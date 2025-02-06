@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>嗨嗨嗨劉昀恩</title>
+    <title>嗨嗨嗞劉昀恩</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -58,6 +58,39 @@
             border-radius: 10px;
             border: 2px solid #ff69b4;
         }
+        #commentSection {
+            margin-top: 20px;
+        }
+        #commentSection h3 {
+            color: #ff69b4;
+        }
+        #commentSection textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 2px solid #ff69b4;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        #commentSection button {
+            padding: 10px 20px;
+            margin-top: 10px;
+            border: none;
+            background-color: #ff69b4;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #commentSection button:hover {
+            background-color: #ff1493;
+        }
+        .comment {
+            border: 1px solid #ff69b4;
+            border-radius: 5px;
+            padding: 10px;
+            margin-top: 10px;
+            text-align: left;
+        }
     </style>
 </head>
 <body>
@@ -84,6 +117,13 @@
             <img src="IMG_5576.jpg" alt="我們的回憶">
             <img src="IMG_6957.jpg" alt="我們的回憶">
         </div>
+        <!-- 留言板 -->
+        <div id="commentSection">
+            <h3>留言板</h3>
+            <textarea id="commentInput" placeholder="留言..."></textarea>
+            <button id="commentBtn">提交</button>
+            <div id="comments"></div>
+        </div>
     </div>
     <script>
         document.getElementById("submitBtn").addEventListener("click", function() {
@@ -94,6 +134,19 @@
                 document.getElementById("submitBtn").style.display = "none";
             } else {
                 alert("密碼錯誤喔，再試一次吧！");
+            }
+        });
+
+        document.getElementById("commentBtn").addEventListener("click", function() {
+            var comment = document.getElementById("commentInput").value;
+            if (comment) {
+                var commentDiv = document.createElement("div");
+                commentDiv.className = "comment";
+                commentDiv.textContent = comment;
+                document.getElementById("comments").appendChild(commentDiv);
+                document.getElementById("commentInput").value = "";
+            } else {
+                alert("請輸入留言內容！");
             }
         });
     </script>
