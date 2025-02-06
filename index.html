@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>嗨嗨嗞劉昀恩</title>
+    <title>嗨嗞劉昀恩</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -98,57 +98,38 @@
     <p>我覺得你猜不到</p>
     <input type="password" id="passwordInput" placeholder="輸入密碼">
     <button id="submitBtn">解鎖</button>
-    <div id="surpriseContent" class="hidden">
-        <h2>驚喜吧，希望妳可以很感動</h2>
-        <p>今天終於又鼓起勇氣講出了我早就想對妳講的話，雖然你好像沒有很意外。我知道我們的關係並不完美，我們也有很多不同的地方，但這些差異才讓我更加確定妳是我想一直喜歡下去的人。</p>
-        <p>過去一段時間我們的關係都很奇怪，妳也一直在包容我的無理取鬧跟不負責任。一直以來我都覺得自己是孤單一個人的，很多難過跟痛苦的時候也都是我自己一個人走過來的。再加上因為前任的關係，我很不相信感情，不相信任何一個人，覺得談戀愛就是給自己找麻煩，拖累自己。</p>
-        <p>一直以來我好像都沒有認清妳在我心裡的位置，一邊享受妳對我的好，又不想負責任。我很對不起沒有珍惜妳的付出，沒有早點勇敢看清自己的想法，導致我做出了一堆瞎事。謝謝經歷了這些傷害的妳，還願意留一個位置讓我有資格站在妳身邊。</p>
-        <p>曾經我一直自以為自己只要讓妳從我的世界離開，就可以回歸到原本的生活。結果⋯妳懂的。沒有了妳在我身邊吵吵鬧鬧，我真的連飯都吃不太下去。我總是受到一點點傷害就想要逃跑，而妳卻在我傷害妳的同時還迎上來擁抱我。</p>
-        <p>還記得我們剛認識時，我只把妳當打發時間的對象，然後妳就在莫名其妙亂暈，幹哈哈哈。我想那時候的我們都沒有想過我們會在一起吧。</p>
-        <p>我不知道怎麼表達我的感謝和心情，但我想妳能懂吧。和妳在一起後，我從來沒有感受到自己是孤單的。不管遇到什麼事妳都會陪著我，就算是妳沒辦法理解的，妳還是會盡力去理解。</p>
-        <p>因為妳的出現，我不想要再追求那些曾經讓我滿足的短暫刺激。我只希望未來的每一天妳都會在。我呢，我也會一直喜歡妳，認真的喜歡妳下去。我會一直等在妳隨時可以牽住的距離，等待左手自然牽住右手，永遠保持乾淨的肩膀，等待妳的靠上來。</p>
-        <p>這些愛或許不用說出口，但也一直藏在行為裡。我會盡力去做一個合格的女朋友，做一個配得上妳付出的人。希望妳可以一直放心大膽地靠在我的肩膀上，開開心心地當小朋友就好了。</p>
-        <p><strong>luv u ❤️</strong></p>
-        <!-- 照片牆 -->
-        <div class="photo-wall">
-            <img src="IMG_8145.JPG" alt="我們的回憶">
-            <img src="IMG_8168.JPG" alt="我們的回憶">
-            <img src="QQAM2028.JPG" alt="我們的回憶">
-            <img src="IMG_5576.jpg" alt="我們的回憶">
-            <img src="IMG_6957.jpg" alt="我們的回憶">
-        </div>
-        <!-- 留言板 -->
-        <div id="commentSection">
-            <h3>留言板</h3>
-            <textarea id="commentInput" placeholder="留言..."></textarea>
-            <button id="commentBtn">提交</button>
-            <div id="comments"></div>
-        </div>
-    </div>
+    <div id="surpriseContent" class="hidden"></div>
     <script>
         document.getElementById("submitBtn").addEventListener("click", function() {
             var password = document.getElementById("passwordInput").value;
             if (password === "072696") {
-                document.getElementById("surpriseContent").classList.remove("hidden");
-                document.getElementById("passwordInput").style.display = "none";
-                document.getElementById("submitBtn").style.display = "none";
-                loadComments();
+                fetch('surpriseContent.html')
+                    .then(response => response.text())
+                    .then(data => {
+                        document.getElementById("surpriseContent").innerHTML = data;
+                        document.getElementById("surpriseContent").classList.remove("hidden");
+                        document.getElementById("passwordInput").style.display = "none";
+                        document.getElementById("submitBtn").style.display = "none";
+                        loadComments();
+                    });
             } else {
-                alert("笨蛋，再試一次！");
+                alert("密碼錯誤喔，再試一次吧！");
             }
         });
 
-        document.getElementById("commentBtn").addEventListener("click", function() {
-            var comment = document.getElementById("commentInput").value;
-            if (comment) {
-                var commentDiv = document.createElement("div");
-                commentDiv.className = "comment";
-                commentDiv.textContent = comment;
-                document.getElementById("comments").appendChild(commentDiv);
-                saveComment(comment);
-                document.getElementById("commentInput").value = "";
-            } else {
-                alert("請輸入留言內容！");
+        document.addEventListener("click", function(event) {
+            if (event.target && event.target.id === "commentBtn") {
+                var comment = document.getElementById("commentInput").value;
+                if (comment) {
+                    var commentDiv = document.createElement("div");
+                    commentDiv.className = "comment";
+                    commentDiv.textContent = comment;
+                    document.getElementById("comments").appendChild(commentDiv);
+                    saveComment(comment);
+                    document.getElementById("commentInput").value = "";
+                } else {
+                    alert("請輸入留言內容！");
+                }
             }
         });
 
