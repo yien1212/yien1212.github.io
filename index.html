@@ -3,19 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>嗨嗨嗨嗨劉昀恩</title>
+    <title>給特別的妳 ❤️</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            padding: 50px;
+            padding: 20px;
             background-color: #fff0f5;
+            position: relative;
+            overflow: hidden;
         }
         h1 {
             color: #ff69b4;
+            font-size: 2.5rem;
         }
         p {
-            font-size: 18px;
+            font-size: 1.1rem;
             color: #333;
             max-width: 600px;
             margin: auto;
@@ -26,20 +29,24 @@
         }
         #passwordInput {
             padding: 10px;
-            font-size: 16px;
+            font-size: 1rem;
             margin-top: 20px;
             border: 2px solid #ff69b4;
             border-radius: 5px;
+            width: 80%;
+            max-width: 300px;
         }
         #submitBtn {
             padding: 10px 20px;
-            font-size: 16px;
+            font-size: 1rem;
             margin-top: 10px;
             border: none;
             background-color: #ff69b4;
             color: white;
             border-radius: 5px;
             cursor: pointer;
+            width: 80%;
+            max-width: 300px;
         }
         #submitBtn:hover {
             background-color: #ff1493;
@@ -52,7 +59,8 @@
             margin-top: 20px;
         }
         .photo-wall img {
-            width: 150px;
+            width: 100%;
+            max-width: 150px;
             height: 150px;
             object-fit: cover;
             border-radius: 10px;
@@ -63,14 +71,16 @@
         }
         #commentSection h3 {
             color: #ff69b4;
+            font-size: 1.5rem;
         }
         #commentSection textarea {
-            width: 100%;
+            width: 80%;
+            max-width: 400px;
             padding: 10px;
             margin-top: 10px;
             border: 2px solid #ff69b4;
             border-radius: 5px;
-            font-size: 16px;
+            font-size: 1rem;
         }
         #commentSection button {
             padding: 10px 20px;
@@ -80,6 +90,7 @@
             color: white;
             border-radius: 5px;
             cursor: pointer;
+            font-size: 1rem;
         }
         #commentSection button:hover {
             background-color: #ff1493;
@@ -88,22 +99,40 @@
             border: 1px solid #ff69b4;
             border-radius: 5px;
             padding: 10px;
-            margin-top: 10px;
+            margin: 10px auto;
             text-align: left;
+            max-width: 400px;
+            background-color: #fff;
+        }
+        .comment strong {
+            color: #ff69b4;
+        }
+        /* 愛心遊戲相關樣式 */
+        .heart-game {
+            position: absolute;
+            font-size: 30px;
+            cursor: pointer;
+            animation: float 5s linear infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0); }
+        }
+        #heartCounter {
+            font-size: 1.5rem;
+            color: #ff69b4;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
-    <h1>luv u</h1>
+    <h1>給特別的妳 ❤️</h1>
     <p>我覺得妳猜不到</p>
     <input type="password" id="passwordInput" placeholder="輸入密碼">
     <button id="submitBtn">解鎖</button>
-    <div id="surpriseContent" class="hidden"
+    <div id="surpriseContent" class="hidden">
         <h2>驚喜吧</h2>
-
-
-
-        
         <p>今天終於又鼓起勇氣講出了我早就想對妳講的話，雖然你好像沒有很意外。我知道我們的關係並不完美，我們也有很多不同的地方，但這些差異才讓我更加確定妳是我想一直喜歡下去的人。</p>
         <p>過去一段時間我們的關係都很奇怪，妳也一直在包容我的無理取鬧跟不負責任。一直以來我都覺得自己是孤單一個人的，很多難過跟痛苦的時候也都是我自己一個人走過來的。再加上因為前任的關係，我很不相信感情，不相信任何一個人，覺得談戀愛就是給自己找麻煩，拖累自己。</p>
         <p>一直以來我好像都沒有認清妳在我心裡的位置，一邊享受妳對我的好，又不想負責任。我很對不起沒有珍惜妳的付出，沒有早點勇敢看清自己的想法，導致我做出了一堆瞎事。謝謝經歷了這些傷害的妳，還願意留一個位置讓我有資格站在妳身邊。</p>
@@ -128,48 +157,152 @@
             <button id="commentBtn">提交</button>
             <div id="comments"></div>
         </div>
+        <!-- 愛心遊戲 -->
+        <div id="heartGame" class="hidden">
+            <h3>點擊愛心收集驚喜！</h3>
+            <div id="heartCounter">已收集：0 個 ❤️</div>
+        </div>
     </div>
     <script>
+        // 密碼解鎖
         document.getElementById("submitBtn").addEventListener("click", function() {
             var password = document.getElementById("passwordInput").value;
             if (password === "072696") {
                 document.getElementById("surpriseContent").classList.remove("hidden");
+                document.getElementById("heartGame").classList.remove("hidden");
                 document.getElementById("passwordInput").style.display = "none";
                 document.getElementById("submitBtn").style.display = "none";
                 loadComments();
+                startHeartGame();
             } else {
                 alert("笨蛋笨蛋，再試一次");
             }
         });
 
+        // 留言板功能
         document.getElementById("commentBtn").addEventListener("click", function() {
             var comment = document.getElementById("commentInput").value;
             if (comment) {
+                var timestamp = new Date().toLocaleString();
                 var commentDiv = document.createElement("div");
                 commentDiv.className = "comment";
-                commentDiv.textContent = comment;
+                commentDiv.innerHTML = `<strong>${timestamp}</strong><br>${comment}`;
                 document.getElementById("comments").appendChild(commentDiv);
-                saveComment(comment);
+                saveComment(comment, timestamp);
                 document.getElementById("commentInput").value = "";
             } else {
                 alert("請輸入留言內容！");
             }
         });
 
-        function saveComment(comment) {
+        function saveComment(comment, timestamp) {
             var comments = JSON.parse(localStorage.getItem("comments")) || [];
-            comments.push(comment);
+            comments.push({ text: comment, time: timestamp });
             localStorage.setItem("comments", JSON.stringify(comments));
         }
 
         function loadComments() {
             var comments = JSON.parse(localStorage.getItem("comments")) || [];
-            comments.forEach(function(comment) {
+            comments.forEach(function(item) {
                 var commentDiv = document.createElement("div");
                 commentDiv.className = "comment";
-                commentDiv.textContent = comment;
+                commentDiv.innerHTML = `<strong>${item.time}</strong><br>${item.text}`;
                 document.getElementById("comments").appendChild(commentDiv);
             });
+        }
+
+        // 愛心遊戲功能
+        const messages = [
+            "妳知道嗎？每次看到妳的笑容，我的世界都會變得明亮起來。❤️",
+            "如果我是星星，妳就是我的月亮，因為妳照亮了我的黑夜。🌙",
+            "不管未來有多難，我都會陪在妳身邊，因為妳是我最重要的人。💖",
+            "妳是我每天的動力，因為有妳，我才能變得更好。✨",
+            "我想把世界上所有的溫柔都給妳，因為妳值得擁有最好的。🌸",
+            "妳是我生命中最美的意外，感謝命運讓我遇見妳。🌟",
+            "如果愛是一種病，那我已經無藥可救了，因為我愛妳愛到無法自拔。💘",
+            "每次想到妳，我的心都會跳得特別快，這就是愛的感覺吧。💓",
+            "我想牽著妳的手，走過每一個春夏秋冬，直到永遠。🌷",
+            "妳是我唯一的選擇，也是我永遠的答案。💍",
+            "即使世界變得再複雜，只要有妳在，一切都會變得簡單。🌍",
+            "我想成為妳的依靠，讓妳可以放心地做自己。🦋",
+            "妳是我心中的小太陽，總是溫暖著我的心。☀️",
+            "如果有一天我們變老了，我希望還能牽著妳的手，一起看夕陽。🌅",
+            "妳是我生命中最美好的存在，我願意用一生去守護妳。💞",
+            "每次看到妳，我都覺得自己是世界上最幸運的人。🍀",
+            "我想把所有的溫柔都藏在妳的枕邊，讓妳每晚都能安心入睡。🌙",
+            "妳是我心中的唯一，沒有人可以取代妳的位置。💎",
+            "如果愛是一種魔法，那我願意用一輩子去學習，只為讓妳幸福。🪄",
+            "我想成為妳的避風港，讓妳在疲憊的時候可以安心休息。🌊",
+            "妳是我心中的小星星，總是閃耀著獨特的光芒。⭐",
+            "我想把世界上所有的美好都送給妳，因為妳值得擁有。🎁",
+            "每次想到妳，我都會覺得生活充滿了希望和動力。🌈",
+            "如果有一天我們走散了，我會在原地等妳，因為妳是我唯一的歸屬。📍",
+            "我想把所有的愛都藏在妳的掌心，讓妳隨時都能感受到我的溫暖。🤲",
+            "妳是我心中的小公主，我會用一生去守護妳的快樂。👑",
+            "每次看到妳，我都覺得自己是世界上最幸福的人。💖",
+            "我想把所有的溫柔都藏在妳的髮梢，讓妳隨時都能感受到我的愛。💇‍♀️",
+            "妳是我心中的唯一，我會用一生去證明我的愛。💌",
+            "如果愛是一種承諾，那我願意用一輩子去實現，只為讓妳幸福。💍",
+            "今天的天氣很好，就像我的心情，因為有妳在身邊。☀️",
+            "妳的笑容是我每天最期待的風景。😊",
+            "我想把所有的溫柔都藏在妳的掌心，讓妳隨時都能感受到我的溫暖。🤲",
+            "妳是我心中的小太陽，總是溫暖著我的心。☀️",
+            "如果有一天我們變老了，我希望還能牽著妳的手，一起看夕陽。🌅",
+            "妳是我生命中最美好的存在，我願意用一生去守護妳。💞",
+            "每次看到妳，我都覺得自己是世界上最幸運的人。🍀",
+            "我想把所有的溫柔都藏在妳的枕邊，讓妳每晚都能安心入睡。🌙",
+            "妳是我心中的唯一，沒有人可以取代妳的位置。💎",
+            "如果愛是一種魔法，那我願意用一輩子去學習，只為讓妳幸福。🪄",
+            "我想成為妳的避風港，讓妳在疲憊的時候可以安心休息。🌊",
+            "妳是我心中的小星星，總是閃耀著獨特的光芒。⭐",
+            "我想把世界上所有的美好都送給妳，因為妳值得擁有。🎁",
+            "每次想到妳，我都會覺得生活充滿了希望和動力。🌈",
+            "如果有一天我們走散了，我會在原地等妳，因為妳是我唯一的歸屬。📍",
+            "我想把所有的愛都藏在妳的掌心，讓妳隨時都能感受到我的溫暖。🤲",
+            "妳是我心中的小公主，我會用一生去守護妳的快樂。👑",
+            "每次看到妳，我都覺得自己是世界上最幸福的人。💖",
+            "我想把所有的溫柔都藏在妳的髮梢，讓妳隨時都能感受到我的愛。💇‍♀️",
+            "妳是我心中的唯一，我會用一生去證明我的愛。💌",
+            "如果愛是一種承諾，那我願意用一輩子去實現，只為讓妳幸福。💍"
+        ];
+
+        let usedMessages = [];
+
+        function startHeartGame() {
+            var heartCounter = 0;
+            var heartGameArea = document.getElementById("heartGame");
+
+            function createHeart() {
+                var heart = document.createElement("div");
+                heart.innerHTML = "❤️";
+                heart.className = "heart-game";
+                heart.style.left = Math.random() * 90 + "%";
+                heart.style.top = Math.random() * 90 + "%";
+                heart.addEventListener("click", function() {
+                    heartCounter++;
+                    document.getElementById("heartCounter").textContent = "已收集：" + heartCounter + " 個 ❤️";
+                    heart.remove();
+                    if (heartCounter === 10) {
+                        showRandomMessage();
+                        heartCounter = 0; // 重置計數器
+                        document.getElementById("heartCounter").textContent = "已收集：0 個 ❤️";
+                    }
+                });
+                heartGameArea.appendChild(heart);
+            }
+
+            function showRandomMessage() {
+                let availableMessages = messages.filter(msg => !usedMessages.includes(msg));
+                if (availableMessages.length === 0) {
+                    availableMessages = messages; // 如果所有情話都用過，重新開始
+                    usedMessages = [];
+                }
+                const randomMessage = availableMessages[Math.floor(Math.random() * availableMessages.length)];
+                usedMessages.push(randomMessage);
+                alert("你看 有小驚喜捏\n" + randomMessage);
+            }
+
+            setInterval(createHeart, 1000); // 每秒生成一個愛心
         }
     </script>
 </body>
