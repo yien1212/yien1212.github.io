@@ -58,6 +58,29 @@
             border-radius: 10px;
             border: 2px solid #ff69b4;
         }
+
+        /* 留言板樣式 */
+        #messages {
+            background-color: #fff0f5; /* 粉色背景 */
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        .message-container {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .message {
+            margin-bottom: 5px;
+        }
+        .message-name {
+            font-weight: bold;
+        }
+        .message-time {
+            font-size: 0.8em;
+            color: gray;
+        }
     </style>
 </head>
 <body>
@@ -80,7 +103,6 @@
         <p>這些愛或許不用說出口，但也一直藏在行為裡。我會盡力去做一個合格的女朋友，做一個配得上妳付出的人。希望妳可以一直放心大膽地靠在我的肩膀上，開開心心地當小朋友就好了。</p>
         <p><strong>luv u ❤️</strong></p>
 
-        <!-- 照片牆 -->
         <div class="photo-wall">
             <img src="IMG_8145.JPG" alt="我們的回憶">
             <img src="IMG_8168.JPG" alt="我們的回憶">
@@ -88,6 +110,20 @@
             <img src="IMG_5576.jpg" alt="我們的回憶">
             <img src="IMG_6957.jpg" alt="我們的回憶">
         </div>
+
+        <div id="messages">
+            <h1>簡易留言板</h1>
+        </div>
+
+        <div>
+            <label for="name">姓名：</label>
+            <input type="text" id="name">
+        </div>
+        <div>
+            <label for="message">留言：</label>
+            <textarea id="message"></textarea>
+        </div>
+        <button onclick="addMessage()">留言</button>
     </div>
 
     <script>
@@ -97,128 +133,52 @@
                 document.getElementById("surpriseContent").classList.remove("hidden");
                 document.getElementById("passwordInput").style.display = "none";
                 document.getElementById("submitBtn").style.display = "none";
+                displayMessages(); // 顯示留言
             } else {
                 alert("密碼錯誤喔，再試一次吧！");
             }
         });
-    </script>
 
-    <!DOCTYPE html>
-<html>
-<head>
-<title>簡易留言板</title>
-<style>
-  body {
-    font-family: sans-serif;
-  }
-  .message-container {
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin-bottom: 10px;
-  }
-  .message {
-    margin-bottom: 5px;
-  }
-  .message-name {
-    font-weight: bold;
-  }
-  .message-time {
-    font-size: 0.8em;
-    color: gray;
-  }
-</style>
-</head>
-<body>
+        function loadMessages() {
+            let messages = localStorage.getItem("messages");
+            if (messages) {
+                return JSON.parse(messages);
+            } else {
+                return [];
+            }
+        }
 
-<h1>簡易留言板</h1>
+        function saveMessages(messages) {
+            localStorage.setItem("messages", JSON.stringify(messages));
+        }
 
-<div id="messages">
-  </div>
+        function displayMessages() {
+            const messagesDiv = document.getElementById("messages");
+            messagesDiv.innerHTML = "<h1>簡易留言板</h1>"; // 清空並加入標題
+            const messages = loadMessages();
 
-<div>
-  <label for="name">姓名：</label>
-  <input type="text" id="name">
-</div>
-<div>
-  <label for="message">留言：</label>
-  <textarea id="message"></textarea>
-</div>
-<button onclick="addMessage()">留言</button>
+            if (messages.length === 0) {
+                messagesDiv.innerHTML += "<p>目前沒有留言。</p>"; // 使用 +=
+                return;
+            }
 
-<script>
-  function loadMessages() {
-    let messages = localStorage.getItem("messages");
-    if (messages) {
-      return JSON.parse(messages);
-    } else {
-      return [];
-    }
-  }
+            messages.forEach(msg => {
+                const msgDiv = document.createElement("div");
+                msgDiv.classList.add("message-container");
 
-  function saveMessages(messages) {
-    localStorage.setItem("messages", JSON.stringify(messages));
-  }
+                const nameSpan = document.createElement("span");
+                nameSpan.classList.add("message-name");
+                nameSpan.textContent = msg.name + ": ";
 
-  function displayMessages() {
-    const messagesDiv = document.getElementById("messages");
-    messagesDiv.innerHTML = "";
-    const messages = loadMessages();
+                const msgSpan = document.createElement("span");
+                msgSpan.classList.add("message");
+                msgSpan.textContent = msg.message;
 
-    if (messages.length === 0) {
-      messagesDiv.innerHTML = "<p>目前沒有留言。</p>";
-      return;
-    }
+                const timeSpan = document.createElement("span");
+                timeSpan.classList.add("message-time");
+                const date = new Date(msg.timestamp);
+                timeSpan.textContent = " (" + date.toLocaleString() + ")";
 
-    messages.forEach(msg => {
-      const msgDiv = document.createElement("div");
-      msgDiv.classList.add("message-container");
-
-      const nameSpan = document.createElement("span");
-      nameSpan.classList.add("message-name");
-      nameSpan.textContent = msg.name + ": ";
-
-      const msgSpan = document.createElement("span");
-      msgSpan.classList.add("message");
-      msgSpan.textContent = msg.message;
-
-      const timeSpan = document.createElement("span");
-      timeSpan.classList.add("message-time");
-      const date = new Date(msg.timestamp);
-      timeSpan.textContent = " (" + date.toLocaleString() + ")";
-
-      msgDiv.appendChild(nameSpan);
-      msgDiv.appendChild(msgSpan);
-      msgDiv.appendChild(timeSpan);
-      messagesDiv.appendChild(msgDiv);
-    });
-  }
-
-  function addMessage() {
-    const nameInput = document.getElementById("name");
-    const messageInput = document.getElementById("message");
-    const name = nameInput.value.trim();
-    const message = messageInput.value.trim();
-
-    if (name === "" || message === "") {
-      alert("請輸入姓名和留言內容！");
-      return;
-    }
-
-    const messages = loadMessages();
-    messages.push({
-      name: name,
-      message: message,
-      timestamp: Date.now()
-    });
-    saveMessages(messages);
-
-    nameInput.value = "";
-    messageInput.value = "";
-    displayMessages();
-  }
-
-  // 初始顯示留言
-  displayMessages();
-
-</body>
-</html>
+                msgDiv.appendChild(nameSpan);
+                msgDiv.appendChild(msgSpan);
+                msgDiv.appendChild(timeSpan
