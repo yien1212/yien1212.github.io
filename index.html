@@ -1,189 +1,77 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Slider</title>
+    <title>FOR 小昀</title>
     <style>
         body {
-            background-color: white;
-            font-family: sans-serif;
-            overflow: hidden; /* Hide scrollbars for the slider */
-        }
-        .slider {
-            width: 100%;
-            height: 300px; /* Adjust the height as needed */
-            overflow: hidden;
-        }
-        .slide-track {
-            display: flex;
-            animation: scroll 20s linear infinite; /* Adjust the duration as needed */
-        }
-        .slide {
-            width: 100%;
-            height: 100%;
-            flex-shrink: 0;
-        }
-        .slide img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        @keyframes scroll {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(calc(-100% * 27)); } /* Adjust the number of slides */
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            text-align: center;
+            margin: 50px;
         }
         #content {
             max-width: 800px;
             margin: 20px auto;
             padding: 20px;
-            background-color: #f9f9f9;
-            border-radius: 5px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        #trigger-easter-egg {
+            color: red;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        #easter-egg {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            border: 2px solid pink;
+            background-color: #fff0f6;
+            border-radius: 10px;
         }
     </style>
 </head>
 <body>
-    <div class="slider">
-        <div class="slide-track">
-            <div class="slide">
-                <img src="https://via.placeholder.com/800x300?text=Slide+1" alt="Slide 1">
-            </div>
-            <div class="slide">
-                <img src="https://via.placeholder.com/800x300?text=Slide+2" alt="Slide 2">
-            </div>
-            <div class="slide">
-                <img src="https://via.placeholder.com/800x300?text=Slide+3" alt="Slide 3">
-            </div>
-            <!-- Add more slides as needed -->
-        </div>
-    </div>
+
     <div id="content">
-        <h1>Welcome to the Image Slider</h1>
-        <p>This is an example of a simple image slider with continuous scrolling effect. You can add more content here as needed.</p>
+        <p>嗨，小昀，驚喜吧！希望妳可以很感動。</p>
+        <p>今天終於又鼓起勇氣講出了我早就想對妳講的話，雖然妳好像沒有很意外。我知道我們的關係並不完美，我們也有很多不同的地方，但這是這些差異才讓我更加確定妳是我想一直喜歡下去的人。</p>
+        <p>過去一段時間我們的關係都很奇怪，妳也一直在包容我的無理取鬧跟不負責任。一直以來我都覺得自己是孤單一個人的，很多難過跟痛苦的時候也都是我自己一個人走過來的，再加上因為前任的關係，我很不相信感情，不相信任何一個人，覺得談戀愛就是給自己找麻煩拖累自己。</p>
+        <p>一直以來我好像都沒有認清妳在我心裡的位置，一邊享受妳對我的好，又不想負責任。我很對不起沒有珍惜妳的付出，沒有早點勇敢看清自己的想法，導致我做出了一堆瞎事。謝謝經歷了這些傷害的妳還願意留一個位置讓我有資格站在妳身邊。</p>
+        <p>曾經我一直自以為自己只要讓妳從我的世界離開，就可以回歸到原本的生活，結果⋯妳懂的。沒有了妳在我身邊吵吵鬧鬧，我真的連飯都吃不太下去。我總是受到一點點傷害就想要逃跑，而妳卻在我傷害妳的同時還迎上來擁抱我。</p>
+        <p>還記得我們剛認識時，我只把妳當打發時間的對象，然後妳就在莫名其妙亂暈，幹哈哈哈。我想那時候的我們都沒有想過我們會在一起吧。我不知道怎麼表達我的感謝和心情，但我想妳能懂吧。</p>
+        <p>和妳在一起後，我從來沒有感受到自己是孤單的，不管遇到什麼事妳都會陪著我，就算是妳沒辦法理解的，妳還是會盡力去理解。因為妳的出現，我不想要再追求那些曾經讓我滿足的短暫刺激，我只希望未來的每一天妳都會在。</p>
+        <p>我呢，我也會一直喜歡妳，認真的喜歡妳下去。我會一直等在妳隨時可以牽住的距離，等待左手自然牽住右手，永遠保持乾淨的肩膀，等待妳的靠上來。這些愛或許不用說出口，但也一直藏在行為裡。我會盡力的去做一個合格的女朋友，做一個配得上妳付出的人，希望妳可以一直放心大膽的靠在我的肩膀上，開開心心的當小朋友就好了。</p>
+        <p><span id="trigger-easter-egg">luv u</span></p>
     </div>
-</body>
-</html>
-<!DOCTYPE html>
-<html>
-<head>
-  <title>FOR 小昀</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
 
-  <div class="slider">
-    <div class="slide-track">
-      <div class="slide">
-        <img src="IMG_5451.jpeg" alt="Image 1">
-      </div>
-      <div class="slide">
-        <img src="IMG_5454.jpeg" alt="Image 2">
-      </div>
-      <div class="slide">
-        <img src="IMG_5579.jpeg" alt="Image 3">
-      </div>
-      <div class="slide">
-        <img src="IMG_5888.jpeg" alt="Image 4">
-      </div>
-      <div class="slide">
-        <img src="IMG_5904.jpeg" alt="Image 5">
-      </div>
-      <div class="slide">
-        <img src="IMG_6010.png" alt="Image 6">
-      </div>
-      <div class="slide">
-        <img src="IMG_6235.jpeg" alt="Image 7">
-      </div>
-      <div class="slide">
-        <img src="IMG_6315.jpeg" alt="Image 8">
-      </div>
-      <div class="slide">
-        <img src="IMG_6634.jpeg" alt="Image 9">
-      </div>
-      <div class="slide">
-        <img src="IMG_6644.jpeg" alt="Image 10">
-      </div>
-      <div class="slide">
-        <img src="IMG_6663.jpeg" alt="Image 11">
-      </div>
-      <div class="slide">
-        <img src="IMG_6952.jpeg" alt="Image 12">
-      </div>
-      <div class="slide">
-        <img src="IMG_6958.jpeg" alt="Image 13">
-      </div>
-      <div class="slide">
-        <img src="IMG_7136.jpeg" alt="Image 14">
-      </div>
-      <div class="slide">
-        <img src="IMG_7202.jpeg" alt="Image 15">
-      </div>
-      <div class="slide">
-        <img src="IMG_8098.jpeg" alt="Image 16">
-      </div>
-      <div class="slide">
-        <img src="IMG_8168.jpeg" alt="Image 17">
-      </div>
-      <div class="slide">
-        <img src="IMG_8172.png" alt="Image 18">
-      </div>
-      <div class="slide">
-        <img src="IMG_8179.jpeg" alt="Image 19">
-      </div>
-      <div class="slide">
-        <img src="IMG_8226.jpeg" alt="Image 20">
-      </div>
-      <div class="slide">
-        <img src="IMG_8250.jpeg" alt="Image 21">
-      </div>
-      <div class="slide">
-        <img src="IMG_9052.jpeg" alt="Image 22">
-      </div>
-      <div class="slide">
-        <img src="IMG_9074.jpeg" alt="Image 23">
-      </div>
-      <div class="slide">
-        <img src="IMG_9080.jpeg" alt="Image 24">
-      </div>
-      <div class="slide">
-        <img src="IMG_2657.jpeg" alt="Image 25">
-      </div>
-      <div class="slide">
-        <img src="IMG_2659.jpeg" alt="Image 26">
-      </div>
-      <div class="slide">
-        <img src="60C2D3C9-8617-40B3-81EB-279607C5E3D0.jpeg" alt="Image 27">
-      </div>
+    <div id="easter-egg">
+        <p>我覺得妳笨笨的找不到這個小驚喜，但既然妳找到了，就告訴妳一個小秘密——</p>
+        <p><b>我其實很喜歡妳叫我狗勾，跟摸我的頭，我可以當妳的專屬小狗嗎？</b></p>
+        <img src="easter-egg.jpg" alt="Easter Egg Image" width="200">
     </div>
-  </div>
 
-  <div id="content">
-    <p>嗨，小昀，驚喜吧！希望妳可以很感動。</p>
-    <p>今天終於又鼓起勇氣講出了我早就想對妳講的話，雖然妳好像沒有很意外。我知道我們的關係並不完美，我們也有很多不同的地方，但這是這些差異才讓我更加確定妳是我想一直喜歡下去的人。</p>
-    <p>過去一段時間我們的關係都很奇怪，妳也一直在包容我的無理取鬧跟不負責任。一直以來我都覺得自己是孤單一個人的，很多難過跟痛苦的時候也都是我自己一個人走過來的，再加上因為前任的關係，我很不相信感情，不相信任何一個人，覺得談戀愛就是給自己找麻煩拖累自己。</p>
-    <p>一直以來我好像都沒有認清妳在我心裡的位置，一邊享受妳對我的好，又不想負責任。我很對不起沒有珍惜妳的付出，沒有早點勇敢看清自己的想法，導致我做出了一堆瞎事。謝謝經歷了這些傷害的妳還願意留一個位置讓我有資格站在妳身邊。</p>
-    <p>曾經我一直自以為自己只要讓妳從我的世界離開，就可以回歸到原本的生活，結果⋯妳懂的。沒有了妳在我身邊吵吵鬧鬧，我真的連飯都吃不太下去。我總是受到一點點傷害就想要逃跑，而妳卻在我傷害妳的同時還迎上來擁抱我。</p>
-    <p>還記得我們剛認識時，我只把妳當打發時間的對象，然後妳就在莫名其妙亂暈，幹哈哈哈。我想那時候的我們都沒有想過我們會在一起吧。我不知道怎麼表達我的感謝和心情，但我想妳能懂吧。</p>
-    <p>和妳在一起後，我從來沒有感受到自己是孤單的，不管遇到什麼事妳都會陪著我，就算是你沒辦法理解的，妳還是會盡力去理解。因為妳的出現，我不想要再追求那些曾經讓我滿足的短暫刺激，我只希望未來的每一天妳都會在。</p>
-    <p>我呢，我也會一直喜歡妳，認真的喜歡妳下去。我會一直等在妳隨時可以牽住的距離，等待左手自然牽住右手，永遠保持乾淨的肩膀，等待妳的靠上來。這些愛或許不用說出口，但也一直藏在行為裡。我會盡力的去做一個合格的女朋友，做一個配得上妳付出的人，希望妳可以一直放心大膽的靠在我的肩膀上，開開心心的當小朋友就好了。</p>
-    <p>luv u</p>
-  </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var password = prompt("妳最最最喜歡的人", "");
+            if (password !== "陳以恩") {
+                document.getElementById("content").style.display = "none";
+                alert("密碼錯誤！");
+            }
+        });
 
-  <div id="easter-egg" style="display: none;">
-    <p>我覺得妳笨笨的找不到這個小驚喜，但既然妳找到了，就告訴妳一個小秘密，我其實很喜歡妳叫我狗勾，跟摸我的頭，我可以當妳的專屬小狗嗎？</p>
-    <img src="easter-egg.jpg" alt="Easter Egg Image">
-  </div>
+        document.getElementById("trigger-easter-egg").addEventListener("click", function() {
+            var password = prompt("<3", "");
+            if (password === "072696") {
+                document.getElementById("easter-egg").style.display = "block";
+            } else {
+                alert("答案錯啦 (¬‿¬) 再想想！");
+            }
+        });
+    </script>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      var password = prompt("妳最最最喜歡的人", "");
-      if (password!== "陳以恩") {
-        document.getElementById("content").style.display = "none";
-        alert("密碼錯誤！");
-      }
-    });
-
-    // Code to trigger the easter egg (e.g., on a specific click or key press)
-  </script>
 </body>
 </html>
