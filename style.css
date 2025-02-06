@@ -1,41 +1,120 @@
-body {
-  background-color: white;
-  font-family: sans-serif;
-  overflow: hidden; /* Hide scrollbars for the slider */
-}
+<!DOCTYPE html>
+<html>
+<head>
+<title>簡易留言板</title>
+<style>
+  body {
+    font-family: sans-serif;
+  }
+  .message-container {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  .message {
+    margin-bottom: 5px;
+  }
+  .message-name {
+    font-weight: bold;
+  }
+  .message-time {
+    font-size: 0.8em;
+    color: gray;
+  }
+</style>
+</head>
+<body>
 
-.slider {
-  width: 100%;
-  height: 300px; /* Adjust the height as needed */
-  overflow: hidden;
-}
+<h1>簡易留言板</h1>
 
-.slide-track {
-  display: flex;
-  animation: scroll 20s linear infinite; /* Adjust the duration as needed */
-}
+<div id="messages">
+  </div>
 
-.slide {
-  width: 100%;
-  height: 100%;
-  flex-shrink: 0;
-}
+<div>
+  <label for="name">姓名：</label>
+  <input type="text" id="name">
+</div>
+<div>
+  <label for="message">留言：</label>
+  <textarea id="message"></textarea>
+</div>
+<button onclick="addMessage()">留言</button>
 
-.slide img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
+<script>
+  function loadMessages() {
+    let messages = localStorage.getItem("messages");
+    if (messages) {
+      return JSON.parse(messages);
+    } else {
+      return [];
+    }
+  }
 
-@keyframes scroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(calc(-100% * 27)); } /* Adjust the number of slides */
-}
+  function saveMessages(messages) {
+    localStorage.setItem("messages", JSON.stringify(messages));
+  }
 
-#content {
-  max-width: 800px;
-  margin: 20px auto;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 5px;
-}
+  function displayMessages() {
+    const messagesDiv = document.getElementById("messages");
+    messagesDiv.innerHTML = "";
+    const messages = loadMessages();
+
+    if (messages.length === 0) {
+      messagesDiv.innerHTML = "<p>目前沒有留言。</p>";
+      return;
+    }
+
+    messages.forEach(msg => {
+      const msgDiv = document.createElement("div");
+      msgDiv.classList.add("message-container");
+
+      const nameSpan = document.createElement("span");
+      nameSpan.classList.add("message-name");
+      nameSpan.textContent = msg.name + ": ";
+
+      const msgSpan = document.createElement("span");
+      msgSpan.classList.add("message");
+      msgSpan.textContent = msg.message;
+
+      const timeSpan = document.createElement("span");
+      timeSpan.classList.add("message-time");
+      const date = new Date(msg.timestamp);
+      timeSpan.textContent = " (" + date.toLocaleString() + ")";
+
+      msgDiv.appendChild(nameSpan);
+      msgDiv.appendChild(msgSpan);
+      msgDiv.appendChild(timeSpan);
+      messagesDiv.appendChild(msgDiv);
+    });
+  }
+
+  function addMessage() {
+    const nameInput = document.getElementById("name");
+    const messageInput = document.getElementById("message");
+    const name = nameInput.value.trim();
+    const message = messageInput.value.trim();
+
+    if (name === "" || message === "") {
+      alert("請輸入姓名和留言內容！");
+      return;
+    }
+
+    const messages = loadMessages();
+    messages.push({
+      name: name,
+      message: message,
+      timestamp: Date.now()
+    });
+    saveMessages(messages);
+
+    nameInput.value = "";
+    messageInput.value = "";
+    displayMessages();
+  }
+
+  // 初始顯示留言
+  displayMessages();
+</script>
+
+</body>
+</html>
