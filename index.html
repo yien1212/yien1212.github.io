@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>給特別的妳 ❤️</title>
+    <title>妳是小昀ㄛ ❤️</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -124,6 +124,23 @@
             color: #ff69b4;
             margin-top: 20px;
         }
+        /* 猜密碼提示 */
+        #passwordHint {
+            color: #ff69b4;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+        /* 輸入錯誤動畫 */
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
+        .shake {
+            animation: shake 0.5s;
+        }
     </style>
 </head>
 <body>
@@ -131,6 +148,7 @@
     <p>我覺得妳猜不到</p>
     <input type="password" id="passwordInput" placeholder="輸入密碼">
     <button id="submitBtn">解鎖</button>
+    <div id="passwordHint" class="hidden">不可能真的猜不到吧 笨蛋</div>
     <div id="surpriseContent" class="hidden">
         <h2>驚喜吧</h2>
         <p>今天終於又鼓起勇氣講出了我早就想對妳講的話，雖然你好像沒有很意外。我知道我們的關係並不完美，我們也有很多不同的地方，但這些差異才讓我更加確定妳是我想一直喜歡下去的人。</p>
@@ -164,146 +182,16 @@
         </div>
     </div>
     <script>
-        // 密碼解鎖
+        // 猜密碼功能
+        let attemptCount = 0;
+        const maxAttempts = 3;
+        const password = "950812"; // 密碼
+
         document.getElementById("submitBtn").addEventListener("click", function() {
-            var password = document.getElementById("passwordInput").value;
-            if (password === "072696") {
+            const inputPassword = document.getElementById("passwordInput").value;
+            if (inputPassword === password) {
                 document.getElementById("surpriseContent").classList.remove("hidden");
                 document.getElementById("heartGame").classList.remove("hidden");
                 document.getElementById("passwordInput").style.display = "none";
                 document.getElementById("submitBtn").style.display = "none";
-                loadComments();
-                startHeartGame();
-            } else {
-                alert("笨蛋笨蛋，再試一次");
-            }
-        });
-
-        // 留言板功能
-        document.getElementById("commentBtn").addEventListener("click", function() {
-            var comment = document.getElementById("commentInput").value;
-            if (comment) {
-                var timestamp = new Date().toLocaleString();
-                var commentDiv = document.createElement("div");
-                commentDiv.className = "comment";
-                commentDiv.innerHTML = `<strong>${timestamp}</strong><br>${comment}`;
-                document.getElementById("comments").appendChild(commentDiv);
-                saveComment(comment, timestamp);
-                document.getElementById("commentInput").value = "";
-            } else {
-                alert("請輸入留言內容！");
-            }
-        });
-
-        function saveComment(comment, timestamp) {
-            var comments = JSON.parse(localStorage.getItem("comments")) || [];
-            comments.push({ text: comment, time: timestamp });
-            localStorage.setItem("comments", JSON.stringify(comments));
-        }
-
-        function loadComments() {
-            var comments = JSON.parse(localStorage.getItem("comments")) || [];
-            comments.forEach(function(item) {
-                var commentDiv = document.createElement("div");
-                commentDiv.className = "comment";
-                commentDiv.innerHTML = `<strong>${item.time}</strong><br>${item.text}`;
-                document.getElementById("comments").appendChild(commentDiv);
-            });
-        }
-
-        // 愛心遊戲功能
-        const messages = [
-            "妳知道嗎？每次看到妳的笑容，我的世界都會變得明亮起來。❤️",
-            "如果我是星星，妳就是我的月亮，因為妳照亮了我的黑夜。🌙",
-            "不管未來有多難，我都會陪在妳身邊，因為妳是我最重要的人。💖",
-            "妳是我每天的動力，因為有妳，我才能變得更好。✨",
-            "我想把世界上所有的溫柔都給妳，因為妳值得擁有最好的。🌸",
-            "妳是我生命中最美的意外，感謝命運讓我遇見妳。🌟",
-            "如果愛是一種病，那我已經無藥可救了，因為我愛妳愛到無法自拔。💘",
-            "每次想到妳，我的心都會跳得特別快，這就是愛的感覺吧。💓",
-            "我想牽著妳的手，走過每一個春夏秋冬，直到永遠。🌷",
-            "妳是我唯一的選擇，也是我永遠的答案。💍",
-            "即使世界變得再複雜，只要有妳在，一切都會變得簡單。🌍",
-            "我想成為妳的依靠，讓妳可以放心地做自己。🦋",
-            "妳是我心中的小太陽，總是溫暖著我的心。☀️",
-            "如果有一天我們變老了，我希望還能牽著妳的手，一起看夕陽。🌅",
-            "妳是我生命中最美好的存在，我願意用一生去守護妳。💞",
-            "每次看到妳，我都覺得自己是世界上最幸運的人。🍀",
-            "我想把所有的溫柔都藏在妳的枕邊，讓妳每晚都能安心入睡。🌙",
-            "妳是我心中的唯一，沒有人可以取代妳的位置。💎",
-            "如果愛是一種魔法，那我願意用一輩子去學習，只為讓妳幸福。🪄",
-            "我想成為妳的避風港，讓妳在疲憊的時候可以安心休息。🌊",
-            "妳是我心中的小星星，總是閃耀著獨特的光芒。⭐",
-            "我想把世界上所有的美好都送給妳，因為妳值得擁有。🎁",
-            "每次想到妳，我都會覺得生活充滿了希望和動力。🌈",
-            "如果有一天我們走散了，我會在原地等妳，因為妳是我唯一的歸屬。📍",
-            "我想把所有的愛都藏在妳的掌心，讓妳隨時都能感受到我的溫暖。🤲",
-            "妳是我心中的小公主，我會用一生去守護妳的快樂。👑",
-            "每次看到妳，我都覺得自己是世界上最幸福的人。💖",
-            "我想把所有的溫柔都藏在妳的髮梢，讓妳隨時都能感受到我的愛。💇‍♀️",
-            "妳是我心中的唯一，我會用一生去證明我的愛。💌",
-            "如果愛是一種承諾，那我願意用一輩子去實現，只為讓妳幸福。💍",
-            "今天的天氣很好，就像我的心情，因為有妳在身邊。☀️",
-            "妳的笑容是我每天最期待的風景。😊",
-            "我想把所有的溫柔都藏在妳的掌心，讓妳隨時都能感受到我的溫暖。🤲",
-            "妳是我心中的小太陽，總是溫暖著我的心。☀️",
-            "如果有一天我們變老了，我希望還能牽著妳的手，一起看夕陽。🌅",
-            "妳是我生命中最美好的存在，我願意用一生去守護妳。💞",
-            "每次看到妳，我都覺得自己是世界上最幸運的人。🍀",
-            "我想把所有的溫柔都藏在妳的枕邊，讓妳每晚都能安心入睡。🌙",
-            "妳是我心中的唯一，沒有人可以取代妳的位置。💎",
-            "如果愛是一種魔法，那我願意用一輩子去學習，只為讓妳幸福。🪄",
-            "我想成為妳的避風港，讓妳在疲憊的時候可以安心休息。🌊",
-            "妳是我心中的小星星，總是閃耀著獨特的光芒。⭐",
-            "我想把世界上所有的美好都送給妳，因為妳值得擁有。🎁",
-            "每次想到妳，我都會覺得生活充滿了希望和動力。🌈",
-            "如果有一天我們走散了，我會在原地等妳，因為妳是我唯一的歸屬。📍",
-            "我想把所有的愛都藏在妳的掌心，讓妳隨時都能感受到我的溫暖。🤲",
-            "妳是我心中的小公主，我會用一生去守護妳的快樂。👑",
-            "每次看到妳，我都覺得自己是世界上最幸福的人。💖",
-            "我想把所有的溫柔都藏在妳的髮梢，讓妳隨時都能感受到我的愛。💇‍♀️",
-            "妳是我心中的唯一，我會用一生去證明我的愛。💌",
-            "如果愛是一種承諾，那我願意用一輩子去實現，只為讓妳幸福。💍"
-        ];
-
-        let usedMessages = [];
-
-        function startHeartGame() {
-            var heartCounter = 0;
-            var heartGameArea = document.getElementById("heartGame");
-
-            function createHeart() {
-                var heart = document.createElement("div");
-                heart.innerHTML = "❤️";
-                heart.className = "heart-game";
-                heart.style.left = Math.random() * 90 + "%";
-                heart.style.top = Math.random() * 90 + "%";
-                heart.addEventListener("click", function() {
-                    heartCounter++;
-                    document.getElementById("heartCounter").textContent = "已收集：" + heartCounter + " 個 ❤️";
-                    heart.remove();
-                    if (heartCounter === 10) {
-                        showRandomMessage();
-                        heartCounter = 0; // 重置計數器
-                        document.getElementById("heartCounter").textContent = "已收集：0 個 ❤️";
-                    }
-                });
-                heartGameArea.appendChild(heart);
-            }
-
-            function showRandomMessage() {
-                let availableMessages = messages.filter(msg => !usedMessages.includes(msg));
-                if (availableMessages.length === 0) {
-                    availableMessages = messages; // 如果所有情話都用過，重新開始
-                    usedMessages = [];
-                }
-                const randomMessage = availableMessages[Math.floor(Math.random() * availableMessages.length)];
-                usedMessages.push(randomMessage);
-                alert("你看 有小驚喜捏\n" + randomMessage);
-            }
-
-            setInterval(createHeart, 1000); // 每秒生成一個愛心
-        }
-    </script>
-</body>
-</html>
+                document.getElementById
