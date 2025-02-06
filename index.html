@@ -132,6 +132,7 @@
                 document.getElementById("surpriseContent").classList.remove("hidden");
                 document.getElementById("passwordInput").style.display = "none";
                 document.getElementById("submitBtn").style.display = "none";
+                loadComments();
             } else {
                 alert("密碼錯誤喔，再試一次吧！");
             }
@@ -144,11 +145,28 @@
                 commentDiv.className = "comment";
                 commentDiv.textContent = comment;
                 document.getElementById("comments").appendChild(commentDiv);
+                saveComment(comment);
                 document.getElementById("commentInput").value = "";
             } else {
                 alert("請輸入留言內容！");
             }
         });
+
+        function saveComment(comment) {
+            var comments = JSON.parse(localStorage.getItem("comments")) || [];
+            comments.push(comment);
+            localStorage.setItem("comments", JSON.stringify(comments));
+        }
+
+        function loadComments() {
+            var comments = JSON.parse(localStorage.getItem("comments")) || [];
+            comments.forEach(function(comment) {
+                var commentDiv = document.createElement("div");
+                commentDiv.className = "comment";
+                commentDiv.textContent = comment;
+                document.getElementById("comments").appendChild(commentDiv);
+            });
+        }
     </script>
 </body>
 </html>
