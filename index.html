@@ -113,18 +113,17 @@
 
         <div id="messages">
             <h1>簡易留言板</h1>
-            <div id="message-list">
-                </div>
-            <div>
-                <label for="name">姓名：</label>
-                <input type="text" id="name">
-            </div>
-            <div>
-                <label for="message">留言：</label>
-                <textarea id="message"></textarea>
-            </div>
-            <button onclick="addMessage()">留言</button>
         </div>
+
+        <div>
+            <label for="name">姓名：</label>
+            <input type="text" id="name">
+        </div>
+        <div>
+            <label for="message">留言：</label>
+            <textarea id="message"></textarea>
+        </div>
+        <button onclick="addMessage()">留言</button>
     </div>
 
     <script>
@@ -134,7 +133,7 @@
                 document.getElementById("surpriseContent").classList.remove("hidden");
                 document.getElementById("passwordInput").style.display = "none";
                 document.getElementById("submitBtn").style.display = "none";
-                loadMessages(); // 載入留言
+                displayMessages(); // 顯示留言
             } else {
                 alert("密碼錯誤喔，再試一次吧！");
             }
@@ -143,38 +142,43 @@
         function loadMessages() {
             let messages = localStorage.getItem("messages");
             if (messages) {
-                messages = JSON.parse(messages);
+                return JSON.parse(messages);
             } else {
-                messages = [];
+                return [];
             }
-            displayMessages(messages);
         }
 
         function saveMessages(messages) {
             localStorage.setItem("messages", JSON.stringify(messages));
         }
 
-        function displayMessages(messages) {
-            const messageList = document.getElementById("message-list");
-            messageList.innerHTML = ""; // 清空留言列表
+        function displayMessages() {
+            const messagesDiv = document.getElementById("messages");
+            messagesDiv.innerHTML = "<h1>簡易留言板</h1>"; // 清空並加入標題
+            const messages = loadMessages();
 
             if (messages.length === 0) {
-                messageList.innerHTML = "<p>目前沒有留言。</p>";
+                messagesDiv.innerHTML += "<p>目前沒有留言。</p>"; // 使用 +=
                 return;
             }
 
             messages.forEach(msg => {
-                const messageDiv = document.createElement("div");
-                messageDiv.classList.add("message-container");
+                const msgDiv = document.createElement("div");
+                msgDiv.classList.add("message-container");
 
                 const nameSpan = document.createElement("span");
                 nameSpan.classList.add("message-name");
                 nameSpan.textContent = msg.name + ": ";
 
-                const messageSpan = document.createElement("span");
-                messageSpan.classList.add("message");
-                messageSpan.textContent = msg.message;
+                const msgSpan = document.createElement("span");
+                msgSpan.classList.add("message");
+                msgSpan.textContent = msg.message;
 
                 const timeSpan = document.createElement("span");
                 timeSpan.classList.add("message-time");
-                const date = new Date(msg.timestamp
+                const date = new Date(msg.timestamp);
+                timeSpan.textContent = " (" + date.toLocaleString() + ")";
+
+                msgDiv.appendChild(nameSpan);
+                msgDiv.appendChild(msgSpan);
+                msgDiv.appendChild(timeSpan
