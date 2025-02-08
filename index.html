@@ -58,6 +58,26 @@
         #submitBtn:hover {
             background-color: #ff1493;
         }
+        /* 照片牆排版 */
+        .photo-wall {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .photo-wall img {
+            width: 100%;
+            max-width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 2px solid #ff69b4;
+            transition: transform 0.3s ease;
+        }
+        .photo-wall img:hover {
+            transform: scale(1.05);
+        }
         /* 愛心遊戲相關樣式 */
         .heart-game {
             position: absolute;
@@ -103,6 +123,24 @@
         }
         .shake {
             animation: shake 0.5s;
+        }
+        /* 音樂播放器樣式 */
+        #musicPlayer {
+            margin-top: 20px;
+        }
+        #musicPlayer button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            border: none;
+            background-color: #ff69b4;
+            color: white;
+            border-radius: 25px;
+            cursor: pointer;
+            margin: 5px;
+            transition: background-color 0.3s ease;
+        }
+        #musicPlayer button:hover {
+            background-color: #ff1493;
         }
     </style>
 </head>
@@ -151,6 +189,16 @@
     <div class="petal" style="left: 40%; animation-delay: 4s;">🌸</div>
     <div class="petal" style="left: 60%; animation-delay: 6s;">🌸</div>
     <div class="petal" style="left: 80%; animation-delay: 8s;">🌸</div>
+
+    <!-- 音樂播放器 -->
+    <div id="musicPlayer">
+        <audio id="backgroundMusic" autoplay loop>
+            <source src="your-music-file.mp3" type="audio/mpeg">
+            您的瀏覽器不支持播放音樂。
+        </audio>
+        <button id="playBtn">播放</button>
+        <button id="pauseBtn">暫停</button>
+    </div>
 
     <script>
         // 猜密碼功能
@@ -223,7 +271,7 @@
             "每天都要開開心心的！",
             "記得喝水，保持身體健康！",
             "別熬夜，早點睡覺！",
-            "平常再忙，也要記得放鬆！",
+            "工作再忙，也要記得放鬆！",
             "心情不好時，記得找我聊聊！",
             "別讓自己太辛苦，我會心疼的！",
             "記得微笑，妳的笑容最美！",
@@ -232,7 +280,7 @@
             "累了就休息，別勉強自己！",
             "記得每天都要愛自己多一點！",
             "別讓壓力壓垮妳，我會陪著妳！",
-            "記得每天都要吃飯哦！",
+            "記得每天都要吃水果哦！",
             "別忘了運動，保持健康！",
             "每天都要對自己說聲加油！",
             "別讓煩惱困擾妳，開心最重要！",
@@ -287,6 +335,27 @@
 
             setInterval(createHeart, 3000); // 每 3 秒生成一個愛心
         }
+
+        // 音樂播放器功能
+        const audio = document.getElementById("backgroundMusic");
+        const playBtn = document.getElementById("playBtn");
+        const pauseBtn = document.getElementById("pauseBtn");
+
+        playBtn.addEventListener("click", function() {
+            audio.play();
+        });
+
+        pauseBtn.addEventListener("click", function() {
+            audio.pause();
+        });
+
+        // 確保音樂自動播放
+        document.addEventListener("DOMContentLoaded", function() {
+            audio.play().catch(() => {
+                // 如果自動播放失敗，顯示提示
+                alert("請點擊頁面以允許播放音樂！");
+            });
+        });
     </script>
 </body>
 </html>
