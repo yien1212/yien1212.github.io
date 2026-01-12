@@ -9,19 +9,28 @@
     </style>
 </head>
 <body>
-    <h1>欸 你不會每天都看一遍吧❤️</h1>
-    <p>我覺得妳猜不到</p>
-    <h2>我們在一起已經 <span id="daysTogether"></span> 天了 ❤️</h2>
+    <!-- 第一頁：密碼頁面 -->
+    <div id="page1">
+        <h1>欸 你不會每天都看一遍吧❤️</h1>
+        <p>我覺得妳猜不到</p>
+        <input type="password" id="passwordInput" placeholder="輸入密碼">
+        <button id="submitBtn">解鎖</button>
+    </div>
+
+    <!-- 第二頁：顯示內容 -->
+    <div id="page2" style="display: none;">
+        <h2>我們在一起已經 <span id="daysTogether"></span> 天了 ❤️</h2>
+    </div>
 
     <script>
         // 設定開始日期
-        const startDate = new Date("2024-12-13"); // 使用ISO格式，避免月份錯誤
+        const startDate = new Date("2024-12-13");
 
         function updateDaysTogether() {
             const now = new Date();
             const timeDiff = now - startDate;
             const daysTogether = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-            const daysText = daysTogether >= 0 ? daysTogether : "0"; // 確保過去天數不為負
+            const daysText = daysTogether >= 0 ? daysTogether : "0";
 
             const daysTogetherElement = document.getElementById("daysTogether");
             if (daysTogetherElement) {
@@ -29,8 +38,24 @@
             }
         }
 
-        // 調用更新函數，當網頁首次裝載時執行
-       document.addEventListener("DOMContentLoaded", updateDaysTogether);
- </script>
+        // 密碼功能
+        const correctPassword = "1234"; // 假設密碼
+        document.getElementById("submitBtn").addEventListener("click", () => {
+            const inputPassword = document.getElementById("passwordInput").value;
+            if (inputPassword === correctPassword) {
+                document.getElementById("page1").style.display = "none";
+                document.getElementById("page2").style.display = "block";
+                updateDaysTogether(); // 顯示第二頁後執行天數更新
+            } else {
+                alert("密碼錯誤！");
+            }
+        });
+
+        // 初次載入時設置顯示為第一頁
+        document.addEventListener("DOMContentLoaded", () => {
+            document.getElementById("page1").style.display = "block";
+            document.getElementById("page2").style.display = "none";
+        });
+    </script>
 </body>
 </html>
