@@ -6,16 +6,18 @@
     <title>妳是小昀ㄛ ❤️</title>
     <style>
         body {
-            font-family: "Microsoft JhengHei", Arial, sans-serif;
+            font-family: Arial, sans-serif;
             text-align: center;
             padding: 20px;
             background-color: #fff0f5;
             position: relative;
+            /* 修正：原本 hidden 會導致無法滑動，改為 auto */
+            overflow-y: auto; 
             overflow-x: hidden;
         }
         h1 {
             color: #ff69b4;
-            font-size: 2rem;
+            font-size: 2.5rem;
             margin-bottom: 20px;
         }
         p {
@@ -28,28 +30,32 @@
         .hidden {
             display: none;
         }
-        /* 輸入框與按鈕 */
         #passwordInput {
-            padding: 12px;
+            padding: 10px;
             font-size: 1rem;
             margin-top: 20px;
             border: 2px solid #ff69b4;
             border-radius: 25px;
             width: 80%;
-            max-width: 250px;
+            max-width: 300px;
             outline: none;
-            text-align: center;
+            transition: border-color 0.3s ease;
+        }
+        #passwordInput:focus {
+            border-color: #ff1493;
         }
         #submitBtn {
-            padding: 10px 25px;
+            padding: 10px 20px;
             font-size: 1rem;
-            margin-top: 15px;
+            margin-top: 10px;
             border: none;
             background-color: #ff69b4;
             color: white;
             border-radius: 25px;
             cursor: pointer;
-            transition: 0.3s;
+            width: 80%;
+            max-width: 300px;
+            transition: background-color 0.3s ease;
         }
         #submitBtn:hover {
             background-color: #ff1493;
@@ -58,8 +64,8 @@
         /* 時光計時器樣式 */
         #timerSection {
             margin: 30px auto;
-            background: rgba(255, 255, 255, 0.7);
-            padding: 20px;
+            background: rgba(255, 255, 255, 0.5);
+            padding: 15px;
             border-radius: 20px;
             border: 2px dashed #ff69b4;
             max-width: 400px;
@@ -68,33 +74,9 @@
             font-size: 1.5rem;
             font-weight: bold;
             color: #ff1493;
-            margin-top: 10px;
         }
 
-        /* 驚喜紙條樣式 */
-        #capsuleSection {
-            margin-top: 30px;
-            padding: 20px;
-        }
-        #gachaBtn {
-            padding: 12px 25px;
-            font-size: 1rem;
-            border: none;
-            background-color: #ff69b4;
-            color: white;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(255,105,180,0.3);
-        }
-        #gachaResult {
-            margin-top: 20px;
-            font-size: 1.2rem;
-            color: #ff1493;
-            font-weight: bold;
-            min-height: 40px;
-        }
-
-        /* 照片牆 */
+        /* 照片牆排版 */
         .photo-wall {
             display: flex;
             flex-wrap: wrap;
@@ -103,145 +85,175 @@
             margin-top: 20px;
         }
         .photo-wall img {
-            width: 140px;
-            height: 140px;
+            width: 100%;
+            max-width: 150px;
+            height: 150px;
             object-fit: cover;
             border-radius: 10px;
             border: 2px solid #ff69b4;
-            transition: 0.3s;
+            transition: transform 0.3s ease;
         }
         .photo-wall img:hover {
-            transform: scale(1.1);
+            transform: scale(1.05);
         }
-
-        /* 愛心遊戲 */
+        /* 愛心遊戲相關樣式 */
         .heart-game {
             position: absolute;
             font-size: 30px;
             cursor: pointer;
-            z-index: 100;
-            user-select: none;
+            animation: float 5s linear infinite;
+            color: #ff69b4;
+            z-index: 10;
+        }
+        @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0); }
         }
         #heartCounter {
-            font-size: 1.2rem;
+            font-size: 1.5rem;
             color: #ff69b4;
-            margin-top: 10px;
+            margin-top: 20px;
         }
-
-        /* 背景飄落花瓣 */
+        /* 背景動畫（飄落的花瓣） */
+        @keyframes fall {
+            0% { transform: translateY(-10%); opacity: 0; }
+            100% { transform: translateY(110%); opacity: 1; }
+        }
         .petal {
-            position: fixed;
+            position: fixed; /* 改為 fixed 確保背景花瓣不隨滾動條跑掉 */
             top: -10%;
             font-size: 20px;
             color: #ff69b4;
-            user-select: none;
-            z-index: -1;
             animation: fall 10s linear infinite;
+            z-index: -1;
         }
-        @keyframes fall {
-            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
-            10% { opacity: 1; }
-            100% { transform: translateY(110vh) rotate(360deg); opacity: 0.5; }
+        #passwordHint {
+            color: #ff69b4;
+            font-size: 0.9rem;
+            margin-top: 10px;
         }
-
-        /* 震動動畫 */
         @keyframes shake {
-            0%, 100% { transform: translateX(0); }
+            0% { transform: translateX(0); }
             25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
+            50% { transform: translateX(10px); }
+            75% { transform: translateX(-10px); }
+            100% { transform: translateX(0); }
         }
-        .shake { animation: shake 0.4s; }
+        .shake {
+            animation: shake 0.5s;
+        }
+        #musicPlayer {
+            margin-top: 40px;
+            padding-bottom: 40px;
+        }
+        #musicPlayer button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            border: none;
+            background-color: #ff69b4;
+            color: white;
+            border-radius: 25px;
+            cursor: pointer;
+            margin: 5px;
+        }
     </style>
 </head>
 <body>
-
     <h1>欸 你不會每天都看一遍吧❤️</h1>
-    <div id="loginArea">
-        <p>我覺得妳猜不到密碼</p>
-        <input type="password" id="passwordInput" placeholder="輸入密碼">
-        <br>
-        <button id="submitBtn">解鎖</button>
-        <div id="passwordHint" class="hidden" style="color:#ff69b4; margin-top:10px;">密碼是我們在一起的日期喔笨蛋</div>
-    </div>
+    <p>我覺得妳猜不到</p>
+    <input type="password" id="passwordInput" placeholder="輸入密碼">
+    <button id="submitBtn">解鎖</button>
+    <div id="passwordHint" class="hidden">不可能真的猜不到吧 笨蛋</div>
 
     <div id="surpriseContent" class="hidden">
-        <h2>驚喜吧！</h2>
-        <p>今天終於又鼓起勇氣講出了我早就想對妳講的話...</p>
-        <p>（這裡保留妳原本感人的長文字內容...）</p>
+        <h2>驚喜吧</h2>
+        <p>今天終於又鼓起勇氣講出了我早就想對妳講的話，雖然你好像沒有很意外。我知道我們的關係並不完美，我們也有很多不同的地方，但這些差異才讓我更加確定妳是我想一直喜歡下去的人。</p>
+        <p>過去一段時間我們的關係都很奇怪，妳也一直在包容我的無理取鬧跟不負責任。一直以來我都覺得自己是孤單一個人的，很多難過跟痛苦的時候也都是我自己一個人走過來的。再加上因為前任的關係，我很不相信感情，不相信任何一個人，覺得談戀愛就是給自己找麻煩，拖累自己。</p>
+        <p>一直以來我好像都沒有認清妳在我心裡的位置，一邊享受妳對我的好，又不想負責任。我很對不起沒有珍惜妳的付出，沒有早點勇敢看清自己的想法，導致我做出了一堆瞎事。謝謝經歷了這些傷害的妳，還願意留一個位置讓我有資格站在妳身邊。</p>
+        <p>曾經我一直自以為自己只要讓妳從我的世界離開，就可以回歸到原本的生活。結果⋯妳懂的。沒有了妳在我身邊吵吵鬧鬧，我真的連飯都吃不太下去。我總是受到一點點傷害就想要逃跑，而妳卻在我傷害妳的同時還迎上來擁抱我。</p>
+        <p>還記得我們剛認識時，我只把妳當打發時間的對象，然後妳就在莫名其妙亂暈，幹哈哈哈。我想那時候的我們都沒有想過我們會在一起吧。</p>
+        <p>我不知道怎麼表達我的感謝和心情，但我想妳能懂吧。和妳在一起後，我從來沒有感受到自己是孤單的。不管遇到什麼事妳都會陪著我，就算是妳沒辦法理解的，妳還是會盡力去理解。</p>
+        <p>因為妳的出現，我不想要再追求那些曾經讓我滿足的短暫刺激。我只希望未來的每一天妳都會在。我呢，我也會一直喜歡妳，認真的喜歡妳下去。我會一直等在妳隨時可以牽住的距離，等待左手自然牽住右手，永遠保持乾淨的肩膀，等待妳的靠上來。</p>
+        <p>這些愛或許不用說出口，但也一直藏在行為裡。我會盡力去做一個合格的女朋友，做一個配得上妳付出的人。希望妳可以一直放心大膽地靠在我的肩膀上，開開心心地當小朋友就好了。</p>
         <p><strong>luv u ❤️</strong></p>
 
         <div id="timerSection">
-            <h3 style="color: #ff1493; margin:0;">我們已經在一起</h3>
+            <h3 style="color: #ff1493; margin-top:0;">我們在一起已經</h3>
             <div id="countdown">計算中...</div>
         </div>
 
         <div class="photo-wall">
-            <img src="IMG_8145.JPG" alt="回憶1">
-            <img src="IMG_8168.JPG" alt="回憶2">
-            <img src="QQAM2028.JPG" alt="回憶3">
-            <img src="IMG_5576.jpg" alt="回憶4">
-            <img src="IMG_6957.jpg" alt="回憶5">
+            <img src="IMG_8145.JPG" alt="我們的回憶">
+            <img src="IMG_8168.JPG" alt="我們的回憶">
+            <img src="QQAM2028.JPG" alt="我們的回憶">
+            <img src="IMG_5576.jpg" alt="我們的回憶">
+            <img src="IMG_6957.jpg" alt="我們的回憶">
         </div>
 
-        <div id="capsuleSection">
-            <button id="gachaBtn">點我：抽一張專屬紙條 💌</button>
-            <div id="gachaResult"></div>
-        </div>
-
-        <div id="heartGameArea" style="margin-top: 40px;">
-            <h3>點擊出現的愛心收集驚喜！</h3>
+        <div id="heartGame" class="hidden">
+            <h3>點擊愛心收集驚喜！</h3>
             <div id="heartCounter">已收集：0 個 ❤️</div>
-            <div id="heartSpace" style="position:relative; height: 200px;"></div>
+            <div id="heartArea" style="position:relative; height:300px; width:100%;"></div>
         </div>
     </div>
 
-    <div class="petal" style="left: 10%; animation-delay: 0s;">🌸</div>
-    <div class="petal" style="left: 30%; animation-delay: 2s;">🌸</div>
-    <div class="petal" style="left: 50%; animation-delay: 4s;">🌸</div>
-    <div class="petal" style="left: 70%; animation-delay: 6s;">🌸</div>
-    <div class="petal" style="left: 90%; animation-delay: 1s;">🌸</div>
+    <div class="petal" style="left: 10%;">🌸</div>
+    <div class="petal" style="left: 20%; animation-delay: 2s;">🌸</div>
+    <div class="petal" style="left: 40%; animation-delay: 4s;">🌸</div>
+    <div class="petal" style="left: 60%; animation-delay: 6s;">🌸</div>
+    <div class="petal" style="left: 80%; animation-delay: 8s;">🌸</div>
 
-    <div id="musicPlayer" style="margin-top: 50px;">
+    <div id="musicPlayer">
         <audio id="backgroundMusic" loop>
             <source src="your-music-file.mp3" type="audio/mpeg">
         </audio>
-        <button onclick="document.getElementById('backgroundMusic').play()" style="border-radius:20px; border:none; padding:5px 15px;">🎵 播放</button>
-        <button onclick="document.getElementById('backgroundMusic').pause()" style="border-radius:20px; border:none; padding:5px 15px;">🔇 暫停</button>
+        <button id="playBtn">播放音樂</button>
+        <button id="pauseBtn">暫停</button>
     </div>
 
     <script>
-        // --- 1. 基礎設定 ---
-        const correctPassword = "0209";
-        const startDate = new Date(2024, 11, 13); // 2024/12/13 (月份要減1)
+        // --- 1. 密碼與計時器資料 ---
+        const password = "0209"; 
+        const startDate = new Date(2024, 11, 13, 0, 0, 0); // 12月要寫 11
+        let attemptCount = 0;
 
-        // --- 2. 解鎖邏輯 ---
+        // --- 2. 解鎖功能 ---
         document.getElementById("submitBtn").addEventListener("click", function() {
-            const input = document.getElementById("passwordInput").value;
-            if (input === correctPassword) {
-                document.getElementById("loginArea").classList.add("hidden");
+            const inputPassword = document.getElementById("passwordInput").value;
+            const audio = document.getElementById("backgroundMusic");
+
+            if (inputPassword === password) {
                 document.getElementById("surpriseContent").classList.remove("hidden");
+                document.getElementById("heartGame").classList.remove("hidden");
+                document.getElementById("passwordInput").style.display = "none";
+                document.getElementById("submitBtn").style.display = "none";
+                document.getElementById("passwordHint").style.display = "none";
                 
                 // 啟動功能
                 startTimer();
                 startHeartGame();
-                // 嘗試自動播放音樂
-                document.getElementById("backgroundMusic").play().catch(() => {});
+                audio.play().catch(() => {});
             } else {
-                const el = document.getElementById("passwordInput");
-                el.classList.add("shake");
+                attemptCount++;
+                const inputField = document.getElementById("passwordInput");
+                inputField.classList.add("shake");
                 document.getElementById("passwordHint").classList.remove("hidden");
-                setTimeout(() => el.classList.remove("shake"), 400);
-                el.value = "";
+                setTimeout(() => inputField.classList.remove("shake"), 500);
+                if (attemptCount >= 5) {
+                    alert("笨蛋，再猜一次！");
+                }
             }
         });
 
-        // --- 3. 計時器邏輯 ---
+        // --- 3. 時光計時器功能 ---
         function startTimer() {
             function update() {
-                const diff = new Date() - startDate;
-                const d = Math.floor(diff / 86400000);
-                const h = Math.floor((diff / 3600000) % 24);
-                const m = Math.floor((diff / 60000) % 60);
+                const now = new Date();
+                const diff = now - startDate;
+                const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+                const m = Math.floor((diff / (1000 * 60)) % 60);
                 const s = Math.floor((diff / 1000) % 60);
                 document.getElementById("countdown").innerHTML = `${d}天 ${h}時 ${m}分 ${s}秒`;
             }
@@ -249,46 +261,42 @@
             setInterval(update, 1000);
         }
 
-        // --- 4. 驚喜紙條邏輯 ---
-        const notes = [
-            "第一次見到妳的時候，沒想到會這麼喜歡妳。",
-            "最喜歡妳笑起來眼睛彎彎的樣子。",
-            "不管是哪一面的妳，在我眼裡都很可愛。",
-            "妳是這世界上最值得被愛的笨蛋。",
-            "我會一直等在妳隨時可以牽住的距離。",
-            "希望妳可以一直放心大膽地開心地當小朋友。",
-            "今天也要記得，妳真的很棒！"
+        // --- 4. 愛心遊戲功能 ---
+        const messages = [
+            "要記得吃飯，照顧好自己！", "別太累了，記得休息哦～", "每天都要開開心心的！",
+            "記得喝水，保持身體健康！", "別熬夜，早點睡覺！", "妳是最棒的，相信自己！"
         ];
-        document.getElementById("gachaBtn").addEventListener("click", function() {
-            const res = document.getElementById("gachaResult");
-            res.style.opacity = 0;
-            setTimeout(() => {
-                res.innerText = "✨ " + notes[Math.floor(Math.random() * notes.length)] + " ✨";
-                res.style.opacity = 1;
-            }, 200);
-        });
-
-        // --- 5. 愛心遊戲邏輯 ---
-        let count = 0;
+        
         function startHeartGame() {
-            const space = document.getElementById("heartSpace");
-            setInterval(() => {
-                if(document.querySelectorAll('.heart-game').length > 5) return;
-                const h = document.createElement("div");
-                h.innerHTML = "❤️";
-                h.className = "heart-game";
-                h.style.left = Math.random() * 90 + "%";
-                h.style.top = Math.random() * 80 + "%";
-                h.onclick = function() {
-                    count++;
-                    document.getElementById("heartCounter").innerText = "已收集：" + count + " 個 ❤️";
-                    this.remove();
-                    if(count % 10 === 0) alert("收集到 10 個愛心！送妳一個大抱抱！");
+            let heartCounter = 0;
+            const heartArea = document.getElementById("heartArea");
+
+            function createHeart() {
+                if (document.querySelectorAll('.heart-game').length > 5) return;
+                const heart = document.createElement("div");
+                heart.innerHTML = "❤️";
+                heart.className = "heart-game";
+                heart.style.left = Math.random() * 90 + "%";
+                heart.style.top = Math.random() * 80 + "%";
+                
+                heart.onclick = function() {
+                    heartCounter++;
+                    document.getElementById("heartCounter").textContent = "已收集：" + heartCounter + " 個 ❤️";
+                    heart.remove();
+                    if (heartCounter % 10 === 0) {
+                        alert(messages[Math.floor(Math.random() * messages.length)]);
+                    }
                 };
-                space.appendChild(h);
-                setTimeout(() => h.remove(), 4000);
-            }, 2000);
+                heartArea.appendChild(heart);
+                setTimeout(() => heart.remove(), 5000);
+            }
+            setInterval(createHeart, 3000);
         }
+
+        // --- 5. 音樂播放器控制 ---
+        const audio = document.getElementById("backgroundMusic");
+        document.getElementById("playBtn").onclick = () => audio.play();
+        document.getElementById("pauseBtn").onclick = () => audio.pause();
     </script>
 </body>
 </html>
