@@ -359,3 +359,83 @@
     </script>
 </body>
 </html>
+
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我們的紀念日</title>
+    <style>
+        body, html {
+            height: 100%; margin: 0; padding: 0;
+            font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+            background: linear-gradient(180deg, #ffafbd 0%, #ffc3a0 100%);
+            display: flex; justify-content: center; align-items: center;
+            overflow: hidden;
+        }
+        /* 愛心動畫 */
+        .heart {
+            position: absolute; color: white; opacity: 0.7;
+            animation: float Up 4s linear infinite;
+            pointer-events: none;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) scale(0); opacity: 1; }
+            100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+        }
+        /* 主卡片 */
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px 30px; border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            text-align: center; width: 80%; max-width: 350px; z-index: 10;
+        }
+        h1 { font-size: 1.2rem; color: #888; margin: 0; }
+        #days-count {
+            font-size: 5rem; font-weight: bold; color: #ff4d6d; display: block;
+        }
+        .unit { font-size: 1.2rem; color: #ff4d6d; font-weight: bold; }
+        .love-msg { margin-top: 20px; color: #555; line-height: 1.5; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h1>我們在一起已經</h1>
+        <div>
+            <span id="days-count">0</span>
+            <span class="unit">DAYS</span>
+        </div>
+        <div class="love-msg">
+            自 2024/12/12 開始<br>
+            每一天都比昨天更愛妳 ❤️
+        </div>
+    </div>
+
+    <script>
+        // 在這裡修改你們在一起的日期 (年, 月-1, 日)
+        const startDate = new Date(2024, 11, 12); 
+
+        function update() {
+            const now = new Date();
+            const diff = Math.floor((now - startDate) / (1000 * 60 * 60 * 24));
+            document.getElementById('days-count').innerText = diff;
+        }
+        
+        function createHeart() {
+            const h = document.createElement('div');
+            h.classList.add('heart');
+            h.innerHTML = '❤️';
+            h.style.left = Math.random() * 100 + 'vw';
+            h.style.fontSize = Math.random() * 20 + 10 + 'px';
+            h.style.animationDuration = Math.random() * 2 + 3 + 's';
+            document.body.appendChild(h);
+            setTimeout(() => h.remove(), 4000);
+        }
+
+        setInterval(createHeart, 400);
+        update();
+    </script>
+</body>
+</html>
