@@ -452,6 +452,23 @@
             <div id="dayPhrase"></div>
         </div>
 
+        <!-- 數字牆 -->
+        <h3 class="section-title">我們的數字 🔢</h3>
+        <div style="display:grid; grid-template-columns: repeat(3,1fr); gap:10px; max-width:500px; margin:0 auto; padding:0 10px;">
+            <div style="background:#fff; border:2px solid #ffb6d5; border-radius:14px; padding:14px 8px;">
+                <div id="numDays" style="font-size:1.6rem; font-weight:bold; color:#ff1493;">-</div>
+                <div style="font-size:0.8rem; color:#999; margin-top:4px;">天</div>
+            </div>
+            <div style="background:#fff; border:2px solid #ffb6d5; border-radius:14px; padding:14px 8px;">
+                <div id="numHours" style="font-size:1.6rem; font-weight:bold; color:#ff1493;">-</div>
+                <div style="font-size:0.8rem; color:#999; margin-top:4px;">小時</div>
+            </div>
+            <div style="background:#fff; border:2px solid #ffb6d5; border-radius:14px; padding:14px 8px;">
+                <div id="numPhotos" style="font-size:1.6rem; font-weight:bold; color:#ff1493;">14</div>
+                <div style="font-size:0.8rem; color:#999; margin-top:4px;">張照片</div>
+            </div>
+        </div>
+
         <!-- 時間軸 -->
         <h3 class="section-title">我們的軌跡 🛤️</h3>
         <div class="timeline">
@@ -466,6 +483,10 @@
             <div class="tl-item">
                 <div class="tl-date">2025/12</div>
                 <div class="tl-text">一起吃甜點、去礁溪老爺住了一晚。</div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-date">2026/01</div>
+                <div class="tl-text">她帶著公主皇冠跟魔杖出現。</div>
             </div>
             <div class="tl-item">
                 <div class="tl-date">2026/02</div>
@@ -607,6 +628,8 @@
                 const s = Math.floor((diff / 1000) % 60);
                 document.getElementById("countdown").innerHTML = `${d}天 ${h}時 ${m}分 ${s}秒`;
                 document.getElementById("dayPhrase").innerText = "✨ " + dayPhrases[d % dayPhrases.length];
+                document.getElementById("numDays").innerText = d;
+                document.getElementById("numHours").innerText = Math.floor(diff / 3600000);
             }
             update(); setInterval(update, 1000);
         }
