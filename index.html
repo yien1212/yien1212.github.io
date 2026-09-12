@@ -625,10 +625,20 @@ body{counter-reset: section}
   </div>
 
   <!-- 刮刮樂 -->
-  <h3 class="stitle">刮刮樂</h3>
-  <div class="scratch-wrap">
-    <div id="scratchMsg">刮我刮我刮我</div>
-    <canvas id="scratchCvs" width="400" height="160"></canvas>
+  <h3 class="stitle">刮刮樂（每天一張）</h3>
+  <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap">
+    <div class="scratch-wrap" style="flex:1; min-width:200px">
+      <div id="scratchMsg">刮我刮我刮我</div>
+      <canvas class="scratchCvs" width="200" height="120"></canvas>
+    </div>
+    <div class="scratch-wrap" style="flex:1; min-width:200px">
+      <div id="scratchMsg2">好想要哦～</div>
+      <canvas class="scratchCvs" width="200" height="120"></canvas>
+    </div>
+    <div class="scratch-wrap" style="flex:1; min-width:200px">
+      <div id="scratchMsg3">刮開看看</div>
+      <canvas class="scratchCvs" width="200" height="120"></canvas>
+    </div>
   </div>
   <p style="text-align:center; color:#999; font-size:.8rem; margin-top:8px">用手指刮開</p>
 
@@ -890,17 +900,16 @@ document.getElementById("mystery").onclick = function(){
 };
 
 /* 刮刮樂 */
-(function(){
-  const c = document.getElementById("scratchCvs");
+document.querySelectorAll(".scratchCvs").forEach((c, idx) => {
   const x = c.getContext("2d");
   const w = c.width, h = c.height;
   x.fillStyle = "#c0c0c0"; x.fillRect(0,0,w,h);
-  x.fillStyle = "#fff"; x.font = "16px sans-serif"; x.textAlign = "center";
+  x.fillStyle = "#fff"; x.font = "14px sans-serif"; x.textAlign = "center";
   x.fillText("刮開我", w/2, h/2);
   let s = false;
   function sc(px,py){
     x.globalCompositeOperation = "destination-out";
-    x.beginPath(); x.arc(px,py,20,0,Math.PI*2); x.fill();
+    x.beginPath(); x.arc(px,py,18,0,Math.PI*2); x.fill();
   }
   c.addEventListener("mousedown", () => s = true);
   c.addEventListener("mouseup", () => s = false);
@@ -918,8 +927,9 @@ document.getElementById("mystery").onclick = function(){
     sc((t.clientX-r.left)*w/r.width, (t.clientY-r.top)*h/r.height);
   }, {passive:true});
   const msgs = ["今天也很喜歡妳","抱抱","想牽手","吃飽了沒","妳最好看","愛妳","不要生氣","快睡覺","想妳了","可愛","么么","心動"];
-  document.getElementById("scratchMsg").textContent = msgs[new Date().getDate() % msgs.length];
-})();
+  const ids = ["scratchMsg","scratchMsg2","scratchMsg3"];
+  document.getElementById(ids[idx]).textContent = msgs[Math.floor(Math.random()*msgs.length)];
+});
 
 /* 翻牌 */
 (function(){
@@ -1295,7 +1305,11 @@ document.getElementById("fireworkBtn").onclick = firework;
 
 /* 轉盤 */
 (function(){
-  const tasks = ["抱抱她","說她可愛","問她吃了沒","親她一下","講情話","陪她講廢話"];
+  const tasks = [
+    "抱抱她","說她可愛","問她吃了沒","親她一下","講情話","陪她講廢話",
+    "幫她吹頭髮","牽她的手","記得說晚安","說想妳","買早餐給她","叫她寶貝",
+    "不要生她氣","聽她抱怨","牽她去廁所","幫她按壓","撒嬌","叫她滾然後抱抱"
+  ];
   const wheel = document.getElementById("wheel");
   const result = document.getElementById("wheelResult");
   let angle = 0;
