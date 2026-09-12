@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>妳是小昀ㄛ ❤️</title>
+    <title>我們的故事 ❤️</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;600&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@200;300;400;600&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         :root {
@@ -18,22 +18,20 @@
         }
         html { scroll-behavior: smooth; }
         body {
-            font-family: "Noto Sans TC", "PingFang TC", sans-serif;
+            font-family: "Noto Sans TC", sans-serif;
             background: var(--cream);
             color: var(--ink);
             min-height: 100vh;
             overflow-x: hidden;
-            position: relative;
         }
-        /* 背景漸層光斑 */
         body::before {
             content: "";
             position: fixed;
             inset: 0;
             background:
-                radial-gradient(circle at 20% 10%, rgba(255,182,213,0.4), transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(255,107,157,0.15), transparent 50%),
-                radial-gradient(circle at 50% 50%, rgba(255,228,230,0.3), transparent 60%);
+                radial-gradient(circle at 15% 20%, rgba(255,182,213,0.35), transparent 50%),
+                radial-gradient(circle at 85% 80%, rgba(255,107,157,0.12), transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(255,228,230,0.25), transparent 60%);
             z-index: -2;
         }
         .hidden { display: none !important; }
@@ -50,103 +48,89 @@
         }
         #loginSection h1 {
             font-family: "Noto Serif TC", serif;
-            font-size: 2rem;
-            font-weight: 300;
+            font-size: 1.8rem;
+            font-weight: 200;
             color: var(--pink-deep);
-            margin-bottom: 10px;
-            letter-spacing: 2px;
+            margin-bottom: 8px;
+            letter-spacing: 4px;
         }
-        #loginSection p { color: #888; margin-bottom: 25px; font-weight: 300; }
+        #loginSection p { color: #aaa; margin-bottom: 25px; font-weight: 300; font-size: 0.9rem; }
         #passwordInput {
             padding: 14px 22px;
             font-size: 1rem;
             border: 1.5px solid var(--pink-soft);
             border-radius: 30px;
-            width: 260px;
+            width: 240px;
             outline: none;
             text-align: center;
             background: rgba(255,255,255,0.8);
-            backdrop-filter: blur(10px);
-            transition: border-color 0.3s;
         }
         #passwordInput:focus { border-color: var(--pink); }
         #submitBtn {
             margin-top: 14px;
             padding: 14px 40px;
-            font-size: 0.95rem;
             border: none;
             background: linear-gradient(135deg, var(--pink), var(--pink-deep));
             color: white;
             border-radius: 30px;
             cursor: pointer;
             box-shadow: 0 8px 25px rgba(233,30,99,0.3);
-            transition: transform 0.2s, box-shadow 0.2s;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
         }
-        #submitBtn:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(233,30,99,0.4); }
         @keyframes shake {
             0%,100% { transform: translateX(0); }
             20%,60% { transform: translateX(-8px); }
             40%,80% { transform: translateX(8px); }
         }
 
-        /* ===== 主內容 ===== */
-        #surpriseContent {
-            max-width: 720px;
-            margin: 0 auto;
-            padding: 40px 20px 80px;
-        }
-        h1#mainTitle {
-            font-family: "Noto Serif TC", serif;
-            font-size: 2.4rem;
-            font-weight: 300;
-            color: var(--pink-deep);
-            text-align: center;
-            margin-bottom: 30px;
-            letter-spacing: 3px;
-            cursor: pointer;
-        }
-        .hero-text {
-            font-family: "Noto Serif TC", serif;
-            font-weight: 300;
-            font-size: 1rem;
-            line-height: 2.2;
-            color: #555;
-            margin-bottom: 14px;
-            text-align: left;
-        }
+        /* ===== 主容器 ===== */
+        #surpriseContent { max-width: 720px; margin: 0 auto; padding: 0 20px 80px; }
 
-        /* ===== 計時器卡片 ===== */
-        #timerSection {
-            margin: 40px auto;
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.5);
-            padding: 30px 20px;
-            border-radius: 24px;
+        /* ===== HERO ===== */
+        .hero {
+            min-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             text-align: center;
-            box-shadow: 0 10px 40px rgba(255,107,157,0.15);
+            padding: 40px 0;
         }
-        #timerSection h3 {
+        .hero h1 {
             font-family: "Noto Serif TC", serif;
-            font-weight: 300;
-            font-size: 0.9rem;
-            color: #999;
-            letter-spacing: 3px;
-            margin-bottom: 15px;
-        }
-        #countdown {
-            font-family: "Noto Serif TC", serif;
-            font-size: 1.8rem;
-            font-weight: 600;
+            font-size: 2.6rem;
+            font-weight: 200;
             color: var(--pink-deep);
+            letter-spacing: 6px;
+            line-height: 1.4;
+        }
+        .hero .sub {
+            margin-top: 16px;
+            color: #999;
+            font-weight: 300;
             letter-spacing: 2px;
         }
-        #dayPhrase {
-            margin-top: 12px;
-            font-size: 0.9rem;
+        .hero-count {
+            margin-top: 30px;
+            font-family: "Noto Serif TC", serif;
+            font-size: 1.3rem;
+            color: #555;
+            font-weight: 300;
+        }
+        .hero-count b {
+            color: var(--pink-deep);
+            font-size: 2rem;
+            font-weight: 600;
+        }
+        .scroll-hint {
+            margin-top: 60px;
             color: var(--pink);
-            font-style: italic;
+            font-size: 1.5rem;
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%,100% { transform: translateY(0); }
+            50% { transform: translateY(10px); }
         }
 
         /* ===== 區塊標題 ===== */
@@ -156,7 +140,7 @@
             font-size: 1.4rem;
             color: var(--pink-deep);
             text-align: center;
-            margin: 60px auto 25px;
+            margin: 70px auto 25px;
             letter-spacing: 4px;
         }
         .section-title::before, .section-title::after {
@@ -165,37 +149,73 @@
             margin: 0 12px;
         }
 
-        /* ===== 數字牆 ===== */
+        /* ===== 計時卡片 ===== */
+        .timer-card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.5);
+            padding: 30px 20px;
+            border-radius: 24px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(255,107,157,0.15);
+        }
+        .timer-card h3 {
+            font-family: "Noto Serif TC", serif;
+            font-weight: 300;
+            font-size: 0.85rem;
+            color: #999;
+            letter-spacing: 3px;
+            margin-bottom: 15px;
+        }
+        #countdown {
+            font-family: "Noto Serif TC", serif;
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: var(--pink-deep);
+            letter-spacing: 2px;
+            line-height: 1.6;
+        }
+        #dayPhrase {
+            margin-top: 12px;
+            font-size: 0.85rem;
+            color: var(--pink);
+            font-style: italic;
+        }
+
+        /* 數字牆 */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 14px;
-            max-width: 480px;
-            margin: 0 auto;
+            margin-top: 16px;
         }
         .stat-card {
             background: var(--glass);
-            backdrop-filter: blur(20px);
             border: 1px solid rgba(255,255,255,0.5);
-            border-radius: 20px;
-            padding: 22px 10px;
+            border-radius: 18px;
+            padding: 20px 8px;
             text-align: center;
-            box-shadow: 0 8px 25px rgba(255,107,157,0.1);
             transition: transform 0.3s;
         }
         .stat-card:hover { transform: translateY(-4px); }
         .stat-num {
             font-family: "Noto Serif TC", serif;
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             font-weight: 600;
             color: var(--pink-deep);
         }
-        .stat-label {
-            font-size: 0.75rem;
-            color: #999;
-            margin-top: 6px;
-            letter-spacing: 2px;
+        .stat-label { font-size: 0.72rem; color: #999; margin-top: 4px; letter-spacing: 2px; }
+
+        /* 下個紀念日倒數 */
+        .next-count {
+            margin-top: 16px;
+            padding: 16px;
+            background: linear-gradient(135deg, rgba(255,107,157,0.1), rgba(255,182,213,0.15));
+            border-radius: 16px;
+            font-size: 0.9rem;
+            color: #555;
         }
+        .next-count b { color: var(--pink-deep); font-size: 1.2rem; }
 
         /* ===== 時間軸 ===== */
         .timeline {
@@ -210,7 +230,7 @@
             left: 50%;
             top: 0; bottom: 0;
             width: 1px;
-            background: linear-gradient(to bottom, transparent, var(--pink-soft), var(--pink-soft), transparent);
+            background: linear-gradient(to bottom, transparent, var(--pink-soft), transparent);
             transform: translateX(-50%);
         }
         .tl-item {
@@ -242,62 +262,76 @@
         }
         .tl-item:nth-child(odd)::after { right: -30px; }
         .tl-item:nth-child(even)::after { left: -30px; }
-        .tl-date {
-            font-size: 0.75rem;
-            color: var(--pink);
-            font-weight: 500;
-            letter-spacing: 1px;
-        }
-        .tl-text {
-            font-size: 0.9rem;
-            color: #555;
-            margin-top: 6px;
-            line-height: 1.6;
-            font-weight: 300;
-        }
+        .tl-date { font-size: 0.75rem; color: var(--pink); font-weight: 500; letter-spacing: 1px; }
+        .tl-text { font-size: 0.9rem; color: #555; margin-top: 6px; line-height: 1.6; font-weight: 300; }
 
-        /* ===== 照片牆 ===== */
+        /* ===== 照片輪播 ===== */
+        .carousel {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .carousel img {
+            width: 100%;
+            height: 380px;
+            object-fit: cover;
+            display: block;
+        }
+        .carousel .cap {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            padding: 40px 20px 16px;
+            background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
+            color: #fff;
+            font-size: 0.95rem;
+            font-family: "Noto Serif TC", serif;
+        }
+        .carousel-btn {
+            position: absolute;
+            top: 50%; transform: translateY(-50%);
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            color: #fff;
+            border: none;
+            font-size: 1.5rem;
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        #carPrev { left: 12px; }
+        #carNext { right: 12px; }
+
+        /* 照片牆 */
         .photo-wall {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 14px;
+            gap: 12px;
         }
         .photo-wall figure {
             margin: 0;
-            position: relative;
             cursor: pointer;
             overflow: hidden;
-            border-radius: 18px;
+            border-radius: 16px;
             background: #fff;
             box-shadow: 0 4px 15px rgba(0,0,0,0.06);
-            transition: transform 0.4s cubic-bezier(.2,.8,.2,1), box-shadow 0.4s;
+            transition: transform 0.4s, box-shadow 0.4s;
         }
         .photo-wall figure:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 15px 35px rgba(233,30,99,0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(233,30,99,0.2);
         }
         .photo-wall img {
             width: 100%;
-            height: 180px;
+            height: 160px;
             object-fit: cover;
             display: block;
             transition: transform 0.6s;
         }
         .photo-wall figure:hover img { transform: scale(1.08); }
-        .photo-wall figcaption {
-            position: absolute;
-            bottom: 0; left: 0; right: 0;
-            padding: 8px 12px;
-            font-size: 0.78rem;
-            color: #fff;
-            background: linear-gradient(to top, rgba(0,0,0,0.5), transparent);
-            opacity: 0;
-            transform: translateY(8px);
-            transition: opacity 0.3s, transform 0.3s;
-        }
-        .photo-wall figure:hover figcaption { opacity: 1; transform: translateY(0); }
 
-        /* ===== 燈箱 ===== */
+        /* 燈箱 */
         #lightbox {
             position: fixed; inset: 0;
             background: rgba(30,20,30,0.92);
@@ -309,39 +343,27 @@
         }
         #lightbox.open { display: flex; animation: fadeIn 0.3s; }
         #lightboxImg {
-            max-width: 92vw; max-height: 82vh;
+            max-width: 92vw; max-height: 80vh;
             border-radius: 14px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
         }
-        #lightboxCaption {
-            color: #ffd6e7;
-            margin-top: 16px;
-            font-size: 0.95rem;
-            font-family: "Noto Serif TC", serif;
-        }
+        #lightboxCaption { color: #ffd6e7; margin-top: 14px; font-size: 0.95rem; }
         .lb-btn {
             position: absolute;
             top: 50%; transform: translateY(-50%);
             background: rgba(255,255,255,0.1);
             color: #fff;
             border: 1px solid rgba(255,255,255,0.2);
-            font-size: 1.8rem;
-            width: 46px; height: 46px;
+            font-size: 1.6rem;
+            width: 44px; height: 44px;
             border-radius: 50%;
             cursor: pointer;
-            transition: background 0.2s;
         }
-        .lb-btn:hover { background: rgba(255,255,255,0.25); }
         #lbPrev { left: 15px; }
         #lbNext { right: 15px; }
         #lbClose {
-            position: absolute;
-            top: 18px; right: 22px;
-            background: transparent;
-            border: none;
-            color: #fff;
-            font-size: 1.8rem;
-            cursor: pointer;
+            position: absolute; top: 18px; right: 22px;
+            background: transparent; border: none;
+            color: #fff; font-size: 1.8rem; cursor: pointer;
         }
 
         /* ===== 盲盒 ===== */
@@ -353,8 +375,7 @@
         }
         #mysteryInner {
             position: relative;
-            width: 100%;
-            height: 220px;
+            width: 100%; height: 220px;
             transition: transform 0.8s cubic-bezier(.2,.8,.2,1);
             transform-style: preserve-3d;
         }
@@ -363,10 +384,8 @@
             position: absolute; inset: 0;
             backface-visibility: hidden;
             border-radius: 22px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
         }
         .face-front {
             background: linear-gradient(135deg, var(--pink), var(--pink-deep));
@@ -383,35 +402,27 @@
             overflow: hidden;
         }
         .face-back img { width: 100%; height: 140px; object-fit: cover; }
-        .face-back .quote {
-            padding: 10px;
-            font-size: 0.82rem;
-            color: #d1478a;
-            line-height: 1.5;
-        }
+        .face-back .quote { padding: 10px; font-size: 0.82rem; color: #d1478a; line-height: 1.5; }
 
-        /* ===== 情話抽卡 ===== */
-        .love-card-area { text-align: center; }
-        #loveCardBtn {
+        /* ===== 情話 ===== */
+        .center { text-align: center; }
+        .btn-pink {
             padding: 14px 36px;
-            font-size: 0.95rem;
             border: none;
             background: linear-gradient(135deg, var(--pink), var(--pink-deep));
             color: white;
             border-radius: 30px;
             cursor: pointer;
             box-shadow: 0 8px 25px rgba(233,30,99,0.3);
-            transition: transform 0.2s, box-shadow 0.2s;
             letter-spacing: 2px;
+            font-size: 0.95rem;
         }
-        #loveCardBtn:hover { transform: translateY(-2px); }
         #loveCardText {
             max-width: 500px;
             margin: 20px auto 0;
             padding: 24px;
             background: var(--glass);
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.5);
             border-radius: 20px;
             color: #555;
             font-family: "Noto Serif TC", serif;
@@ -441,19 +452,12 @@
             font-size: 1.05rem;
             line-height: 1.7;
             min-height: 140px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: flex; align-items: center; justify-content: center;
             text-align: center;
         }
-        #scratchCanvas {
-            position: absolute;
-            inset: 0;
-            cursor: grab;
-        }
-        #scratchCanvas:active { cursor: grabbing; }
+        #scratchCanvas { position: absolute; inset: 0; cursor: grab; }
 
-        /* ===== 翻牌遊戲 ===== */
+        /* ===== 翻牌 ===== */
         .memory-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -461,14 +465,9 @@
             max-width: 400px;
             margin: 0 auto;
         }
-        .mem-card {
-            aspect-ratio: 1;
-            perspective: 600px;
-            cursor: pointer;
-        }
+        .mem-card { aspect-ratio: 1; perspective: 600px; cursor: pointer; }
         .mem-inner {
-            position: relative;
-            width: 100%; height: 100%;
+            position: relative; width: 100%; height: 100%;
             transition: transform 0.5s;
             transform-style: preserve-3d;
         }
@@ -477,45 +476,58 @@
             position: absolute; inset: 0;
             backface-visibility: hidden;
             border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: flex; align-items: center; justify-content: center;
         }
         .mem-front {
             background: linear-gradient(135deg, var(--pink), var(--pink-deep));
-            color: #fff;
-            font-size: 1.4rem;
+            color: #fff; font-size: 1.4rem;
         }
-        .mem-back {
-            background: #fff;
-            transform: rotateY(180deg);
+        .mem-back { background: #fff; transform: rotateY(180deg); overflow: hidden; }
+        .mem-back img { width: 100%; height: 100%; object-fit: cover; }
+        .mem-card.matched { opacity: 0.6; }
+        #memStatus { text-align: center; color: var(--pink); margin-top: 12px; font-size: 0.9rem; }
+
+        /* ===== 愛情指數 ===== */
+        #loveMeterBox {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 30px;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border-radius: 22px;
+            text-align: center;
+        }
+        #loveMeterNum {
+            font-family: "Noto Serif TC", serif;
+            font-size: 3rem;
+            font-weight: 600;
+            color: var(--pink-deep);
+        }
+        #loveMeterBar {
+            height: 12px;
+            background: #eee;
+            border-radius: 6px;
+            margin: 16px 0;
             overflow: hidden;
         }
-        .mem-back img { width: 100%; height: 100%; object-fit: cover; }
-        .mem-card.matched { opacity: 0.7; }
-        #memStatus {
-            text-align: center;
-            color: var(--pink);
-            margin-top: 12px;
-            font-size: 0.9rem;
+        #loveMeterFill {
+            height: 100%;
+            background: linear-gradient(to right, var(--pink), var(--pink-deep));
+            width: 0;
+            border-radius: 6px;
+            transition: width 1.5s ease;
         }
+        #loveMeterMsg { color: #888; font-size: 0.9rem; min-height: 30px; }
 
         /* ===== 願望清單 ===== */
-        .wish-list {
-            max-width: 500px;
-            margin: 0 auto;
-            text-align: left;
-        }
+        .wish-list { max-width: 500px; margin: 0 auto; text-align: left; }
         .wish-item {
             background: var(--glass);
             backdrop-filter: blur(10px);
             padding: 12px 16px;
             border-radius: 14px;
             margin: 8px 0;
-            border: 1px solid rgba(255,255,255,0.5);
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            display: flex; align-items: center; gap: 10px;
         }
         .wish-item.done { opacity: 0.5; text-decoration: line-through; }
         .wish-item input[type=checkbox] { width: 18px; height: 18px; accent-color: var(--pink); }
@@ -528,144 +540,14 @@
             background: var(--glass);
             backdrop-filter: blur(20px);
             border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.5);
             font-family: "Noto Serif TC", serif;
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             color: #555;
             line-height: 1.8;
         }
 
-        /* ===== 刮刮樂 ===== */
-        (function() {
-            const cvs = document.getElementById("scratchCanvas");
-            const ctx = cvs.getContext("2d");
-            const w = cvs.width, h = cvs.height;
-            ctx.fillStyle = "#c0c0c0";
-            ctx.fillRect(0, 0, w, h);
-            ctx.fillStyle = "#fff";
-            ctx.font = "16px 'Noto Sans TC'";
-            ctx.textAlign = "center";
-            ctx.fillText("刮開我", w/2, h/2);
-            let scratching = false;
-            function scratch(x, y) {
-                ctx.globalCompositeOperation = "destination-out";
-                ctx.beginPath();
-                ctx.arc(x, y, 20, 0, Math.PI*2);
-                ctx.fill();
-            }
-            cvs.addEventListener("mousedown", e => { scratching = true; });
-            cvs.addEventListener("mouseup", () => scratching = false);
-            cvs.addEventListener("mousemove", e => {
-                if (!scratching) return;
-                const r = cvs.getBoundingClientRect();
-                scratch((e.clientX-r.left)*w/r.width, (e.clientY-r.top)*h/r.height);
-            });
-            cvs.addEventListener("touchstart", e => { scratching = true; }, {passive: true});
-            cvs.addEventListener("touchend", () => scratching = false);
-            cvs.addEventListener("touchmove", e => {
-                if (!scratching) return;
-                const r = cvs.getBoundingClientRect();
-                const t = e.touches[0];
-                scratch((t.clientX-r.left)*w/r.width, (t.clientY-r.top)*h/r.height);
-            }, {passive: true});
-            // 每天隨機一句
-            const msgs = [
-                "今天也很喜歡妳", "抱抱", "想牽手", "吃飽了沒",
-                "妳最好看", "愛妳", "不要生氣", "快睡覺",
-                "想妳了", "可愛", "么么", "心動"
-            ];
-            document.getElementById("scratchText").innerText = msgs[new Date().getDate() % msgs.length];
-        })();
-
-        /* ===== 翻牌記憶遊戲 ===== */
-        (function() {
-            const photos = [
-                "couple_helmet.jpg", "date_dessert.jpg", "trip_hotel.jpg",
-                "couple_crown.jpg", "cinnamoroll.jpg", "giant_icecream.jpg"
-            ];
-            const deck = [...photos, ...photos].sort(() => Math.random() - 0.5);
-            const grid = document.getElementById("memGrid");
-            let first = null, lock = false, matched = 0;
-            deck.forEach((src, i) => {
-                const card = document.createElement("div");
-                card.className = "mem-card";
-                card.innerHTML = `<div class="mem-inner">
-                    <div class="mem-front">?</div>
-                    <div class="mem-back"><img src="${src}" alt=""></div>
-                </div>`;
-                card.onclick = () => {
-                    if (lock || card.classList.contains("flipped") || card.classList.contains("matched")) return;
-                    card.classList.add("flipped");
-                    if (!first) { first = card; return; }
-                    lock = true;
-                    const match = first.querySelector("img").src === card.querySelector("img").src;
-                    setTimeout(() => {
-                        if (match) {
-                            first.classList.add("matched");
-                            card.classList.add("matched");
-                            matched++;
-                            if (matched === photos.length) {
-                                document.getElementById("memStatus").innerText = "全部配對成功！妳好聰明 ❤️";
-                            }
-                        } else {
-                            first.classList.remove("flipped");
-                            card.classList.remove("flipped");
-                        }
-                        first = null;
-                        lock = false;
-                    }, 600);
-                };
-                grid.appendChild(card);
-            });
-        })();
-
-        /* ===== 願望清單 ===== */
-        (function() {
-            const wishes = [
-                "一起看一場海", "一起跨年", "一起去日本",
-                "一起養一隻貓", "一起做飯給對方吃", "一起露營",
-                "一起拍一系列情侶照", "一起看煙火", "一起養老"
-            ];
-            const saved = JSON.parse(localStorage.getItem("wishes") || "[]");
-            const list = document.getElementById("wishList");
-            wishes.forEach((w, i) => {
-                const done = saved.includes(i);
-                const div = document.createElement("div");
-                div.className = "wish-item" + (done ? " done" : "");
-                div.innerHTML = `<input type="checkbox" ${done ? "checked" : ""}> <span>${w}</span>`;
-                div.querySelector("input").onchange = function() {
-                    let s = JSON.parse(localStorage.getItem("wishes") || "[]");
-                    if (this.checked) s.push(i); else s = s.filter(x => x !== i);
-                    localStorage.setItem("wishes", JSON.stringify(s));
-                    div.classList.toggle("done", this.checked);
-                };
-                list.appendChild(div);
-            });
-        })();
-
-        /* ===== 每日一問 ===== */
-        (function() {
-            const qs = [
-                "今天最開心的一件事是什麼？",
-                "我們第一次約會去了哪？",
-                "妳覺得我哪裡最可愛？",
-                "想跟我一起去哪裡旅行？",
-                "今天有想我嗎？",
-                "我們第一次吵架是為了什麼？",
-                "喜歡我叫妳什麼？",
-                "下次見面想做什麼？",
-                "覺得我哪一點最吸引妳？",
-                "想一起完成什麼事？"
-            ];
-            const day = Math.floor(Date.now() / 86400000);
-            document.getElementById("dailyQ").innerText = qs[day % qs.length];
-        })();
-
         /* ===== 便利貼 ===== */
-        #noteArea {
-            max-width: 500px;
-            margin: 0 auto;
-        }
+        #noteArea { max-width: 500px; margin: 0 auto; }
         #noteInput {
             width: 100%;
             min-height: 80px;
@@ -677,9 +559,7 @@
             resize: vertical;
             outline: none;
             background: rgba(255,255,255,0.8);
-            transition: border-color 0.3s;
         }
-        #noteInput:focus { border-color: var(--pink); }
         .note-btns { margin-top: 10px; display: flex; gap: 10px; justify-content: center; }
         #noteBtn, #copyNoteBtn {
             padding: 10px 24px;
@@ -687,12 +567,8 @@
             border-radius: 20px;
             cursor: pointer;
             font-size: 0.85rem;
-            letter-spacing: 1px;
         }
-        #noteBtn {
-            background: linear-gradient(135deg, var(--pink), var(--pink-deep));
-            color: #fff;
-        }
+        #noteBtn { background: linear-gradient(135deg, var(--pink), var(--pink-deep)); color: #fff; }
         #copyNoteBtn { background: #e0e0e0; color: #666; }
         .note-item {
             background: #fffde7;
@@ -703,80 +579,57 @@
             text-align: left;
             font-size: 0.92rem;
             line-height: 1.6;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
         }
         .note-date { font-size: 0.72rem; color: #aaa; margin-top: 6px; }
 
         /* ===== 愛心遊戲 ===== */
         .heart-game {
             position: absolute;
-            font-size: 28px;
+            font-size: 26px;
             cursor: pointer;
             animation: float 5s ease-in-out infinite;
             color: var(--pink);
-            z-index: 10;
-            transition: transform 0.1s;
         }
-        .heart-game:active { transform: scale(1.5); }
-        @keyframes float {
-            0%,100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
-        }
-        #heartCounter {
-            font-size: 1rem;
-            color: var(--pink);
-            margin-bottom: 15px;
-            letter-spacing: 1px;
-        }
+        @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+        #heartCounter { font-size: 1rem; color: var(--pink); margin-bottom: 15px; }
         #gameSpace {
             position: relative;
-            height: 280px;
+            height: 260px;
             max-width: 600px;
             margin: 0 auto;
             background: var(--glass);
-            backdrop-filter: blur(10px);
             border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.5);
         }
 
-        /* ===== 花瓣 ===== */
+        /* 花瓣 */
         .petal {
-            position: fixed;
-            top: -5%;
-            font-size: 16px;
-            color: var(--pink-soft);
+            position: fixed; top: -5%;
+            font-size: 14px; color: var(--pink-soft);
             animation: fall 12s linear infinite;
-            z-index: -1;
-            pointer-events: none;
+            z-index: -1; pointer-events: none;
         }
         @keyframes fall {
-            0%   { transform: translateY(-5vh) rotate(0deg); opacity: 0; }
-            10%  { opacity: 0.8; }
+            0% { transform: translateY(-5vh) rotate(0); opacity: 0; }
+            10% { opacity: 0.8; }
             100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
         }
         .burst-heart {
-            position: fixed;
-            pointer-events: none;
-            font-size: 18px;
-            z-index: 9999;
+            position: fixed; pointer-events: none;
+            font-size: 18px; z-index: 9999;
             animation: burst 1s ease-out forwards;
         }
         @keyframes burst {
-            0%   { transform: translate(0,0) scale(0.5); opacity: 1; }
+            0% { transform: translate(0,0) scale(0.5); opacity: 1; }
             100% { transform: translate(var(--dx), var(--dy)) scale(1.4); opacity: 0; }
         }
 
-        /* ===== 音樂 ===== */
-        #musicPlayer {
-            margin-top: 60px;
-            text-align: center;
-        }
+        /* 音樂 */
+        #musicPlayer { margin-top: 60px; text-align: center; padding-bottom: 40px; }
         #musicPlayer button {
             padding: 10px 22px;
             font-size: 0.85rem;
             border: none;
             background: var(--glass);
-            backdrop-filter: blur(10px);
             color: var(--pink-deep);
             border-radius: 20px;
             cursor: pointer;
@@ -786,29 +639,25 @@
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
-            to   { opacity: 1; transform: translateY(0); }
+            to { opacity: 1; transform: translateY(0); }
         }
         .fade-in { animation: fadeIn 1s ease both; }
 
-        /* 手機版 */
         @media (max-width: 600px) {
             .timeline::before { left: 20px; }
             .tl-item, .tl-item:nth-child(odd), .tl-item:nth-child(even) {
-                width: calc(100% - 50px);
-                left: 45px !important;
+                width: calc(100% - 50px); left: 45px !important;
             }
             .tl-item::after, .tl-item:nth-child(odd)::after, .tl-item:nth-child(even)::after {
-                left: -28px !important;
-                right: auto !important;
+                left: -28px !important; right: auto !important;
             }
-            h1#mainTitle { font-size: 1.8rem; }
-            .hero-text { font-size: 0.95rem; }
+            .hero h1 { font-size: 1.8rem; }
+            .carousel img { height: 260px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- 花瓣 -->
     <div class="petal" style="left: 8%;">🌸</div>
     <div class="petal" style="left: 28%; animation-delay: 2s;">🌸</div>
     <div class="petal" style="left: 50%; animation-delay: 4s;">🌸</div>
@@ -817,32 +666,43 @@
 
     <div id="loginSection">
         <h1>給最重要的人</h1>
-        <p>輸入密碼才能進去</p>
+        <p>這是只屬於我們的地方</p>
         <input type="password" id="passwordInput" placeholder="••••">
         <br>
         <button id="submitBtn">進入</button>
-        <div id="passwordHint" class="hidden" style="color:var(--pink); margin-top:14px; font-size:0.85rem;">密碼是我們在一起的日期喔</div>
+        <div id="passwordHint" class="hidden" style="color:var(--pink); margin-top:14px; font-size:0.85rem;">在一起的那天</div>
     </div>
 
     <div id="surpriseContent" class="hidden">
-        <h1 id="mainTitle">欸 妳不會每天都看一遍吧 ❤️</h1>
 
-        <p class="hero-text">今天終於又鼓起勇氣講出了我早就想對妳講的話，雖然妳好像沒有很意外。我知道我們的關係並不完美，但這些差異才讓我更加確定妳是我想一直喜歡下去的人。</p>
-        <p class="hero-text">過去一段時間我們的關係都很奇怪，妳也一直在包容我的無理取鬧。一直以來我都覺得自己是孤單一個人的。再加上因為前任的關係，我很不相信感情。</p>
-        <p class="hero-text">一直以來我好像都沒有認清妳在我心裡的位置，一邊享受妳對我的好，又不想負責任。謝謝經歷了這些傷害的妳，還願意留一個位置讓我有資格站在妳身邊。</p>
-        <p class="hero-text">曾經我一直自以為只要讓妳離開就可以回歸原本生活。結果⋯妳懂的。沒有了妳在我身邊吵吵鬧鬧，我真的連飯都吃不太下去。</p>
-        <p class="hero-text">和妳在一起後，我從來沒有感受到自己是孤單的。因為妳的出現，我不想要再追求那些曾經讓我滿足的短暫刺激。我只希望未來的每一天妳都會在。</p>
-        <p class="hero-text" style="text-align:center; margin-top:20px; color:var(--pink-deep);">luv u ❤️</p>
+        <!-- HERO -->
+        <div class="hero">
+            <h1>妳是小昀ㄛ</h1>
+            <p class="sub">— 我們的故事 —</p>
+            <div class="hero-count">
+                已經在一起<br>
+                <b id="heroDays">...</b> 天
+            </div>
+            <div class="scroll-hint">↓</div>
+        </div>
+
+        <!-- 情書 -->
+        <h3 class="section-title">寫給妳</h3>
+        <div style="font-family:'Noto Serif TC',serif; font-weight:300; font-size:1rem; line-height:2.2; color:#555; text-align:left;">
+            <p style="margin-bottom:14px;">今天終於又鼓起勇氣講出了我早就想對妳講的話。我知道我們的關係並不完美，但這些差異才讓我更加確定妳是我想一直喜歡下去的人。</p>
+            <p style="margin-bottom:14px;">一直以來我都覺得自己是孤單一個人的。因為前任的關係，我很不相信感情。但妳在莫名其妙亂暈，然後我們就在一起了。</p>
+            <p style="margin-bottom:14px;">我曾經以為只要讓妳走就可以回到原本生活。結果⋯沒有了妳在我身邊吵吵鬧鬧，我真的連飯都吃不太下去。</p>
+            <p style="margin-bottom:14px;">和妳在一起後，我從來沒有感受到自己是孤單的。因為妳的出現，我不想要再追求那些短暫刺激。我只希望未來的每一天妳都會在。</p>
+            <p style="text-align:center; margin-top:20px; color:var(--pink-deep);">luv u ❤️</p>
+        </div>
 
         <!-- 計時器 -->
-        <div id="timerSection">
-            <h3>我們在一起已經</h3>
+        <h3 class="section-title">我們在一起</h3>
+        <div class="timer-card">
+            <h3>每一秒都在增加</h3>
             <div id="countdown">計算中...</div>
             <div id="dayPhrase"></div>
         </div>
-
-        <!-- 數字牆 -->
-        <h3 class="section-title">我們的數字</h3>
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-num" id="numDays">-</div>
@@ -857,13 +717,14 @@
                 <div class="stat-label">張照片</div>
             </div>
         </div>
+        <div class="next-count" id="nextCount"></div>
 
         <!-- 時間軸 -->
         <h3 class="section-title">我們的軌跡</h3>
         <div class="timeline">
             <div class="tl-item">
                 <div class="tl-date">2024 / 12 / 13</div>
-                <div class="tl-text">在一起的那天。雖然過程很智障，但結果很好。</div>
+                <div class="tl-text">在一起的那天。過程很智障，但結果很好。</div>
             </div>
             <div class="tl-item">
                 <div class="tl-date">2025 / 10</div>
@@ -891,32 +752,38 @@
             </div>
         </div>
 
+        <!-- 照片輪播 -->
+        <h3 class="section-title">回憶</h3>
+        <div class="carousel">
+            <img id="carImg" src="couple_helmet.jpg" alt="">
+            <div class="cap" id="carCap">兩個安全帽</div>
+            <button class="carousel-btn" id="carPrev">‹</button>
+            <button class="carousel-btn" id="carNext">›</button>
+        </div>
+
         <!-- 照片牆 -->
-        <h3 class="section-title">最可愛的女朋友</h3>
         <div class="photo-wall" id="photoWall">
-            <figure><img src="IMG_8145.JPG" alt="" data-caption="第一次一起的時候"><figcaption>第一次</figcaption></figure>
-            <figure><img src="IMG_8168.JPG" alt="" data-caption="偷偷拍的"><figcaption>偷偷拍</figcaption></figure>
-            <figure><img src="QQAM2028.JPG" alt="" data-caption="出去玩的那天"><figcaption>出去玩</figcaption></figure>
-            <figure><img src="IMG_5576.jpg"  alt="" data-caption="笑到肚子痛"><figcaption>笑到痛</figcaption></figure>
-            <figure><img src="IMG_6957.jpg"  alt="" data-caption="最可愛的一張"><figcaption>最可愛</figcaption></figure>
-            <figure><img src="couple_helmet.jpg" alt="" data-caption="兩個安全帽"><figcaption>騎車</figcaption></figure>
-            <figure><img src="date_dessert.jpg" alt="" data-caption="兩碗甜點"><figcaption>甜點</figcaption></figure>
-            <figure><img src="trip_hotel.jpg" alt="" data-caption="礁溪老爺"><figcaption>礁溪</figcaption></figure>
-            <figure><img src="couple_crown.jpg" alt="" data-caption="公主與魔杖"><figcaption>公主</figcaption></figure>
-            <figure><img src="cinnamoroll.jpg" alt="" data-caption="玉桂狗聯名"><figcaption>玉桂狗</figcaption></figure>
-            <figure><img src="cry_face.jpg" alt="" data-caption="怎麼了嘛"><figcaption>怎麼了</figcaption></figure>
-            <figure><img src="icecream_selfie.jpg" alt="" data-caption="張大嘴吃冰"><figcaption>冰淇淋</figcaption></figure>
-            <figure><img src="red_umbrella.jpg" alt="" data-caption="星巴克前面"><figcaption>紅傘</figcaption></figure>
-            <figure><img src="giant_icecream.jpg" alt="" data-caption="她變成冰淇淋"><figcaption>大冰淇淋</figcaption></figure>
+            <figure><img src="IMG_8145.JPG" alt="" data-caption="第一次一起"><figcaption></figcaption></figure>
+            <figure><img src="IMG_8168.JPG" alt="" data-caption="偷偷拍的"><figcaption></figcaption></figure>
+            <figure><img src="QQAM2028.JPG" alt="" data-caption="出去玩"><figcaption></figcaption></figure>
+            <figure><img src="IMG_5576.jpg"  alt="" data-caption="笑到肚子痛"><figcaption></figcaption></figure>
+            <figure><img src="IMG_6957.jpg"  alt="" data-caption="最可愛的一張"><figcaption></figcaption></figure>
+            <figure><img src="couple_helmet.jpg" alt="" data-caption="兩個安全帽"><figcaption></figcaption></figure>
+            <figure><img src="date_dessert.jpg" alt="" data-caption="兩碗甜點"><figcaption></figcaption></figure>
+            <figure><img src="trip_hotel.jpg" alt="" data-caption="礁溪老爺"><figcaption></figcaption></figure>
+            <figure><img src="couple_crown.jpg" alt="" data-caption="公主與魔杖"><figcaption></figcaption></figure>
+            <figure><img src="cinnamoroll.jpg" alt="" data-caption="玉桂狗聯名"><figcaption></figcaption></figure>
+            <figure><img src="cry_face.jpg" alt="" data-caption="怎麼了嘛"><figcaption></figcaption></figure>
+            <figure><img src="icecream_selfie.jpg" alt="" data-caption="張大嘴吃冰"><figcaption></figcaption></figure>
+            <figure><img src="red_umbrella.jpg" alt="" data-caption="星巴克前面"><figcaption></figcaption></figure>
+            <figure><img src="giant_icecream.jpg" alt="" data-caption="她變成冰淇淋"><figcaption></figcaption></figure>
         </div>
 
         <!-- 盲盒 -->
         <h3 class="section-title">抽一個回憶</h3>
         <div id="mysteryBox">
             <div id="mysteryInner">
-                <div class="face face-front">
-                    點我<br>抽一張回憶
-                </div>
+                <div class="face face-front">點我<br>抽一張回憶</div>
                 <div class="face face-back">
                     <img id="mysteryImg" src="" alt="">
                     <div class="quote" id="mysteryQuote"></div>
@@ -925,9 +792,9 @@
         </div>
 
         <!-- 情話 -->
-        <h3 class="section-title">想聽情話</h3>
-        <div class="love-card-area">
-            <button id="loveCardBtn">抽一句</button>
+        <h3 class="section-title">情話</h3>
+        <div class="center">
+            <button class="btn-pink" id="loveCardBtn">抽一句</button>
             <div id="loveCardText">按上面那顆按鈕～</div>
         </div>
 
@@ -937,12 +804,22 @@
             <div id="scratchText">刮我刮我刮我</div>
             <canvas id="scratchCanvas" width="400" height="160"></canvas>
         </div>
-        <p style="text-align:center; color:#999; font-size:0.8rem; margin-top:8px;">用手指或滑鼠刮開</p>
+        <p style="text-align:center; color:#999; font-size:0.8rem; margin-top:8px;">用手指刮開</p>
 
-        <!-- 翻牌記憶遊戲 -->
+        <!-- 翻牌 -->
         <h3 class="section-title">翻牌配對</h3>
         <div class="memory-grid" id="memGrid"></div>
         <div id="memStatus">翻牌配對相同的照片</div>
+
+        <!-- 愛情指數 -->
+        <h3 class="section-title">愛情指數</h3>
+        <div id="loveMeterBox">
+            <div id="loveMeterNum">--%</div>
+            <div id="loveMeterBar"><div id="loveMeterFill"></div></div>
+            <div id="loveMeterMsg">按按鈕測我們的契合度</div>
+            <br>
+            <button class="btn-pink" id="loveMeterBtn">測一下</button>
+        </div>
 
         <!-- 願望清單 -->
         <h3 class="section-title">我們想做的事</h3>
@@ -965,7 +842,7 @@
 
         <!-- 愛心遊戲 -->
         <h3 class="section-title">收集愛心</h3>
-        <div style="text-align:center;">
+        <div class="center">
             <div id="heartCounter">已收集 0 個 ❤️</div>
             <div id="gameSpace"></div>
         </div>
@@ -1005,6 +882,7 @@
                 startHeartGame();
                 renderNotes();
                 observeTimeline();
+                startCarousel();
                 audio.play().catch(() => {});
             } else {
                 const el = document.getElementById("passwordInput");
@@ -1036,17 +914,46 @@
                 document.getElementById("dayPhrase").innerText = "— " + dayPhrases[d % dayPhrases.length] + " —";
                 document.getElementById("numDays").innerText = d;
                 document.getElementById("numHours").innerText = Math.floor(diff / 3600000);
+                document.getElementById("heroDays").innerText = d.toLocaleString();
+                // 下個紀念日
+                const next100 = Math.ceil((d+1)/100)*100;
+                const next520 = Math.ceil((d+1)/520)*520;
+                const nextYear = (new Date().getFullYear() - 2024) * 365 + (12-13 > new Date().getMonth()*30+new Date().getDate() ? 0 : 365);
+                document.getElementById("nextCount").innerHTML =
+                    `距離第 <b>${next100}</b> 天還有 <b>${next100-d}</b> 天`;
             }
             update(); setInterval(update, 1000);
         }
 
-        /* 時間軸滾動動畫 */
+        /* 時間軸動畫 */
         function observeTimeline() {
-            const items = document.querySelectorAll(".tl-item");
             const obs = new IntersectionObserver((entries) => {
                 entries.forEach(e => { if (e.isIntersecting) e.target.classList.add("visible"); });
             }, { threshold: 0.2 });
-            items.forEach(i => obs.observe(i));
+            document.querySelectorAll(".tl-item").forEach(i => obs.observe(i));
+        }
+
+        /* 照片輪播 */
+        const carPhotos = [
+            ["couple_helmet.jpg", "兩個安全帽"],
+            ["date_dessert.jpg", "兩碗甜點"],
+            ["trip_hotel.jpg", "礁溪老爺"],
+            ["couple_crown.jpg", "公主與魔杖"],
+            ["cinnamoroll.jpg", "玉桂狗聯名"],
+            ["giant_icecream.jpg", "她變成冰淇淋"],
+            ["icecream_selfie.jpg", "張大嘴吃冰"]
+        ];
+        let carIdx = 0, carTimer;
+        function startCarousel() {
+            function show(i) {
+                carIdx = (i + carPhotos.length) % carPhotos.length;
+                document.getElementById("carImg").src = carPhotos[carIdx][0];
+                document.getElementById("carCap").innerText = carPhotos[carIdx][1];
+            }
+            document.getElementById("carNext").onclick = () => { show(carIdx+1); reset(); };
+            document.getElementById("carPrev").onclick = () => { show(carIdx-1); reset(); };
+            function reset() { clearInterval(carTimer); carTimer = setInterval(() => show(carIdx+1), 4000); }
+            reset();
         }
 
         /* 照片燈箱 */
@@ -1077,7 +984,7 @@
 
         /* 情話 */
         const loveLines = [
-            "妳知道嗎？就算重來一次，我還是會在同一個地方遇見妳。",
+            "就算重來一次，我還是會在同一個地方遇見妳。",
             "我不是因為孤單才找妳，是因為是妳，我才不想再一個人。",
             "別人都說我變了，只有我知道我只是終於敢面對自己喜歡誰。",
             "以後吵架可以，但不准不接我電話。",
@@ -1091,15 +998,7 @@
             "未來的每一天，我都想跟妳一起浪費。",
             "妳生氣的時候也可愛，但別常常生氣。",
             "我手機裡全是妳，滑不滑都一樣。",
-            "妳說想我的時候，我其實已經在想妳了。",
-            "不用每天講情話，我知道。但我還是想講。",
-            "我們吵架的次數沒有我想妳的次數多。",
-            "妳吃東西的樣子比任何甜點都好看。",
             "下雨天想牽妳，出太陽也想牽妳。",
-            "如果妳累了，我可以變安靜一點。",
-            "我討厭分開，但我更討厭沒有妳。",
-            "妳不用完美，我喜歡的本來就不是完美。",
-            "今天也有好好吃飯嗎？沒有我會生氣。",
             "想跟妳一起老，老到一起抱怨膝蓋痛。"
         ];
         let lastLine = -1;
@@ -1109,10 +1008,7 @@
             lastLine = i;
             const box = document.getElementById("loveCardText");
             box.classList.remove("show");
-            setTimeout(() => {
-                box.innerText = loveLines[i];
-                box.classList.add("show");
-            }, 200);
+            setTimeout(() => { box.innerText = loveLines[i]; box.classList.add("show"); }, 200);
         });
 
         /* 盲盒 */
@@ -1121,10 +1017,116 @@
             const fig = figures[Math.floor(Math.random() * figures.length)];
             document.getElementById("mysteryImg").src = fig.querySelector("img").src;
             document.getElementById("mysteryQuote").innerText =
-                (fig.dataset.caption || "") + " — " + loveLines[Math.floor(Math.random() * loveLines.length)];
+                (fig.dataset.caption || "") + " — " + loveLines[Math.floor(Math.random()*loveLines.length)];
             box.classList.add("flipped");
             setTimeout(() => box.classList.remove("flipped"), 4000);
         });
+
+        /* 刮刮樂 */
+        (function() {
+            const cvs = document.getElementById("scratchCanvas");
+            const ctx = cvs.getContext("2d");
+            const w = cvs.width, h = cvs.height;
+            ctx.fillStyle = "#c0c0c0";
+            ctx.fillRect(0, 0, w, h);
+            ctx.fillStyle = "#fff";
+            ctx.font = "16px sans-serif";
+            ctx.textAlign = "center";
+            ctx.fillText("刮開我", w/2, h/2);
+            let scratching = false;
+            function scratch(x, y) {
+                ctx.globalCompositeOperation = "destination-out";
+                ctx.beginPath();
+                ctx.arc(x, y, 20, 0, Math.PI*2);
+                ctx.fill();
+            }
+            cvs.addEventListener("mousedown", () => scratching = true);
+            cvs.addEventListener("mouseup", () => scratching = false);
+            cvs.addEventListener("mousemove", e => {
+                if (!scratching) return;
+                const r = cvs.getBoundingClientRect();
+                scratch((e.clientX-r.left)*w/r.width, (e.clientY-r.top)*h/r.height);
+            });
+            cvs.addEventListener("touchstart", () => scratching = true, {passive:true});
+            cvs.addEventListener("touchend", () => scratching = false);
+            cvs.addEventListener("touchmove", e => {
+                if (!scratching) return;
+                const r = cvs.getBoundingClientRect();
+                const t = e.touches[0];
+                scratch((t.clientX-r.left)*w/r.width, (t.clientY-r.top)*h/r.height);
+            }, {passive:true});
+            const msgs = ["今天也很喜歡妳","抱抱","想牽手","吃飽了沒","妳最好看","愛妳","不要生氣","快睡覺","想妳了","可愛","么么","心動"];
+            document.getElementById("scratchText").innerText = msgs[new Date().getDate() % msgs.length];
+        })();
+
+        /* 翻牌 */
+        (function() {
+            const photos = ["couple_helmet.jpg","date_dessert.jpg","trip_hotel.jpg","couple_crown.jpg","cinnamoroll.jpg","giant_icecream.jpg"];
+            const deck = [...photos, ...photos].sort(() => Math.random()-0.5);
+            const grid = document.getElementById("memGrid");
+            let first = null, lock = false, matched = 0;
+            deck.forEach((src) => {
+                const card = document.createElement("div");
+                card.className = "mem-card";
+                card.innerHTML = `<div class="mem-inner"><div class="mem-front">?</div><div class="mem-back"><img src="${src}" alt=""></div></div>`;
+                card.onclick = () => {
+                    if (lock || card.classList.contains("flipped") || card.classList.contains("matched")) return;
+                    card.classList.add("flipped");
+                    if (!first) { first = card; return; }
+                    lock = true;
+                    const match = first.querySelector("img").src === card.querySelector("img").src;
+                    setTimeout(() => {
+                        if (match) {
+                            first.classList.add("matched");
+                            card.classList.add("matched");
+                            matched++;
+                            if (matched === photos.length)
+                                document.getElementById("memStatus").innerText = "全部配對成功！妳好聰明 ❤️";
+                        } else {
+                            first.classList.remove("flipped");
+                            card.classList.remove("flipped");
+                        }
+                        first = null; lock = false;
+                    }, 600);
+                };
+                grid.appendChild(card);
+            });
+        })();
+
+        /* 愛情指數 */
+        document.getElementById("loveMeterBtn").onclick = function() {
+            const n = 95 + Math.floor(Math.random() * 6); // 95-100
+            document.getElementById("loveMeterNum").innerText = n + "%";
+            document.getElementById("loveMeterFill").style.width = n + "%";
+            document.getElementById("loveMeterMsg").innerText = n >= 98 ? "滿分！妳們註定在一起 ❤️" : "很高！繼續下去就滿分了";
+        };
+
+        /* 願望清單 */
+        (function() {
+            const wishes = ["一起看海","一起跨年","一起去日本","一起養一隻貓","一起做飯","一起露營","一起拍情侶照","一起看煙火","一起養老"];
+            const saved = JSON.parse(localStorage.getItem("wishes") || "[]");
+            const list = document.getElementById("wishList");
+            wishes.forEach((w, i) => {
+                const done = saved.includes(i);
+                const div = document.createElement("div");
+                div.className = "wish-item" + (done ? " done" : "");
+                div.innerHTML = `<input type="checkbox" ${done?"checked":""}> <span>${w}</span>`;
+                div.querySelector("input").onchange = function() {
+                    let s = JSON.parse(localStorage.getItem("wishes") || "[]");
+                    if (this.checked) s.push(i); else s = s.filter(x => x !== i);
+                    localStorage.setItem("wishes", JSON.stringify(s));
+                    div.classList.toggle("done", this.checked);
+                };
+                list.appendChild(div);
+            });
+        })();
+
+        /* 每日一問 */
+        (function() {
+            const qs = ["今天最開心的一件事？","我們第一次約會去哪？","妳覺得我哪裡最可愛？","想跟我去哪旅行？","今天有想我嗎？","喜歡我叫妳什麼？","下次見面想做什麼？","覺得我哪一點最吸引妳？","想一起完成什麼事？","最近一次想我是什麼時候？"];
+            const day = Math.floor(Date.now() / 86400000);
+            document.getElementById("dailyQ").innerText = qs[day % qs.length];
+        })();
 
         /* 便利貼 */
         function renderNotes() {
@@ -1153,9 +1155,7 @@
         document.getElementById("copyNoteBtn").onclick = function() {
             const text = document.getElementById("noteInput").value.trim();
             if (!text) { alert("先寫點東西啦"); return; }
-            navigator.clipboard.writeText("【便利貼】" + text).then(() => {
-                alert("複製好了！貼到 LINE 傳給我～");
-            });
+            navigator.clipboard.writeText("【便利貼】" + text).then(() => alert("複製好了！貼到 LINE 傳給我～"));
         };
 
         /* 愛心遊戲 */
@@ -1167,8 +1167,8 @@
                 const h = document.createElement("div");
                 h.innerHTML = "❤️";
                 h.className = "heart-game";
-                h.style.left = Math.random() * 90 + "%";
-                h.style.top = Math.random() * 80 + "%";
+                h.style.left = Math.random()*90 + "%";
+                h.style.top = Math.random()*80 + "%";
                 h.onclick = function(e) {
                     count++;
                     document.getElementById("heartCounter").innerText = "已收集 " + count + " 個 ❤️";
@@ -1181,7 +1181,6 @@
             }, 3000);
         }
 
-        /* 點擊噴愛心 */
         function burstHearts(x, y) {
             const emojis = ["❤️","💖","💕","✨","💗"];
             for (let i = 0; i < 6; i++) {
@@ -1201,21 +1200,6 @@
         document.addEventListener("click", (e) => {
             if (e.target.closest("button") || e.target.closest("input") || e.target.closest("textarea")) return;
             burstHearts(e.clientX, e.clientY);
-        });
-
-        /* 彩蛋 */
-        let titleClicks = 0, titleTimer;
-        document.getElementById("mainTitle").addEventListener("click", () => {
-            titleClicks++;
-            clearTimeout(titleTimer);
-            titleTimer = setTimeout(() => titleClicks = 0, 1500);
-            if (titleClicks >= 5) {
-                titleClicks = 0;
-                for (let i = 0; i < 30; i++) {
-                    setTimeout(() => burstHearts(Math.random()*innerWidth, Math.random()*innerHeight), i*60);
-                }
-                alert("被妳發現彩蛋了！我也愛妳很多很多很多 ❤️");
-            }
         });
 
         /* 音樂 */
