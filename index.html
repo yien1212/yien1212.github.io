@@ -626,6 +626,43 @@ body{counter-reset: section}
   </div>
   <div class="next" id="nextBox"></div>
 
+  <!-- 今日心情 -->
+  <h3 class="stitle">😊 今天心情</h3>
+  <div style="text-align:center">
+    <div id="moodShow" style="font-size:1.2rem;margin-bottom:10px">她還沒更新</div>
+    <div style="display:flex;gap:8px;justify-content:center;font-size:1.5rem">
+      <span class="mood" data-mood="😢" style="cursor:pointer">😢</span>
+      <span class="mood" data-mood="😐" style="cursor:pointer">😐</span>
+      <span class="mood" data-mood="😊" style="cursor:pointer">😊</span>
+      <span class="mood" data-mood="😍" style="cursor:pointer">😍</span>
+      <span class="mood" data-mood="🤩" style="cursor:pointer">🤩</span>
+    </div>
+  </div>
+
+  <!-- 紀念日 -->
+  <h3 class="stitle">📅 重要日子</h3>
+  <div id="anniList" style="max-width:500px;margin:0 auto"></div>
+  <div style="max-width:500px;margin:10px auto;text-align:center">
+    <input type="text" id="anniName" placeholder="名稱 例如：小昀生日" style="padding:8px;border-radius:12px;border:1.5px solid var(--pink-soft);width:60%;margin-right:5px">
+    <input type="date" id="anniDate" style="padding:8px;border-radius:12px;border:1.5px solid var(--pink-soft)">
+    <button class="btn-pink" id="anniAdd" style="margin-top:8px">＋ 新增</button>
+  </div>
+
+  <!-- 電子寵物 -->
+  <h3 class="stitle">🦝 我們的狐獴</h3>
+  <div style="text-align:center;background:rgba(255,255,255,.65);backdrop-filter:blur(20px);border-radius:24px;padding:25px;max-width:400px;margin:0 auto;box-shadow:0 8px 32px rgba(233,30,99,.08)">
+    <div id="petEmoji" style="font-size:5rem">🦝</div>
+    <div id="petName" style="font-family:'Noto Serif TC',serif;color:var(--pink-deep);margin:10px 0">狐獴小寶</div>
+    <div style="width:100%;height:10px;background:#eee;border-radius:5px;margin:10px 0">
+      <div id="petBar" style="height:100%;width:50%;background:linear-gradient(90deg,var(--pink),var(--pink-deep));border-radius:5px;transition:width .5s"></div>
+    </div>
+    <div style="font-size:.8rem;color:#999" id="petMood">肚肚餓了</div>
+    <div style="display:flex;gap:10px;justify-content:center;margin-top:15px">
+      <button class="btn-pink" id="feedBtn">🍖 餵食</button>
+      <button class="btn-pink" id="playBtn">🎾 陪玩</button>
+    </div>
+  </div>
+
   </div>
   <div class="page" id="page-memories">
 
@@ -831,30 +868,6 @@ body{counter-reset: section}
     <button class="btn-pink" id="meetBtn" style="margin-top:5px">設定</button>
   </div>
 
-  <!-- 紀念日 -->
-  <h3 class="stitle">📅 重要日子</h3>
-  <div id="anniList" style="max-width:500px;margin:0 auto"></div>
-  <div style="max-width:500px;margin:10px auto;text-align:center">
-    <input type="text" id="anniName" placeholder="名稱 例如：小昀生日" style="padding:8px;border-radius:12px;border:1.5px solid var(--pink-soft);width:60%;margin-right:5px">
-    <input type="date" id="anniDate" style="padding:8px;border-radius:12px;border:1.5px solid var(--pink-soft)">
-    <button class="btn-pink" id="anniAdd" style="margin-top:8px">＋ 新增</button>
-  </div>
-
-  <!-- 電子寵物 -->
-  <h3 class="stitle">🦝 我們的狐獴</h3>
-  <div style="text-align:center;background:rgba(255,255,255,.65);backdrop-filter:blur(20px);border-radius:24px;padding:25px;max-width:400px;margin:0 auto;box-shadow:0 8px 32px rgba(233,30,99,.08)">
-    <div id="petEmoji" style="font-size:5rem">🦝</div>
-    <div id="petName" style="font-family:'Noto Serif TC',serif;color:var(--pink-deep);margin:10px 0">狐獴小寶</div>
-    <div style="width:100%;height:10px;background:#eee;border-radius:5px;margin:10px 0">
-      <div id="petBar" style="height:100%;width:50%;background:linear-gradient(90deg,var(--pink),var(--pink-deep));border-radius:5px;transition:width .5s"></div>
-    </div>
-    <div style="font-size:.8rem;color:#999" id="petMood">肚肚餓了</div>
-    <div style="display:flex;gap:10px;justify-content:center;margin-top:15px">
-      <button class="btn-pink" id="feedBtn">🍖 餵食</button>
-      <button class="btn-pink" id="playBtn">🎾 陪玩</button>
-    </div>
-  </div>
-
   <!-- 誰先睡 -->
   <h3 class="stitle">🌙 誰先睡</h3>
   <div style="text-align:center">
@@ -884,19 +897,6 @@ body{counter-reset: section}
     <div><div id="statChat" style="font-size:1.5rem;color:var(--pink)">0</div><div style="font-size:.8rem;color:#999">句聊天</div></div>
     <div><div id="statHearts" style="font-size:1.5rem;color:var(--pink)">0</div><div style="font-size:.8rem;color:#999">次愛心</div></div>
     <div><div id="statKiss" style="font-size:1.5rem;color:var(--pink)">0</div><div style="font-size:.8rem;color:#999">次親親</div></div>
-  </div>
-
-  <!-- 今日心情 -->
-  <h3 class="stitle">😊 今天心情</h3>
-  <div style="text-align:center">
-    <div id="moodShow" style="font-size:1.2rem;margin-bottom:10px">她還沒更新</div>
-    <div style="display:flex;gap:8px;justify-content:center;font-size:1.5rem">
-      <span class="mood" data-mood="😢" style="cursor:pointer">😢</span>
-      <span class="mood" data-mood="😐" style="cursor:pointer">😐</span>
-      <span class="mood" data-mood="😊" style="cursor:pointer">😊</span>
-      <span class="mood" data-mood="😍" style="cursor:pointer">😍</span>
-      <span class="mood" data-mood="🤩" style="cursor:pointer">🤩</span>
-    </div>
   </div>
 
   <!-- 現在在幹嘛 -->
