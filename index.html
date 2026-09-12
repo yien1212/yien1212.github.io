@@ -1073,13 +1073,30 @@ document.getElementById("noteBtn").onclick = function(){
   const ta = document.getElementById("noteInput");
   const t = ta.value.trim();
   if(!t) return;
-  const l = JSON.parse(localStorage.getItem("notes")||"[]");
-  l.unshift({text:t, date:new Date().toLocaleString("zh-TW")});
-  localStorage.setItem("notes", JSON.stringify(l));
   localStorage.setItem("noteWrote","1");
   ta.value = "";
-  renderNotes(); renderBadges();
+  if(uid){
+    db.collection("notes").add({text:t, date:new Date().toLocaleString("zh-TW"), uid:uid})
+      .then(() => { loadNotes(); renderBadges(); });
+  }
 };
+function loadNotes(){
+  db.collection("notes").orderBy("date","desc").limit(50).onSnapshot(snap => {
+    const l = [];
+    snap.forEach(d => l.push(d.data()));
+    renderNotes(l);
+  });
+}
+function renderNotes(notes){
+  const list = document.getElementById("noteList");
+  if(!notes) notes = JSON.parse(localStorage.getItem("notes")||"[]");
+  list.innerHTML = notes.map(n => 
+    `<div class="note" style="animation:fadeIn .5s">
+      <div>${n.text}</div>
+      <div style="font-size:.7rem;color:#aaa;margin-top:5px">${n.date}</div>
+    </div>`
+  ).join("");
+}
 document.getElementById("copyBtn").onclick = function(){
   const t = document.getElementById("noteInput").value.trim();
   if(!t){ alert("先寫點東西啦"); return; }
@@ -1442,6 +1459,24 @@ document.getElementById("playBtn").onclick = () => bgm.play();
 document.getElementById("pauseBtn").onclick = () => bgm.pause();
 </script>
 
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyCDRGa7Pz4n481Hy2UwtbnnDLFo74lewU",
+    authDomain: "yien1212-8a306.firebaseapp.com",
+    projectId: "yien1212-8a306",
+    storageBucket: "yien1212-8a306.firebasestorage.app",
+    messagingSenderId: "579288934330",
+    appId: "1:579288934330:web:fbf4f118205d94b4c5f83"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+  let uid = null;
+  firebase.auth().signInAnonymously().then(u => { uid = u.user.uid; loadNotes(); });
+</script>
 <script src="https://cdn.botpress.cloud/webchat/v3.5/inject.js"></script>
 <script src="https://files.bpcontent.cloud/2026/01/12/17/20260112175648-Q8N99NKQ.js" defer></script>
 
