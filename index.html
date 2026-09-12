@@ -722,12 +722,22 @@ body{counter-reset: section}
     <button class="btn-pink" id="spinBtn">轉！</button>
   </div>
 
-  <!-- 愛情骰盅 -->
-  <h3 class="stitle">擲骰子</h3>
-  <div style="text-align:center">
-    <div id="dice" style="font-size:4rem; margin:10px">🎲</div>
-    <button class="btn-pink" id="diceBtn">擲！</button>
-    <div id="diceResult" style="margin-top:10px; font-family:'Noto Serif TC',serif; color:var(--pink-deep)"></div>
+  <!-- 即時聊天 -->
+  <h3 class="stitle">即時聊天</h3>
+  <div style="max-width:500px;margin:0 auto">
+    <div id="chatList" style="height:300px;overflow-y:auto;background:rgba(255,255,255,.6);border-radius:16px;padding:15px;margin-bottom:10px"></div>
+    <div style="display:flex;gap:8px">
+      <input type="text" id="chatInput" placeholder="講話..." style="flex:1;padding:10px 14px;border:1.5px solid var(--pink-soft);border-radius:20px;font-family:inherit;outline:none">
+      <button class="btn-pink" id="chatSend">送</button>
+    </div>
+  </div>
+
+  <!-- 定位+電量 -->
+  <h3 class="stitle">她在哪</h3>
+  <div style="text-align:center;font-family:'Noto Serif TC',serif;color:var(--pink-deep)">
+    <div id="locStatus">點下方按鈕上傳位置</div>
+    <button class="btn-pink" id="locBtn" style="margin-top:10px">上傳我的位置</button>
+    <div id="batteryStatus" style="margin-top:10px"></div>
   </div>
 
   <!-- 便利貼 -->
@@ -964,7 +974,7 @@ function initScratch(){
       const t = e.touches[0];
       sc((t.clientX-r.left)*c.width/r.width, (t.clientY-r.top)*c.height/r.height);
     }, {passive:false});
-    const msgs = ["今天也很喜歡妳","抱抱","想牽手","吃飽了沒","妳最好看","愛妳","不要生氣","快睡覺","想妳了","可愛","么么","心動"];
+    const msgs = ["今天也很喜歡妳","抱抱","想牽手","吃飽了沒","妳最好看","愛妳","不要生氣","快睡覺","想妳了","可愛","么么","心動","寶貝","滾進來睡","不要走","我在","餓不餓","冷不冷","想見妳","妳好漂亮","抱緊一點","不要不理我","晚安","早安","今天也要愛妳","別熬夜","乖乖吃飯","我只想陪妳","妳是我的","愛妳愛妳"];
     const ids = ["scratchMsg","scratchMsg2","scratchMsg3"];
     document.getElementById(ids[idx]).textContent = msgs[Math.floor(Math.random()*msgs.length)];
   });
@@ -1188,12 +1198,12 @@ document.addEventListener("click", e => {
 /* 我們的日常 — 從真實 LINE 記錄抽 */
 (function(){
   const convos = [
-    [{t:"下午03:43",who:"them",text:"你猜我們現在在幹嘛"},{t:"下午03:43",who:"me",text:"上課"},{t:"下午03:43",who:"them",text:"💩"},{t:"下午03:43",who:"them",text:"你猜錯了"},{t:"下午03:44",who:"me",text:"報告的怎麼樣"}],
+    [{t:"下午03:43",who:"them",text:"你猜我們現在在幹嘛"},{t:"下午03:43",who:"me",text:"上課"},{t:"下午03:43",who:"them",text:"💩"},{t:"下午03:43",who:"them",text:"你猜錯了"},{t:"下午03:44",who:"me",text:"報告的怎麼樣"},{t:"下午03:44",who:"me",text:"我明天不想上課嗚嗚"}],
     [{t:"下午03:46",who:"them",text:"我們報告100分欸吧"},{t:"下午03:46",who:"me",text:"欸好厲害"},{t:"下午03:46",who:"me",text:"超級猛"},{t:"下午03:46",who:"me",text:"你們報告英文的欸"}],
-    [{t:"下午03:44",who:"me",text:"幹我跟你講我買新桌子"},{t:"下午03:44",who:"me",text:"把舊的丟了想說他很快就來"},{t:"下午03:44",who:"me",text:"結果等了快一個月"},{t:"下午03:44",who:"me",text:"...."}],
+    [{t:"下午03:44",who:"me",text:"幹我跟你講我買新桌子"},{t:"下午03:44",who:"me",text:"把舊的丟了想說他很快就來"},{t:"下午03:44",who:"me",text:"結果等了快一個月"},{t:"下午03:44",who:"me",text:"...."},{t:"下午03:45",who:"me",text:"這個小桌子超破"}],
     [{t:"下午11:26",who:"me",text:"我在想你"},{t:"下午11:27",who:"them",text:"白痴"},{t:"下午11:28",who:"me",text:"真的"},{t:"下午11:29",who:"them",text:"滾"}],
     [{t:"上午10:35",who:"them",text:"我上車車ㄌ"},{t:"上午10:36",who:"me",text:"好"},{t:"上午10:37",who:"me",text:"搭車小心"},{t:"上午10:38",who:"them",text:"嗯"}],
-    [{t:"上午09:20",who:"them",text:"乖乖"},{t:"上午09:21",who:"me",text:"嗯"},{t:"上午09:22",who:"them",text:"吃早餐了嗎"},{t:"上午09:23",who:"me",text:"還沒"}],
+    [{t:"上午09:20",who:"them",text:"乖乖"},{t:"上午09:21",who:"me",text:"嗯"},{t:"上午09:22",who:"them",text:"吃早餐了嗎"},{t:"上午09:23",who:"me",text:"還沒"},{t:"上午09:24",who:"them",text:"趕快去吃"}],
     [{t:"下午11:41",who:"them",text:"你好寶寶"},{t:"下午11:42",who:"me",text:"？"},{t:"下午11:43",who:"them",text:"沒有"}],
     [{t:"下午06:52",who:"them",text:"不要洗屁股"},{t:"下午06:53",who:"me",text:"為什麼"},{t:"下午06:53",who:"them",text:"就不要"}],
     [{t:"下午08:36",who:"them",text:"幹你娘"},{t:"下午08:37",who:"me",text:"笑死"},{t:"下午08:37",who:"them",text:"真的"},{t:"下午08:38",who:"me",text:"哈哈哈"}],
@@ -1204,6 +1214,14 @@ document.addEventListener("click", e => {
     [{t:"下午05:05",who:"them",text:"要也不準備多一點"},{t:"下午05:06",who:"me",text:"好啦"},{t:"下午05:06",who:"them",text:"每次都這樣"}],
     [{t:"下午03:28",who:"them",text:"好"},{t:"下午03:29",who:"them",text:"哈哈哈"},{t:"下午03:30",who:"me",text:"笑屁"}],
     [{t:"上午08:03",who:"them",text:"嗯！"},{t:"上午08:04",who:"me",text:"早安"},{t:"上午08:05",who:"them",text:"早"}],
+    [{t:"下午05:56",who:"them",text:"我去哪裡找你"},{t:"下午05:57",who:"me",text:"你在哪"},{t:"下午05:58",who:"them",text:"學校"},{t:"下午05:59",who:"me",text:"等我"}],
+    [{t:"上午09:53",who:"me",text:"我也肚子痛"},{t:"上午09:54",who:"them",text:"怎麼了"},{t:"上午09:55",who:"me",text:"不知道"},{t:"上午09:56",who:"them",text:"喝熱水"}],
+    [{t:"下午06:29",who:"them",text:"好貴"},{t:"下午06:30",who:"me",text:"什麼"},{t:"下午06:31",who:"them",text:"那個飲料"},{t:"下午06:32",who:"me",text:"那別買"}],
+    [{t:"下午02:42",who:"them",text:"…好心態"},{t:"下午02:43",who:"me",text:"？"},{t:"下午02:44",who:"them",text:"沒事"}],
+    [{t:"下午02:08",who:"me",text:"誰要大叫"},{t:"下午02:09",who:"them",text:"不知道"},{t:"下午02:10",who:"me",text:"神經"}],
+    [{t:"下午12:24",who:"them",text:"（收回訊息）"},{t:"下午12:25",who:"me",text:"妳剛剛說什麼"},{t:"下午12:26",who:"them",text:"沒"}],
+    [{t:"下午05:18",who:"them",text:"你整支手都蚊子"},{t:"下午05:19",who:"me",text:"笑死"},{t:"下午05:20",who:"them",text:"超癢"}],
+    [{t:"下午11:37",who:"them",text:"沒"},{t:"下午11:38",who:"me",text:"沒什麼"},{t:"下午11:39",who:"them",text:"滾"}],
   ];
   const conv = convos[Math.floor(Math.random()*convos.length)];
   const box = document.getElementById("chatToday");
@@ -1220,20 +1238,72 @@ document.addEventListener("click", e => {
   ).join("");
 })();
 
-/* 愛情骰子 */
-(function(){
-  const dice = ["❤️","💖","💕","💘","💝","💗"];
-  const acts = ["抱一下","親一下","說我愛妳","牽手三分鐘","講情話","撒嬌"];
-  document.getElementById("diceBtn").onclick = function(){
-    const n = Math.floor(Math.random()*6);
-    const d = document.getElementById("dice");
-    d.style.transform = "rotate(" + (Math.random()*720) + "deg)";
-    setTimeout(() => {
-      d.textContent = dice[n];
-      document.getElementById("diceResult").textContent = "👉 " + acts[n];
-    }, 500);
+/* 即時聊天 */
+if(uid){
+  const chatList = document.getElementById("chatList");
+  db.collection("chat").orderBy("time","asc").limit(100).onSnapshot(snap => {
+    chatList.innerHTML = "";
+    snap.forEach(d => {
+      const m = d.data();
+      const mine = m.uid === uid;
+      chatList.innerHTML += `<div style="margin:8px 0;${mine?'text-align:right':''}">
+        <span style="display:inline-block;padding:8px 14px;border-radius:16px;
+          background:${mine?'var(--pink)':'#fff'};color:${mine?'#fff':'#555'};
+          border:${mine?'none':'1px solid var(--pink-soft)'}">${m.text}</span></div>`;
+    });
+    chatList.scrollTop = chatList.scrollHeight;
+  });
+  document.getElementById("chatSend").onclick = function(){
+    const v = document.getElementById("chatInput").value.trim();
+    if(!v) return;
+    db.collection("chat").add({text:v, uid:uid, time:firebase.firestore.FieldValue.serverTimestamp()});
+    document.getElementById("chatInput").value = "";
   };
-})();
+  document.getElementById("chatInput").addEventListener("keydown", e => {
+    if(e.key === "Enter") document.getElementById("chatSend").click();
+  });
+}
+
+/* 定位+電量 */
+if(uid){
+  // 上傳電量
+  if(navigator.getBattery){
+    navigator.getBattery().then(b => {
+      function upd(){
+        db.collection("locations").doc(uid).set({
+          battery: Math.round(b.level*100),
+          charging: b.charging,
+          time: new Date().toLocaleString("zh-TW")
+        }, {merge:true});
+      }
+      upd();
+      b.addEventListener("levelchange", upd);
+    });
+  }
+  // 顯示對方位置
+  db.collection("locations").where("uid","!=",uid).onSnapshot(snap => {
+    snap.forEach(d => {
+      const l = d.data();
+      document.getElementById("batteryStatus").textContent =
+        "她的電量: " + l.battery + "%" + (l.charging?" 🔋充電中":"");
+      if(l.lat){
+        document.getElementById("locStatus").innerHTML =
+          `她在: <a href="https://www.google.com/maps?q=${l.lat},${l.lng}" target="_blank">點我看地圖</a><br>更新: ${l.time}`;
+      }
+    });
+  });
+  // 上傳位置
+  document.getElementById("locBtn").onclick = function(){
+    navigator.geolocation.getCurrentPosition(pos => {
+      db.collection("locations").doc(uid).set({
+        lat: pos.coords.latitude,
+        lng: pos.coords.longitude,
+        time: new Date().toLocaleString("zh-TW")
+      }, {merge:true});
+      document.getElementById("locStatus").textContent = "位置已上傳！";
+    });
+  };
+}
 
 /* 便利貼匯出 */
 document.getElementById("exportNotes").onclick = function(){
