@@ -552,13 +552,14 @@ body{counter-reset: section}
   </div>
 
   <!-- 情書 -->
-  <h3 class="stitle">寫給妳</h3>
-  <div class="typewriter" id="typewriter">
-    <span class="line">今天終於又鼓起勇氣講出了我早就想對妳講的話。我知道我們的關係並不完美，但這些差異才讓我更加確定妳是我想一直喜歡下去的人。</span>
-    <span class="line">一直以來我都覺得自己是孤單一個人的。因為前任的關係，我很不相信感情。但妳在莫名其妙亂暈，然後我們就在一起了。</span>
-    <span class="line">我曾經以為只要讓妳走就可以回到原本生活。結果⋯沒有了妳在我身邊吵吵鬧鬧，我真的連飯都吃不太下去。</span>
-    <span class="line">和妳在一起後，我從來沒有感受到自己是孤單的。因為妳的出現，我不想要再追求那些短暫刺激。我只希望未來的每一天妳都會在。</span>
-    <span class="line" style="text-align:center; margin-top:20px; color:var(--pink-deep)">luv u ❤️</span>
+  <!-- 即時聊天 -->
+  <h3 class="stitle">💬 寫給妳（也跟妳說話）</h3>
+  <div style="max-width:500px;margin:0 auto;background:rgba(255,255,255,.7);backdrop-filter:blur(20px);border-radius:24px;padding:20px;box-shadow:0 10px 30px rgba(233,30,99,.15)">
+    <div id="chatList" style="height:300px;overflow-y:auto;background:#fff;border-radius:16px;padding:15px;margin-bottom:10px;border:1px solid var(--pink-soft)"></div>
+    <div style="display:flex;gap:8px">
+      <input type="text" id="chatInput" placeholder="講話..." style="flex:1;padding:12px 18px;border:2px solid var(--pink-soft);border-radius:25px;font-family:inherit;outline:none;background:#fff">
+      <button class="btn-pink" id="chatSend" style="border-radius:25px;padding:12px 24px">送 ❤️</button>
+    </div>
   </div>
 
   <!-- 計時 -->
@@ -719,16 +720,6 @@ body{counter-reset: section}
     <div id="wheelResult"></div>
     <br>
     <button class="btn-pink" id="spinBtn">轉！</button>
-  </div>
-
-  <!-- 即時聊天 -->
-  <h3 class="stitle">💬 即時聊天</h3>
-  <div style="max-width:500px;margin:0 auto;background:rgba(255,255,255,.7);backdrop-filter:blur(20px);border-radius:24px;padding:20px;box-shadow:0 10px 30px rgba(233,30,99,.15)">
-    <div id="chatList" style="height:300px;overflow-y:auto;background:#fff;border-radius:16px;padding:15px;margin-bottom:10px;border:1px solid var(--pink-soft)"></div>
-    <div style="display:flex;gap:8px">
-      <input type="text" id="chatInput" placeholder="講話..." style="flex:1;padding:12px 18px;border:2px solid var(--pink-soft);border-radius:25px;font-family:inherit;outline:none;background:#fff">
-      <button class="btn-pink" id="chatSend" style="border-radius:25px;padding:12px 24px">送 ❤️</button>
-    </div>
   </div>
 
   <!-- 定位+電量 -->
