@@ -234,11 +234,11 @@ body::before{
 .center{text-align:center}
 #loveText{
   max-width:500px; margin:20px auto 0; padding:24px;
-  background:rgba(255,255,255,.6); backdrop-filter:blur(20px);
+  background:rgba(255,255,255,.95); backdrop-filter:blur(20px);
   border-radius:20px; color:#555;
   font-family:"Noto Serif TC",serif; font-size:1.05rem; line-height:1.8;
   min-height:60px; opacity:0; transform:translateY(15px);
-  transition:all .5s;
+  transition:all .5s; position:relative; z-index:10;
 }
 #loveText.show{opacity:1; transform:translateY(0)}
 
