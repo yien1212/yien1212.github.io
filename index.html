@@ -1118,7 +1118,7 @@ document.getElementById("copyBtn").onclick = function(){
 };
 
 /* 一起按愛心 */
-if(uid){
+if(typeof uid !== 'undefined' && uid){
   db.collection("counters").doc("hearts").onSnapshot(doc => {
     const n = doc.exists ? doc.data().count : 0;
     document.getElementById("heartCount2").textContent = n;
@@ -1226,7 +1226,7 @@ document.addEventListener("click", e => {
 })();
 
 /* 即時聊天 */
-if(uid){
+if(typeof uid !== 'undefined' && uid){
   const chatList = document.getElementById("chatList");
   db.collection("chat").orderBy("time","asc").limit(100).onSnapshot(snap => {
     chatList.innerHTML = "";
@@ -1252,7 +1252,7 @@ if(uid){
 }
 
 /* 定位+電量 */
-if(uid){
+if(typeof uid !== 'undefined' && uid){
   // 上傳電量
   if(navigator.getBattery){
     navigator.getBattery().then(b => {
