@@ -993,6 +993,7 @@ document.querySelectorAll(".tab-btn").forEach(btn => {
     btn.classList.add("active");
     document.getElementById("page-" + btn.dataset.page).classList.add("active");
     window.scrollTo(0,0);
+    if(btn.dataset.page === "games") setTimeout(initScratch, 100);
   };
 });
 
