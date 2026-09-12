@@ -572,10 +572,10 @@ body{counter-reset: section}
   window.uid = null;
   window._authReady = new Promise(resolve => {
     firebase.auth().onAuthStateChanged(u => {
-      if(u){ window.uid = u.user.uid; resolve(u.user.uid); }
+      if(u && u.uid){ window.uid = u.uid; resolve(u.uid); }
     });
   });
-  firebase.auth().signInAnonymously();
+  firebase.auth().signInAnonymously().catch(e => console.log("auth err:", e.message));
 </script>
 
 <div class="petal" style="left:8%">🌸</div>
