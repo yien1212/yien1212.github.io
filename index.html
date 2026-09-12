@@ -650,21 +650,13 @@ body{counter-reset: section}
 
   <!-- 刮刮樂 -->
   <h3 class="stitle">刮刮樂</h3>
-  <div class="scratch-grid">
-    <div class="scratch-wrap">
+  <div style="max-width:350px;margin:0 auto">
+    <div class="scratch-wrap" style="height:200px">
       <div class="msg" id="scratchMsg">刮我</div>
       <canvas class="scratchCvs"></canvas>
     </div>
-    <div class="scratch-wrap">
-      <div class="msg" id="scratchMsg2">好想要～</div>
-      <canvas class="scratchCvs"></canvas>
-    </div>
-    <div class="scratch-wrap">
-      <div class="msg" id="scratchMsg3">刮開看看</div>
-      <canvas class="scratchCvs"></canvas>
-    </div>
+    <p style="text-align:center; color:#999; font-size:.8rem; margin-top:8px">刮開看看今天的情話</p>
   </div>
-  <p style="text-align:center; color:#999; font-size:.8rem; margin-top:8px">用手指刮開</p>
 
   <!-- 翻牌 -->
   <h3 class="stitle">翻牌配對</h3>
@@ -741,6 +733,67 @@ body{counter-reset: section}
     <div id="locStatus" style="font-family:'Noto Serif TC',serif;color:var(--pink-deep);font-size:1.05rem">點下方按鈕上傳位置</div>
     <button class="btn-pink" id="locBtn" style="margin-top:12px;border-radius:25px">📍 上傳我的位置</button>
     <div id="batteryStatus" style="margin-top:12px;font-size:1.1rem"></div>
+  </div>
+
+  <!-- 在線狀態 -->
+  <h3 class="stitle">🟢 在線狀態</h3>
+  <div style="text-align:center;font-family:'Noto Serif TC',serif;color:var(--pink-deep)" id="onlineStatus">載入中...</div>
+
+  <!-- 每日一吻 -->
+  <h3 class="stitle">😘 每日一吻</h3>
+  <div style="text-align:center">
+    <div id="kissStreak" style="font-size:2rem;color:var(--pink);margin:10px">0</div>
+    <div style="font-size:.85rem;color:#999;margin-bottom:10px">連續天數</div>
+    <button class="btn-pink" id="kissBtn">親一下 😘</button>
+  </div>
+
+  <!-- 下次見面倒數 -->
+  <h3 class="stitle">⏰ 下次見面</h3>
+  <div style="text-align:center;font-family:'Noto Serif TC',serif;color:var(--pink-deep)">
+    <div id="countdown" style="font-size:1.5rem">設定日期</div>
+    <input type="date" id="meetDate" style="margin-top:10px;padding:8px;border-radius:12px;border:1.5px solid var(--pink-soft)">
+    <button class="btn-pink" id="meetBtn" style="margin-top:5px">設定</button>
+  </div>
+
+  <!-- 誰先睡 -->
+  <h3 class="stitle">🌙 誰先睡</h3>
+  <div style="text-align:center">
+    <div id="sleepStatus" style="font-family:'Noto Serif TC',serif;color:var(--pink-deep);margin-bottom:10px">還沒人睡</div>
+    <button class="btn-pink" id="sleepBtn">我睡了</button>
+  </div>
+
+  <!-- 愛情分數 -->
+  <h3 class="stitle">💯 愛情分數</h3>
+  <div style="text-align:center">
+    <div id="loveScore" style="font-size:2rem;color:var(--pink);margin:10px">--</div>
+    <div style="margin-bottom:10px">今天妳給我幾分？</div>
+    <div style="display:flex;gap:5px;justify-content:center;flex-wrap:wrap" id="scoreBtns"></div>
+  </div>
+
+  <!-- 心願瓶 -->
+  <h3 class="stitle">🍾 心願瓶</h3>
+  <div style="max-width:500px;margin:0 auto">
+    <div id="wishBottle" style="max-height:250px;overflow-y:auto;background:rgba(255,255,255,.6);border-radius:16px;padding:15px;margin-bottom:10px"></div>
+    <div style="display:flex;gap:8px">
+      <input type="text" id="bottleInput" placeholder="許個願..." style="flex:1;padding:10px 14px;border:1.5px solid var(--pink-soft);border-radius:20px;font-family:inherit;outline:none">
+      <button class="btn-pink" id="bottleSend">許</button>
+    </div>
+  </div>
+
+  <!-- 聲音訊息 -->
+  <h3 class="stitle">🎙️ 聲音訊息</h3>
+  <div style="text-align:center">
+    <button class="btn-pink" id="recBtn">開始錄音</button>
+    <div id="recStatus" style="margin-top:8px;font-size:.85rem;color:#999"></div>
+    <div id="voiceList" style="max-width:400px;margin:10px auto 0"></div>
+  </div>
+
+  <!-- 線上數據 -->
+  <h3 class="stitle">📊 今天的我們</h3>
+  <div style="display:flex;justify-content:center;gap:20px;text-align:center;flex-wrap:wrap">
+    <div><div id="statChat" style="font-size:1.5rem;color:var(--pink)">0</div><div style="font-size:.8rem;color:#999">句聊天</div></div>
+    <div><div id="statHearts" style="font-size:1.5rem;color:var(--pink)">0</div><div style="font-size:.8rem;color:#999">次愛心</div></div>
+    <div><div id="statKiss" style="font-size:1.5rem;color:var(--pink)">0</div><div style="font-size:.8rem;color:#999">次親親</div></div>
   </div>
 
   <!-- 便利貼 -->
@@ -937,48 +990,46 @@ document.getElementById("mystery").onclick = function(){
 
 /* 刮刮樂 */
 function initScratch(){
-  document.querySelectorAll(".scratchCvs").forEach((c, idx) => {
-    if(c.dataset.inited) return;
-    c.dataset.inited = "1";
-    const x = c.getContext("2d");
-    const parent = c.parentElement;
-    function sizeCanvas(){
-      const w = parent.clientWidth, h = parent.clientHeight;
-      if(w < 10 || h < 10) return;
-      c.width = w; c.height = h;
-      x.fillStyle = "#c0c0c0"; x.fillRect(0,0,w,h);
-      x.fillStyle = "#fff"; x.font = "13px sans-serif"; x.textAlign = "center";
-      x.fillText("刮開我", w/2, h/2);
-    }
-    sizeCanvas();
-    setTimeout(sizeCanvas, 100);
-    setTimeout(sizeCanvas, 500);
-    let s = false;
-    function sc(px,py){
-      x.globalCompositeOperation = "destination-out";
-      x.beginPath(); x.arc(px,py,20,0,Math.PI*2); x.fill();
-    }
-    c.addEventListener("mousedown", e => { s = true; const r = c.getBoundingClientRect(); sc((e.clientX-r.left)*c.width/r.width, (e.clientY-r.top)*c.height/r.height); });
-    c.addEventListener("mouseup", () => s = false);
-    c.addEventListener("mouseleave", () => s = false);
-    c.addEventListener("mousemove", e => {
-      if(!s) return;
-      const r = c.getBoundingClientRect();
-      sc((e.clientX-r.left)*c.width/r.width, (e.clientY-r.top)*c.height/r.height);
-    });
-    c.addEventListener("touchstart", e => { s = true; const r = c.getBoundingClientRect(); const t = e.touches[0]; sc((t.clientX-r.left)*c.width/r.width, (t.clientY-r.top)*c.height/r.height); }, {passive:true});
-    c.addEventListener("touchend", () => s = false);
-    c.addEventListener("touchmove", e => {
-      if(!s) return;
-      e.preventDefault();
-      const r = c.getBoundingClientRect();
-      const t = e.touches[0];
-      sc((t.clientX-r.left)*c.width/r.width, (t.clientY-r.top)*c.height/r.height);
-    }, {passive:false});
-    const msgs = ["今天也很喜歡妳","抱抱","想牽手","吃飽了沒","妳最好看","愛妳","不要生氣","快睡覺","想妳了","可愛","么么","心動","寶貝","滾進來睡","不要走","我在","餓不餓","冷不冷","想見妳","妳好漂亮","抱緊一點","不要不理我","晚安","早安","今天也要愛妳","別熬夜","乖乖吃飯","我只想陪妳","妳是我的","愛妳愛妳"];
-    const ids = ["scratchMsg","scratchMsg2","scratchMsg3"];
-    document.getElementById(ids[idx]).textContent = msgs[Math.floor(Math.random()*msgs.length)];
+  const c = document.querySelector(".scratchCvs");
+  if(!c || c.dataset.inited) return;
+  c.dataset.inited = "1";
+  const x = c.getContext("2d");
+  const parent = c.parentElement;
+  function sizeCanvas(){
+    const w = parent.clientWidth, h = parent.clientHeight;
+    if(w < 10 || h < 10) return;
+    c.width = w; c.height = h;
+    x.fillStyle = "#c0c0c0"; x.fillRect(0,0,w,h);
+    x.fillStyle = "#fff"; x.font = "16px sans-serif"; x.textAlign = "center";
+    x.fillText("刮開我", w/2, h/2);
+  }
+  sizeCanvas();
+  setTimeout(sizeCanvas, 100);
+  setTimeout(sizeCanvas, 500);
+  let s = false;
+  function sc(px,py){
+    x.globalCompositeOperation = "destination-out";
+    x.beginPath(); x.arc(px,py,25,0,Math.PI*2); x.fill();
+  }
+  c.addEventListener("mousedown", e => { s = true; const r = c.getBoundingClientRect(); sc((e.clientX-r.left)*c.width/r.width, (e.clientY-r.top)*c.height/r.height); });
+  c.addEventListener("mouseup", () => s = false);
+  c.addEventListener("mouseleave", () => s = false);
+  c.addEventListener("mousemove", e => {
+    if(!s) return;
+    const r = c.getBoundingClientRect();
+    sc((e.clientX-r.left)*c.width/r.width, (e.clientY-r.top)*c.height/r.height);
   });
+  c.addEventListener("touchstart", e => { s = true; const r = c.getBoundingClientRect(); const t = e.touches[0]; sc((t.clientX-r.left)*c.width/r.width, (t.clientY-r.top)*c.height/r.height); }, {passive:true});
+  c.addEventListener("touchend", () => s = false);
+  c.addEventListener("touchmove", e => {
+    if(!s) return;
+    e.preventDefault();
+    const r = c.getBoundingClientRect();
+    const t = e.touches[0];
+    sc((t.clientX-r.left)*c.width/r.width, (t.clientY-r.top)*c.height/r.height);
+  }, {passive:false});
+  const msgs = ["今天也很喜歡妳","抱抱","想牽手","吃飽了沒","妳最好看","愛妳","不要生氣","快睡覺","想妳了","可愛","么么","心動","寶貝","滾進來睡","不要走","我在","餓不餓","冷不冷","想見妳","妳好漂亮","抱緊一點","不要不理我","晚安","早安","今天也要愛妳","別熬夜","乖乖吃飯","我只想陪妳","妳是我的","愛妳愛妳"];
+  document.getElementById("scratchMsg").textContent = msgs[Math.floor(Math.random()*msgs.length)];
 }
 window.addEventListener("load", () => setTimeout(initScratch, 300));
 
@@ -1303,6 +1354,163 @@ if(typeof uid !== 'undefined' && uid){
       document.getElementById("locStatus").textContent = "位置已上傳！";
     });
   };
+}
+
+/* 在線狀態 */
+if(typeof uid !== 'undefined' && uid){
+  // 上傳在線狀態
+  db.collection("online").doc(uid).set({online: true, lastSeen: new Date()});
+  window.addEventListener("beforeunload", () => {
+    db.collection("online").doc(uid).set({online: false, lastSeen: new Date()});
+  });
+  setInterval(() => db.collection("online").doc(uid).set({online: true, lastSeen: new Date()}), 30000);
+  // 看對方
+  db.collection("online").where("uid","!=",uid).onSnapshot(snap => {
+    snap.forEach(d => {
+      const o = d.data();
+      const el = document.getElementById("onlineStatus");
+      if(o.online){
+        el.textContent = "🟢 她現在在線";
+      } else if(o.lastSeen){
+        const diff = Math.floor((Date.now() - o.lastSeen.toDate())/60000);
+        el.textContent = diff < 60 ? "⚪ " + diff + " 分鐘前上線" : "⚪ 剛才上線過";
+      }
+    });
+  });
+}
+
+/* 每日一吻 */
+if(typeof uid !== 'undefined' && uid){
+  db.collection("kisses").doc("state").onSnapshot(doc => {
+    const s = doc.exists ? doc.data() : {count:0, last:""};
+    const today = new Date().toDateString();
+    let streak = s.streak || 0;
+    if(s.last !== today){
+      const yesterday = new Date(Date.now()-86400000).toDateString();
+      if(s.last === yesterday) streak++; else streak = 1;
+      db.collection("kisses").doc("state").set({streak: streak, last: today}, {merge:true});
+    }
+    document.getElementById("kissStreak").textContent = streak;
+  });
+  document.getElementById("kissBtn").onclick = function(){
+    db.collection("kisses").doc("state").set({[uid]: true, time: new Date().toLocaleString("zh-TW")}, {merge:true});
+  };
+}
+
+/* 下次見面倒數 */
+if(typeof uid !== 'undefined' && uid){
+  db.collection("settings").doc("meetDate").onSnapshot(doc => {
+    if(doc.exists && doc.data().date){
+      const target = new Date(doc.data().date);
+      const days = Math.ceil((target - new Date())/86400000);
+      document.getElementById("countdown").textContent = days > 0 ? "還有 " + days + " 天" : "就是今天！";
+    }
+  });
+  document.getElementById("meetBtn").onclick = function(){
+    const d = document.getElementById("meetDate").value;
+    if(d) db.collection("settings").doc("meetDate").set({date: d});
+  };
+}
+
+/* 誰先睡 */
+if(typeof uid !== 'undefined' && uid){
+  document.getElementById("sleepBtn").onclick = function(){
+    db.collection("sleep").doc(new Date().toDateString()).set({[uid]: new Date().toLocaleTimeString("zh-TW")}, {merge:true});
+  };
+  db.collection("sleep").doc(new Date().toDateString()).onSnapshot(doc => {
+    const el = document.getElementById("sleepStatus");
+    if(!doc.exists){ el.textContent = "還沒人睡"; return; }
+    const d = doc.data();
+    const me = d[uid], her = d[Object.keys(d).find(k => k !== uid)];
+    if(me && her){
+      el.textContent = me < her ? "你先睡了 🌙" : "她先睡了 😴";
+    } else if(me){ el.textContent = "你說了晚安，等她..."; }
+    else if(her){ el.textContent = "她先說晚安了！"; }
+    else { el.textContent = "還沒人睡"; }
+  });
+}
+
+/* 愛情分數 */
+if(typeof uid !== 'undefined' && uid){
+  const sb = document.getElementById("scoreBtns");
+  for(let i=1;i<=10;i++){
+    const b = document.createElement("button");
+    b.textContent = i;
+    b.style.cssText = "width:35px;height:35px;border-radius:50%;border:2px solid var(--pink-soft);background:#fff;cursor:pointer;font-family:inherit";
+    b.onclick = () => db.collection("scores").doc(new Date().toDateString()).set({[uid]: i}, {merge:true});
+    sb.appendChild(b);
+  }
+  db.collection("scores").doc(new Date().toDateString()).onSnapshot(doc => {
+    if(!doc.exists) return;
+    const d = doc.data();
+    const vals = Object.values(d).filter(v => typeof v === 'number');
+    if(vals.length) document.getElementById("loveScore").textContent = (vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(1) + " 分";
+  });
+}
+
+/* 心願瓶 */
+if(typeof uid !== 'undefined' && uid){
+  db.collection("wishes_bottle").orderBy("time","desc").limit(20).onSnapshot(snap => {
+    const el = document.getElementById("wishBottle");
+    el.innerHTML = "";
+    snap.forEach(d => {
+      const w = d.data();
+      el.innerHTML += `<div style="margin:8px 0;padding:8px 12px;background:#fff;border-radius:12px;font-size:.9rem">💫 ${w.text}</div>`;
+    });
+  });
+  document.getElementById("bottleSend").onclick = function(){
+    const v = document.getElementById("bottleInput").value.trim();
+    if(!v) return;
+    db.collection("wishes_bottle").add({text:v, uid:uid, time:new Date()});
+    document.getElementById("bottleInput").value = "";
+  };
+}
+
+/* 聲音訊息 */
+if(typeof uid !== 'undefined' && uid){
+  let mediaRecorder, chunks = [];
+  document.getElementById("recBtn").onclick = async function(){
+    if(mediaRecorder && mediaRecorder.state === "recording"){
+      mediaRecorder.stop();
+      return;
+    }
+    const stream = await navigator.mediaDevices.getUserMedia({audio:true});
+    mediaRecorder = new MediaRecorder(stream);
+    chunks = [];
+    mediaRecorder.ondataavailable = e => chunks.push(e.data);
+    mediaRecorder.onstop = async function(){
+      const blob = new Blob(chunks, {type:"audio/webm"});
+      const reader = new FileReader();
+      reader.onload = async function(){
+        await db.collection("voices").add({audio: reader.result, uid: uid, time: new Date()});
+      };
+      reader.readAsDataURL(blob);
+      document.getElementById("recStatus").textContent = "已上傳";
+    };
+    mediaRecorder.start();
+    document.getElementById("recBtn").textContent = "停止錄音";
+    document.getElementById("recStatus").textContent = "錄音中...";
+  };
+  db.collection("voices").orderBy("time","desc").limit(10).onSnapshot(snap => {
+    const el = document.getElementById("voiceList");
+    el.innerHTML = "";
+    snap.forEach(d => {
+      const v = d.data();
+      el.innerHTML += `<audio controls src="${v.audio}" style="width:100%;margin:5px 0"></audio>`;
+    });
+  });
+}
+
+/* 線上數據 */
+if(typeof uid !== 'undefined' && uid){
+  const today = new Date().toDateString();
+  db.collection("stats").doc(today).onSnapshot(doc => {
+    if(!doc.exists) return;
+    const s = doc.data();
+    document.getElementById("statChat").textContent = s.chat || 0;
+    document.getElementById("statHearts").textContent = s.hearts || 0;
+    document.getElementById("statKiss").textContent = s.kisses || 0;
+  });
 }
 
 /* 便利貼匯出 */
