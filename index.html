@@ -556,6 +556,29 @@ body{counter-reset: section}
 </style>
 </head>
 <body>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script>
+  firebase.initializeApp({
+    apiKey: "AIzaSyCDRGa7Pz4n481Hy2ktUwtnnDLFo74lewU",
+    authDomain: "yien1212-8a306.firebaseapp.com",
+    projectId: "yien1212-8a306",
+    storageBucket: "yien1212-8a306.firebasestorage.app",
+    messagingSenderId: "579288934330",
+    appId: "1:579288934330:web:fbf4f118205d94b4c5f83"
+  });
+  const db = firebase.firestore();
+  let uid = firebase.auth().currentUser ? firebase.auth().currentUser.uid : null;
+  firebase.auth().signInAnonymously().then(u => {
+    uid = u.user.uid;
+    renderWishes();
+    if(!localStorage.getItem("reloaded")){
+      localStorage.setItem("reloaded","1");
+      location.reload();
+    }
+  });
+</script>
 
 <div class="petal" style="left:8%">🌸</div>
 <div class="petal" style="left:28%; animation-delay:2s">🌸</div>
@@ -2032,50 +2055,6 @@ document.getElementById("playBtn").onclick = () => bgm.play();
 document.getElementById("pauseBtn").onclick = () => bgm.pause();
 </script>
 
-<!-- Firebase -->
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-<script>
-  window.firebaseConfig = {
-    apiKey: "AIzaSyCDRGa7Pz4n481Hy2ktUwtnnDlFo74lewU",
-    authDomain: "yien1212-8a306.firebaseapp.com",
-    projectId: "yien1212-8a306",
-    storageBucket: "yien1212-8a306.firebasestorage.app",
-    messagingSenderId: "579288934330",
-    appId: "1:579288934330:web:fbf4f118205d94b4c5f83"
-  };
-</script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging-compat.js"></script>
-<script>
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
-  let uid = firebase.auth().currentUser ? firebase.auth().currentUser.uid : null;
-
-  // 通知權限
-  if("Notification" in window && Notification.permission === "default"){
-    Notification.requestPermission();
-  }
-
-  firebase.auth().signInAnonymously().then(u => {
-    uid = u.user.uid;
-    renderWishes();
-    if(!localStorage.getItem("reloaded")){
-      localStorage.setItem("reloaded","1");
-      location.reload();
-    }
-    // 新聊天通知
-    // 新聊天通知
-    db.collection("chat").orderBy("time","desc").limit(1).onSnapshot(snap => {
-      snap.forEach(d => {
-        const m = d.data();
-        if(m.uid !== uid && "Notification" in window && Notification.permission === "granted"){
-          new Notification("她說：", {body: m.text});
-        }
-      });
-    });
-  });
-</script>
 <script src="https://cdn.botpress.cloud/webchat/v3.5/inject.js"></script>
 <script src="https://files.bpcontent.cloud/2026/01/12/17/20260112175648-Q8N99NKQ.js" defer></script>
 
