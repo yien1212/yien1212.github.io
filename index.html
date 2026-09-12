@@ -722,6 +722,14 @@ body{counter-reset: section}
     <button class="btn-pink" id="spinBtn">轉！</button>
   </div>
 
+  <!-- 愛情骰盅 -->
+  <h3 class="stitle">擲骰子</h3>
+  <div style="text-align:center">
+    <div id="dice" style="font-size:4rem; margin:10px">🎲</div>
+    <button class="btn-pink" id="diceBtn">擲！</button>
+    <div id="diceResult" style="margin-top:10px; font-family:'Noto Serif TC',serif; color:var(--pink-deep)"></div>
+  </div>
+
   <!-- 便利貼 -->
   <h3 class="stitle">想對我說的話</h3>
   <div id="noteArea">
@@ -729,6 +737,7 @@ body{counter-reset: section}
     <div class="note-btns">
       <button id="noteBtn">貼上去</button>
       <button id="copyBtn">複製傳給我</button>
+      <button id="exportNotes">匯出全部</button>
     </div>
     <div id="noteList"></div>
   </div>
@@ -1015,7 +1024,14 @@ document.getElementById("mystery").addEventListener("click", () => { localStorag
 
 /* 願望 */
 function renderWishes(){
-  const wishes = ["一起看海","一起跨年","一起去日本","一起養一隻貓","一起做飯","一起露營","一起拍情侶照","一起看煙火","一起養老"];
+  const wishes = [
+    "一起看海","一起跨年","一起去日本","一起養一隻貓","一起做飯",
+    "一起露營","一起拍情侶照","一起看煙火","一起養老",
+    "一起去迪士尼","一起泡溫泉","一起騎車環島","一起看演唱會",
+    "一起種植物","一起組電腦","一起去海邊看日出","一起做蛋糕",
+    "一起養隻狗","一起去冰山","一起住小木屋","一起玩雲霄飛車",
+    "一起看流星雨","一起逛夜市","一起買情侶裝","一起去貓咪咖啡廳"
+  ];
   const saved = JSON.parse(localStorage.getItem("wishes")||"[]");
   const list = document.getElementById("wishList");
   wishes.forEach((w,i) => {
@@ -1148,6 +1164,32 @@ document.addEventListener("click", e => {
     </div>`
   ).join("");
 })();
+
+/* 愛情骰子 */
+(function(){
+  const dice = ["❤️","💖","💕","💘","💝","💗"];
+  const acts = ["抱一下","親一下","說我愛妳","牽手三分鐘","講情話","撒嬌"];
+  document.getElementById("diceBtn").onclick = function(){
+    const n = Math.floor(Math.random()*6);
+    const d = document.getElementById("dice");
+    d.style.transform = "rotate(" + (Math.random()*720) + "deg)";
+    setTimeout(() => {
+      d.textContent = dice[n];
+      document.getElementById("diceResult").textContent = "👉 " + acts[n];
+    }, 500);
+  };
+})();
+
+/* 便利貼匯出 */
+document.getElementById("exportNotes").onclick = function(){
+  const notes = JSON.parse(localStorage.getItem("notes")||"[]");
+  const text = notes.map(n => n.text).join("\n---\n");
+  const blob = new Blob([text], {type:"text/plain"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "便利貼.txt";
+  a.click();
+};
 
 /* 彈幕手動發送 */
 document.getElementById("dmSend").onclick = function(){
