@@ -860,15 +860,7 @@ body{counter-reset: section}
   <h3 class="stitle">🟢 在線狀態</h3>
   <div style="text-align:center;font-family:'Noto Serif TC',serif;color:var(--pink-deep)" id="onlineStatus">載入中...</div>
 
-  <!-- 每日一吻 -->
-  <h3 class="stitle">😘 每日一吻</h3>
-  <div style="text-align:center">
-    <div id="kissStreak" style="font-size:2rem;color:var(--pink);margin:10px">0</div>
-    <div style="font-size:.85rem;color:#999;margin-bottom:10px">連續天數</div>
-    <button class="btn-pink" id="kissBtn">親一下 😘</button>
-  </div>
-
-  <!-- 下次見面倒數 -->
+<!-- 下次見面倒數 -->
   <h3 class="stitle">⏰ 下次見面</h3>
   <div style="text-align:center;font-family:'Noto Serif TC',serif;color:var(--pink-deep)">
     <div id="countdown" style="font-size:1.5rem">設定日期</div>
@@ -1549,33 +1541,7 @@ if(typeof uid !== 'undefined' && uid){
   });
 }
 
-/* 每日一吻 */
-if(typeof uid !== 'undefined' && uid){
-  db.collection("kisses").doc("state").onSnapshot(doc => {
-    const s = doc.exists ? doc.data() : {count:0, last:""};
-    const today = new Date().toDateString();
-    let streak = s.streak || 0;
-    if(s.last !== today){
-      const yesterday = new Date(Date.now()-86400000).toDateString();
-      if(s.last === yesterday) streak++; else streak = 1;
-      db.collection("kisses").doc("state").set({streak: streak, last: today}, {merge:true});
-    }
-    document.getElementById("kissStreak").textContent = streak;
-  });
-  document.getElementById("kissBtn").onclick = function(){
-    db.collection("kisses").doc("state").set({[uid]: true, time: new Date().toLocaleString("zh-TW")}, {merge:true});
-  };
-}
-
-/* 下次見面倒數 */
-if(typeof uid !== 'undefined' && uid){
-  db.collection("settings").doc("meetDate").onSnapshot(doc => {
-    if(doc.exists && doc.data().date){
-      const target = new Date(doc.data().date);
-      const days = Math.ceil((target - new Date())/86400000);
-      document.getElementById("countdown").textContent = days > 0 ? "還有 " + days + " 天" : "就是今天！";
-    }
-  });
+);
   document.getElementById("meetBtn").onclick = function(){
     const d = document.getElementById("meetDate").value;
     if(d) db.collection("settings").doc("meetDate").set({date: d});
