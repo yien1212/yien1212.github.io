@@ -520,6 +520,20 @@ body{counter-reset: section}
   .hero h1{font-size:1.9rem}
   .carousel img{height:260px}
 }
+/* Tab 導航 */
+.tab-bar{
+  position:fixed; bottom:0; left:0; right:0; z-index:1000;
+  display:flex; background:rgba(255,255,255,.9); backdrop-filter:blur(20px);
+  border-top:1px solid rgba(233,30,99,.15); padding:8px 0 env(safe-area-inset-bottom);
+}
+.tab-btn{
+  flex:1; text-align:center; padding:8px; cursor:pointer; font-size:.75rem;
+  color:#999; border:none; background:none; font-family:inherit;
+}
+.tab-btn.active{ color:var(--pink); font-weight:700; }
+.tab-btn .icon{ font-size:1.3rem; display:block; }
+.page{ display:none; padding-bottom:80px; }
+.page.active{ display:block; }
 </style>
 </head>
 <body>
@@ -541,6 +555,8 @@ body{counter-reset: section}
 </div>
 
 <div id="app" class="hidden">
+
+  <div class="page active" id="page-home">
 
   <!-- HERO -->
   <div class="hero">
@@ -590,6 +606,9 @@ body{counter-reset: section}
   </div>
   <div class="next" id="nextBox"></div>
 
+  </div>
+  <div class="page" id="page-memories">
+
   <!-- 時間軸 -->
   <h3 class="stitle">我們的軌跡</h3>
   <div class="tl">
@@ -628,6 +647,9 @@ body{counter-reset: section}
     <figure><img src="red_umbrella.jpg" data-cap="星巴克前面"><figcaption></figcaption></figure>
     <figure><img src="giant_icecream.jpg" data-cap="她變成冰淇淋"><figcaption></figcaption></figure>
   </div>
+
+  </div>
+  <div class="page" id="page-games">
 
   <!-- 盲盒 -->
   <h3 class="stitle">抽一個回憶</h3>
@@ -726,6 +748,9 @@ body{counter-reset: section}
     <br>
     <button class="btn-pink" id="spinBtn">轉！</button>
   </div>
+
+  </div>
+  <div class="page" id="page-chat">
 
   <!-- 定位+電量 -->
   <h3 class="stitle">📍 我們在哪</h3>
@@ -833,7 +858,16 @@ body{counter-reset: section}
     <div id="heartCount">已收集 0 個 ❤️</div>
     <div id="gameSpace"></div>
   </div>
-</div>
+  </div><!-- /page-chat -->
+
+  <!-- Tab Bar -->
+  <div class="tab-bar">
+    <button class="tab-btn active" data-page="home"><span class="icon">🏠</span>首頁</button>
+    <button class="tab-btn" data-page="memories"><span class="icon">📷</span>回憶</button>
+    <button class="tab-btn" data-page="chat"><span class="icon">💬</span>互動</button>
+    <button class="tab-btn" data-page="games"><span class="icon">🎮</span>遊戲</button>
+  </div>
+</div><!-- /app -->
 
 <!-- 滾動進度條 -->
 <div id="progressBar"></div>
@@ -863,6 +897,17 @@ body{counter-reset: section}
 </div>
 
 <script>
+/* Tab 切換 */
+document.querySelectorAll(".tab-btn").forEach(btn => {
+  btn.onclick = function(){
+    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+    btn.classList.add("active");
+    document.getElementById("page-" + btn.dataset.page).classList.add("active");
+    window.scrollTo(0,0);
+  };
+});
+
 const PW = "1213";
 const start = new Date(2024, 11, 13);
 const bgm = document.getElementById("bgm");
