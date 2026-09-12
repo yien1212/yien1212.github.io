@@ -806,16 +806,6 @@ body{counter-reset: section}
     <div style="display:flex;gap:5px;justify-content:center;flex-wrap:wrap" id="scoreBtns"></div>
   </div>
 
-  <!-- 心願瓶 -->
-  <h3 class="stitle">🍾 心願瓶</h3>
-  <div style="max-width:500px;margin:0 auto">
-    <div id="wishBottle" style="max-height:250px;overflow-y:auto;background:rgba(255,255,255,.6);border-radius:16px;padding:15px;margin-bottom:10px"></div>
-    <div style="display:flex;gap:8px">
-      <input type="text" id="bottleInput" placeholder="許個願..." style="flex:1;padding:10px 14px;border:1.5px solid var(--pink-soft);border-radius:20px;font-family:inherit;outline:none">
-      <button class="btn-pink" id="bottleSend">許</button>
-    </div>
-  </div>
-
   <!-- 聲音訊息 -->
   <h3 class="stitle">🎙️ 聲音訊息</h3>
   <div style="text-align:center">
@@ -830,18 +820,6 @@ body{counter-reset: section}
     <div><div id="statChat" style="font-size:1.5rem;color:var(--pink)">0</div><div style="font-size:.8rem;color:#999">句聊天</div></div>
     <div><div id="statHearts" style="font-size:1.5rem;color:var(--pink)">0</div><div style="font-size:.8rem;color:#999">次愛心</div></div>
     <div><div id="statKiss" style="font-size:1.5rem;color:var(--pink)">0</div><div style="font-size:.8rem;color:#999">次親親</div></div>
-  </div>
-
-  <!-- 便利貼 -->
-  <h3 class="stitle">想對我說的話</h3>
-  <div id="noteArea">
-    <textarea id="noteInput" placeholder="想罵我想誇我都可以"></textarea>
-    <div class="note-btns">
-      <button id="noteBtn">貼上去</button>
-      <button id="copyBtn">複製傳給我</button>
-      <button id="exportNotes">匯出全部</button>
-    </div>
-    <div id="noteList"></div>
   </div>
 
   <!-- 一起按愛心 -->
@@ -1185,7 +1163,7 @@ function renderWishes(){
 
 /* 每日一問 */
 (function(){
-  const qs = ["今天最開心的一件事？","我們第一次約會去哪？","妳覺得我哪裡最可愛？","想跟我去哪旅行？","今天有想我嗎？","喜歡我叫妳什麼？","下次見面想做什麼？","覺得我哪一點最吸引妳？","想一起完成什麼事？","最近一次想我是什麼時候？"];
+  const qs = ["今天最開心的一件事？","我們第一次約會去哪？","妳覺得我哪裡最可愛？","想跟我去哪旅行？","今天有想我嗎？","喜歡我叫妳什麼？","下次見面想做什麼？","覺得我哪一點最吸引妳？","想一起完成什麼事？","最近一次想我是什麼時候？","我們哪個瞬間最浪漫？","妳覺得我們哪裡最像？","第一次牽手是什麼感覺？","最想收到我送什麼禮物？","哪句情話最打動妳？","我們最適合一起做什麼？","想跟我養什麼動物？","最喜歡我什麼習慣？","什麼時候覺得認定我了？","想一起住什麼樣的房子？","第一次見面覺得我是什麼樣的人？","現在最想我做什麼？","哪件事最讓妳感動？","想一起看什麼電影？","哪個季節最適合我們？","最想跟我去吃什麼？","哪個瞬間覺得我可愛？","想跟我挑戰什麼新事物？","最喜歡抱著我的時候？","什麼時候覺得我很帥？","想一起慶祝什麼節日？","哪件事只有我們懂？","覺得我哪裡需要改進？","想一起拍什麼風格的照片？","最想對我說什麼心裡話？","哪個地方最讓妳放鬆？","想一起學什麼技能？","哪段回憶最寶貴？","現在最想吃什麼？","想跟我在哪裡過生日？","哪句話最讓妳心動？","想一起看什麼夜景？","覺得我們的愛情像什麼？","最想收到什麼驚喜？","什麼時候最想抱抱我？","想一起做什麼瘋狂的事？","哪個習慣讓妳覺得窩心？","未來想跟我一起去哪？","現在的心情用一個詞形容","我愛妳用台語怎麼說"];
   document.getElementById("dailyQ").textContent = qs[Math.floor(Date.now()/86400000) % qs.length];
 })();
 
