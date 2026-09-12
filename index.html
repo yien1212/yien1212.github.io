@@ -570,10 +570,12 @@ body{counter-reset: section}
   });
   window.db = firebase.firestore();
   window.uid = null;
-  firebase.auth().signInAnonymously();
-  firebase.auth().onAuthStateChanged(u => {
-    if(u) window.uid = u.user.uid;
+  window._authReady = new Promise(resolve => {
+    firebase.auth().onAuthStateChanged(u => {
+      if(u){ window.uid = u.user.uid; resolve(u.user.uid); }
+    });
   });
+  firebase.auth().signInAnonymously();
 </script>
 
 <div class="petal" style="left:8%">🌸</div>
@@ -981,6 +983,7 @@ body{counter-reset: section}
 </div>
 
 <script>
+window._authReady.then(function(uid){
 /* Tab 切換 */
 document.querySelectorAll(".tab-btn").forEach(btn => {
   btn.onclick = function(){
@@ -2013,6 +2016,7 @@ document.querySelectorAll(".photo figure, .card").forEach(el => {
 /* 音樂 */
 document.getElementById("playBtn").onclick = () => bgm.play();
 document.getElementById("pauseBtn").onclick = () => bgm.pause();
+});
 </script>
 
 <script src="https://cdn.botpress.cloud/webchat/v3.5/inject.js"></script>
