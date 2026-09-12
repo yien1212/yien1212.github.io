@@ -964,8 +964,16 @@ const start = new Date(2024, 11, 13);
 const bgm = document.getElementById("bgm");
 
 /* 解鎖 */
+if(localStorage.getItem("unlocked") === "1"){
+  document.getElementById("login").classList.add("hidden");
+  const a = document.getElementById("app");
+  a.classList.remove("hidden"); a.classList.add("fade-in");
+  startTimer(); startGame(); renderNotes(); renderWishes(); renderBadges();
+  initCarousel(); initTimeline();
+}
 document.getElementById("go").onclick = () => {
   if (document.getElementById("pw").value === PW) {
+    localStorage.setItem("unlocked","1");
     document.getElementById("login").classList.add("hidden");
     const a = document.getElementById("app");
     a.classList.remove("hidden");
