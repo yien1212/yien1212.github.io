@@ -1006,7 +1006,7 @@ if(localStorage.getItem("unlocked") === "1"){
   document.getElementById("login").classList.add("hidden");
   const a = document.getElementById("app");
   a.classList.remove("hidden"); a.classList.add("fade-in");
-  startTimer(); startGame(); renderWishes(); renderBadges();
+  startTimer(); startGame(); renderBadges();
   initCarousel(); initTimeline();
 }
 document.getElementById("go").onclick = () => {
@@ -1018,8 +1018,6 @@ document.getElementById("go").onclick = () => {
     a.classList.add("fade-in");
     startTimer();
     startGame();
-    renderNotes();
-    renderWishes();
     renderBadges();
     initCarousel();
     initTimeline();
@@ -2096,6 +2094,7 @@ document.getElementById("pauseBtn").onclick = () => bgm.pause();
 
   firebase.auth().signInAnonymously().then(u => {
     uid = u.user.uid;
+    renderWishes();
     // 新聊天通知
     db.collection("chat").orderBy("time","desc").limit(1).onSnapshot(snap => {
       snap.forEach(d => {
