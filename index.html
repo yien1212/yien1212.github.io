@@ -908,45 +908,45 @@ document.getElementById("mystery").onclick = function(){
 };
 
 /* 刮刮樂 */
-document.querySelectorAll(".scratchCvs").forEach((c, idx) => {
-  const x = c.getContext("2d");
-  const parent = c.parentElement;
-  function sizeCanvas(){
-    c.width = parent.clientWidth;
-    c.height = parent.clientHeight;
-    paint();
-  }
-  function paint(){
-    const w = c.width, h = c.height;
-    x.fillStyle = "#c0c0c0"; x.fillRect(0,0,w,h);
-    x.fillStyle = "#fff"; x.font = "13px sans-serif"; x.textAlign = "center";
-    x.fillText("刮開我", w/2, h/2);
-  }
-  sizeCanvas();
-  addEventListener("resize", sizeCanvas);
-  let s = false;
-  function sc(px,py){
-    x.globalCompositeOperation = "destination-out";
-    x.beginPath(); x.arc(px,py,18,0,Math.PI*2); x.fill();
-  }
-  c.addEventListener("mousedown", () => s = true);
-  c.addEventListener("mouseup", () => s = false);
-  c.addEventListener("mousemove", e => {
-    if(!s) return;
-    const r = c.getBoundingClientRect();
-    sc((e.clientX-r.left)*c.width/r.width, (e.clientY-r.top)*c.height/r.height);
+window.addEventListener("load", () => {
+  document.querySelectorAll(".scratchCvs").forEach((c, idx) => {
+    const x = c.getContext("2d");
+    const parent = c.parentElement;
+    function sizeCanvas(){
+      const w = parent.clientWidth, h = parent.clientHeight;
+      c.width = w; c.height = h;
+      x.fillStyle = "#c0c0c0"; x.fillRect(0,0,w,h);
+      x.fillStyle = "#fff"; x.font = "13px sans-serif"; x.textAlign = "center";
+      x.fillText("刮開我", w/2, h/2);
+    }
+    sizeCanvas();
+    setTimeout(sizeCanvas, 500);
+    let s = false;
+    function sc(px,py){
+      x.globalCompositeOperation = "destination-out";
+      x.beginPath(); x.arc(px,py,20,0,Math.PI*2); x.fill();
+    }
+    c.addEventListener("mousedown", e => { s = true; const r = c.getBoundingClientRect(); sc((e.clientX-r.left)*c.width/r.width, (e.clientY-r.top)*c.height/r.height); });
+    c.addEventListener("mouseup", () => s = false);
+    c.addEventListener("mouseleave", () => s = false);
+    c.addEventListener("mousemove", e => {
+      if(!s) return;
+      const r = c.getBoundingClientRect();
+      sc((e.clientX-r.left)*c.width/r.width, (e.clientY-r.top)*c.height/r.height);
+    });
+    c.addEventListener("touchstart", e => { s = true; const r = c.getBoundingClientRect(); const t = e.touches[0]; sc((t.clientX-r.left)*c.width/r.width, (t.clientY-r.top)*c.height/r.height); }, {passive:true});
+    c.addEventListener("touchend", () => s = false);
+    c.addEventListener("touchmove", e => {
+      if(!s) return;
+      e.preventDefault();
+      const r = c.getBoundingClientRect();
+      const t = e.touches[0];
+      sc((t.clientX-r.left)*c.width/r.width, (t.clientY-r.top)*c.height/r.height);
+    }, {passive:false});
+    const msgs = ["今天也很喜歡妳","抱抱","想牽手","吃飽了沒","妳最好看","愛妳","不要生氣","快睡覺","想妳了","可愛","么么","心動"];
+    const ids = ["scratchMsg","scratchMsg2","scratchMsg3"];
+    document.getElementById(ids[idx]).textContent = msgs[Math.floor(Math.random()*msgs.length)];
   });
-  c.addEventListener("touchstart", () => s = true, {passive:true});
-  c.addEventListener("touchend", () => s = false);
-  c.addEventListener("touchmove", e => {
-    if(!s) return;
-    const r = c.getBoundingClientRect();
-    const t = e.touches[0];
-    sc((t.clientX-r.left)*c.width/r.width, (t.clientY-r.top)*c.height/r.height);
-  }, {passive:true});
-  const msgs = ["今天也很喜歡妳","抱抱","想牽手","吃飽了沒","妳最好看","愛妳","不要生氣","快睡覺","想妳了","可愛","么么","心動"];
-  const ids = ["scratchMsg","scratchMsg2","scratchMsg3"];
-  document.getElementById(ids[idx]).textContent = msgs[Math.floor(Math.random()*msgs.length)];
 });
 
 /* 翻牌 */
