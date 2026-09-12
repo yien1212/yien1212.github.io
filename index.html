@@ -1106,9 +1106,7 @@ document.addEventListener("click", e => {
     [{t:"下午05:05",who:"them",text:"要也不準備多一點"}],
     [{t:"上午08:03",who:"them",text:"嗯！"}],
   ];
-  const today = new Date();
-  const dayIdx = Math.floor((today - new Date(2024,11,13)) / 86400000);
-  const conv = convos[dayIdx % convos.length];
+  const conv = convos[Math.floor(Math.random()*convos.length)];
   const box = document.getElementById("chatToday");
   box.innerHTML = conv.map(m => 
     `<div style="margin:8px 0; ${m.who==='me' ? 'text-align:right' : ''}">
