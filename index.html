@@ -243,19 +243,28 @@ body::before{
 #loveText.show{opacity:1; transform:translateY(0)}
 
 /* 刮刮樂 */
-.scratch-wrap{
-  max-width:320px; margin:0 auto; position:relative;
-  border-radius:18px; overflow:hidden;
-  box-shadow:0 10px 30px rgba(233,30,99,.2);
+.scratch-grid{
+  display:grid; grid-template-columns:repeat(3,1fr);
+  gap:10px; max-width:600px; margin:0 auto;
 }
-#scratchMsg{
-  padding:30px 20px;
+.scratch-wrap{
+  position:relative; border-radius:14px; overflow:hidden;
+  box-shadow:0 8px 20px rgba(233,30,99,.2);
+  aspect-ratio: 5/3;
+}
+.scratch-wrap .msg{
+  position:absolute; inset:0;
+  padding:10px;
   background:linear-gradient(135deg,var(--pink),var(--pink-deep));
   color:#fff; font-family:"Noto Serif TC",serif;
-  font-size:1.05rem; line-height:1.7; min-height:140px;
+  font-size:.85rem; line-height:1.5;
   display:flex; align-items:center; justify-content:center; text-align:center;
 }
-#scratchCvs{position:absolute; inset:0; cursor:grab}
+.scratchCvs{position:absolute; inset:0; width:100%; height:100%; cursor:grab}
+@media(max-width:500px){
+  .scratch-grid{grid-template-columns:repeat(3,1fr); gap:6px}
+  .scratch-wrap .msg{font-size:.7rem; padding:6px}
+}
 
 /* 翻牌 */
 .mem-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; max-width:400px; margin:0 auto}
@@ -625,19 +634,19 @@ body{counter-reset: section}
   </div>
 
   <!-- 刮刮樂 -->
-  <h3 class="stitle">刮刮樂（每天一張）</h3>
-  <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap">
-    <div class="scratch-wrap" style="flex:1; min-width:200px">
-      <div id="scratchMsg">刮我刮我刮我</div>
-      <canvas class="scratchCvs" width="200" height="120"></canvas>
+  <h3 class="stitle">刮刮樂</h3>
+  <div class="scratch-grid">
+    <div class="scratch-wrap">
+      <div class="msg" id="scratchMsg">刮我</div>
+      <canvas class="scratchCvs"></canvas>
     </div>
-    <div class="scratch-wrap" style="flex:1; min-width:200px">
-      <div id="scratchMsg2">好想要哦～</div>
-      <canvas class="scratchCvs" width="200" height="120"></canvas>
+    <div class="scratch-wrap">
+      <div class="msg" id="scratchMsg2">好想要～</div>
+      <canvas class="scratchCvs"></canvas>
     </div>
-    <div class="scratch-wrap" style="flex:1; min-width:200px">
-      <div id="scratchMsg3">刮開看看</div>
-      <canvas class="scratchCvs" width="200" height="120"></canvas>
+    <div class="scratch-wrap">
+      <div class="msg" id="scratchMsg3">刮開看看</div>
+      <canvas class="scratchCvs"></canvas>
     </div>
   </div>
   <p style="text-align:center; color:#999; font-size:.8rem; margin-top:8px">用手指刮開</p>
@@ -897,10 +906,20 @@ document.getElementById("mystery").onclick = function(){
 /* 刮刮樂 */
 document.querySelectorAll(".scratchCvs").forEach((c, idx) => {
   const x = c.getContext("2d");
-  const w = c.width, h = c.height;
-  x.fillStyle = "#c0c0c0"; x.fillRect(0,0,w,h);
-  x.fillStyle = "#fff"; x.font = "14px sans-serif"; x.textAlign = "center";
-  x.fillText("刮開我", w/2, h/2);
+  const parent = c.parentElement;
+  function sizeCanvas(){
+    c.width = parent.clientWidth;
+    c.height = parent.clientHeight;
+    paint();
+  }
+  function paint(){
+    const w = c.width, h = c.height;
+    x.fillStyle = "#c0c0c0"; x.fillRect(0,0,w,h);
+    x.fillStyle = "#fff"; x.font = "13px sans-serif"; x.textAlign = "center";
+    x.fillText("刮開我", w/2, h/2);
+  }
+  sizeCanvas();
+  addEventListener("resize", sizeCanvas);
   let s = false;
   function sc(px,py){
     x.globalCompositeOperation = "destination-out";
@@ -1089,22 +1108,22 @@ document.addEventListener("click", e => {
 /* 我們的日常 — 從真實 LINE 記錄抽 */
 (function(){
   const convos = [
-    [{t:"下午11:26",who:"me",text:"我在想你"},{t:"下午11:27",who:"them",text:"白痴"}],
-    [{t:"上午10:35",who:"them",text:"我上車車ㄌ"},{t:"上午10:36",who:"me",text:"好"}],
-    [{t:"上午09:20",who:"them",text:"乖乖"},{t:"上午09:21",who:"me",text:"嗯"}],
-    [{t:"下午11:41",who:"them",text:"你好寶寶"}],
-    [{t:"下午06:52",who:"them",text:"不要洗屁股"}],
-    [{t:"下午08:36",who:"them",text:"幹你娘"},{t:"下午08:37",who:"me",text:"笑死"}],
-    [{t:"上午02:28",who:"me",text:"你如果變成了我最不想靠近的那種人"},{t:"上午02:30",who:"them",text:"不會的"}],
-    [{t:"下午12:44",who:"them",text:"齁我要怎麼講"}],
-    [{t:"下午09:35",who:"them",text:"我他媽真的傻眼"}],
-    [{t:"上午08:52",who:"me",text:"知道妳懶"},{t:"上午08:53",who:"them",text:"滾"}],
-    [{t:"下午03:43",who:"them",text:"你猜我們現在在幹嘛"},{t:"下午03:43",who:"me",text:"上課"},{t:"下午03:43",who:"them",text:"你猜錯了"}],
-    [{t:"下午03:46",who:"them",text:"我們報告100分欸吧"},{t:"下午03:46",who:"me",text:"欸好厲害 超級猛"}],
-    [{t:"上午07:50",who:"me",text:"🤏🏻"}],
-    [{t:"下午02:42",who:"them",text:"…好心態"}],
-    [{t:"下午05:05",who:"them",text:"要也不準備多一點"}],
-    [{t:"上午08:03",who:"them",text:"嗯！"}],
+    [{t:"下午03:43",who:"them",text:"你猜我們現在在幹嘛"},{t:"下午03:43",who:"me",text:"上課"},{t:"下午03:43",who:"them",text:"💩"},{t:"下午03:43",who:"them",text:"你猜錯了"},{t:"下午03:44",who:"me",text:"報告的怎麼樣"}],
+    [{t:"下午03:46",who:"them",text:"我們報告100分欸吧"},{t:"下午03:46",who:"me",text:"欸好厲害"},{t:"下午03:46",who:"me",text:"超級猛"},{t:"下午03:46",who:"me",text:"你們報告英文的欸"}],
+    [{t:"下午03:44",who:"me",text:"幹我跟你講我買新桌子"},{t:"下午03:44",who:"me",text:"把舊的丟了想說他很快就來"},{t:"下午03:44",who:"me",text:"結果等了快一個月"},{t:"下午03:44",who:"me",text:"...."}],
+    [{t:"下午11:26",who:"me",text:"我在想你"},{t:"下午11:27",who:"them",text:"白痴"},{t:"下午11:28",who:"me",text:"真的"},{t:"下午11:29",who:"them",text:"滾"}],
+    [{t:"上午10:35",who:"them",text:"我上車車ㄌ"},{t:"上午10:36",who:"me",text:"好"},{t:"上午10:37",who:"me",text:"搭車小心"},{t:"上午10:38",who:"them",text:"嗯"}],
+    [{t:"上午09:20",who:"them",text:"乖乖"},{t:"上午09:21",who:"me",text:"嗯"},{t:"上午09:22",who:"them",text:"吃早餐了嗎"},{t:"上午09:23",who:"me",text:"還沒"}],
+    [{t:"下午11:41",who:"them",text:"你好寶寶"},{t:"下午11:42",who:"me",text:"？"},{t:"下午11:43",who:"them",text:"沒有"}],
+    [{t:"下午06:52",who:"them",text:"不要洗屁股"},{t:"下午06:53",who:"me",text:"為什麼"},{t:"下午06:53",who:"them",text:"就不要"}],
+    [{t:"下午08:36",who:"them",text:"幹你娘"},{t:"下午08:37",who:"me",text:"笑死"},{t:"下午08:37",who:"them",text:"真的"},{t:"下午08:38",who:"me",text:"哈哈哈"}],
+    [{t:"上午02:28",who:"me",text:"你如果變成了我最不想靠近的那種人"},{t:"上午02:30",who:"them",text:"不會的"},{t:"上午02:31",who:"me",text:"最好是"}],
+    [{t:"下午12:44",who:"them",text:"齁我要怎麼講"},{t:"下午12:45",who:"me",text:"就說"},{t:"下午12:45",who:"them",text:"我不知道啦"}],
+    [{t:"下午09:35",who:"them",text:"我他媽真的傻眼"},{t:"下午09:36",who:"me",text:"怎麼了"},{t:"下午09:36",who:"them",text:"沒事"}],
+    [{t:"上午08:52",who:"me",text:"知道妳懶"},{t:"上午08:53",who:"them",text:"滾"},{t:"上午08:53",who:"me",text:"哈哈"}],
+    [{t:"下午05:05",who:"them",text:"要也不準備多一點"},{t:"下午05:06",who:"me",text:"好啦"},{t:"下午05:06",who:"them",text:"每次都這樣"}],
+    [{t:"下午03:28",who:"them",text:"好"},{t:"下午03:29",who:"them",text:"哈哈哈"},{t:"下午03:30",who:"me",text:"笑屁"}],
+    [{t:"上午08:03",who:"them",text:"嗯！"},{t:"上午08:04",who:"me",text:"早安"},{t:"上午08:05",who:"them",text:"早"}],
   ];
   const conv = convos[Math.floor(Math.random()*convos.length)];
   const box = document.getElementById("chatToday");
