@@ -968,7 +968,7 @@ if(localStorage.getItem("unlocked") === "1"){
   document.getElementById("login").classList.add("hidden");
   const a = document.getElementById("app");
   a.classList.remove("hidden"); a.classList.add("fade-in");
-  startTimer(); startGame(); renderNotes(); renderWishes(); renderBadges();
+  startTimer(); startGame(); renderWishes(); renderBadges();
   initCarousel(); initTimeline();
 }
 document.getElementById("go").onclick = () => {
@@ -1247,54 +1247,6 @@ function renderWishes(){
   const qs = ["今天最開心的一件事？","我們第一次約會去哪？","妳覺得我哪裡最可愛？","想跟我去哪旅行？","今天有想我嗎？","喜歡我叫妳什麼？","下次見面想做什麼？","覺得我哪一點最吸引妳？","想一起完成什麼事？","最近一次想我是什麼時候？","我們哪個瞬間最浪漫？","妳覺得我們哪裡最像？","第一次牽手是什麼感覺？","最想收到我送什麼禮物？","哪句情話最打動妳？","我們最適合一起做什麼？","想跟我養什麼動物？","最喜歡我什麼習慣？","什麼時候覺得認定我了？","想一起住什麼樣的房子？","第一次見面覺得我是什麼樣的人？","現在最想我做什麼？","哪件事最讓妳感動？","想一起看什麼電影？","哪個季節最適合我們？","最想跟我去吃什麼？","哪個瞬間覺得我可愛？","想跟我挑戰什麼新事物？","最喜歡抱著我的時候？","什麼時候覺得我很帥？","想一起慶祝什麼節日？","哪件事只有我們懂？","覺得我哪裡需要改進？","想一起拍什麼風格的照片？","最想對我說什麼心裡話？","哪個地方最讓妳放鬆？","想一起學什麼技能？","哪段回憶最寶貴？","現在最想吃什麼？","想跟我在哪裡過生日？","哪句話最讓妳心動？","想一起看什麼夜景？","覺得我們的愛情像什麼？","最想收到什麼驚喜？","什麼時候最想抱抱我？","想一起做什麼瘋狂的事？","哪個習慣讓妳覺得窩心？","未來想跟我一起去哪？","現在的心情用一個詞形容","我愛妳用台語怎麼說"];
   document.getElementById("dailyQ").textContent = qs[Math.floor(Date.now()/86400000) % qs.length];
 })();
-
-/* 便利貼 */
-function renderNotes(){
-  const list = JSON.parse(localStorage.getItem("notes")||"[]");
-  document.getElementById("noteList").innerHTML = list.map((n,i) =>
-    `<div class="note-item">${esc(n.text)}<div class="note-date">${n.date} <span style="color:var(--pink);cursor:pointer" onclick="delN(${i})">✕</span></div></div>`
-  ).join("");
-}
-function esc(s){ const d = document.createElement("div"); d.innerText = s; return d.innerHTML; }
-window.delN = i => {
-  const l = JSON.parse(localStorage.getItem("notes")||"[]");
-  l.splice(i,1);
-  localStorage.setItem("notes", JSON.stringify(l));
-  renderNotes();
-};
-document.getElementById("noteBtn").onclick = function(){
-  const ta = document.getElementById("noteInput");
-  const t = ta.value.trim();
-  if(!t) return;
-  localStorage.setItem("noteWrote","1");
-  ta.value = "";
-  if(uid){
-    db.collection("notes").add({text:t, date:new Date().toLocaleString("zh-TW"), uid:uid})
-      .then(() => { loadNotes(); renderBadges(); });
-  }
-};
-function loadNotes(){
-  db.collection("notes").orderBy("date","desc").limit(50).onSnapshot(snap => {
-    const l = [];
-    snap.forEach(d => l.push(d.data()));
-    renderNotes(l);
-  });
-}
-function renderNotes(notes){
-  const list = document.getElementById("noteList");
-  if(!notes) notes = JSON.parse(localStorage.getItem("notes")||"[]");
-  list.innerHTML = notes.map(n => 
-    `<div class="note" style="animation:fadeIn .5s">
-      <div>${n.text}</div>
-      <div style="font-size:.7rem;color:#aaa;margin-top:5px">${n.date}</div>
-    </div>`
-  ).join("");
-}
-document.getElementById("copyBtn").onclick = function(){
-  const t = document.getElementById("noteInput").value.trim();
-  if(!t){ alert("先寫點東西啦"); return; }
-  navigator.clipboard.writeText("【便利貼】"+t).then(() => alert("複製好了！貼到 LINE 傳給我～"));
-};
 
 /* 一起按愛心 */
 if(typeof uid !== 'undefined' && uid){
@@ -1741,17 +1693,6 @@ if(typeof uid !== 'undefined' && uid){
   document.getElementById("clearDraw").onclick = () => { ctx.clearRect(0,0,canvas.width,canvas.height); };
 }
 
-/* 便利貼匯出 */
-document.getElementById("exportNotes").onclick = function(){
-  const notes = JSON.parse(localStorage.getItem("notes")||"[]");
-  const text = notes.map(n => n.text).join("\n---\n");
-  const blob = new Blob([text], {type:"text/plain"});
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "便利貼.txt";
-  a.click();
-};
-
 /* 彈幕手動發送 */
 document.getElementById("dmSend").onclick = function(){
   const v = document.getElementById("dmInput").value.trim();
@@ -2016,6 +1957,7 @@ document.getElementById("pauseBtn").onclick = () => bgm.pause();
     messagingSenderId: "579288934330",
     appId: "1:579288934330:web:fbf4f118205d94b4c5f83"
   };
+</script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging-compat.js"></script>
 <script>
   firebase.initializeApp(firebaseConfig);
@@ -2029,7 +1971,6 @@ document.getElementById("pauseBtn").onclick = () => bgm.pause();
 
   firebase.auth().signInAnonymously().then(u => {
     uid = u.user.uid;
-    loadNotes();
     // 新聊天通知
     db.collection("chat").orderBy("time","desc").limit(1).onSnapshot(snap => {
       snap.forEach(d => {
