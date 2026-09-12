@@ -1,1214 +1,882 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我們的故事 ❤️</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@200;300;400;600&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        :root {
-            --pink: #ff6b9d;
-            --pink-deep: #e91e63;
-            --pink-soft: #ffd6e7;
-            --cream: #fff8f0;
-            --ink: #2d2d3a;
-            --glass: rgba(255,255,255,0.65);
-        }
-        html { scroll-behavior: smooth; }
-        body {
-            font-family: "Noto Sans TC", sans-serif;
-            background: var(--cream);
-            color: var(--ink);
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-        body::before {
-            content: "";
-            position: fixed;
-            inset: 0;
-            background:
-                radial-gradient(circle at 15% 20%, rgba(255,182,213,0.35), transparent 50%),
-                radial-gradient(circle at 85% 80%, rgba(255,107,157,0.12), transparent 50%),
-                radial-gradient(circle at 50% 50%, rgba(255,228,230,0.25), transparent 60%);
-            z-index: -2;
-        }
-        .hidden { display: none !important; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>我們 ❤️</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@200;300;400;600;700&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pink:#ff6b9d; --pink-deep:#e91e63; --pink-soft:#ffd6e7;
+  --cream:#fff5f7; --ink:#3a2a3a; --gold:#d4a574;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Noto Sans TC",sans-serif;
+  background:var(--cream); color:var(--ink);
+  min-height:100vh; overflow-x:hidden;
+}
+body::before{
+  content:""; position:fixed; inset:0; z-index:-2;
+  background:
+    radial-gradient(circle at 15% 10%, rgba(255,182,213,.4), transparent 45%),
+    radial-gradient(circle at 85% 85%, rgba(255,107,157,.15), transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(255,240,245,.6), transparent 70%);
+}
+.hidden{display:none!important}
 
-        /* ===== 解鎖 ===== */
-        #loginSection {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 20px;
-        }
-        #loginSection h1 {
-            font-family: "Noto Serif TC", serif;
-            font-size: 1.8rem;
-            font-weight: 200;
-            color: var(--pink-deep);
-            margin-bottom: 8px;
-            letter-spacing: 4px;
-        }
-        #loginSection p { color: #aaa; margin-bottom: 25px; font-weight: 300; font-size: 0.9rem; }
-        #passwordInput {
-            padding: 14px 22px;
-            font-size: 1rem;
-            border: 1.5px solid var(--pink-soft);
-            border-radius: 30px;
-            width: 240px;
-            outline: none;
-            text-align: center;
-            background: rgba(255,255,255,0.8);
-        }
-        #passwordInput:focus { border-color: var(--pink); }
-        #submitBtn {
-            margin-top: 14px;
-            padding: 14px 40px;
-            border: none;
-            background: linear-gradient(135deg, var(--pink), var(--pink-deep));
-            color: white;
-            border-radius: 30px;
-            cursor: pointer;
-            box-shadow: 0 8px 25px rgba(233,30,99,0.3);
-            letter-spacing: 3px;
-        }
-        @keyframes shake {
-            0%,100% { transform: translateX(0); }
-            20%,60% { transform: translateX(-8px); }
-            40%,80% { transform: translateX(8px); }
-        }
+/* 解鎖 */
+#login{
+  min-height:100vh; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; text-align:center; padding:20px;
+}
+#login .lock-emoji{font-size:3rem; margin-bottom:10px; animation:breathe 3s ease-in-out infinite}
+@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+#login h1{
+  font-family:"Noto Serif TC",serif; font-weight:200;
+  font-size:1.8rem; color:var(--pink-deep); letter-spacing:6px; margin-bottom:8px;
+}
+#login p{color:#aaa; font-size:.9rem; margin-bottom:25px; font-weight:300}
+#pw{
+  padding:14px 22px; font-size:1rem; text-align:center;
+  border:1.5px solid var(--pink-soft); border-radius:30px;
+  width:220px; outline:none; background:rgba(255,255,255,.8);
+}
+#pw:focus{border-color:var(--pink)}
+#go{
+  margin-top:14px; padding:14px 44px; border:none;
+  background:linear-gradient(135deg,var(--pink),var(--pink-deep));
+  color:#fff; border-radius:30px; cursor:pointer;
+  box-shadow:0 8px 25px rgba(233,30,99,.3); letter-spacing:4px;
+  transition:transform .2s;
+}
+#go:hover{transform:translateY(-2px)}
+@keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
 
-        /* ===== 主容器 ===== */
-        #surpriseContent { max-width: 720px; margin: 0 auto; padding: 0 20px 80px; }
+/* 主容器 */
+#app{max-width:720px; margin:0 auto; padding:0 20px 80px}
 
-        /* ===== HERO ===== */
-        .hero {
-            min-height: 90vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 40px 0;
-        }
-        .hero h1 {
-            font-family: "Noto Serif TC", serif;
-            font-size: 2.6rem;
-            font-weight: 200;
-            color: var(--pink-deep);
-            letter-spacing: 6px;
-            line-height: 1.4;
-        }
-        .hero .sub {
-            margin-top: 16px;
-            color: #999;
-            font-weight: 300;
-            letter-spacing: 2px;
-        }
-        .hero-count {
-            margin-top: 30px;
-            font-family: "Noto Serif TC", serif;
-            font-size: 1.3rem;
-            color: #555;
-            font-weight: 300;
-        }
-        .hero-count b {
-            color: var(--pink-deep);
-            font-size: 2rem;
-            font-weight: 600;
-        }
-        .scroll-hint {
-            margin-top: 60px;
-            color: var(--pink);
-            font-size: 1.5rem;
-            animation: bounce 2s infinite;
-        }
-        @keyframes bounce {
-            0%,100% { transform: translateY(0); }
-            50% { transform: translateY(10px); }
-        }
+/* HERO */
+.hero{
+  min-height:100vh; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; text-align:center;
+  position:relative;
+}
+.hero .heart{font-size:3rem; margin-bottom:20px; animation:beat 1.5s ease-in-out infinite}
+@keyframes beat{0%,100%{transform:scale(1)}25%{transform:scale(1.15)}50%{transform:scale(1)}75%{transform:scale(1.1)}}
+.hero h1{
+  font-family:"Noto Serif TC",serif; font-weight:200;
+  font-size:2.8rem; color:var(--pink-deep); letter-spacing:8px; line-height:1.4;
+}
+.hero .sub{color:#bb9; margin-top:14px; font-size:.95rem; letter-spacing:3px}
+.hero .big{
+  margin-top:30px; font-family:"Noto Serif TC",serif;
+  font-size:1.1rem; color:#888; font-weight:300;
+}
+.hero .big b{
+  display:block; font-size:3rem; color:var(--pink-deep);
+  font-weight:600; margin-top:8px;
+}
+.scroll{
+  position:absolute; bottom:30px; color:var(--pink);
+  font-size:1.5rem; animation:bounce 2s infinite;
+}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(10px)}}
 
-        /* ===== 區塊標題 ===== */
-        .section-title {
-            font-family: "Noto Serif TC", serif;
-            font-weight: 300;
-            font-size: 1.4rem;
-            color: var(--pink-deep);
-            text-align: center;
-            margin: 70px auto 25px;
-            letter-spacing: 4px;
-        }
-        .section-title::before, .section-title::after {
-            content: "—";
-            color: var(--pink-soft);
-            margin: 0 12px;
-        }
+/* 區塊標題 */
+.stitle{
+  font-family:"Noto Serif TC",serif; font-weight:300;
+  font-size:1.3rem; color:var(--pink-deep);
+  text-align:center; margin:70px auto 25px; letter-spacing:5px;
+}
+.stitle::before,.stitle::after{
+  content:"—"; color:var(--pink-soft); margin:0 12px;
+}
 
-        /* ===== 計時卡片 ===== */
-        .timer-card {
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.5);
-            padding: 30px 20px;
-            border-radius: 24px;
-            text-align: center;
-            box-shadow: 0 10px 40px rgba(255,107,157,0.15);
-        }
-        .timer-card h3 {
-            font-family: "Noto Serif TC", serif;
-            font-weight: 300;
-            font-size: 0.85rem;
-            color: #999;
-            letter-spacing: 3px;
-            margin-bottom: 15px;
-        }
-        #countdown {
-            font-family: "Noto Serif TC", serif;
-            font-size: 1.6rem;
-            font-weight: 600;
-            color: var(--pink-deep);
-            letter-spacing: 2px;
-            line-height: 1.6;
-        }
-        #dayPhrase {
-            margin-top: 12px;
-            font-size: 0.85rem;
-            color: var(--pink);
-            font-style: italic;
-        }
+/* 通用卡片 */
+.card{
+  background:rgba(255,255,255,.6);
+  backdrop-filter:blur(20px);
+  border:1px solid rgba(255,255,255,.6);
+  border-radius:22px;
+  padding:28px 22px;
+  box-shadow:0 10px 40px rgba(233,30,99,.08);
+}
 
-        /* 數字牆 */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 14px;
-            margin-top: 16px;
-        }
-        .stat-card {
-            background: var(--glass);
-            border: 1px solid rgba(255,255,255,0.5);
-            border-radius: 18px;
-            padding: 20px 8px;
-            text-align: center;
-            transition: transform 0.3s;
-        }
-        .stat-card:hover { transform: translateY(-4px); }
-        .stat-num {
-            font-family: "Noto Serif TC", serif;
-            font-size: 1.6rem;
-            font-weight: 600;
-            color: var(--pink-deep);
-        }
-        .stat-label { font-size: 0.72rem; color: #999; margin-top: 4px; letter-spacing: 2px; }
+/* 計時器 */
+.timer-card{text-align:center}
+.timer-card h3{
+  font-family:"Noto Serif TC",serif; font-weight:300;
+  font-size:.85rem; color:#aaa; letter-spacing:3px; margin-bottom:14px;
+}
+#cd{
+  font-family:"Noto Serif TC",serif; font-size:1.5rem;
+  font-weight:600; color:var(--pink-deep); letter-spacing:2px; line-height:1.6;
+}
+#phrase{margin-top:10px; font-size:.85rem; color:var(--pink); font-style:italic}
 
-        /* 下個紀念日倒數 */
-        .next-count {
-            margin-top: 16px;
-            padding: 16px;
-            background: linear-gradient(135deg, rgba(255,107,157,0.1), rgba(255,182,213,0.15));
-            border-radius: 16px;
-            font-size: 0.9rem;
-            color: #555;
-        }
-        .next-count b { color: var(--pink-deep); font-size: 1.2rem; }
+/* 數字 */
+.stats{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:14px}
+.stat{
+  background:rgba(255,255,255,.6); border-radius:16px;
+  padding:18px 8px; text-align:center;
+  transition:transform .3s;
+}
+.stat:hover{transform:translateY(-4px)}
+.stat .n{font-family:"Noto Serif TC",serif; font-size:1.5rem; font-weight:600; color:var(--pink-deep)}
+.stat .l{font-size:.7rem; color:#aaa; margin-top:4px; letter-spacing:2px}
 
-        /* ===== 時間軸 ===== */
-        .timeline {
-            position: relative;
-            max-width: 600px;
-            margin: 30px auto;
-            padding: 10px 0;
-        }
-        .timeline::before {
-            content: "";
-            position: absolute;
-            left: 50%;
-            top: 0; bottom: 0;
-            width: 1px;
-            background: linear-gradient(to bottom, transparent, var(--pink-soft), transparent);
-            transform: translateX(-50%);
-        }
-        .tl-item {
-            position: relative;
-            width: 45%;
-            padding: 18px 20px;
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            border-radius: 18px;
-            border: 1px solid rgba(255,255,255,0.5);
-            margin: 16px 0;
-            text-align: left;
-            box-shadow: 0 6px 20px rgba(255,107,157,0.08);
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.6s, transform 0.6s;
-        }
-        .tl-item.visible { opacity: 1; transform: translateY(0); }
-        .tl-item:nth-child(odd) { left: 0; }
-        .tl-item:nth-child(even) { left: 55%; }
-        .tl-item::after {
-            content: "";
-            position: absolute;
-            top: 22px;
-            width: 10px; height: 10px;
-            background: var(--pink);
-            border-radius: 50%;
-            box-shadow: 0 0 0 4px var(--pink-soft);
-        }
-        .tl-item:nth-child(odd)::after { right: -30px; }
-        .tl-item:nth-child(even)::after { left: -30px; }
-        .tl-date { font-size: 0.75rem; color: var(--pink); font-weight: 500; letter-spacing: 1px; }
-        .tl-text { font-size: 0.9rem; color: #555; margin-top: 6px; line-height: 1.6; font-weight: 300; }
+.next{
+  margin-top:14px; padding:16px;
+  background:linear-gradient(135deg, rgba(255,107,157,.08), rgba(255,182,213,.15));
+  border-radius:14px; text-align:center; font-size:.9rem; color:#777;
+}
+.next b{color:var(--pink-deep); font-size:1.3rem}
 
-        /* ===== 照片輪播 ===== */
-        .carousel {
-            position: relative;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-        }
-        .carousel img {
-            width: 100%;
-            height: 380px;
-            object-fit: cover;
-            display: block;
-        }
-        .carousel .cap {
-            position: absolute;
-            bottom: 0; left: 0; right: 0;
-            padding: 40px 20px 16px;
-            background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
-            color: #fff;
-            font-size: 0.95rem;
-            font-family: "Noto Serif TC", serif;
-        }
-        .carousel-btn {
-            position: absolute;
-            top: 50%; transform: translateY(-50%);
-            background: rgba(255,255,255,0.2);
-            backdrop-filter: blur(10px);
-            color: #fff;
-            border: none;
-            font-size: 1.5rem;
-            width: 40px; height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-        }
-        #carPrev { left: 12px; }
-        #carNext { right: 12px; }
+/* 時間軸 */
+.tl{position:relative; max-width:600px; margin:30px auto; padding:10px 0}
+.tl::before{
+  content:""; position:absolute; left:50%; top:0; bottom:0;
+  width:1px; background:linear-gradient(to bottom,transparent,var(--pink-soft),transparent);
+  transform:translateX(-50%);
+}
+.tl-item{
+  position:relative; width:45%; padding:16px 18px;
+  background:rgba(255,255,255,.6); backdrop-filter:blur(10px);
+  border-radius:16px; margin:14px 0; text-align:left;
+  opacity:0; transform:translateY(20px); transition:all .6s;
+}
+.tl-item.vis{opacity:1; transform:translateY(0)}
+.tl-item:nth-child(odd){left:0}
+.tl-item:nth-child(even){left:55%}
+.tl-item::after{
+  content:""; position:absolute; top:20px;
+  width:10px; height:10px; background:var(--pink); border-radius:50%;
+  box-shadow:0 0 0 4px var(--pink-soft);
+}
+.tl-item:nth-child(odd)::after{right:-28px}
+.tl-item:nth-child(even)::after{left:-28px}
+.tl-date{font-size:.72rem; color:var(--pink); font-weight:500}
+.tl-text{font-size:.88rem; color:#666; margin-top:5px; line-height:1.5; font-weight:300}
 
-        /* 照片牆 */
-        .photo-wall {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 12px;
-        }
-        .photo-wall figure {
-            margin: 0;
-            cursor: pointer;
-            overflow: hidden;
-            border-radius: 16px;
-            background: #fff;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
-            transition: transform 0.4s, box-shadow 0.4s;
-        }
-        .photo-wall figure:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 30px rgba(233,30,99,0.2);
-        }
-        .photo-wall img {
-            width: 100%;
-            height: 160px;
-            object-fit: cover;
-            display: block;
-            transition: transform 0.6s;
-        }
-        .photo-wall figure:hover img { transform: scale(1.08); }
+/* 輪播 */
+.carousel{
+  position:relative; border-radius:20px; overflow:hidden;
+  box-shadow:0 15px 40px rgba(0,0,0,.1); margin-bottom:16px;
+}
+.carousel img{width:100%; height:380px; object-fit:cover; display:block}
+.carousel .cap{
+  position:absolute; bottom:0; left:0; right:0;
+  padding:40px 20px 14px;
+  background:linear-gradient(to top, rgba(0,0,0,.6), transparent);
+  color:#fff; font-family:"Noto Serif TC",serif; font-size:.95rem;
+}
+.cbtn{
+  position:absolute; top:50%; transform:translateY(-50%);
+  background:rgba(255,255,255,.2); backdrop-filter:blur(10px);
+  color:#fff; border:none; font-size:1.4rem;
+  width:38px; height:38px; border-radius:50%; cursor:pointer;
+}
+#cPrev{left:10px} #cNext{right:10px}
 
-        /* 燈箱 */
-        #lightbox {
-            position: fixed; inset: 0;
-            background: rgba(30,20,30,0.92);
-            display: none;
-            align-items: center; justify-content: center;
-            z-index: 999;
-            flex-direction: column;
-            backdrop-filter: blur(10px);
-        }
-        #lightbox.open { display: flex; animation: fadeIn 0.3s; }
-        #lightboxImg {
-            max-width: 92vw; max-height: 80vh;
-            border-radius: 14px;
-        }
-        #lightboxCaption { color: #ffd6e7; margin-top: 14px; font-size: 0.95rem; }
-        .lb-btn {
-            position: absolute;
-            top: 50%; transform: translateY(-50%);
-            background: rgba(255,255,255,0.1);
-            color: #fff;
-            border: 1px solid rgba(255,255,255,0.2);
-            font-size: 1.6rem;
-            width: 44px; height: 44px;
-            border-radius: 50%;
-            cursor: pointer;
-        }
-        #lbPrev { left: 15px; }
-        #lbNext { right: 15px; }
-        #lbClose {
-            position: absolute; top: 18px; right: 22px;
-            background: transparent; border: none;
-            color: #fff; font-size: 1.8rem; cursor: pointer;
-        }
+/* 照片牆 */
+.wall{display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:12px}
+.wall figure{
+  margin:0; cursor:pointer; overflow:hidden; border-radius:16px;
+  background:#fff; box-shadow:0 4px 15px rgba(0,0,0,.06);
+  transition:all .4s;
+}
+.wall figure:hover{transform:translateY(-5px); box-shadow:0 12px 30px rgba(233,30,99,.2)}
+.wall img{width:100%; height:160px; object-fit:cover; display:block; transition:transform .6s}
+.wall figure:hover img{transform:scale(1.08)}
 
-        /* ===== 盲盒 ===== */
-        #mysteryBox {
-            max-width: 300px;
-            margin: 20px auto;
-            perspective: 1200px;
-            cursor: pointer;
-        }
-        #mysteryInner {
-            position: relative;
-            width: 100%; height: 220px;
-            transition: transform 0.8s cubic-bezier(.2,.8,.2,1);
-            transform-style: preserve-3d;
-        }
-        #mysteryBox.flipped #mysteryInner { transform: rotateY(180deg); }
-        .face {
-            position: absolute; inset: 0;
-            backface-visibility: hidden;
-            border-radius: 22px;
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-        }
-        .face-front {
-            background: linear-gradient(135deg, var(--pink), var(--pink-deep));
-            color: #fff;
-            font-family: "Noto Serif TC", serif;
-            font-size: 1.1rem;
-            letter-spacing: 2px;
-            box-shadow: 0 15px 40px rgba(233,30,99,0.3);
-        }
-        .face-back {
-            background: #fff;
-            border: 2px solid var(--pink);
-            transform: rotateY(180deg);
-            overflow: hidden;
-        }
-        .face-back img { width: 100%; height: 140px; object-fit: cover; }
-        .face-back .quote { padding: 10px; font-size: 0.82rem; color: #d1478a; line-height: 1.5; }
+/* 燈箱 */
+#lb{
+  position:fixed; inset:0; background:rgba(30,20,30,.92);
+  display:none; align-items:center; justify-content:center;
+  z-index:999; flex-direction:column; backdrop-filter:blur(10px);
+}
+#lb.open{display:flex; animation:fadeIn .3s}
+#lbImg{max-width:92vw; max-height:80vh; border-radius:14px}
+#lbCap{color:#ffd6e7; margin-top:14px; font-size:.95rem}
+.lb-btn{
+  position:absolute; top:50%; transform:translateY(-50%);
+  background:rgba(255,255,255,.1); color:#fff;
+  border:1px solid rgba(255,255,255,.2);
+  font-size:1.5rem; width:42px; height:42px; border-radius:50%; cursor:pointer;
+}
+#lbP{left:15px} #lbN{right:15px}
+#lbC{position:absolute; top:18px; right:22px; background:none; border:none; color:#fff; font-size:1.8rem; cursor:pointer}
 
-        /* ===== 情話 ===== */
-        .center { text-align: center; }
-        .btn-pink {
-            padding: 14px 36px;
-            border: none;
-            background: linear-gradient(135deg, var(--pink), var(--pink-deep));
-            color: white;
-            border-radius: 30px;
-            cursor: pointer;
-            box-shadow: 0 8px 25px rgba(233,30,99,0.3);
-            letter-spacing: 2px;
-            font-size: 0.95rem;
-        }
-        #loveCardText {
-            max-width: 500px;
-            margin: 20px auto 0;
-            padding: 24px;
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            color: #555;
-            font-family: "Noto Serif TC", serif;
-            font-size: 1.05rem;
-            line-height: 1.8;
-            min-height: 60px;
-            opacity: 0;
-            transform: translateY(15px);
-            transition: opacity 0.5s, transform 0.5s;
-        }
-        #loveCardText.show { opacity: 1; transform: translateY(0); }
+/* 盲盒 */
+.mystery{max-width:300px; margin:20px auto; perspective:1200px; cursor:pointer}
+.mystery-inner{
+  position:relative; width:100%; height:220px;
+  transition:transform .8s cubic-bezier(.2,.8,.2,1);
+  transform-style:preserve-3d;
+}
+.mystery.flipped .mystery-inner{transform:rotateY(180deg)}
+.face{position:absolute; inset:0; backface-visibility:hidden; border-radius:22px; display:flex; flex-direction:column; align-items:center; justify-content:center}
+.face-front{background:linear-gradient(135deg,var(--pink),var(--pink-deep)); color:#fff; font-family:"Noto Serif TC",serif; font-size:1.1rem; letter-spacing:2px; box-shadow:0 15px 40px rgba(233,30,99,.3)}
+.face-back{background:#fff; border:2px solid var(--pink); transform:rotateY(180deg); overflow:hidden}
+.face-back img{width:100%; height:140px; object-fit:cover}
+.face-back .q{padding:10px; font-size:.82rem; color:#d1478a; line-height:1.5}
 
-        /* ===== 刮刮樂 ===== */
-        .scratch-wrap {
-            max-width: 320px;
-            margin: 0 auto;
-            position: relative;
-            border-radius: 18px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(233,30,99,0.2);
-        }
-        #scratchText {
-            padding: 30px 20px;
-            background: linear-gradient(135deg, var(--pink), var(--pink-deep));
-            color: #fff;
-            font-family: "Noto Serif TC", serif;
-            font-size: 1.05rem;
-            line-height: 1.7;
-            min-height: 140px;
-            display: flex; align-items: center; justify-content: center;
-            text-align: center;
-        }
-        #scratchCanvas { position: absolute; inset: 0; cursor: grab; }
+/* 按鈕 */
+.btn-pink{
+  padding:14px 36px; border:none;
+  background:linear-gradient(135deg,var(--pink),var(--pink-deep));
+  color:#fff; border-radius:30px; cursor:pointer;
+  box-shadow:0 8px 25px rgba(233,30,99,.3); letter-spacing:2px; font-size:.95rem;
+}
+.center{text-align:center}
+#loveText{
+  max-width:500px; margin:20px auto 0; padding:24px;
+  background:rgba(255,255,255,.6); backdrop-filter:blur(20px);
+  border-radius:20px; color:#555;
+  font-family:"Noto Serif TC",serif; font-size:1.05rem; line-height:1.8;
+  min-height:60px; opacity:0; transform:translateY(15px);
+  transition:all .5s;
+}
+#loveText.show{opacity:1; transform:translateY(0)}
 
-        /* ===== 翻牌 ===== */
-        .memory-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            max-width: 400px;
-            margin: 0 auto;
-        }
-        .mem-card { aspect-ratio: 1; perspective: 600px; cursor: pointer; }
-        .mem-inner {
-            position: relative; width: 100%; height: 100%;
-            transition: transform 0.5s;
-            transform-style: preserve-3d;
-        }
-        .mem-card.flipped .mem-inner, .mem-card.matched .mem-inner { transform: rotateY(180deg); }
-        .mem-front, .mem-back {
-            position: absolute; inset: 0;
-            backface-visibility: hidden;
-            border-radius: 12px;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .mem-front {
-            background: linear-gradient(135deg, var(--pink), var(--pink-deep));
-            color: #fff; font-size: 1.4rem;
-        }
-        .mem-back { background: #fff; transform: rotateY(180deg); overflow: hidden; }
-        .mem-back img { width: 100%; height: 100%; object-fit: cover; }
-        .mem-card.matched { opacity: 0.6; }
-        #memStatus { text-align: center; color: var(--pink); margin-top: 12px; font-size: 0.9rem; }
+/* 刮刮樂 */
+.scratch-wrap{
+  max-width:320px; margin:0 auto; position:relative;
+  border-radius:18px; overflow:hidden;
+  box-shadow:0 10px 30px rgba(233,30,99,.2);
+}
+#scratchMsg{
+  padding:30px 20px;
+  background:linear-gradient(135deg,var(--pink),var(--pink-deep));
+  color:#fff; font-family:"Noto Serif TC",serif;
+  font-size:1.05rem; line-height:1.7; min-height:140px;
+  display:flex; align-items:center; justify-content:center; text-align:center;
+}
+#scratchCvs{position:absolute; inset:0; cursor:grab}
 
-        /* ===== 愛情指數 ===== */
-        #loveMeterBox {
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 30px;
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            border-radius: 22px;
-            text-align: center;
-        }
-        #loveMeterNum {
-            font-family: "Noto Serif TC", serif;
-            font-size: 3rem;
-            font-weight: 600;
-            color: var(--pink-deep);
-        }
-        #loveMeterBar {
-            height: 12px;
-            background: #eee;
-            border-radius: 6px;
-            margin: 16px 0;
-            overflow: hidden;
-        }
-        #loveMeterFill {
-            height: 100%;
-            background: linear-gradient(to right, var(--pink), var(--pink-deep));
-            width: 0;
-            border-radius: 6px;
-            transition: width 1.5s ease;
-        }
-        #loveMeterMsg { color: #888; font-size: 0.9rem; min-height: 30px; }
+/* 翻牌 */
+.mem-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; max-width:400px; margin:0 auto}
+.mem-card{aspect-ratio:1; perspective:600px; cursor:pointer}
+.mem-inner{position:relative; width:100%; height:100%; transition:transform .5s; transform-style:preserve-3d}
+.mem-card.flipped .mem-inner, .mem-card.matched .mem-inner{transform:rotateY(180deg)}
+.mem-front,.mem-back{position:absolute; inset:0; backface-visibility:hidden; border-radius:12px; display:flex; align-items:center; justify-content:center}
+.mem-front{background:linear-gradient(135deg,var(--pink),var(--pink-deep)); color:#fff; font-size:1.3rem}
+.mem-back{background:#fff; transform:rotateY(180deg); overflow:hidden}
+.mem-back img{width:100%; height:100%; object-fit:cover}
+.mem-card.matched{opacity:.6}
+#memStat{text-align:center; color:var(--pink); margin-top:12px; font-size:.9rem}
 
-        /* ===== 願望清單 ===== */
-        .wish-list { max-width: 500px; margin: 0 auto; text-align: left; }
-        .wish-item {
-            background: var(--glass);
-            backdrop-filter: blur(10px);
-            padding: 12px 16px;
-            border-radius: 14px;
-            margin: 8px 0;
-            display: flex; align-items: center; gap: 10px;
-        }
-        .wish-item.done { opacity: 0.5; text-decoration: line-through; }
-        .wish-item input[type=checkbox] { width: 18px; height: 18px; accent-color: var(--pink); }
+/* 愛情指數 */
+#meterBox{max-width:400px; margin:0 auto; padding:30px; text-align:center}
+#meterNum{font-family:"Noto Serif TC",serif; font-size:3rem; font-weight:600; color:var(--pink-deep)}
+#meterBar{height:12px; background:#eee; border-radius:6px; margin:16px 0; overflow:hidden}
+#meterFill{height:100%; background:linear-gradient(to right,var(--pink),var(--pink-deep)); width:0; border-radius:6px; transition:width 1.5s ease}
+#meterMsg{color:#888; font-size:.9rem; min-height:30px}
 
-        /* ===== 每日一問 ===== */
-        #dailyQ {
-            max-width: 500px;
-            margin: 0 auto;
-            padding: 24px;
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            font-family: "Noto Serif TC", serif;
-            font-size: 1.05rem;
-            color: #555;
-            line-height: 1.8;
-        }
+/* 成就徽章 */
+.badges{display:grid; grid-template-columns:repeat(auto-fill,minmax(80px,1fr)); gap:12px; max-width:500px; margin:0 auto}
+.badge{
+  text-align:center; padding:14px 8px; border-radius:16px;
+  background:rgba(255,255,255,.6);
+  transition:transform .3s;
+}
+.badge.locked{opacity:.3}
+.badge.unlocked{background:linear-gradient(135deg, rgba(255,107,157,.15), rgba(255,182,213,.2))}
+.badge .emoji{font-size:1.8rem}
+.badge .label{font-size:.72rem; color:#888; margin-top:6px}
+.badge.unlocked .label{color:var(--pink-deep); font-weight:500}
 
-        /* ===== 便利貼 ===== */
-        #noteArea { max-width: 500px; margin: 0 auto; }
-        #noteInput {
-            width: 100%;
-            min-height: 80px;
-            padding: 14px;
-            border: 1.5px solid var(--pink-soft);
-            border-radius: 18px;
-            font-family: inherit;
-            font-size: 0.95rem;
-            resize: vertical;
-            outline: none;
-            background: rgba(255,255,255,0.8);
-        }
-        .note-btns { margin-top: 10px; display: flex; gap: 10px; justify-content: center; }
-        #noteBtn, #copyNoteBtn {
-            padding: 10px 24px;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.85rem;
-        }
-        #noteBtn { background: linear-gradient(135deg, var(--pink), var(--pink-deep)); color: #fff; }
-        #copyNoteBtn { background: #e0e0e0; color: #666; }
-        .note-item {
-            background: #fffde7;
-            border-left: 3px solid var(--pink);
-            padding: 12px 16px;
-            margin: 10px 0;
-            border-radius: 10px;
-            text-align: left;
-            font-size: 0.92rem;
-            line-height: 1.6;
-        }
-        .note-date { font-size: 0.72rem; color: #aaa; margin-top: 6px; }
+/* 願望 */
+.wish-list{max-width:500px; margin:0 auto; text-align:left}
+.wish-item{
+  background:rgba(255,255,255,.6); padding:12px 16px;
+  border-radius:14px; margin:8px 0; display:flex; align-items:center; gap:10px;
+}
+.wish-item.done{opacity:.5; text-decoration:line-through}
+.wish-item input{width:18px; height:18px; accent-color:var(--pink)}
 
-        /* ===== 愛心遊戲 ===== */
-        .heart-game {
-            position: absolute;
-            font-size: 26px;
-            cursor: pointer;
-            animation: float 5s ease-in-out infinite;
-            color: var(--pink);
-        }
-        @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
-        #heartCounter { font-size: 1rem; color: var(--pink); margin-bottom: 15px; }
-        #gameSpace {
-            position: relative;
-            height: 260px;
-            max-width: 600px;
-            margin: 0 auto;
-            background: var(--glass);
-            border-radius: 20px;
-        }
+/* 每日 */
+#dailyQ{
+  max-width:500px; margin:0 auto; padding:24px;
+  font-family:"Noto Serif TC",serif; font-size:1.05rem;
+  color:#555; line-height:1.8;
+}
 
-        /* 花瓣 */
-        .petal {
-            position: fixed; top: -5%;
-            font-size: 14px; color: var(--pink-soft);
-            animation: fall 12s linear infinite;
-            z-index: -1; pointer-events: none;
-        }
-        @keyframes fall {
-            0% { transform: translateY(-5vh) rotate(0); opacity: 0; }
-            10% { opacity: 0.8; }
-            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
-        }
-        .burst-heart {
-            position: fixed; pointer-events: none;
-            font-size: 18px; z-index: 9999;
-            animation: burst 1s ease-out forwards;
-        }
-        @keyframes burst {
-            0% { transform: translate(0,0) scale(0.5); opacity: 1; }
-            100% { transform: translate(var(--dx), var(--dy)) scale(1.4); opacity: 0; }
-        }
+/* 便利貼 */
+#noteArea{max-width:500px; margin:0 auto}
+#noteInput{
+  width:100%; min-height:80px; padding:14px;
+  border:1.5px solid var(--pink-soft); border-radius:18px;
+  font-family:inherit; font-size:.95rem; resize:vertical; outline:none;
+  background:rgba(255,255,255,.8);
+}
+.note-btns{margin-top:10px; display:flex; gap:10px; justify-content:center}
+#noteBtn,#copyBtn{padding:10px 24px; border:none; border-radius:20px; cursor:pointer; font-size:.85rem}
+#noteBtn{background:linear-gradient(135deg,var(--pink),var(--pink-deep)); color:#fff}
+#copyBtn{background:#e0e0e0; color:#666}
+.note-item{
+  background:#fffde7; border-left:3px solid var(--pink);
+  padding:12px 16px; margin:10px 0; border-radius:10px;
+  text-align:left; font-size:.92rem; line-height:1.6;
+}
+.note-date{font-size:.72rem; color:#aaa; margin-top:6px}
 
-        /* 音樂 */
-        #musicPlayer { margin-top: 60px; text-align: center; padding-bottom: 40px; }
-        #musicPlayer button {
-            padding: 10px 22px;
-            font-size: 0.85rem;
-            border: none;
-            background: var(--glass);
-            color: var(--pink-deep);
-            border-radius: 20px;
-            cursor: pointer;
-            margin: 5px;
-            border: 1px solid rgba(255,255,255,0.5);
-        }
+/* 愛心遊戲 */
+.heart-game{position:absolute; font-size:24px; cursor:pointer; animation:floatH 5s ease-in-out infinite; color:var(--pink)}
+@keyframes floatH{0%,100%{transform:translateY(0)}50%{transform:translateY(-15px)}}
+#heartCount{font-size:1rem; color:var(--pink); margin-bottom:15px}
+#gameSpace{
+  position:relative; height:260px; max-width:600px; margin:0 auto;
+  background:rgba(255,255,255,.6); border-radius:20px;
+}
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .fade-in { animation: fadeIn 1s ease both; }
+/* 花瓣 */
+.petal{position:fixed; top:-5%; font-size:14px; color:var(--pink-soft); animation:fall 12s linear infinite; z-index:-1; pointer-events:none}
+@keyframes fall{0%{transform:translateY(-5vh) rotate(0); opacity:0}10%{opacity:.8}100%{transform:translateY(110vh) rotate(360deg); opacity:0}}
+.burst-heart{position:fixed; pointer-events:none; font-size:18px; z-index:9999; animation:burst 1s ease-out forwards}
+@keyframes burst{0%{transform:translate(0,0) scale(.5); opacity:1}100%{transform:translate(var(--dx),var(--dy)) scale(1.4); opacity:0}}
 
-        @media (max-width: 600px) {
-            .timeline::before { left: 20px; }
-            .tl-item, .tl-item:nth-child(odd), .tl-item:nth-child(even) {
-                width: calc(100% - 50px); left: 45px !important;
-            }
-            .tl-item::after, .tl-item:nth-child(odd)::after, .tl-item:nth-child(even)::after {
-                left: -28px !important; right: auto !important;
-            }
-            .hero h1 { font-size: 1.8rem; }
-            .carousel img { height: 260px; }
-        }
-    </style>
+/* 音樂 */
+#music{margin-top:60px; text-align:center; padding-bottom:40px}
+#music button{
+  padding:10px 22px; font-size:.85rem; border:none;
+  background:rgba(255,255,255,.6); color:var(--pink-deep);
+  border-radius:20px; cursor:pointer; margin:5px;
+}
+
+@keyframes fadeIn{from{opacity:0; transform:translateY(20px)}to{opacity:1; transform:translateY(0)}}
+.fade-in{animation:fadeIn 1s ease both}
+
+@media (max-width:600px){
+  .tl::before{left:20px}
+  .tl-item,.tl-item:nth-child(odd),.tl-item:nth-child(even){width:calc(100% - 50px); left:45px!important}
+  .tl-item::after,.tl-item:nth-child(odd)::after,.tl-item:nth-child(even)::after{left:-28px!important; right:auto!important}
+  .hero h1{font-size:1.9rem}
+  .carousel img{height:260px}
+}
+</style>
 </head>
 <body>
 
-    <div class="petal" style="left: 8%;">🌸</div>
-    <div class="petal" style="left: 28%; animation-delay: 2s;">🌸</div>
-    <div class="petal" style="left: 50%; animation-delay: 4s;">🌸</div>
-    <div class="petal" style="left: 72%; animation-delay: 6s;">🌸</div>
-    <div class="petal" style="left: 92%; animation-delay: 8s;">🌸</div>
+<div class="petal" style="left:8%">🌸</div>
+<div class="petal" style="left:28%; animation-delay:2s">🌸</div>
+<div class="petal" style="left:50%; animation-delay:4s">🌸</div>
+<div class="petal" style="left:72%; animation-delay:6s">🌸</div>
+<div class="petal" style="left:92%; animation-delay:8s">🌸</div>
 
-    <div id="loginSection">
-        <h1>給最重要的人</h1>
-        <p>這是只屬於我們的地方</p>
-        <input type="password" id="passwordInput" placeholder="••••">
-        <br>
-        <button id="submitBtn">進入</button>
-        <div id="passwordHint" class="hidden" style="color:var(--pink); margin-top:14px; font-size:0.85rem;">在一起的那天</div>
+<div id="login">
+  <div class="lock-emoji">🔐</div>
+  <h1>給最重要的人</h1>
+  <p>這是只屬於我們的地方</p>
+  <input type="password" id="pw" placeholder="••••">
+  <br>
+  <button id="go">進入</button>
+  <div id="hint" class="hidden" style="color:var(--pink); margin-top:14px; font-size:.85rem">在一起的那天</div>
+</div>
+
+<div id="app" class="hidden">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="heart">❤️</div>
+    <h1>妳是小昀ㄛ</h1>
+    <p class="sub">— 我們的故事 —</p>
+    <div class="big">已經在一起<b id="heroDays">...</b>天</div>
+    <div class="scroll">↓</div>
+  </div>
+
+  <!-- 情書 -->
+  <h3 class="stitle">寫給妳</h3>
+  <div style="font-family:'Noto Serif TC',serif; font-weight:300; font-size:1rem; line-height:2.2; color:#555; text-align:left">
+    <p style="margin-bottom:14px">今天終於又鼓起勇氣講出了我早就想對妳講的話。我知道我們的關係並不完美，但這些差異才讓我更加確定妳是我想一直喜歡下去的人。</p>
+    <p style="margin-bottom:14px">一直以來我都覺得自己是孤單一個人的。因為前任的關係，我很不相信感情。但妳在莫名其妙亂暈，然後我們就在一起了。</p>
+    <p style="margin-bottom:14px">我曾經以為只要讓妳走就可以回到原本生活。結果⋯沒有了妳在我身邊吵吵鬧鬧，我真的連飯都吃不太下去。</p>
+    <p style="margin-bottom:14px">和妳在一起後，我從來沒有感受到自己是孤單的。因為妳的出現，我不想要再追求那些短暫刺激。我只希望未來的每一天妳都會在。</p>
+    <p style="text-align:center; margin-top:20px; color:var(--pink-deep)">luv u ❤️</p>
+  </div>
+
+  <!-- 計時 -->
+  <h3 class="stitle">我們在一起</h3>
+  <div class="card timer-card">
+    <h3>每一秒都在增加</h3>
+    <div id="cd">計算中...</div>
+    <div id="phrase"></div>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="n" id="numDays">-</div><div class="l">天</div></div>
+    <div class="stat"><div class="n" id="numHours">-</div><div class="l">小時</div></div>
+    <div class="stat"><div class="n">14</div><div class="l">張照片</div></div>
+  </div>
+  <div class="next" id="nextBox"></div>
+
+  <!-- 時間軸 -->
+  <h3 class="stitle">我們的軌跡</h3>
+  <div class="tl">
+    <div class="tl-item"><div class="tl-date">2024 / 12 / 13</div><div class="tl-text">在一起的那天。過程很智障，但結果很好。</div></div>
+    <div class="tl-item"><div class="tl-date">2025 / 10</div><div class="tl-text">兩個安全帽一起騎車兜風。</div></div>
+    <div class="tl-item"><div class="tl-date">2025 / 12</div><div class="tl-text">一起吃甜點、去礁溪老爺住了一晚。</div></div>
+    <div class="tl-item"><div class="tl-date">2026 / 01</div><div class="tl-text">她帶著公主皇冠跟魔杖出現。</div></div>
+    <div class="tl-item"><div class="tl-date">2026 / 02</div><div class="tl-text">睡醒還是要拍一張。</div></div>
+    <div class="tl-item"><div class="tl-date">2026 / 03</div><div class="tl-text">一起吃冰淇淋，她變成冰淇淋。</div></div>
+    <div class="tl-item"><div class="tl-date">現在</div><div class="tl-text">還在繼續。未完待續。</div></div>
+  </div>
+
+  <!-- 輪播 -->
+  <h3 class="stitle">回憶</h3>
+  <div class="carousel">
+    <img id="carImg" src="couple_helmet.jpg" alt="">
+    <div class="cap" id="carCap">兩個安全帽</div>
+    <button class="cbtn" id="cPrev">‹</button>
+    <button class="cbtn" id="cNext">›</button>
+  </div>
+
+  <!-- 照片牆 -->
+  <div class="wall" id="wall">
+    <figure><img src="IMG_8145.JPG" data-cap="第一次一起"><figcaption></figcaption></figure>
+    <figure><img src="IMG_8168.JPG" data-cap="偷偷拍的"><figcaption></figcaption></figure>
+    <figure><img src="QQAM2028.JPG" data-cap="出去玩"><figcaption></figcaption></figure>
+    <figure><img src="IMG_5576.jpg" data-cap="笑到肚子痛"><figcaption></figcaption></figure>
+    <figure><img src="IMG_6957.jpg" data-cap="最可愛的一張"><figcaption></figcaption></figure>
+    <figure><img src="couple_helmet.jpg" data-cap="兩個安全帽"><figcaption></figcaption></figure>
+    <figure><img src="date_dessert.jpg" data-cap="兩碗甜點"><figcaption></figcaption></figure>
+    <figure><img src="trip_hotel.jpg" data-cap="礁溪老爺"><figcaption></figcaption></figure>
+    <figure><img src="couple_crown.jpg" data-cap="公主與魔杖"><figcaption></figcaption></figure>
+    <figure><img src="cinnamoroll.jpg" data-cap="玉桂狗聯名"><figcaption></figcaption></figure>
+    <figure><img src="cry_face.jpg" data-cap="怎麼了嘛"><figcaption></figcaption></figure>
+    <figure><img src="icecream_selfie.jpg" data-cap="張大嘴吃冰"><figcaption></figcaption></figure>
+    <figure><img src="red_umbrella.jpg" data-cap="星巴克前面"><figcaption></figcaption></figure>
+    <figure><img src="giant_icecream.jpg" data-cap="她變成冰淇淋"><figcaption></figcaption></figure>
+  </div>
+
+  <!-- 盲盒 -->
+  <h3 class="stitle">抽一個回憶</h3>
+  <div class="mystery" id="mystery">
+    <div class="mystery-inner">
+      <div class="face face-front">點我<br>抽一張回憶</div>
+      <div class="face face-back">
+        <img id="mystImg" src="" alt="">
+        <div class="q" id="mystQ"></div>
+      </div>
     </div>
+  </div>
 
-    <div id="surpriseContent" class="hidden">
+  <!-- 情話 -->
+  <h3 class="stitle">情話</h3>
+  <div class="center">
+    <button class="btn-pink" id="loveBtn">抽一句</button>
+    <div id="loveText">按上面那顆按鈕～</div>
+  </div>
 
-        <!-- HERO -->
-        <div class="hero">
-            <h1>妳是小昀ㄛ</h1>
-            <p class="sub">— 我們的故事 —</p>
-            <div class="hero-count">
-                已經在一起<br>
-                <b id="heroDays">...</b> 天
-            </div>
-            <div class="scroll-hint">↓</div>
-        </div>
+  <!-- 刮刮樂 -->
+  <h3 class="stitle">刮刮樂</h3>
+  <div class="scratch-wrap">
+    <div id="scratchMsg">刮我刮我刮我</div>
+    <canvas id="scratchCvs" width="400" height="160"></canvas>
+  </div>
+  <p style="text-align:center; color:#999; font-size:.8rem; margin-top:8px">用手指刮開</p>
 
-        <!-- 情書 -->
-        <h3 class="section-title">寫給妳</h3>
-        <div style="font-family:'Noto Serif TC',serif; font-weight:300; font-size:1rem; line-height:2.2; color:#555; text-align:left;">
-            <p style="margin-bottom:14px;">今天終於又鼓起勇氣講出了我早就想對妳講的話。我知道我們的關係並不完美，但這些差異才讓我更加確定妳是我想一直喜歡下去的人。</p>
-            <p style="margin-bottom:14px;">一直以來我都覺得自己是孤單一個人的。因為前任的關係，我很不相信感情。但妳在莫名其妙亂暈，然後我們就在一起了。</p>
-            <p style="margin-bottom:14px;">我曾經以為只要讓妳走就可以回到原本生活。結果⋯沒有了妳在我身邊吵吵鬧鬧，我真的連飯都吃不太下去。</p>
-            <p style="margin-bottom:14px;">和妳在一起後，我從來沒有感受到自己是孤單的。因為妳的出現，我不想要再追求那些短暫刺激。我只希望未來的每一天妳都會在。</p>
-            <p style="text-align:center; margin-top:20px; color:var(--pink-deep);">luv u ❤️</p>
-        </div>
+  <!-- 翻牌 -->
+  <h3 class="stitle">翻牌配對</h3>
+  <div class="mem-grid" id="memGrid"></div>
+  <div id="memStat">翻牌配對相同的照片</div>
 
-        <!-- 計時器 -->
-        <h3 class="section-title">我們在一起</h3>
-        <div class="timer-card">
-            <h3>每一秒都在增加</h3>
-            <div id="countdown">計算中...</div>
-            <div id="dayPhrase"></div>
-        </div>
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-num" id="numDays">-</div>
-                <div class="stat-label">天</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-num" id="numHours">-</div>
-                <div class="stat-label">小時</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-num" id="numPhotos">14</div>
-                <div class="stat-label">張照片</div>
-            </div>
-        </div>
-        <div class="next-count" id="nextCount"></div>
+  <!-- 愛情指數 -->
+  <h3 class="stitle">愛情指數</h3>
+  <div class="card" id="meterBox">
+    <div id="meterNum">--%</div>
+    <div id="meterBar"><div id="meterFill"></div></div>
+    <div id="meterMsg">按按鈕測我們的契合度</div>
+    <br>
+    <button class="btn-pink" id="meterBtn">測一下</button>
+  </div>
 
-        <!-- 時間軸 -->
-        <h3 class="section-title">我們的軌跡</h3>
-        <div class="timeline">
-            <div class="tl-item">
-                <div class="tl-date">2024 / 12 / 13</div>
-                <div class="tl-text">在一起的那天。過程很智障，但結果很好。</div>
-            </div>
-            <div class="tl-item">
-                <div class="tl-date">2025 / 10</div>
-                <div class="tl-text">兩個安全帽一起騎車兜風。</div>
-            </div>
-            <div class="tl-item">
-                <div class="tl-date">2025 / 12</div>
-                <div class="tl-text">一起吃甜點、去礁溪老爺住了一晚。</div>
-            </div>
-            <div class="tl-item">
-                <div class="tl-date">2026 / 01</div>
-                <div class="tl-text">她帶著公主皇冠跟魔杖出現。</div>
-            </div>
-            <div class="tl-item">
-                <div class="tl-date">2026 / 02</div>
-                <div class="tl-text">睡醒還是要拍一張。</div>
-            </div>
-            <div class="tl-item">
-                <div class="tl-date">2026 / 03</div>
-                <div class="tl-text">一起吃冰淇淋，她變成冰淇淋。</div>
-            </div>
-            <div class="tl-item">
-                <div class="tl-date">現在</div>
-                <div class="tl-text">還在繼續。未完待續。</div>
-            </div>
-        </div>
+  <!-- 成就 -->
+  <h3 class="stitle">解鎖成就</h3>
+  <div class="badges" id="badges"></div>
 
-        <!-- 照片輪播 -->
-        <h3 class="section-title">回憶</h3>
-        <div class="carousel">
-            <img id="carImg" src="couple_helmet.jpg" alt="">
-            <div class="cap" id="carCap">兩個安全帽</div>
-            <button class="carousel-btn" id="carPrev">‹</button>
-            <button class="carousel-btn" id="carNext">›</button>
-        </div>
+  <!-- 願望 -->
+  <h3 class="stitle">我們想做的事</h3>
+  <div class="wish-list" id="wishList"></div>
 
-        <!-- 照片牆 -->
-        <div class="photo-wall" id="photoWall">
-            <figure><img src="IMG_8145.JPG" alt="" data-caption="第一次一起"><figcaption></figcaption></figure>
-            <figure><img src="IMG_8168.JPG" alt="" data-caption="偷偷拍的"><figcaption></figcaption></figure>
-            <figure><img src="QQAM2028.JPG" alt="" data-caption="出去玩"><figcaption></figcaption></figure>
-            <figure><img src="IMG_5576.jpg"  alt="" data-caption="笑到肚子痛"><figcaption></figcaption></figure>
-            <figure><img src="IMG_6957.jpg"  alt="" data-caption="最可愛的一張"><figcaption></figcaption></figure>
-            <figure><img src="couple_helmet.jpg" alt="" data-caption="兩個安全帽"><figcaption></figcaption></figure>
-            <figure><img src="date_dessert.jpg" alt="" data-caption="兩碗甜點"><figcaption></figcaption></figure>
-            <figure><img src="trip_hotel.jpg" alt="" data-caption="礁溪老爺"><figcaption></figcaption></figure>
-            <figure><img src="couple_crown.jpg" alt="" data-caption="公主與魔杖"><figcaption></figcaption></figure>
-            <figure><img src="cinnamoroll.jpg" alt="" data-caption="玉桂狗聯名"><figcaption></figcaption></figure>
-            <figure><img src="cry_face.jpg" alt="" data-caption="怎麼了嘛"><figcaption></figcaption></figure>
-            <figure><img src="icecream_selfie.jpg" alt="" data-caption="張大嘴吃冰"><figcaption></figcaption></figure>
-            <figure><img src="red_umbrella.jpg" alt="" data-caption="星巴克前面"><figcaption></figcaption></figure>
-            <figure><img src="giant_icecream.jpg" alt="" data-caption="她變成冰淇淋"><figcaption></figcaption></figure>
-        </div>
+  <!-- 每日一問 -->
+  <h3 class="stitle">今天的問題</h3>
+  <div class="card" id="dailyQ">載入中...</div>
 
-        <!-- 盲盒 -->
-        <h3 class="section-title">抽一個回憶</h3>
-        <div id="mysteryBox">
-            <div id="mysteryInner">
-                <div class="face face-front">點我<br>抽一張回憶</div>
-                <div class="face face-back">
-                    <img id="mysteryImg" src="" alt="">
-                    <div class="quote" id="mysteryQuote"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 情話 -->
-        <h3 class="section-title">情話</h3>
-        <div class="center">
-            <button class="btn-pink" id="loveCardBtn">抽一句</button>
-            <div id="loveCardText">按上面那顆按鈕～</div>
-        </div>
-
-        <!-- 刮刮樂 -->
-        <h3 class="section-title">刮刮樂</h3>
-        <div class="scratch-wrap">
-            <div id="scratchText">刮我刮我刮我</div>
-            <canvas id="scratchCanvas" width="400" height="160"></canvas>
-        </div>
-        <p style="text-align:center; color:#999; font-size:0.8rem; margin-top:8px;">用手指刮開</p>
-
-        <!-- 翻牌 -->
-        <h3 class="section-title">翻牌配對</h3>
-        <div class="memory-grid" id="memGrid"></div>
-        <div id="memStatus">翻牌配對相同的照片</div>
-
-        <!-- 愛情指數 -->
-        <h3 class="section-title">愛情指數</h3>
-        <div id="loveMeterBox">
-            <div id="loveMeterNum">--%</div>
-            <div id="loveMeterBar"><div id="loveMeterFill"></div></div>
-            <div id="loveMeterMsg">按按鈕測我們的契合度</div>
-            <br>
-            <button class="btn-pink" id="loveMeterBtn">測一下</button>
-        </div>
-
-        <!-- 願望清單 -->
-        <h3 class="section-title">我們想做的事</h3>
-        <div class="wish-list" id="wishList"></div>
-
-        <!-- 每日一問 -->
-        <h3 class="section-title">今天的問題</h3>
-        <div id="dailyQ">載入中...</div>
-
-        <!-- 便利貼 -->
-        <h3 class="section-title">想對我說的話</h3>
-        <div id="noteArea">
-            <textarea id="noteInput" placeholder="想罵我想誇我都可以"></textarea>
-            <div class="note-btns">
-                <button id="noteBtn">貼上去</button>
-                <button id="copyNoteBtn">複製傳給我</button>
-            </div>
-            <div id="noteList"></div>
-        </div>
-
-        <!-- 愛心遊戲 -->
-        <h3 class="section-title">收集愛心</h3>
-        <div class="center">
-            <div id="heartCounter">已收集 0 個 ❤️</div>
-            <div id="gameSpace"></div>
-        </div>
+  <!-- 便利貼 -->
+  <h3 class="stitle">想對我說的話</h3>
+  <div id="noteArea">
+    <textarea id="noteInput" placeholder="想罵我想誇我都可以"></textarea>
+    <div class="note-btns">
+      <button id="noteBtn">貼上去</button>
+      <button id="copyBtn">複製傳給我</button>
     </div>
+    <div id="noteList"></div>
+  </div>
 
-    <!-- 燈箱 -->
-    <div id="lightbox">
-        <button id="lbClose">×</button>
-        <button class="lb-btn" id="lbPrev">‹</button>
-        <img id="lightboxImg" src="" alt="">
-        <button class="lb-btn" id="lbNext">›</button>
-        <div id="lightboxCaption"></div>
-    </div>
+  <!-- 愛心遊戲 -->
+  <h3 class="stitle">收集愛心</h3>
+  <div class="center">
+    <div id="heartCount">已收集 0 個 ❤️</div>
+    <div id="gameSpace"></div>
+  </div>
+</div>
 
-    <div id="musicPlayer">
-        <audio id="backgroundMusic" autoplay loop>
-            <source src="你聽得到.mp3" type="audio/mpeg">
-        </audio>
-        <button id="playBtn">播放音樂</button>
-        <button id="pauseBtn">暫停</button>
-    </div>
+<!-- 燈箱 -->
+<div id="lb">
+  <button id="lbC">×</button>
+  <button class="lb-btn" id="lbP">‹</button>
+  <img id="lbImg" src="" alt="">
+  <button class="lb-btn" id="lbN">›</button>
+  <div id="lbCap"></div>
+</div>
 
-    <script>
-        const correctPassword = "1213";
-        const startDate = new Date(2024, 11, 13);
-        const audio = document.getElementById("backgroundMusic");
+<div id="music">
+  <audio id="bgm" autoplay loop>
+    <source src="你聽得到.mp3" type="audio/mpeg">
+  </audio>
+  <button id="playBtn">播放音樂</button>
+  <button id="pauseBtn">暫停</button>
+</div>
 
-        /* 解鎖 */
-        document.getElementById("submitBtn").addEventListener("click", function() {
-            const input = document.getElementById("passwordInput").value;
-            if (input === correctPassword) {
-                document.getElementById("loginSection").classList.add("hidden");
-                const c = document.getElementById("surpriseContent");
-                c.classList.remove("hidden");
-                c.classList.add("fade-in");
-                startTimer();
-                startHeartGame();
-                renderNotes();
-                observeTimeline();
-                startCarousel();
-                audio.play().catch(() => {});
-            } else {
-                const el = document.getElementById("passwordInput");
-                el.style.animation = "none"; el.offsetHeight;
-                el.style.animation = "shake 0.5s";
-                document.getElementById("passwordHint").classList.remove("hidden");
-                el.value = "";
-            }
-        });
+<script>
+const PW = "1213";
+const start = new Date(2024, 11, 13);
+const bgm = document.getElementById("bgm");
 
-        /* 計時器 */
-        const dayPhrases = [
-            "今天也辛苦了，我愛妳",
-            "離下次見面又近了一天",
-            "妳笑起來最好看了",
-            "別餓肚子喔",
-            "想牽妳的手",
-            "今天也要想我喔",
-            "妳是我最重要的人"
-        ];
-        function startTimer() {
-            function update() {
-                const diff = new Date() - startDate;
-                const d = Math.floor(diff / 86400000);
-                const h = Math.floor((diff / 3600000) % 24);
-                const m = Math.floor((diff / 60000) % 60);
-                const s = Math.floor((diff / 1000) % 60);
-                document.getElementById("countdown").innerHTML = `${d}天 ${h}時 ${m}分 ${s}秒`;
-                document.getElementById("dayPhrase").innerText = "— " + dayPhrases[d % dayPhrases.length] + " —";
-                document.getElementById("numDays").innerText = d;
-                document.getElementById("numHours").innerText = Math.floor(diff / 3600000);
-                document.getElementById("heroDays").innerText = d.toLocaleString();
-                // 下個紀念日
-                const next100 = Math.ceil((d+1)/100)*100;
-                const next520 = Math.ceil((d+1)/520)*520;
-                const nextYear = (new Date().getFullYear() - 2024) * 365 + (12-13 > new Date().getMonth()*30+new Date().getDate() ? 0 : 365);
-                document.getElementById("nextCount").innerHTML =
-                    `距離第 <b>${next100}</b> 天還有 <b>${next100-d}</b> 天`;
-            }
-            update(); setInterval(update, 1000);
+/* 解鎖 */
+document.getElementById("go").onclick = () => {
+  if (document.getElementById("pw").value === PW) {
+    document.getElementById("login").classList.add("hidden");
+    const a = document.getElementById("app");
+    a.classList.remove("hidden");
+    a.classList.add("fade-in");
+    startTimer();
+    startGame();
+    renderNotes();
+    renderWishes();
+    renderBadges();
+    initCarousel();
+    initTimeline();
+    bgm.play().catch(()=>{});
+  } else {
+    const el = document.getElementById("pw");
+    el.style.animation = "none"; el.offsetHeight;
+    el.style.animation = "shake .5s";
+    document.getElementById("hint").classList.remove("hidden");
+    el.value = "";
+  }
+};
+
+/* 計時 */
+const phrases = ["今天也辛苦了，我愛妳","離下次見面又近了一天","妳笑起來最好看了","別餓肚子喔","想牽妳的手","今天也要想我喔","妳是我最重要的人"];
+function startTimer(){
+  function up(){
+    const d = new Date() - start;
+    const days = Math.floor(d/86400000);
+    const h = Math.floor(d/3600000)%24;
+    const m = Math.floor(d/60000)%60;
+    const s = Math.floor(d/1000)%60;
+    document.getElementById("cd").textContent = `${days}天 ${h}時 ${m}分 ${s}秒`;
+    document.getElementById("phrase").textContent = "— " + phrases[days%phrases.length] + " —";
+    document.getElementById("numDays").textContent = days;
+    document.getElementById("numHours").textContent = Math.floor(d/3600000);
+    document.getElementById("heroDays").textContent = days.toLocaleString();
+    const n100 = Math.ceil((days+1)/100)*100;
+    document.getElementById("nextBox").innerHTML = `距離第 <b>${n100}</b> 天還有 <b>${n100-days}</b> 天`;
+  }
+  up(); setInterval(up, 1000);
+}
+
+/* 時間軸 */
+function initTimeline(){
+  const obs = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting) e.target.classList.add("vis") }), {threshold:.2});
+  document.querySelectorAll(".tl-item").forEach(i => obs.observe(i));
+}
+
+/* 輪播 */
+const carP = [
+  ["couple_helmet.jpg","兩個安全帽"],
+  ["date_dessert.jpg","兩碗甜點"],
+  ["trip_hotel.jpg","礁溪老爺"],
+  ["couple_crown.jpg","公主與魔杖"],
+  ["cinnamoroll.jpg","玉桂狗聯名"],
+  ["giant_icecream.jpg","她變成冰淇淋"],
+  ["icecream_selfie.jpg","張大嘴吃冰"]
+];
+let carI = 0, carT;
+function initCarousel(){
+  function show(i){
+    carI = (i + carP.length) % carP.length;
+    document.getElementById("carImg").src = carP[carI][0];
+    document.getElementById("carCap").textContent = carP[carI][1];
+  }
+  document.getElementById("cNext").onclick = () => { show(carI+1); reset(); };
+  document.getElementById("cPrev").onclick = () => { show(carI-1); reset(); };
+  function reset(){ clearInterval(carT); carT = setInterval(() => show(carI+1), 4000); }
+  reset();
+}
+
+/* 燈箱 */
+const figs = Array.from(document.querySelectorAll("#wall figure"));
+const lb = document.getElementById("lb");
+let lbI = 0;
+function openLB(i){ lbI = i; showLB(); lb.classList.add("open"); }
+function showLB(){
+  const f = figs[lbI];
+  document.getElementById("lbImg").src = f.querySelector("img").src;
+  document.getElementById("lbCap").textContent = f.dataset.cap + "  (" + (lbI+1) + "/" + figs.length + ")";
+}
+figs.forEach((f,i) => f.onclick = () => openLB(i));
+document.getElementById("lbC").onclick = () => lb.classList.remove("open");
+document.getElementById("lbP").onclick = (e) => { e.stopPropagation(); lbI = (lbI-1+figs.length)%figs.length; showLB(); };
+document.getElementById("lbN").onclick = (e) => { e.stopPropagation(); lbI = (lbI+1)%figs.length; showLB(); };
+lb.onclick = (e) => { if(e.target === lb) lb.classList.remove("open"); };
+document.addEventListener("keydown", e => {
+  if(!lb.classList.contains("open")) return;
+  if(e.key==="Escape") lb.classList.remove("open");
+  if(e.key==="ArrowLeft"){ lbI=(lbI-1+figs.length)%figs.length; showLB(); }
+  if(e.key==="ArrowRight"){ lbI=(lbI+1)%figs.length; showLB(); }
+});
+
+/* 情話 */
+const lines = [
+  "就算重來一次，我還是會在同一個地方遇見妳。",
+  "我不是因為孤單才找妳，是因為是妳，我才不想再一個人。",
+  "別人都說我變了，只有我知道我只是終於敢面對自己喜歡誰。",
+  "以後吵架可以，但不准不接我電話。",
+  "妳不用一直當大人，在我這邊可以當小朋友。",
+  "我數過了，今天也比昨天更喜歡妳一點。",
+  "左邊肩膀永遠留給妳，隨時可以靠過來。",
+  "我之前不信永遠，現在信了，因為妳。",
+  "笨笨的也沒關係，我本來就喜歡原來的妳。",
+  "下次見面第一件事，是抱抱。",
+  "謝謝妳那時候沒有真的走掉。",
+  "未來的每一天，我都想跟妳一起浪費。",
+  "妳生氣的時候也可愛，但別常常生氣。",
+  "我手機裡全是妳，滑不滑都一樣。",
+  "下雨天想牽妳，出太陽也想牽妳。",
+  "想跟妳一起老，老到一起抱怨膝蓋痛。"
+];
+let lastL = -1;
+document.getElementById("loveBtn").onclick = () => {
+  let i; do { i = Math.floor(Math.random()*lines.length); } while(i === lastL);
+  lastL = i;
+  const el = document.getElementById("loveText");
+  el.classList.remove("show");
+  setTimeout(() => { el.textContent = lines[i]; el.classList.add("show"); }, 200);
+};
+
+/* 盲盒 */
+document.getElementById("mystery").onclick = function(){
+  const f = figs[Math.floor(Math.random()*figs.length)];
+  document.getElementById("mystImg").src = f.querySelector("img").src;
+  document.getElementById("mystQ").textContent = f.dataset.cap + " — " + lines[Math.floor(Math.random()*lines.length)];
+  this.classList.add("flipped");
+  setTimeout(() => this.classList.remove("flipped"), 4000);
+};
+
+/* 刮刮樂 */
+(function(){
+  const c = document.getElementById("scratchCvs");
+  const x = c.getContext("2d");
+  const w = c.width, h = c.height;
+  x.fillStyle = "#c0c0c0"; x.fillRect(0,0,w,h);
+  x.fillStyle = "#fff"; x.font = "16px sans-serif"; x.textAlign = "center";
+  x.fillText("刮開我", w/2, h/2);
+  let s = false;
+  function sc(px,py){
+    x.globalCompositeOperation = "destination-out";
+    x.beginPath(); x.arc(px,py,20,0,Math.PI*2); x.fill();
+  }
+  c.addEventListener("mousedown", () => s = true);
+  c.addEventListener("mouseup", () => s = false);
+  c.addEventListener("mousemove", e => {
+    if(!s) return;
+    const r = c.getBoundingClientRect();
+    sc((e.clientX-r.left)*w/r.width, (e.clientY-r.top)*h/r.height);
+  });
+  c.addEventListener("touchstart", () => s = true, {passive:true});
+  c.addEventListener("touchend", () => s = false);
+  c.addEventListener("touchmove", e => {
+    if(!s) return;
+    const r = c.getBoundingClientRect();
+    const t = e.touches[0];
+    sc((t.clientX-r.left)*w/r.width, (t.clientY-r.top)*h/r.height);
+  }, {passive:true});
+  const msgs = ["今天也很喜歡妳","抱抱","想牽手","吃飽了沒","妳最好看","愛妳","不要生氣","快睡覺","想妳了","可愛","么么","心動"];
+  document.getElementById("scratchMsg").textContent = msgs[new Date().getDate() % msgs.length];
+})();
+
+/* 翻牌 */
+(function(){
+  const ps = ["couple_helmet.jpg","date_dessert.jpg","trip_hotel.jpg","couple_crown.jpg","cinnamoroll.jpg","giant_icecream.jpg"];
+  const deck = [...ps, ...ps].sort(() => Math.random()-0.5);
+  const g = document.getElementById("memGrid");
+  let first = null, lock = false, mat = 0;
+  deck.forEach(src => {
+    const card = document.createElement("div");
+    card.className = "mem-card";
+    card.innerHTML = `<div class="mem-inner"><div class="mem-front">?</div><div class="mem-back"><img src="${src}"></div></div>`;
+    card.onclick = () => {
+      if(lock || card.classList.contains("flipped") || card.classList.contains("matched")) return;
+      card.classList.add("flipped");
+      if(!first){ first = card; return; }
+      lock = true;
+      const ok = first.querySelector("img").src === card.querySelector("img").src;
+      setTimeout(() => {
+        if(ok){
+          first.classList.add("matched"); card.classList.add("matched");
+          mat++;
+          if(mat === ps.length) document.getElementById("memStat").textContent = "全部配對成功！妳好聰明 ❤️";
+        } else {
+          first.classList.remove("flipped"); card.classList.remove("flipped");
         }
+        first = null; lock = false;
+      }, 600);
+    };
+    g.appendChild(card);
+  });
+})();
 
-        /* 時間軸動畫 */
-        function observeTimeline() {
-            const obs = new IntersectionObserver((entries) => {
-                entries.forEach(e => { if (e.isIntersecting) e.target.classList.add("visible"); });
-            }, { threshold: 0.2 });
-            document.querySelectorAll(".tl-item").forEach(i => obs.observe(i));
-        }
+/* 愛情指數 */
+document.getElementById("meterBtn").onclick = () => {
+  const n = 95 + Math.floor(Math.random()*6);
+  document.getElementById("meterNum").textContent = n + "%";
+  document.getElementById("meterFill").style.width = n + "%";
+  document.getElementById("meterMsg").textContent = n >= 98 ? "滿分！妳們註定在一起 ❤️" : "很高！繼續下去就滿分了";
+};
 
-        /* 照片輪播 */
-        const carPhotos = [
-            ["couple_helmet.jpg", "兩個安全帽"],
-            ["date_dessert.jpg", "兩碗甜點"],
-            ["trip_hotel.jpg", "礁溪老爺"],
-            ["couple_crown.jpg", "公主與魔杖"],
-            ["cinnamoroll.jpg", "玉桂狗聯名"],
-            ["giant_icecream.jpg", "她變成冰淇淋"],
-            ["icecream_selfie.jpg", "張大嘴吃冰"]
-        ];
-        let carIdx = 0, carTimer;
-        function startCarousel() {
-            function show(i) {
-                carIdx = (i + carPhotos.length) % carPhotos.length;
-                document.getElementById("carImg").src = carPhotos[carIdx][0];
-                document.getElementById("carCap").innerText = carPhotos[carIdx][1];
-            }
-            document.getElementById("carNext").onclick = () => { show(carIdx+1); reset(); };
-            document.getElementById("carPrev").onclick = () => { show(carIdx-1); reset(); };
-            function reset() { clearInterval(carTimer); carTimer = setInterval(() => show(carIdx+1), 4000); }
-            reset();
-        }
+/* 成就 */
+function renderBadges(){
+  const badges = [
+    {e:"💘", l:"解鎖密碼", u:true},
+    {e:"📸", l:"看過14張照片", u:true},
+    {e:"🎰", l:"抽過情話", u:localStorage.getItem("luvDrew")==="1"},
+    {e:"🎁", l:"抽過盲盒", u:localStorage.getItem("boxDrew")==="1"},
+    {e:"🧩", l:"完成翻牌", u:localStorage.getItem("memDone")==="1"},
+    {e:"❤️", l:"收集10愛心", u:localStorage.getItem("heart10")==="1"},
+    {e:"📝", l:"寫過便利貼", u:localStorage.getItem("noteWrote")==="1"},
+    {e:"🎂", l:"100天", u:Math.floor((new Date()-start)/86400000)>=100},
+  ];
+  document.getElementById("badges").innerHTML = badges.map(b =>
+    `<div class="badge ${b.u?"unlocked":"locked"}"><div class="emoji">${b.e}</div><div class="label">${b.l}</div></div>`
+  ).join("");
+}
+// 標記成就
+document.getElementById("loveBtn").addEventListener("click", () => { localStorage.setItem("luvDrew","1"); renderBadges(); });
+document.getElementById("mystery").addEventListener("click", () => { localStorage.setItem("boxDrew","1"); renderBadges(); });
 
-        /* 照片燈箱 */
-        const figures = Array.from(document.querySelectorAll("#photoWall figure"));
-        const lb = document.getElementById("lightbox");
-        const lbImg = document.getElementById("lightboxImg");
-        const lbCap = document.getElementById("lightboxCaption");
-        let lbIndex = 0;
-        function openLB(i) { lbIndex = i; showLB(); lb.classList.add("open"); }
-        function showLB() {
-            const fig = figures[lbIndex];
-            lbImg.src = fig.querySelector("img").src;
-            lbCap.innerText = (fig.dataset.caption || "") + `  (${lbIndex+1} / ${figures.length})`;
-        }
-        function closeLB() { lb.classList.remove("open"); }
-        function navLB(dir) { lbIndex = (lbIndex + dir + figures.length) % figures.length; showLB(); }
-        figures.forEach((fig, i) => fig.addEventListener("click", () => openLB(i)));
-        document.getElementById("lbClose").onclick = closeLB;
-        document.getElementById("lbPrev").onclick = (e) => { e.stopPropagation(); navLB(-1); };
-        document.getElementById("lbNext").onclick = (e) => { e.stopPropagation(); navLB(1); };
-        lb.addEventListener("click", (e) => { if (e.target === lb) closeLB(); });
-        document.addEventListener("keydown", (e) => {
-            if (!lb.classList.contains("open")) return;
-            if (e.key === "Escape") closeLB();
-            if (e.key === "ArrowLeft") navLB(-1);
-            if (e.key === "ArrowRight") navLB(1);
-        });
+/* 願望 */
+function renderWishes(){
+  const wishes = ["一起看海","一起跨年","一起去日本","一起養一隻貓","一起做飯","一起露營","一起拍情侶照","一起看煙火","一起養老"];
+  const saved = JSON.parse(localStorage.getItem("wishes")||"[]");
+  const list = document.getElementById("wishList");
+  wishes.forEach((w,i) => {
+    const done = saved.includes(i);
+    const d = document.createElement("div");
+    d.className = "wish-item" + (done?" done":"");
+    d.innerHTML = `<input type="checkbox" ${done?"checked":""}> <span>${w}</span>`;
+    d.querySelector("input").onchange = function(){
+      let s = JSON.parse(localStorage.getItem("wishes")||"[]");
+      if(this.checked) s.push(i); else s = s.filter(x => x !== i);
+      localStorage.setItem("wishes", JSON.stringify(s));
+      d.classList.toggle("done", this.checked);
+    };
+    list.appendChild(d);
+  });
+}
 
-        /* 情話 */
-        const loveLines = [
-            "就算重來一次，我還是會在同一個地方遇見妳。",
-            "我不是因為孤單才找妳，是因為是妳，我才不想再一個人。",
-            "別人都說我變了，只有我知道我只是終於敢面對自己喜歡誰。",
-            "以後吵架可以，但不准不接我電話。",
-            "妳不用一直當大人，在我這邊可以當小朋友。",
-            "我數過了，今天也比昨天更喜歡妳一點。",
-            "左邊肩膀永遠留給妳，隨時可以靠過來。",
-            "我之前不信永遠，現在信了，因為妳。",
-            "笨笨的也沒關係，我本來就喜歡原來的妳。",
-            "下次見面第一件事，是抱抱。",
-            "謝謝妳那時候沒有真的走掉。",
-            "未來的每一天，我都想跟妳一起浪費。",
-            "妳生氣的時候也可愛，但別常常生氣。",
-            "我手機裡全是妳，滑不滑都一樣。",
-            "下雨天想牽妳，出太陽也想牽妳。",
-            "想跟妳一起老，老到一起抱怨膝蓋痛。"
-        ];
-        let lastLine = -1;
-        document.getElementById("loveCardBtn").addEventListener("click", () => {
-            let i;
-            do { i = Math.floor(Math.random() * loveLines.length); } while (i === lastLine);
-            lastLine = i;
-            const box = document.getElementById("loveCardText");
-            box.classList.remove("show");
-            setTimeout(() => { box.innerText = loveLines[i]; box.classList.add("show"); }, 200);
-        });
+/* 每日一問 */
+(function(){
+  const qs = ["今天最開心的一件事？","我們第一次約會去哪？","妳覺得我哪裡最可愛？","想跟我去哪旅行？","今天有想我嗎？","喜歡我叫妳什麼？","下次見面想做什麼？","覺得我哪一點最吸引妳？","想一起完成什麼事？","最近一次想我是什麼時候？"];
+  document.getElementById("dailyQ").textContent = qs[Math.floor(Date.now()/86400000) % qs.length];
+})();
 
-        /* 盲盒 */
-        const box = document.getElementById("mysteryBox");
-        box.addEventListener("click", () => {
-            const fig = figures[Math.floor(Math.random() * figures.length)];
-            document.getElementById("mysteryImg").src = fig.querySelector("img").src;
-            document.getElementById("mysteryQuote").innerText =
-                (fig.dataset.caption || "") + " — " + loveLines[Math.floor(Math.random()*loveLines.length)];
-            box.classList.add("flipped");
-            setTimeout(() => box.classList.remove("flipped"), 4000);
-        });
+/* 便利貼 */
+function renderNotes(){
+  const list = JSON.parse(localStorage.getItem("notes")||"[]");
+  document.getElementById("noteList").innerHTML = list.map((n,i) =>
+    `<div class="note-item">${esc(n.text)}<div class="note-date">${n.date} <span style="color:var(--pink);cursor:pointer" onclick="delN(${i})">✕</span></div></div>`
+  ).join("");
+}
+function esc(s){ const d = document.createElement("div"); d.innerText = s; return d.innerHTML; }
+window.delN = i => {
+  const l = JSON.parse(localStorage.getItem("notes")||"[]");
+  l.splice(i,1);
+  localStorage.setItem("notes", JSON.stringify(l));
+  renderNotes();
+};
+document.getElementById("noteBtn").onclick = function(){
+  const ta = document.getElementById("noteInput");
+  const t = ta.value.trim();
+  if(!t) return;
+  const l = JSON.parse(localStorage.getItem("notes")||"[]");
+  l.unshift({text:t, date:new Date().toLocaleString("zh-TW")});
+  localStorage.setItem("notes", JSON.stringify(l));
+  localStorage.setItem("noteWrote","1");
+  ta.value = "";
+  renderNotes(); renderBadges();
+};
+document.getElementById("copyBtn").onclick = function(){
+  const t = document.getElementById("noteInput").value.trim();
+  if(!t){ alert("先寫點東西啦"); return; }
+  navigator.clipboard.writeText("【便利貼】"+t).then(() => alert("複製好了！貼到 LINE 傳給我～"));
+};
 
-        /* 刮刮樂 */
-        (function() {
-            const cvs = document.getElementById("scratchCanvas");
-            const ctx = cvs.getContext("2d");
-            const w = cvs.width, h = cvs.height;
-            ctx.fillStyle = "#c0c0c0";
-            ctx.fillRect(0, 0, w, h);
-            ctx.fillStyle = "#fff";
-            ctx.font = "16px sans-serif";
-            ctx.textAlign = "center";
-            ctx.fillText("刮開我", w/2, h/2);
-            let scratching = false;
-            function scratch(x, y) {
-                ctx.globalCompositeOperation = "destination-out";
-                ctx.beginPath();
-                ctx.arc(x, y, 20, 0, Math.PI*2);
-                ctx.fill();
-            }
-            cvs.addEventListener("mousedown", () => scratching = true);
-            cvs.addEventListener("mouseup", () => scratching = false);
-            cvs.addEventListener("mousemove", e => {
-                if (!scratching) return;
-                const r = cvs.getBoundingClientRect();
-                scratch((e.clientX-r.left)*w/r.width, (e.clientY-r.top)*h/r.height);
-            });
-            cvs.addEventListener("touchstart", () => scratching = true, {passive:true});
-            cvs.addEventListener("touchend", () => scratching = false);
-            cvs.addEventListener("touchmove", e => {
-                if (!scratching) return;
-                const r = cvs.getBoundingClientRect();
-                const t = e.touches[0];
-                scratch((t.clientX-r.left)*w/r.width, (t.clientY-r.top)*h/r.height);
-            }, {passive:true});
-            const msgs = ["今天也很喜歡妳","抱抱","想牽手","吃飽了沒","妳最好看","愛妳","不要生氣","快睡覺","想妳了","可愛","么么","心動"];
-            document.getElementById("scratchText").innerText = msgs[new Date().getDate() % msgs.length];
-        })();
+/* 愛心遊戲 */
+function startGame(){
+  const sp = document.getElementById("gameSpace");
+  let c = 0;
+  setInterval(() => {
+    if(document.querySelectorAll(".heart-game").length > 5) return;
+    const h = document.createElement("div");
+    h.innerHTML = "❤️";
+    h.className = "heart-game";
+    h.style.left = Math.random()*90 + "%";
+    h.style.top = Math.random()*80 + "%";
+    h.onclick = function(e){
+      c++;
+      document.getElementById("heartCount").textContent = "已收集 " + c + " 個 ❤️";
+      burst(e.clientX, e.clientY);
+      this.remove();
+      if(c === 10){ localStorage.setItem("heart10","1"); renderBadges(); }
+      if(c % 10 === 0) alert("收集到 " + c + " 個愛心！");
+    };
+    sp.appendChild(h);
+    setTimeout(() => { if(h.parentElement) h.remove(); }, 5000);
+  }, 3000);
+}
 
-        /* 翻牌 */
-        (function() {
-            const photos = ["couple_helmet.jpg","date_dessert.jpg","trip_hotel.jpg","couple_crown.jpg","cinnamoroll.jpg","giant_icecream.jpg"];
-            const deck = [...photos, ...photos].sort(() => Math.random()-0.5);
-            const grid = document.getElementById("memGrid");
-            let first = null, lock = false, matched = 0;
-            deck.forEach((src) => {
-                const card = document.createElement("div");
-                card.className = "mem-card";
-                card.innerHTML = `<div class="mem-inner"><div class="mem-front">?</div><div class="mem-back"><img src="${src}" alt=""></div></div>`;
-                card.onclick = () => {
-                    if (lock || card.classList.contains("flipped") || card.classList.contains("matched")) return;
-                    card.classList.add("flipped");
-                    if (!first) { first = card; return; }
-                    lock = true;
-                    const match = first.querySelector("img").src === card.querySelector("img").src;
-                    setTimeout(() => {
-                        if (match) {
-                            first.classList.add("matched");
-                            card.classList.add("matched");
-                            matched++;
-                            if (matched === photos.length)
-                                document.getElementById("memStatus").innerText = "全部配對成功！妳好聰明 ❤️";
-                        } else {
-                            first.classList.remove("flipped");
-                            card.classList.remove("flipped");
-                        }
-                        first = null; lock = false;
-                    }, 600);
-                };
-                grid.appendChild(card);
-            });
-        })();
+function burst(x,y){
+  const em = ["❤️","💖","💕","✨","💗"];
+  for(let i=0;i<6;i++){
+    const el = document.createElement("div");
+    el.className = "burst-heart";
+    el.innerText = em[Math.floor(Math.random()*em.length)];
+    el.style.left = x+"px"; el.style.top = y+"px";
+    const a = Math.random()*Math.PI*2;
+    const d = 40 + Math.random()*50;
+    el.style.setProperty("--dx", Math.cos(a)*d+"px");
+    el.style.setProperty("--dy", Math.sin(a)*d+"px");
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 1000);
+  }
+}
+document.addEventListener("click", e => {
+  if(e.target.closest("button") || e.target.closest("input") || e.target.closest("textarea")) return;
+  burst(e.clientX, e.clientY);
+});
 
-        /* 愛情指數 */
-        document.getElementById("loveMeterBtn").onclick = function() {
-            const n = 95 + Math.floor(Math.random() * 6); // 95-100
-            document.getElementById("loveMeterNum").innerText = n + "%";
-            document.getElementById("loveMeterFill").style.width = n + "%";
-            document.getElementById("loveMeterMsg").innerText = n >= 98 ? "滿分！妳們註定在一起 ❤️" : "很高！繼續下去就滿分了";
-        };
+/* 音樂 */
+document.getElementById("playBtn").onclick = () => bgm.play();
+document.getElementById("pauseBtn").onclick = () => bgm.pause();
+</script>
 
-        /* 願望清單 */
-        (function() {
-            const wishes = ["一起看海","一起跨年","一起去日本","一起養一隻貓","一起做飯","一起露營","一起拍情侶照","一起看煙火","一起養老"];
-            const saved = JSON.parse(localStorage.getItem("wishes") || "[]");
-            const list = document.getElementById("wishList");
-            wishes.forEach((w, i) => {
-                const done = saved.includes(i);
-                const div = document.createElement("div");
-                div.className = "wish-item" + (done ? " done" : "");
-                div.innerHTML = `<input type="checkbox" ${done?"checked":""}> <span>${w}</span>`;
-                div.querySelector("input").onchange = function() {
-                    let s = JSON.parse(localStorage.getItem("wishes") || "[]");
-                    if (this.checked) s.push(i); else s = s.filter(x => x !== i);
-                    localStorage.setItem("wishes", JSON.stringify(s));
-                    div.classList.toggle("done", this.checked);
-                };
-                list.appendChild(div);
-            });
-        })();
-
-        /* 每日一問 */
-        (function() {
-            const qs = ["今天最開心的一件事？","我們第一次約會去哪？","妳覺得我哪裡最可愛？","想跟我去哪旅行？","今天有想我嗎？","喜歡我叫妳什麼？","下次見面想做什麼？","覺得我哪一點最吸引妳？","想一起完成什麼事？","最近一次想我是什麼時候？"];
-            const day = Math.floor(Date.now() / 86400000);
-            document.getElementById("dailyQ").innerText = qs[day % qs.length];
-        })();
-
-        /* 便利貼 */
-        function renderNotes() {
-            const list = JSON.parse(localStorage.getItem("notes") || "[]");
-            document.getElementById("noteList").innerHTML = list.map((n, i) =>
-                `<div class="note-item">${esc(n.text)}<div class="note-date">${n.date} <span style="color:var(--pink);cursor:pointer;" onclick="delNote(${i})">✕</span></div></div>`
-            ).join("");
-        }
-        function esc(s) { const d = document.createElement("div"); d.innerText = s; return d.innerHTML; }
-        window.delNote = function(i) {
-            const list = JSON.parse(localStorage.getItem("notes") || "[]");
-            list.splice(i, 1);
-            localStorage.setItem("notes", JSON.stringify(list));
-            renderNotes();
-        };
-        document.getElementById("noteBtn").onclick = function() {
-            const ta = document.getElementById("noteInput");
-            const text = ta.value.trim();
-            if (!text) return;
-            const list = JSON.parse(localStorage.getItem("notes") || "[]");
-            list.unshift({ text, date: new Date().toLocaleString("zh-TW") });
-            localStorage.setItem("notes", JSON.stringify(list));
-            ta.value = "";
-            renderNotes();
-        };
-        document.getElementById("copyNoteBtn").onclick = function() {
-            const text = document.getElementById("noteInput").value.trim();
-            if (!text) { alert("先寫點東西啦"); return; }
-            navigator.clipboard.writeText("【便利貼】" + text).then(() => alert("複製好了！貼到 LINE 傳給我～"));
-        };
-
-        /* 愛心遊戲 */
-        function startHeartGame() {
-            const space = document.getElementById("gameSpace");
-            let count = 0;
-            setInterval(() => {
-                if (document.querySelectorAll('.heart-game').length > 5) return;
-                const h = document.createElement("div");
-                h.innerHTML = "❤️";
-                h.className = "heart-game";
-                h.style.left = Math.random()*90 + "%";
-                h.style.top = Math.random()*80 + "%";
-                h.onclick = function(e) {
-                    count++;
-                    document.getElementById("heartCounter").innerText = "已收集 " + count + " 個 ❤️";
-                    burstHearts(e.clientX, e.clientY);
-                    this.remove();
-                    if (count % 10 === 0) alert("收集到 " + count + " 個愛心！");
-                };
-                space.appendChild(h);
-                setTimeout(() => { if (h.parentElement) h.remove(); }, 5000);
-            }, 3000);
-        }
-
-        function burstHearts(x, y) {
-            const emojis = ["❤️","💖","💕","✨","💗"];
-            for (let i = 0; i < 6; i++) {
-                const el = document.createElement("div");
-                el.className = "burst-heart";
-                el.innerText = emojis[Math.floor(Math.random()*emojis.length)];
-                el.style.left = x + "px";
-                el.style.top  = y + "px";
-                const angle = Math.random() * Math.PI * 2;
-                const dist  = 40 + Math.random() * 50;
-                el.style.setProperty("--dx", Math.cos(angle)*dist + "px");
-                el.style.setProperty("--dy", Math.sin(angle)*dist + "px");
-                document.body.appendChild(el);
-                setTimeout(() => el.remove(), 1000);
-            }
-        }
-        document.addEventListener("click", (e) => {
-            if (e.target.closest("button") || e.target.closest("input") || e.target.closest("textarea")) return;
-            burstHearts(e.clientX, e.clientY);
-        });
-
-        /* 音樂 */
-        document.getElementById("playBtn").onclick  = () => audio.play();
-        document.getElementById("pauseBtn").onclick = () => audio.pause();
-    </script>
-
-    <script src="https://cdn.botpress.cloud/webchat/v3.5/inject.js"></script>
-    <script src="https://files.bpcontent.cloud/2026/01/12/17/20260112175648-Q8N99NKQ.js" defer></script>
+<script src="https://cdn.botpress.cloud/webchat/v3.5/inject.js"></script>
+<script src="https://files.bpcontent.cloud/2026/01/12/17/20260112175648-Q8N99NKQ.js" defer></script>
 
 </body>
 </html>
