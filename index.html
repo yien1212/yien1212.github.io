@@ -728,11 +728,22 @@ body{counter-reset: section}
   </div>
 
   <!-- 定位+電量 -->
-  <h3 class="stitle">📍 她在哪</h3>
-  <div style="max-width:500px;margin:0 auto;background:rgba(255,255,255,.7);backdrop-filter:blur(20px);border-radius:24px;padding:25px;text-align:center;box-shadow:0 10px 30px rgba(233,30,99,.15)">
-    <div id="locStatus" style="font-family:'Noto Serif TC',serif;color:var(--pink-deep);font-size:1.05rem">點下方按鈕上傳位置</div>
-    <button class="btn-pink" id="locBtn" style="margin-top:12px;border-radius:25px">📍 上傳我的位置</button>
-    <div id="batteryStatus" style="margin-top:12px;font-size:1.1rem"></div>
+  <h3 class="stitle">📍 我們在哪</h3>
+  <div style="max-width:500px;margin:0 auto;background:rgba(255,255,255,.7);backdrop-filter:blur(20px);border-radius:24px;padding:25px;box-shadow:0 10px 30px rgba(233,30,99,.15)">
+    <div style="display:flex;gap:15px;text-align:center">
+      <div style="flex:1">
+        <div style="font-size:.85rem;color:#999;margin-bottom:5px">我</div>
+        <div id="myLoc" style="font-size:.9rem;color:var(--pink-deep)">還沒上傳</div>
+        <div id="myBattery" style="font-size:.9rem;margin-top:5px"></div>
+      </div>
+      <div style="display:flex;align-items:center;color:var(--pink);font-size:1.2rem">❤️</div>
+      <div style="flex:1">
+        <div style="font-size:.85rem;color:#999;margin-bottom:5px">她</div>
+        <div id="herLoc" style="font-size:.9rem;color:var(--pink-deep)">還沒上傳</div>
+        <div id="herBattery" style="font-size:.9rem;margin-top:5px"></div>
+      </div>
+    </div>
+    <button class="btn-pink" id="locBtn" style="margin-top:15px;border-radius:25px;width:100%">📍 上傳我的位置</button>
   </div>
 
   <!-- 在線狀態 -->
@@ -1331,16 +1342,19 @@ if(typeof uid !== 'undefined' && uid){
       b.addEventListener("levelchange", upd);
     });
   }
-  // 顯示對方位置
-  db.collection("locations").where("uid","!=",uid).onSnapshot(snap => {
+  // 顯示所有人位置
+  db.collection("locations").onSnapshot(snap => {
     snap.forEach(d => {
       const l = d.data();
-      document.getElementById("batteryStatus").textContent =
-        "她的電量: " + l.battery + "%" + (l.charging?" 🔋充電中":"");
+      const isMe = d.id === uid;
+      const locEl = document.getElementById(isMe ? "myLoc" : "herLoc");
+      const batEl = document.getElementById(isMe ? "myBattery" : "herBattery");
       if(l.lat){
-        document.getElementById("locStatus").innerHTML =
-          `她在: <a href="https://www.google.com/maps?q=${l.lat},${l.lng}" target="_blank">點我看地圖</a><br>更新: ${l.time}`;
+        locEl.innerHTML = `<a href="https://www.google.com/maps?q=${l.lat},${l.lng}" target="_blank" style="color:var(--pink)">看地圖</a>`;
+      } else {
+        locEl.textContent = "還沒上傳";
       }
+      batEl.textContent = l.battery ? "🔋 " + l.battery + "%" : "";
     });
   });
   // 上傳位置
@@ -1351,7 +1365,7 @@ if(typeof uid !== 'undefined' && uid){
         lng: pos.coords.longitude,
         time: new Date().toLocaleString("zh-TW")
       }, {merge:true});
-      document.getElementById("locStatus").textContent = "位置已上傳！";
+      document.getElementById("myLoc").innerHTML = `<a href="https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}" target="_blank" style="color:var(--pink)">看地圖</a>`;
     });
   };
 }
