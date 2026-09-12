@@ -97,7 +97,7 @@
             margin: 45px auto 15px;
         }
 
-        /* ---------- 相簿（升級） ---------- */
+        /* ---------- 相簿 ---------- */
         .photo-wall {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -136,7 +136,7 @@
             background: #fff;
         }
 
-        /* 燈箱 Lightbox */
+        /* 燈箱 */
         #lightbox {
             position: fixed;
             inset: 0;
@@ -171,7 +171,6 @@
             height: 48px;
             border-radius: 50%;
             cursor: pointer;
-            transition: background 0.2s;
         }
         .lb-btn:hover { background: rgba(255,255,255,0.35); }
         #lbPrev { left: 15px; }
@@ -187,7 +186,133 @@
             cursor: pointer;
         }
 
-        /* ---------- 愛心收集遊戲 ---------- */
+        /* ---------- 時間軸 ---------- */
+        .timeline {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 0 20px;
+            position: relative;
+        }
+        .timeline::before {
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: #ffb6d5;
+            transform: translateX(-50%);
+        }
+        .tl-item {
+            position: relative;
+            margin: 25px 0;
+            width: 50%;
+            padding: 12px 18px;
+            background: #fff;
+            border-radius: 14px;
+            border: 2px solid #ffb6d5;
+            text-align: left;
+        }
+        .tl-item:nth-child(odd) { left: 0; }
+        .tl-item:nth-child(even) { left: 50%; }
+        .tl-item::after {
+            content: "❤️";
+            position: absolute;
+            top: 15px;
+            font-size: 1.2rem;
+        }
+        .tl-item:nth-child(odd)::after { right: -28px; }
+        .tl-item:nth-child(even)::after { left: -28px; }
+        .tl-date { font-size: 0.8rem; color: #ff69b4; font-weight: bold; }
+        .tl-text { font-size: 0.95rem; color: #333; margin-top: 4px; line-height: 1.5; }
+
+        /* ---------- 回憶盲盒 ---------- */
+        #mysteryBox {
+            max-width: 320px;
+            margin: 20px auto;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+        #mysteryInner {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        #mysteryBox.flipped #mysteryInner { transform: rotateY(180deg); }
+        .face {
+            position: absolute;
+            inset: 0;
+            backface-visibility: hidden;
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .face-front {
+            background: linear-gradient(135deg, #ff69b4, #ff1493);
+            color: #fff;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        .face-back {
+            background: #fff;
+            border: 3px solid #ff69b4;
+            transform: rotateY(180deg);
+            overflow: hidden;
+        }
+        .face-back img {
+            width: 100%;
+            height: 130px;
+            object-fit: cover;
+        }
+        .face-back .quote {
+            padding: 8px;
+            font-size: 0.85rem;
+            color: #d1478a;
+        }
+
+        /* ---------- 便利貼 ---------- */
+        #noteArea {
+            max-width: 500px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+        #noteInput {
+            width: 100%;
+            min-height: 70px;
+            padding: 12px;
+            border: 2px solid #ffb6d5;
+            border-radius: 14px;
+            font-family: inherit;
+            font-size: 1rem;
+            resize: vertical;
+            outline: none;
+        }
+        #noteBtn {
+            margin-top: 10px;
+            padding: 10px 24px;
+            border: none;
+            background: #ff69b4;
+            color: white;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+        .note-item {
+            background: #fffde7;
+            border-left: 4px solid #ff69b4;
+            padding: 10px 14px;
+            margin: 10px 0;
+            border-radius: 8px;
+            text-align: left;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        .note-date { font-size: 0.75rem; color: #999; margin-top: 4px; }
+
+        /* ---------- 愛心遊戲 ---------- */
         .heart-game {
             position: absolute;
             font-size: 30px;
@@ -195,7 +320,6 @@
             animation: float 5s linear infinite;
             color: #ff69b4;
             z-index: 10;
-            transition: transform 0.1s;
         }
         .heart-game:active { transform: scale(1.4); }
         @keyframes float {
@@ -219,7 +343,6 @@
             border-radius: 30px;
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(255,105,180,0.4);
-            transition: transform 0.15s;
         }
         #loveCardBtn:active { transform: scale(0.95); }
         #loveCardText {
@@ -254,8 +377,6 @@
             10%  { opacity: 1; }
             100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
         }
-
-        /* 點擊噴出的小愛心 */
         .burst-heart {
             position: fixed;
             pointer-events: none;
@@ -280,12 +401,23 @@
             cursor: pointer;
             margin: 5px;
         }
-
-        /* 進場淡入 */
         .fade-in { animation: fadeIn 0.8s ease both; }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(15px); }
             to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 手機版時間軸 */
+        @media (max-width: 600px) {
+            .timeline::before { left: 20px; }
+            .tl-item, .tl-item:nth-child(odd), .tl-item:nth-child(even) {
+                width: calc(100% - 50px);
+                left: 40px !important;
+            }
+            .tl-item::after, .tl-item:nth-child(odd)::after, .tl-item:nth-child(even)::after {
+                left: -32px !important;
+                right: auto !important;
+            }
         }
     </style>
 </head>
@@ -313,14 +445,39 @@
         <p>這些愛或許不用說出口，但也一直藏在行為裡。我會盡力去做一個合格的女朋友，做一個配得上妳付出的人。希望妳可以一直放心大膽地靠在我的肩膀上，開開心心地當小朋友就好了。</p>
         <p><strong>luv u ❤️</strong></p>
 
-        <!-- 在一起計時器 -->
+        <!-- 計時器 -->
         <div id="timerSection">
             <h3 style="color: #ff1493; margin:0;">我們在一起已經</h3>
             <div id="countdown">計算中...</div>
             <div id="dayPhrase"></div>
         </div>
 
-        <!-- 升級後的相簿 -->
+        <!-- 時間軸 -->
+        <h3 class="section-title">我們的軌跡 🛤️</h3>
+        <div class="timeline">
+            <div class="tl-item">
+                <div class="tl-date">2024/12/13</div>
+                <div class="tl-text">在一起的那天。雖然過程很智障，但結果很好。</div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-date">2025/10</div>
+                <div class="tl-text">兩個安全帽一起騎車兜風。</div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-date">2025/12</div>
+                <div class="tl-text">一起吃甜點、去礁溪老爺住了一晚。</div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-date">2026/02</div>
+                <div class="tl-text">睡醒還是要拍一張。</div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-date">現在</div>
+                <div class="tl-text">還在繼續。未完待續。</div>
+            </div>
+        </div>
+
+        <!-- 相簿 -->
         <h3 class="section-title">最可愛的女朋友 📸</h3>
         <div class="photo-wall" id="photoWall">
             <figure><img src="IMG_8145.JPG" alt="回憶1" data-caption="第一次一起的時候"><figcaption>回憶 1</figcaption></figure>
@@ -334,7 +491,20 @@
             <figure><img src="her_selfie1.jpg" alt="女友自拍1" data-caption="睡醒還是很美"><figcaption>她的自拍 1</figcaption></figure>
             <figure><img src="her_selfie2.jpg" alt="女友自拍2" data-caption="盯著我看"><figcaption>她的自拍 2</figcaption></figure>
             <figure><img src="her_selfie3.jpg" alt="女友自拍3" data-caption="微笑"><figcaption>她的自拍 3</figcaption></figure>
-            <!-- 想新增照片就在這裡照上面格式複製一行，換掉 src 跟 figcaption 就行 -->
+        </div>
+
+        <!-- 回憶盲盒 -->
+        <h3 class="section-title">抽一個回憶 🎁</h3>
+        <div id="mysteryBox">
+            <div id="mysteryInner">
+                <div class="face face-front">
+                    點我抽一張<br>回憶 + 一句話
+                </div>
+                <div class="face face-back">
+                    <img id="mysteryImg" src="" alt="">
+                    <div class="quote" id="mysteryQuote"></div>
+                </div>
+            </div>
         </div>
 
         <!-- 情話抽卡 -->
@@ -342,7 +512,16 @@
         <button id="loveCardBtn">抽一句給我聽</button>
         <div id="loveCardText">按上面那顆按鈕～</div>
 
-        <!-- 愛心收集遊戲 -->
+        <!-- 便利貼 -->
+        <h3 class="section-title">想對我說的話 📝</h3>
+        <div id="noteArea">
+            <textarea id="noteInput" placeholder="想罵我想誇我都可以，寫下來～"></textarea>
+            <br>
+            <button id="noteBtn">貼上去</button>
+            <div id="noteList"></div>
+        </div>
+
+        <!-- 愛心遊戲 -->
         <div id="heartGame" style="margin-top: 40px;">
             <h3 class="section-title" style="margin-top:40px;">點擊愛心收集驚喜！</h3>
             <div id="heartCounter">已收集：0 個 ❤️</div>
@@ -377,10 +556,10 @@
 
     <script>
         const correctPassword = "0209";
-        const startDate = new Date(2024, 11, 13); // 12月
+        const startDate = new Date(2024, 11, 13);
         const audio = document.getElementById("backgroundMusic");
 
-        /* ---------- 解鎖 ---------- */
+        /* 解鎖 */
         document.getElementById("submitBtn").addEventListener("click", function() {
             const input = document.getElementById("passwordInput").value;
             if (input === correctPassword) {
@@ -390,21 +569,21 @@
                 c.classList.add("fade-in");
                 startTimer();
                 startHeartGame();
+                renderNotes();
                 audio.play().catch(() => {});
             } else {
                 const el = document.getElementById("passwordInput");
-                el.style.animation = "none";
-                el.offsetHeight;
+                el.style.animation = "none"; el.offsetHeight;
                 el.style.animation = "shake 0.5s";
                 document.getElementById("passwordHint").classList.remove("hidden");
                 el.value = "";
             }
         });
 
-        /* ---------- 在一起計時 + 每日小話 ---------- */
+        /* 計時器 */
         const dayPhrases = [
             "今天也辛苦了，我愛妳 ❤️",
-            "离下次見面又近了一天",
+            "離下次見面又近了一天",
             "妳笑起來最好看了",
             "別餓肚子喔",
             "想牽妳的手",
@@ -413,47 +592,35 @@
         ];
         function startTimer() {
             function update() {
-                const now = new Date();
-                const diff = now - startDate;
+                const diff = new Date() - startDate;
                 const d = Math.floor(diff / 86400000);
                 const h = Math.floor((diff / 3600000) % 24);
                 const m = Math.floor((diff / 60000) % 60);
                 const s = Math.floor((diff / 1000) % 60);
-                document.getElementById("countdown").innerHTML =
-                    `${d}天 ${h}時 ${m}分 ${s}秒`;
-                document.getElementById("dayPhrase").innerText =
-                    "✨ " + dayPhrases[d % dayPhrases.length];
+                document.getElementById("countdown").innerHTML = `${d}天 ${h}時 ${m}分 ${s}秒`;
+                document.getElementById("dayPhrase").innerText = "✨ " + dayPhrases[d % dayPhrases.length];
             }
-            update();
-            setInterval(update, 1000);
+            update(); setInterval(update, 1000);
         }
 
-        /* ---------- 照片燈箱 ---------- */
+        /* 照片燈箱 */
         const figures = Array.from(document.querySelectorAll("#photoWall figure"));
         const lb = document.getElementById("lightbox");
         const lbImg = document.getElementById("lightboxImg");
         const lbCap = document.getElementById("lightboxCaption");
         let lbIndex = 0;
-
-        function openLB(i) {
-            lbIndex = i;
-            showLB();
-            lb.classList.add("open");
-        }
+        function openLB(i) { lbIndex = i; showLB(); lb.classList.add("open"); }
         function showLB() {
             const fig = figures[lbIndex];
             lbImg.src = fig.querySelector("img").src;
-            lbCap.innerText = (fig.dataset.caption || "") +
-                              `  (${lbIndex+1} / ${figures.length})`;
+            lbCap.innerText = (fig.dataset.caption || "") + `  (${lbIndex+1} / ${figures.length})`;
         }
         function closeLB() { lb.classList.remove("open"); }
         function navLB(dir) {
             lbIndex = (lbIndex + dir + figures.length) % figures.length;
             showLB();
         }
-        figures.forEach((fig, i) => {
-            fig.addEventListener("click", () => openLB(i));
-        });
+        figures.forEach((fig, i) => fig.addEventListener("click", () => openLB(i)));
         document.getElementById("lbClose").onclick = closeLB;
         document.getElementById("lbPrev").onclick = (e) => { e.stopPropagation(); navLB(-1); };
         document.getElementById("lbNext").onclick = (e) => { e.stopPropagation(); navLB(1); };
@@ -465,11 +632,11 @@
             if (e.key === "ArrowRight") navLB(1);
         });
 
-        /* ---------- 情話抽卡 ---------- */
+        /* 情話抽卡 */
         const loveLines = [
             "妳知道嗎？就算重來一次，我還是會在同一個地方遇見妳。",
             "我不是因為孤單才找妳，是因為是妳，我才不想再一個人。",
-            "别人都說我變了，只有我知道我只是終於敢面對自己喜歡誰。",
+            "別人都說我變了，只有我知道我只是終於敢面對自己喜歡誰。",
             "以後吵架可以，但不准不接我電話。",
             "妳不用一直當大人，在我這邊可以當小朋友。",
             "我數過了，今天也比昨天更喜歡妳一點。",
@@ -483,8 +650,7 @@
         let lastLine = -1;
         document.getElementById("loveCardBtn").addEventListener("click", () => {
             let i;
-            do { i = Math.floor(Math.random() * loveLines.length); }
-            while (i === lastLine);
+            do { i = Math.floor(Math.random() * loveLines.length); } while (i === lastLine);
             lastLine = i;
             const box = document.getElementById("loveCardText");
             box.classList.remove("show");
@@ -494,7 +660,46 @@
             }, 200);
         });
 
-        /* ---------- 愛心收集遊戲（保留原版） ---------- */
+        /* 回憶盲盒 */
+        const box = document.getElementById("mysteryBox");
+        box.addEventListener("click", () => {
+            const fig = figures[Math.floor(Math.random() * figures.length)];
+            const img = fig.querySelector("img").src;
+            const cap = fig.dataset.caption || fig.querySelector("figcaption").innerText;
+            const line = loveLines[Math.floor(Math.random() * loveLines.length)];
+            document.getElementById("mysteryImg").src = img;
+            document.getElementById("mysteryQuote").innerText = cap + " — " + line;
+            box.classList.add("flipped");
+            setTimeout(() => box.classList.remove("flipped"), 4000);
+        });
+
+        /* 便利貼 */
+        function renderNotes() {
+            const list = JSON.parse(localStorage.getItem("notes") || "[]");
+            const el = document.getElementById("noteList");
+            el.innerHTML = list.map((n, i) =>
+                `<div class="note-item">${esc(n.text)}<div class="note-date">${n.date} <span style="color:#ff69b4;cursor:pointer;" onclick="delNote(${i})">✕</span></div></div>`
+            ).join("");
+        }
+        function esc(s) { const d = document.createElement("div"); d.innerText = s; return d.innerHTML; }
+        window.delNote = function(i) {
+            const list = JSON.parse(localStorage.getItem("notes") || "[]");
+            list.splice(i, 1);
+            localStorage.setItem("notes", JSON.stringify(list));
+            renderNotes();
+        };
+        document.getElementById("noteBtn").onclick = function() {
+            const ta = document.getElementById("noteInput");
+            const text = ta.value.trim();
+            if (!text) return;
+            const list = JSON.parse(localStorage.getItem("notes") || "[]");
+            list.unshift({ text, date: new Date().toLocaleString("zh-TW") });
+            localStorage.setItem("notes", JSON.stringify(list));
+            ta.value = "";
+            renderNotes();
+        };
+
+        /* 愛心遊戲 */
         function startHeartGame() {
             const space = document.getElementById("gameSpace");
             let count = 0;
@@ -505,10 +710,10 @@
                 h.className = "heart-game";
                 h.style.left = Math.random() * 90 + "%";
                 h.style.top = Math.random() * 80 + "%";
-                h.onclick = function() {
+                h.onclick = function(e) {
                     count++;
                     document.getElementById("heartCounter").innerText = "已收集：" + count + " 個 ❤️";
-                    burstHearts(event.clientX, event.clientY);
+                    burstHearts(e.clientX, e.clientY);
                     this.remove();
                     if (count % 10 === 0) alert("收集到 " + count + " 個愛心！要一直開心喔！");
                 };
@@ -517,7 +722,7 @@
             }, 3000);
         }
 
-        /* ---------- 點擊任意處噴愛心 ---------- */
+        /* 點擊噴愛心 */
         function burstHearts(x, y) {
             const emojis = ["❤️","💖","💕","✨","💗"];
             for (let i = 0; i < 6; i++) {
@@ -535,12 +740,11 @@
             }
         }
         document.addEventListener("click", (e) => {
-            // 避免打遊戲愛心時噴兩次 + 避免按鈕被擋
-            if (e.target.closest("button") || e.target.closest("input")) return;
+            if (e.target.closest("button") || e.target.closest("input") || e.target.closest("textarea")) return;
             burstHearts(e.clientX, e.clientY);
         });
 
-        /* ---------- 彩蛋：連點標題 5 次 ---------- */
+        /* 彩蛋 */
         let titleClicks = 0, titleTimer;
         document.getElementById("mainTitle").addEventListener("click", () => {
             titleClicks++;
@@ -549,18 +753,13 @@
             if (titleClicks >= 5) {
                 titleClicks = 0;
                 for (let i = 0; i < 30; i++) {
-                    setTimeout(() => {
-                        burstHearts(
-                            Math.random() * window.innerWidth,
-                            Math.random() * window.innerHeight
-                        );
-                    }, i * 60);
+                    setTimeout(() => burstHearts(Math.random()*innerWidth, Math.random()*innerHeight), i*60);
                 }
                 alert("被妳發現彩蛋了！我也愛妳很多很多很多 ❤️");
             }
         });
 
-        /* ---------- 音樂 ---------- */
+        /* 音樂 */
         document.getElementById("playBtn").onclick  = () => audio.play();
         document.getElementById("pauseBtn").onclick = () => audio.pause();
     </script>
