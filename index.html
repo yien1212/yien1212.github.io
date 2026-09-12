@@ -568,14 +568,11 @@ body{counter-reset: section}
     messagingSenderId: "579288934330",
     appId: "1:579288934330:web:efbf4f118205d94b4c5f83"
   });
-  const db = firebase.firestore();
-  let uid = firebase.auth().currentUser ? firebase.auth().currentUser.uid : null;
-  firebase.auth().signInAnonymously().then(u => {
-    uid = u.user.uid;
-    if(!localStorage.getItem("reloaded")){
-      localStorage.setItem("reloaded","1");
-      location.reload();
-    }
+  window.db = firebase.firestore();
+  window.uid = null;
+  firebase.auth().signInAnonymously();
+  firebase.auth().onAuthStateChanged(u => {
+    if(u) window.uid = u.user.uid;
   });
 </script>
 
@@ -1278,7 +1275,7 @@ function renderWishes(){
 }
 
 /* 共同記帳 */
-if(typeof uid !== 'undefined' && uid){
+if(true){
   document.getElementById("expAdd").onclick = function(){
     const a = parseFloat(document.getElementById("expAmount").value);
     const n = document.getElementById("expNote").value.trim();
@@ -1309,7 +1306,7 @@ if(typeof uid !== 'undefined' && uid){
 })();
 
 /* 一起按愛心 */
-if(typeof uid !== 'undefined' && uid){
+if(true){
   db.collection("counters").doc("hearts").onSnapshot(doc => {
     const n = doc.exists ? doc.data().count : 0;
     document.getElementById("heartCount2").textContent = n;
@@ -1417,7 +1414,7 @@ document.addEventListener("click", e => {
 })();
 
 /* 即時聊天 */
-if(typeof uid !== 'undefined' && uid){
+if(true){
   const chatList = document.getElementById("chatList");
   db.collection("chat").orderBy("time","asc").limit(100).onSnapshot(snap => {
     chatList.innerHTML = "";
@@ -1455,7 +1452,7 @@ if(typeof uid !== 'undefined' && uid){
 }
 
 /* 定位+電量 */
-if(typeof uid !== 'undefined' && uid){
+if(true){
   // 上傳電量
   if(navigator.getBattery){
     navigator.getBattery().then(b => {
@@ -1518,7 +1515,7 @@ if(typeof uid !== 'undefined' && uid){
 }
 
 /* 在線狀態 */
-if(typeof uid !== 'undefined' && uid){
+if(true){
   // 上傳在線狀態
   db.collection("online").doc(uid).set({online: true, lastSeen: new Date()});
   window.addEventListener("beforeunload", () => {
@@ -1576,7 +1573,7 @@ if(typeof uid !== 'undefined' && uid){
 }
 
 /* 誰先睡 */
-if(typeof uid !== 'undefined' && uid){
+if(true){
   document.getElementById("sleepBtn").onclick = function(){
     db.collection("sleep").doc(new Date().toDateString()).set({[uid]: new Date().toLocaleTimeString("zh-TW")}, {merge:true});
   };
@@ -1594,7 +1591,7 @@ if(typeof uid !== 'undefined' && uid){
 }
 
 /* 愛情分數 */
-if(typeof uid !== 'undefined' && uid){
+if(true){
   const sb = document.getElementById("scoreBtns");
   for(let i=1;i<=10;i++){
     const b = document.createElement("button");
@@ -1612,7 +1609,7 @@ if(typeof uid !== 'undefined' && uid){
 }
 
 /* 心願瓶 */
-if(typeof uid !== 'undefined' && uid){
+if(true){
   db.collection("wishes_bottle").orderBy("time","desc").limit(20).onSnapshot(snap => {
     const el = document.getElementById("wishBottle");
     el.innerHTML = "";
@@ -1630,7 +1627,7 @@ if(typeof uid !== 'undefined' && uid){
 }
 
 /* 聲音訊息 */
-if(typeof uid !== 'undefined' && uid){
+if(true){
   let mediaRecorder, chunks = [];
   document.getElementById("recBtn").onclick = async function(){
     if(mediaRecorder && mediaRecorder.state === "recording"){
@@ -1665,7 +1662,7 @@ if(typeof uid !== 'undefined' && uid){
 }
 
 /* 線上數據 */
-if(typeof uid !== 'undefined' && uid){
+if(true){
   const today = new Date().toDateString();
   db.collection("stats").doc(today).onSnapshot(doc => {
     if(!doc.exists) return;
@@ -1677,7 +1674,7 @@ if(typeof uid !== 'undefined' && uid){
 }
 
 /* 今日心情 */
-if(typeof uid !== 'undefined' && uid){
+if(true){
   document.querySelectorAll(".mood").forEach(m => {
     m.onclick = () => db.collection("status").doc(uid).set({mood: m.dataset.mood, time: new Date()}, {merge:true});
   });
@@ -1691,7 +1688,7 @@ if(typeof uid !== 'undefined' && uid){
 }
 
 /* 現在在幹嘛 */
-if(typeof uid !== 'undefined' && uid){
+if(true){
   document.querySelectorAll(".status-btn").forEach(b => {
     b.onclick = () => db.collection("status").doc(uid).set({what: b.textContent, time: new Date()}, {merge:true});
   });
@@ -1705,7 +1702,7 @@ if(typeof uid !== 'undefined' && uid){
 }
 
 /* 今日打卡 */
-if(typeof uid !== 'undefined' && uid){
+if(true){
   document.getElementById("checkinBtn").onclick = () => document.getElementById("checkinInput").click();
   document.getElementById("checkinInput").onchange = function(){
     Array.from(this.files).forEach(file => {
@@ -1739,7 +1736,7 @@ if(typeof uid !== 'undefined' && uid){
 }
 
 /* 即時塗鴉 */
-if(typeof uid !== 'undefined' && uid){
+if(true){
   const canvas = document.getElementById("drawCanvas");
   const ctx = canvas.getContext("2d");
   let drawing = false;
