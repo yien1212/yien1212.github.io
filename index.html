@@ -590,7 +590,8 @@ body{counter-reset: section}
   <!-- 即時聊天 -->
   <h3 class="stitle">💬 寫給妳（也跟妳說話）</h3>
   <div style="max-width:500px;margin:0 auto;background:rgba(255,255,255,.7);backdrop-filter:blur(20px);border-radius:24px;padding:20px;box-shadow:0 10px 30px rgba(233,30,99,.15)">
-    <div id="chatList" style="height:300px;overflow-y:auto;background:#fff;border-radius:16px;padding:15px;margin-bottom:10px;border:1px solid var(--pink-soft)"></div>
+    <div id="chatList" style="height:300px;overflow-y:auto;background:#fff;border-radius:16px;padding:15px;margin-bottom:5px;border:1px solid var(--pink-soft)"></div>
+    <div id="typing" style="font-size:.8rem;color:var(--pink);margin-bottom:5px;display:none">對方正在輸入...</div>
     <div style="display:flex;gap:8px">
       <input type="text" id="chatInput" placeholder="講話..." style="flex:1;padding:12px 18px;border:2px solid var(--pink-soft);border-radius:25px;font-family:inherit;outline:none;background:#fff">
       <button class="btn-pink" id="chatSend" style="border-radius:25px;padding:12px 24px">送 ❤️</button>
@@ -721,6 +722,18 @@ body{counter-reset: section}
   <!-- 願望 -->
   <h3 class="stitle">我們想做的事</h3>
   <div class="wish-list" id="wishList"></div>
+
+  <!-- 共同記帳 -->
+  <h3 class="stitle">💰 約會記帳</h3>
+  <div style="max-width:500px;margin:0 auto;background:rgba(255,255,255,.65);backdrop-filter:blur(20px);border-radius:24px;padding:20px">
+    <div style="display:flex;gap:8px;margin-bottom:10px">
+      <input type="number" id="expAmount" placeholder="金額" style="flex:1;padding:10px;border-radius:12px;border:1.5px solid var(--pink-soft)">
+      <input type="text" id="expNote" placeholder="買了什麼" style="flex:1;padding:10px;border-radius:12px;border:1.5px solid var(--pink-soft)">
+      <button class="btn-pink" id="expAdd">記</button>
+    </div>
+    <div id="expList" style="max-height:200px;overflow-y:auto"></div>
+    <div id="expTotal" style="margin-top:10px;font-family:'Noto Serif TC',serif;color:var(--pink-deep)"></div>
+  </div>
 
   <!-- 每日一問 -->
   <h3 class="stitle">今天的問題</h3>
@@ -1266,6 +1279,31 @@ function renderWishes(){
   }
 }
 
+/* 共同記帳 */
+if(typeof uid !== 'undefined' && uid){
+  document.getElementById("expAdd").onclick = function(){
+    const a = parseFloat(document.getElementById("expAmount").value);
+    const n = document.getElementById("expNote").value.trim();
+    if(!a) return;
+    db.collection("expenses").add({amount:a, note:n, uid:uid, time:new Date()});
+    document.getElementById("expAmount").value = "";
+    document.getElementById("expNote").value = "";
+  };
+  db.collection("expenses").orderBy("time","desc").onSnapshot(snap => {
+    const list = document.getElementById("expList");
+    let total = 0, html = "";
+    snap.forEach(d => {
+      const e = d.data();
+      total += e.amount;
+      html += `<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #f0f0f0;font-size:.9rem">
+        <span>${e.note || "消費"}</span><span>$${e.amount}</span>
+      </div>`;
+    });
+    list.innerHTML = html || "<div style='color:#999;font-size:.85rem'>還沒有記帳</div>";
+    document.getElementById("expTotal").textContent = "總計：" + total + " 元";
+  });
+}
+
 /* 每日一問 */
 (function(){
   const qs = ["今天最開心的一件事？","我們第一次約會去哪？","妳覺得我哪裡最可愛？","想跟我去哪旅行？","今天有想我嗎？","喜歡我叫妳什麼？","下次見面想做什麼？","覺得我哪一點最吸引妳？","想一起完成什麼事？","最近一次想我是什麼時候？","我們哪個瞬間最浪漫？","妳覺得我們哪裡最像？","第一次牽手是什麼感覺？","最想收到我送什麼禮物？","哪句情話最打動妳？","我們最適合一起做什麼？","想跟我養什麼動物？","最喜歡我什麼習慣？","什麼時候覺得認定我了？","想一起住什麼樣的房子？","第一次見面覺得我是什麼樣的人？","現在最想我做什麼？","哪件事最讓妳感動？","想一起看什麼電影？","哪個季節最適合我們？","最想跟我去吃什麼？","哪個瞬間覺得我可愛？","想跟我挑戰什麼新事物？","最喜歡抱著我的時候？","什麼時候覺得我很帥？","想一起慶祝什麼節日？","哪件事只有我們懂？","覺得我哪裡需要改進？","想一起拍什麼風格的照片？","最想對我說什麼心裡話？","哪個地方最讓妳放鬆？","想一起學什麼技能？","哪段回憶最寶貴？","現在最想吃什麼？","想跟我在哪裡過生日？","哪句話最讓妳心動？","想一起看什麼夜景？","覺得我們的愛情像什麼？","最想收到什麼驚喜？","什麼時候最想抱抱我？","想一起做什麼瘋狂的事？","哪個習慣讓妳覺得窩心？","未來想跟我一起去哪？","現在的心情用一個詞形容","我愛妳用台語怎麼說"];
@@ -1403,6 +1441,18 @@ if(typeof uid !== 'undefined' && uid){
   };
   document.getElementById("chatInput").addEventListener("keydown", e => {
     if(e.key === "Enter") document.getElementById("chatSend").click();
+  });
+  // 正在輸入
+  let typingTimeout;
+  document.getElementById("chatInput").addEventListener("input", () => {
+    db.collection("typing").doc(uid).set({isTyping:true});
+    clearTimeout(typingTimeout);
+    typingTimeout = setTimeout(() => db.collection("typing").doc(uid).set({isTyping:false}), 2000);
+  });
+  db.collection("typing").where("isTyping","==",true).onSnapshot(snap => {
+    let typing = false;
+    snap.forEach(d => { if(d.id !== uid) typing = true; });
+    document.getElementById("typing").style.display = typing ? "block" : "none";
   });
 }
 
