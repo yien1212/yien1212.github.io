@@ -742,6 +742,14 @@ body{counter-reset: section}
     <div id="noteList"></div>
   </div>
 
+  <!-- 一起按愛心 -->
+  <h3 class="stitle">一起按愛心</h3>
+  <div style="text-align:center">
+    <div id="heartCount2" style="font-size:3rem; color:var(--pink); margin:10px">0</div>
+    <button class="btn-pink" id="heartBtn">按一下 ❤️</button>
+    <div style="font-size:.8rem;color:#999;margin-top:5px">她按的你看得到，你按的她也看得到</div>
+  </div>
+
   <!-- 愛心遊戲 -->
   <h3 class="stitle">收集愛心</h3>
   <div class="center">
@@ -1022,7 +1030,7 @@ function renderBadges(){
 document.getElementById("loveBtn").addEventListener("click", () => { localStorage.setItem("luvDrew","1"); renderBadges(); });
 document.getElementById("mystery").addEventListener("click", () => { localStorage.setItem("boxDrew","1"); renderBadges(); });
 
-/* 願望 */
+/* 願望清單 - 雲端同步 */
 function renderWishes(){
   const wishes = [
     "一起看海","一起跨年","一起去日本","一起養一隻貓","一起做飯",
@@ -1030,23 +1038,32 @@ function renderWishes(){
     "一起去迪士尼","一起泡溫泉","一起騎車環島","一起看演唱會",
     "一起種植物","一起組電腦","一起去海邊看日出","一起做蛋糕",
     "一起養隻狗","一起去冰山","一起住小木屋","一起玩雲霄飛車",
-    "一起看流星雨","一起逛夜市","一起買情侶裝","一起去貓咪咖啡廳"
+    "一起看流星雨","一起逛夜市","一起買情侶裝","一起去貓咪咖啡廳",
+    "一起去海邊游泳","一起賞楓","一起拍大頭貼","一起去遊樂園",
+    "一起看一輝的演唱會","一起吃壽司","一起去逛街","一起打電動",
+    "一起看恐怖片","一起過生日","一起交換禮物","一起賞櫻花"
   ];
-  const saved = JSON.parse(localStorage.getItem("wishes")||"[]");
   const list = document.getElementById("wishList");
-  wishes.forEach((w,i) => {
-    const done = saved.includes(i);
-    const d = document.createElement("div");
-    d.className = "wish-item" + (done?" done":"");
-    d.innerHTML = `<input type="checkbox" ${done?"checked":""}> <span>${w}</span>`;
-    d.querySelector("input").onchange = function(){
-      let s = JSON.parse(localStorage.getItem("wishes")||"[]");
-      if(this.checked) s.push(i); else s = s.filter(x => x !== i);
-      localStorage.setItem("wishes", JSON.stringify(s));
-      d.classList.toggle("done", this.checked);
-    };
-    list.appendChild(d);
-  });
+  list.innerHTML = "";
+  if(uid){
+    db.collection("wishes").doc("state").onSnapshot(doc => {
+      const done = doc.exists ? doc.data().done || [] : [];
+      list.innerHTML = "";
+      wishes.forEach((w,i) => {
+        const isDone = done.includes(i);
+        const d = document.createElement("div");
+        d.className = "wish-item" + (isDone?" done":"");
+        d.innerHTML = `<input type="checkbox" ${isDone?"checked":""}> <span>${w}</span>`;
+        d.querySelector("input").onchange = function(){
+          let s = [...done];
+          if(this.checked) s.push(i); else s = s.filter(x => x !== i);
+          db.collection("wishes").doc("state").set({done:s});
+        };
+        list.appendChild(d);
+      });
+    });
+  }
+}
 }
 
 /* 每日一問 */
@@ -1102,6 +1119,27 @@ document.getElementById("copyBtn").onclick = function(){
   if(!t){ alert("先寫點東西啦"); return; }
   navigator.clipboard.writeText("【便利貼】"+t).then(() => alert("複製好了！貼到 LINE 傳給我～"));
 };
+
+/* 一起按愛心 */
+if(uid){
+  db.collection("counters").doc("hearts").onSnapshot(doc => {
+    const n = doc.exists ? doc.data().count : 0;
+    document.getElementById("heartCount2").textContent = n;
+  });
+  document.getElementById("heartBtn").onclick = function(){
+    db.collection("counters").doc("hearts").set({count: firebase.firestore.FieldValue.increment(1)});
+    for(let i = 0; i < 3; i++){
+      setTimeout(() => {
+        const el = document.createElement("div");
+        el.textContent = "❤️";
+        el.style.cssText = "position:fixed;left:"+(40+Math.random()*20)+"%;bottom:0;font-size:1.5rem;z-index:9999;pointer-events:none;transition:all 2s ease-out;";
+        document.body.appendChild(el);
+        requestAnimationFrame(() => { el.style.bottom = "60vh"; el.style.opacity = "0"; });
+        setTimeout(() => el.remove(), 2000);
+      }, i*100);
+    }
+  };
+}
 
 /* 愛心遊戲 */
 function startGame(){
