@@ -790,6 +790,14 @@ body{counter-reset: section}
     <button class="btn-pink" id="locBtn" style="margin-top:15px;border-radius:25px;width:100%">📍 上傳我的位置</button>
   </div>
 
+  <!-- 愛情雷達 -->
+  <h3 class="stitle">📡 愛情雷達</h3>
+  <div style="text-align:center;background:rgba(255,255,255,.65);backdrop-filter:blur(20px);border-radius:24px;padding:25px;max-width:500px;margin:0 auto;box-shadow:0 8px 32px rgba(233,30,99,.08)">
+    <div id="distance" style="font-size:2rem;color:var(--pink);font-weight:600">--</div>
+    <div style="font-size:.85rem;color:#999;margin-top:5px">我們距離多遠</div>
+    <div id="weatherTip" style="margin-top:15px;font-size:.9rem;color:var(--pink-deep)"></div>
+  </div>
+
   <!-- 在線狀態 -->
   <h3 class="stitle">🟢 在線狀態</h3>
   <div style="text-align:center;font-family:'Noto Serif TC',serif;color:var(--pink-deep)" id="onlineStatus">載入中...</div>
@@ -1430,7 +1438,8 @@ if(typeof uid !== 'undefined' && uid){
       b.addEventListener("levelchange", upd);
     });
   }
-  // 顯示所有人位置
+  // 顯示所有人位置 + 距離
+  const locs = {};
   db.collection("locations").onSnapshot(snap => {
     snap.forEach(d => {
       const l = d.data();
@@ -1438,12 +1447,30 @@ if(typeof uid !== 'undefined' && uid){
       const locEl = document.getElementById(isMe ? "myLoc" : "herLoc");
       const batEl = document.getElementById(isMe ? "myBattery" : "herBattery");
       if(l.lat){
+        locs[d.id] = {lat: l.lat, lng: l.lng};
         locEl.innerHTML = `<a href="https://www.google.com/maps?q=${l.lat},${l.lng}" target="_blank" style="color:var(--pink)">看地圖</a>`;
       } else {
         locEl.textContent = "還沒上傳";
       }
       batEl.textContent = l.battery ? "🔋 " + l.battery + "%" : "";
     });
+    // 算距離
+    const keys = Object.keys(locs);
+    if(keys.length >= 2){
+      const me = locs[uid], her = locs[keys.find(k => k !== uid)];
+      if(me && her){
+        const R = 6371;
+        const dLat = (her.lat-me.lat)*Math.PI/180;
+        const dLng = (her.lng-me.lng)*Math.PI/180;
+        const a = Math.sin(dLat/2)**2 + Math.cos(me.lat*Math.PI/180)*Math.cos(her.lat*Math.PI/180)*Math.sin(dLng/2)**2;
+        const dist = Math.round(R*2*Math.atan2(Math.sqrt(a), Math.sqrt(1-a)));
+        document.getElementById("distance").textContent = dist < 1 ? Math.round(dist*1000) + " 公尺" : dist + " 公里";
+        // 天氣
+        fetch(`https://wttr.in/${her.lat},${her.lng}?format=%C+%t&m`).then(r => r.text()).then(w => {
+          document.getElementById("weatherTip").textContent = "她那裡 " + w;
+        }).catch(()=>{});
+      }
+    }
   });
   // 上傳位置
   document.getElementById("locBtn").onclick = function(){
