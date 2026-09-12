@@ -818,6 +818,15 @@ body{counter-reset: section}
     <button class="btn-pink" id="meetBtn" style="margin-top:5px">設定</button>
   </div>
 
+  <!-- 紀念日 -->
+  <h3 class="stitle">📅 重要日子</h3>
+  <div id="anniList" style="max-width:500px;margin:0 auto"></div>
+  <div style="max-width:500px;margin:10px auto;text-align:center">
+    <input type="text" id="anniName" placeholder="名稱 例如：小昀生日" style="padding:8px;border-radius:12px;border:1.5px solid var(--pink-soft);width:60%;margin-right:5px">
+    <input type="date" id="anniDate" style="padding:8px;border-radius:12px;border:1.5px solid var(--pink-soft)">
+    <button class="btn-pink" id="anniAdd" style="margin-top:8px">＋ 新增</button>
+  </div>
+
   <!-- 電子寵物 -->
   <h3 class="stitle">🦝 我們的狐獴</h3>
   <div style="text-align:center;background:rgba(255,255,255,.65);backdrop-filter:blur(20px);border-radius:24px;padding:25px;max-width:400px;margin:0 auto;box-shadow:0 8px 32px rgba(233,30,99,.08)">
@@ -1513,6 +1522,36 @@ if(typeof uid !== 'undefined' && uid){
   document.getElementById("meetBtn").onclick = function(){
     const d = document.getElementById("meetDate").value;
     if(d) db.collection("settings").doc("meetDate").set({date: d});
+  };
+
+  /* 紀念日 */
+  db.collection("anniversaries").onSnapshot(snap => {
+    const list = document.getElementById("anniList");
+    let html = "";
+    snap.forEach(d => {
+      const a = d.data();
+      const target = new Date(a.date);
+      const now = new Date();
+      let days = Math.ceil((target - now)/86400000);
+      // 每年重複
+      if(days < 0){
+        target.setFullYear(now.getFullYear() + 1);
+        days = Math.ceil((target - now)/86400000);
+      }
+      html += `<div style="background:rgba(255,255,255,.65);backdrop-filter:blur(20px);border-radius:16px;padding:12px;margin:8px 0;display:flex;justify-content:space-between;align-items:center">
+        <span style="font-family:'Noto Serif TC',serif;color:var(--pink-deep)">${a.name}</span>
+        <span style="color:var(--pink);font-weight:600">${days === 0 ? "今天！🎉" : days + " 天"}</span>
+      </div>`;
+    });
+    list.innerHTML = html || "<div style='color:#999;font-size:.85rem'>還沒有紀念日，加一個吧～</div>";
+  });
+  document.getElementById("anniAdd").onclick = function(){
+    const n = document.getElementById("anniName").value.trim();
+    const d = document.getElementById("anniDate").value;
+    if(n && d){
+      db.collection("anniversaries").add({name:n, date:d});
+      document.getElementById("anniName").value = "";
+    }
   };
 }
 
