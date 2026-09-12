@@ -2008,10 +2008,30 @@ document.getElementById("pauseBtn").onclick = () => bgm.pause();
     messagingSenderId: "579288934330",
     appId: "1:579288934330:web:fbf4f118205d94b4c5f83"
   };
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging-compat.js"></script>
+<script>
   firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
   let uid = null;
-  firebase.auth().signInAnonymously().then(u => { uid = u.user.uid; loadNotes(); });
+
+  // 通知權限
+  if("Notification" in window && Notification.permission === "default"){
+    Notification.requestPermission();
+  }
+
+  firebase.auth().signInAnonymously().then(u => {
+    uid = u.user.uid;
+    loadNotes();
+    // 新聊天通知
+    db.collection("chat").orderBy("time","desc").limit(1).onSnapshot(snap => {
+      snap.forEach(d => {
+        const m = d.data();
+        if(m.uid !== uid && "Notification" in window && Notification.permission === "granted"){
+          new Notification("她說：", {body: m.text});
+        }
+      });
+    });
+  });
 </script>
 <script src="https://cdn.botpress.cloud/webchat/v3.5/inject.js"></script>
 <script src="https://files.bpcontent.cloud/2026/01/12/17/20260112175648-Q8N99NKQ.js" defer></script>
