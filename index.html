@@ -648,21 +648,6 @@ body{counter-reset: section}
     <button class="btn-pink" id="anniAdd" style="margin-top:8px">＋ 新增</button>
   </div>
 
-  <!-- 電子寵物 -->
-  <h3 class="stitle">🦝 我們的狐獴</h3>
-  <div style="text-align:center;background:rgba(255,255,255,.65);backdrop-filter:blur(20px);border-radius:24px;padding:25px;max-width:400px;margin:0 auto;box-shadow:0 8px 32px rgba(233,30,99,.08)">
-    <div id="petEmoji" style="font-size:5rem">🦝</div>
-    <div id="petName" style="font-family:'Noto Serif TC',serif;color:var(--pink-deep);margin:10px 0">狐獴小寶</div>
-    <div style="width:100%;height:10px;background:#eee;border-radius:5px;margin:10px 0">
-      <div id="petBar" style="height:100%;width:50%;background:linear-gradient(90deg,var(--pink),var(--pink-deep));border-radius:5px;transition:width .5s"></div>
-    </div>
-    <div style="font-size:.8rem;color:#999" id="petMood">肚肚餓了</div>
-    <div style="display:flex;gap:10px;justify-content:center;margin-top:15px">
-      <button class="btn-pink" id="feedBtn">🍖 餵食</button>
-      <button class="btn-pink" id="playBtn">🎾 陪玩</button>
-    </div>
-  </div>
-
   </div>
   <div class="page" id="page-memories">
 
@@ -1604,27 +1589,6 @@ if(typeof uid !== 'undefined' && uid){
   };
 }
 
-/* 電子寵物 */
-if(typeof uid !== 'undefined' && uid){
-  const petRef = db.collection("settings").doc("pet");
-  petRef.onSnapshot(doc => {
-    const p = doc.data() || {happiness:50, hunger:50};
-    const lvl = Math.floor(p.happiness/20);
-    const emojis = ["😿","🦝","😊","🥰","😍"];
-    document.getElementById("petEmoji").textContent = emojis[lvl] || "🐱";
-    document.getElementById("petBar").style.width = p.happiness + "%";
-    document.getElementById("petMood").textContent = p.hunger > 70 ? "肚肚好飽～" : (p.happiness > 60 ? "好開心！" : "陪我玩嘛");
-  });
-  document.getElementById("feedBtn").onclick = () => petRef.set({
-    happiness: firebase.firestore.FieldValue.increment(5),
-    hunger: firebase.firestore.FieldValue.increment(10)
-  }, {merge:true});
-  document.getElementById("playBtn").onclick = () => petRef.set({
-    happiness: firebase.firestore.FieldValue.increment(10),
-    hunger: firebase.firestore.FieldValue.increment(-5)
-  }, {merge:true});
-}
-
 /* 誰先睡 */
 if(typeof uid !== 'undefined' && uid){
   document.getElementById("sleepBtn").onclick = function(){
@@ -2086,7 +2050,7 @@ document.getElementById("pauseBtn").onclick = () => bgm.pause();
 <script>
   firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
-  let uid = null;
+  let uid = firebase.auth().currentUser ? firebase.auth().currentUser.uid : null;
 
   // 通知權限
   if("Notification" in window && Notification.permission === "default"){
@@ -2096,6 +2060,11 @@ document.getElementById("pauseBtn").onclick = () => bgm.pause();
   firebase.auth().signInAnonymously().then(u => {
     uid = u.user.uid;
     renderWishes();
+    if(!localStorage.getItem("reloaded")){
+      localStorage.setItem("reloaded","1");
+      location.reload();
+    }
+    // 新聊天通知
     // 新聊天通知
     db.collection("chat").orderBy("time","desc").limit(1).onSnapshot(snap => {
       snap.forEach(d => {
