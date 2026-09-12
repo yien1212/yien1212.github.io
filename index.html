@@ -424,6 +424,243 @@
         }
         #loveCardText.show { opacity: 1; transform: translateY(0); }
 
+        /* ===== 刮刮樂 ===== */
+        .scratch-wrap {
+            max-width: 320px;
+            margin: 0 auto;
+            position: relative;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(233,30,99,0.2);
+        }
+        #scratchText {
+            padding: 30px 20px;
+            background: linear-gradient(135deg, var(--pink), var(--pink-deep));
+            color: #fff;
+            font-family: "Noto Serif TC", serif;
+            font-size: 1.05rem;
+            line-height: 1.7;
+            min-height: 140px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        #scratchCanvas {
+            position: absolute;
+            inset: 0;
+            cursor: grab;
+        }
+        #scratchCanvas:active { cursor: grabbing; }
+
+        /* ===== 翻牌遊戲 ===== */
+        .memory-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        .mem-card {
+            aspect-ratio: 1;
+            perspective: 600px;
+            cursor: pointer;
+        }
+        .mem-inner {
+            position: relative;
+            width: 100%; height: 100%;
+            transition: transform 0.5s;
+            transform-style: preserve-3d;
+        }
+        .mem-card.flipped .mem-inner, .mem-card.matched .mem-inner { transform: rotateY(180deg); }
+        .mem-front, .mem-back {
+            position: absolute; inset: 0;
+            backface-visibility: hidden;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .mem-front {
+            background: linear-gradient(135deg, var(--pink), var(--pink-deep));
+            color: #fff;
+            font-size: 1.4rem;
+        }
+        .mem-back {
+            background: #fff;
+            transform: rotateY(180deg);
+            overflow: hidden;
+        }
+        .mem-back img { width: 100%; height: 100%; object-fit: cover; }
+        .mem-card.matched { opacity: 0.7; }
+        #memStatus {
+            text-align: center;
+            color: var(--pink);
+            margin-top: 12px;
+            font-size: 0.9rem;
+        }
+
+        /* ===== 願望清單 ===== */
+        .wish-list {
+            max-width: 500px;
+            margin: 0 auto;
+            text-align: left;
+        }
+        .wish-item {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            padding: 12px 16px;
+            border-radius: 14px;
+            margin: 8px 0;
+            border: 1px solid rgba(255,255,255,0.5);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .wish-item.done { opacity: 0.5; text-decoration: line-through; }
+        .wish-item input[type=checkbox] { width: 18px; height: 18px; accent-color: var(--pink); }
+
+        /* ===== 每日一問 ===== */
+        #dailyQ {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 24px;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.5);
+            font-family: "Noto Serif TC", serif;
+            font-size: 1.1rem;
+            color: #555;
+            line-height: 1.8;
+        }
+
+        /* ===== 刮刮樂 ===== */
+        (function() {
+            const cvs = document.getElementById("scratchCanvas");
+            const ctx = cvs.getContext("2d");
+            const w = cvs.width, h = cvs.height;
+            ctx.fillStyle = "#c0c0c0";
+            ctx.fillRect(0, 0, w, h);
+            ctx.fillStyle = "#fff";
+            ctx.font = "16px 'Noto Sans TC'";
+            ctx.textAlign = "center";
+            ctx.fillText("刮開我", w/2, h/2);
+            let scratching = false;
+            function scratch(x, y) {
+                ctx.globalCompositeOperation = "destination-out";
+                ctx.beginPath();
+                ctx.arc(x, y, 20, 0, Math.PI*2);
+                ctx.fill();
+            }
+            cvs.addEventListener("mousedown", e => { scratching = true; });
+            cvs.addEventListener("mouseup", () => scratching = false);
+            cvs.addEventListener("mousemove", e => {
+                if (!scratching) return;
+                const r = cvs.getBoundingClientRect();
+                scratch((e.clientX-r.left)*w/r.width, (e.clientY-r.top)*h/r.height);
+            });
+            cvs.addEventListener("touchstart", e => { scratching = true; }, {passive: true});
+            cvs.addEventListener("touchend", () => scratching = false);
+            cvs.addEventListener("touchmove", e => {
+                if (!scratching) return;
+                const r = cvs.getBoundingClientRect();
+                const t = e.touches[0];
+                scratch((t.clientX-r.left)*w/r.width, (t.clientY-r.top)*h/r.height);
+            }, {passive: true});
+            // 每天隨機一句
+            const msgs = [
+                "今天也很喜歡妳", "抱抱", "想牽手", "吃飽了沒",
+                "妳最好看", "愛妳", "不要生氣", "快睡覺",
+                "想妳了", "可愛", "么么", "心動"
+            ];
+            document.getElementById("scratchText").innerText = msgs[new Date().getDate() % msgs.length];
+        })();
+
+        /* ===== 翻牌記憶遊戲 ===== */
+        (function() {
+            const photos = [
+                "couple_helmet.jpg", "date_dessert.jpg", "trip_hotel.jpg",
+                "couple_crown.jpg", "cinnamoroll.jpg", "giant_icecream.jpg"
+            ];
+            const deck = [...photos, ...photos].sort(() => Math.random() - 0.5);
+            const grid = document.getElementById("memGrid");
+            let first = null, lock = false, matched = 0;
+            deck.forEach((src, i) => {
+                const card = document.createElement("div");
+                card.className = "mem-card";
+                card.innerHTML = `<div class="mem-inner">
+                    <div class="mem-front">?</div>
+                    <div class="mem-back"><img src="${src}" alt=""></div>
+                </div>`;
+                card.onclick = () => {
+                    if (lock || card.classList.contains("flipped") || card.classList.contains("matched")) return;
+                    card.classList.add("flipped");
+                    if (!first) { first = card; return; }
+                    lock = true;
+                    const match = first.querySelector("img").src === card.querySelector("img").src;
+                    setTimeout(() => {
+                        if (match) {
+                            first.classList.add("matched");
+                            card.classList.add("matched");
+                            matched++;
+                            if (matched === photos.length) {
+                                document.getElementById("memStatus").innerText = "全部配對成功！妳好聰明 ❤️";
+                            }
+                        } else {
+                            first.classList.remove("flipped");
+                            card.classList.remove("flipped");
+                        }
+                        first = null;
+                        lock = false;
+                    }, 600);
+                };
+                grid.appendChild(card);
+            });
+        })();
+
+        /* ===== 願望清單 ===== */
+        (function() {
+            const wishes = [
+                "一起看一場海", "一起跨年", "一起去日本",
+                "一起養一隻貓", "一起做飯給對方吃", "一起露營",
+                "一起拍一系列情侶照", "一起看煙火", "一起養老"
+            ];
+            const saved = JSON.parse(localStorage.getItem("wishes") || "[]");
+            const list = document.getElementById("wishList");
+            wishes.forEach((w, i) => {
+                const done = saved.includes(i);
+                const div = document.createElement("div");
+                div.className = "wish-item" + (done ? " done" : "");
+                div.innerHTML = `<input type="checkbox" ${done ? "checked" : ""}> <span>${w}</span>`;
+                div.querySelector("input").onchange = function() {
+                    let s = JSON.parse(localStorage.getItem("wishes") || "[]");
+                    if (this.checked) s.push(i); else s = s.filter(x => x !== i);
+                    localStorage.setItem("wishes", JSON.stringify(s));
+                    div.classList.toggle("done", this.checked);
+                };
+                list.appendChild(div);
+            });
+        })();
+
+        /* ===== 每日一問 ===== */
+        (function() {
+            const qs = [
+                "今天最開心的一件事是什麼？",
+                "我們第一次約會去了哪？",
+                "妳覺得我哪裡最可愛？",
+                "想跟我一起去哪裡旅行？",
+                "今天有想我嗎？",
+                "我們第一次吵架是為了什麼？",
+                "喜歡我叫妳什麼？",
+                "下次見面想做什麼？",
+                "覺得我哪一點最吸引妳？",
+                "想一起完成什麼事？"
+            ];
+            const day = Math.floor(Date.now() / 86400000);
+            document.getElementById("dailyQ").innerText = qs[day % qs.length];
+        })();
+
         /* ===== 便利貼 ===== */
         #noteArea {
             max-width: 500px;
@@ -693,6 +930,27 @@
             <button id="loveCardBtn">抽一句</button>
             <div id="loveCardText">按上面那顆按鈕～</div>
         </div>
+
+        <!-- 刮刮樂 -->
+        <h3 class="section-title">刮刮樂</h3>
+        <div class="scratch-wrap">
+            <div id="scratchText">刮我刮我刮我</div>
+            <canvas id="scratchCanvas" width="400" height="160"></canvas>
+        </div>
+        <p style="text-align:center; color:#999; font-size:0.8rem; margin-top:8px;">用手指或滑鼠刮開</p>
+
+        <!-- 翻牌記憶遊戲 -->
+        <h3 class="section-title">翻牌配對</h3>
+        <div class="memory-grid" id="memGrid"></div>
+        <div id="memStatus">翻牌配對相同的照片</div>
+
+        <!-- 願望清單 -->
+        <h3 class="section-title">我們想做的事</h3>
+        <div class="wish-list" id="wishList"></div>
+
+        <!-- 每日一問 -->
+        <h3 class="section-title">今天的問題</h3>
+        <div id="dailyQ">載入中...</div>
 
         <!-- 便利貼 -->
         <h3 class="section-title">想對我說的話</h3>
