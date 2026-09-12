@@ -392,6 +392,66 @@ body::before{
 .chat-msg.me .bubble{background:var(--pink); color:#fff}
 .chat-time{font-size:.7rem; color:#aaa; margin-top:4px}
 
+/* Canvas 粒子背景 */
+#particles{position:fixed; inset:0; z-index:-1; pointer-events:none}
+
+/* 打字機 */
+.typewriter{
+  font-family:"Noto Serif TC",serif;
+  font-weight:300;
+  font-size:1rem;
+  line-height:2.2;
+  color:#555;
+  text-align:left;
+}
+.typewriter .line{
+  display:block;
+  opacity:0;
+  transform:translateY(10px);
+  transition:all 0.8s;
+}
+.typewriter .line.show{opacity:1; transform:translateY(0)}
+.typewriter .cursor{
+  display:inline-block; width:2px; height:1em;
+  background:var(--pink); vertical-align:middle;
+  animation:blink 1s infinite;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+/* 煙花 */
+#fireworkBtn{
+  padding:14px 36px; border:none;
+  background:linear-gradient(135deg,#ff9a9e,#fad0c4);
+  color:#e91e63; border-radius:30px; cursor:pointer;
+  font-size:.95rem; letter-spacing:2px;
+  box-shadow:0 8px 25px rgba(255,154,158,.4);
+}
+
+/* 轉盤 */
+.wheel-area{text-align:center}
+.wheel{
+  width:200px; height:200px;
+  border-radius:50%;
+  border:6px solid var(--pink);
+  margin:0 auto;
+  position:relative;
+  transition:transform 3s cubic-bezier(.2,.8,.2,1);
+  background:conic-gradient(
+    #ff6b9d 0deg 60deg, #ffd6e7 60deg 120deg,
+    #ff6b9d 120deg 180deg, #ffd6e7 180deg 240deg,
+    #ff6b9d 240deg 300deg, #ffd6e7 300deg 360deg
+  );
+}
+.wheel-pointer{
+  position:absolute; top:-15px; left:50%;
+  transform:translateX(-50%);
+  font-size:1.5rem; color:var(--pink-deep);
+}
+#wheelResult{margin-top:15px; font-family:"Noto Serif TC",serif; color:var(--pink-deep); font-size:1.1rem; min-height:30px}
+
+/* 3D 卡片傾斜 */
+.card3d{transition:transform 0.2s ease-out; transform-style:preserve-3d}
+
 /* 花瓣 */
 .petal{position:fixed; top:-5%; font-size:14px; color:var(--pink-soft); animation:fall 12s linear infinite; z-index:-1; pointer-events:none}
 @keyframes fall{0%{transform:translateY(-5vh) rotate(0); opacity:0}10%{opacity:.8}100%{transform:translateY(110vh) rotate(360deg); opacity:0}}
@@ -449,12 +509,12 @@ body::before{
 
   <!-- 情書 -->
   <h3 class="stitle">寫給妳</h3>
-  <div style="font-family:'Noto Serif TC',serif; font-weight:300; font-size:1rem; line-height:2.2; color:#555; text-align:left">
-    <p style="margin-bottom:14px">今天終於又鼓起勇氣講出了我早就想對妳講的話。我知道我們的關係並不完美，但這些差異才讓我更加確定妳是我想一直喜歡下去的人。</p>
-    <p style="margin-bottom:14px">一直以來我都覺得自己是孤單一個人的。因為前任的關係，我很不相信感情。但妳在莫名其妙亂暈，然後我們就在一起了。</p>
-    <p style="margin-bottom:14px">我曾經以為只要讓妳走就可以回到原本生活。結果⋯沒有了妳在我身邊吵吵鬧鬧，我真的連飯都吃不太下去。</p>
-    <p style="margin-bottom:14px">和妳在一起後，我從來沒有感受到自己是孤單的。因為妳的出現，我不想要再追求那些短暫刺激。我只希望未來的每一天妳都會在。</p>
-    <p style="text-align:center; margin-top:20px; color:var(--pink-deep)">luv u ❤️</p>
+  <div class="typewriter" id="typewriter">
+    <span class="line">今天終於又鼓起勇氣講出了我早就想對妳講的話。我知道我們的關係並不完美，但這些差異才讓我更加確定妳是我想一直喜歡下去的人。</span>
+    <span class="line">一直以來我都覺得自己是孤單一個人的。因為前任的關係，我很不相信感情。但妳在莫名其妙亂暈，然後我們就在一起了。</span>
+    <span class="line">我曾經以為只要讓妳走就可以回到原本生活。結果⋯沒有了妳在我身邊吵吵鬧鬧，我真的連飯都吃不太下去。</span>
+    <span class="line">和妳在一起後，我從來沒有感受到自己是孤單的。因為妳的出現，我不想要再追求那些短暫刺激。我只希望未來的每一天妳都會在。</span>
+    <span class="line" style="text-align:center; margin-top:20px; color:var(--pink-deep)">luv u ❤️</span>
   </div>
 
   <!-- 計時 -->
@@ -594,6 +654,23 @@ body::before{
     <div class="chat-msg them"><div class="bubble">😳</div><div class="chat-time">今天 14:26</div></div>
   </div>
 
+  <!-- 煙花 -->
+  <h3 class="stitle">放煙花</h3>
+  <div class="center">
+    <button id="fireworkBtn">點我放煙花 🎆</button>
+  </div>
+
+  <!-- 轉盤 -->
+  <h3 class="stitle">轉個任務</h3>
+  <div class="wheel-area">
+    <div class="wheel" id="wheel">
+      <div class="wheel-pointer">▼</div>
+    </div>
+    <div id="wheelResult"></div>
+    <br>
+    <button class="btn-pink" id="spinBtn">轉！</button>
+  </div>
+
   <!-- 便利貼 -->
   <h3 class="stitle">想對我說的話</h3>
   <div id="noteArea">
@@ -612,6 +689,9 @@ body::before{
     <div id="gameSpace"></div>
   </div>
 </div>
+
+<!-- 粒子畫布 -->
+<canvas id="particles"></canvas>
 
 <!-- 彈幕層 -->
 <div class="danmaku-layer" id="dmLayer"></div>
@@ -1024,6 +1104,139 @@ window.sendGift = function(emoji){
   }
   setTimeout(() => setInterval(shoot, 2500), 3000);
 })();
+
+/* Canvas 粒子愛心背景 */
+(function(){
+  const cv = document.getElementById("particles");
+  const ctx = cv.getContext("2d");
+  let W, H;
+  function resize(){ W = cv.width = innerWidth; H = cv.height = innerHeight; }
+  resize();
+  addEventListener("resize", resize);
+  const hearts = [];
+  for(let i = 0; i < 40; i++){
+    hearts.push({
+      x: Math.random()*W, y: Math.random()*H,
+      r: 3 + Math.random()*6,
+      dx: (Math.random()-.5)*.5,
+      dy: -.5 - Math.random(),
+      alpha: .2 + Math.random()*.5
+    });
+  }
+  function drawHeart(x,y,r,a){
+    ctx.save();
+    ctx.translate(x,y);
+    ctx.scale(r/10, r/10);
+    ctx.globalAlpha = a;
+    ctx.fillStyle = "#ff6b9d";
+    ctx.beginPath();
+    ctx.moveTo(0,3);
+    ctx.bezierCurveTo(-6,-3,-3,-9,0,-5);
+    ctx.bezierCurveTo(3,-9,6,-3,0,3);
+    ctx.fill();
+    ctx.restore();
+  }
+  function loop(){
+    ctx.clearRect(0,0,W,H);
+    hearts.forEach(h => {
+      h.x += h.dx; h.y += h.dy;
+      if(h.y < -20){ h.y = H+20; h.x = Math.random()*W; }
+      drawHeart(h.x, h.y, h.r, h.alpha);
+    });
+    requestAnimationFrame(loop);
+  }
+  loop();
+})();
+
+/* 鼠標軌跡愛心 */
+let lastTrail = 0;
+document.addEventListener("mousemove", e => {
+  const now = Date.now();
+  if(now - lastTrail < 60) return;
+  lastTrail = now;
+  const el = document.createElement("div");
+  el.textContent = "♥";
+  el.style.cssText = `
+    position:fixed; left:${e.clientX}px; top:${e.clientY}px;
+    font-size:${8+Math.random()*8}px; color:var(--pink);
+    pointer-events:none; z-index:9998;
+    transition:all 1s ease-out; opacity:1;
+  `;
+  document.body.appendChild(el);
+  requestAnimationFrame(() => {
+    el.style.transform = "translateY(-30px) scale(0)";
+    el.style.opacity = "0";
+  });
+  setTimeout(() => el.remove(), 1000);
+});
+
+/* 打字機情書 */
+(function(){
+  const lines = document.querySelectorAll("#typewriter .line");
+  lines.forEach((line, i) => {
+    setTimeout(() => line.classList.add("show"), 800 + i*1200);
+  });
+})();
+
+/* 煙花 */
+window.firework = function(){
+  const colors = ["#ff6b9d","#ffd700","#ff9a9e","#c084fc","#7dd3fc","#fda4af"];
+  for(let burst = 0; burst < 6; burst++){
+    setTimeout(() => {
+      const cx = innerWidth/2 + (Math.random()-.5)*innerWidth*.6;
+      const cy = innerHeight/3 + (Math.random()-.5)*innerHeight*.3;
+      for(let i = 0; i < 20; i++){
+        const p = document.createElement("div");
+        p.style.cssText = `
+          position:fixed; left:${cx}px; top:${cy}px;
+          width:8px; height:8px; border-radius:50%;
+          background:${colors[Math.floor(Math.random()*colors.length)]};
+          pointer-events:none; z-index:9999;
+          transition:all 1.2s ease-out;
+        `;
+        document.body.appendChild(p);
+        const ang = (i/20)*Math.PI*2;
+        const dist = 80 + Math.random()*100;
+        requestAnimationFrame(() => {
+          p.style.transform = `translate(${Math.cos(ang)*dist}px, ${Math.sin(ang)*dist + 60}px) scale(0)`;
+          p.style.opacity = "0";
+        });
+        setTimeout(() => p.remove(), 1200);
+      }
+    }, burst*250);
+  }
+};
+document.getElementById("fireworkBtn").onclick = firework;
+
+/* 轉盤 */
+(function(){
+  const tasks = ["抱抱她","說她可愛","問她吃了沒","親她一下","講情話","陪她講廢話"];
+  const wheel = document.getElementById("wheel");
+  const result = document.getElementById("wheelResult");
+  let angle = 0;
+  document.getElementById("spinBtn").onclick = function(){
+    const spin = 360*4 + Math.floor(Math.random()*360);
+    angle += spin;
+    wheel.style.transform = `rotate(${angle}deg)`;
+    setTimeout(() => {
+      const idx = Math.floor(((360 - (angle % 360)) / 60) % 6);
+      result.textContent = "👉 " + tasks[idx];
+    }, 3200);
+  };
+})();
+
+/* 3D 照片傾斜 */
+document.querySelectorAll(".photo figure, .card").forEach(el => {
+  el.addEventListener("mousemove", e => {
+    const r = el.getBoundingClientRect();
+    const x = (e.clientX - r.left)/r.width - .5;
+    const y = (e.clientY - r.top)/r.height - .5;
+    el.style.transform = `perspective(600px) rotateY(${x*8}deg) rotateX(${-y*8}deg)`;
+  });
+  el.addEventListener("mouseleave", () => {
+    el.style.transform = "";
+  });
+});
 
 /* 音樂 */
 document.getElementById("playBtn").onclick = () => bgm.play();
