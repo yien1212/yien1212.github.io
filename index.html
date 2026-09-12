@@ -1000,6 +1000,7 @@ const PW = "1213";
 const start = new Date(2024, 11, 13);
 const bgm = document.getElementById("bgm");
 const phrases = ["今天也辛苦了，我愛妳","離下次見面又近了一天","妳笑起來最好看了","別餓肚子喔","想牽妳的手","今天也要想我喔","妳是我最重要的人"];
+let carI = 0, carT;
 
 /* 解鎖 */
 if(localStorage.getItem("unlocked") === "1"){
@@ -1066,7 +1067,6 @@ const carP = [
   ["giant_icecream.jpg","她變成冰淇淋"],
   ["icecream_selfie.jpg","張大嘴吃冰"]
 ];
-let carI = 0, carT;
 function initCarousel(){
   function show(i){
     carI = (i + carP.length) % carP.length;
