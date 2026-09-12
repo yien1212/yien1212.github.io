@@ -333,6 +333,21 @@ body::before{
   background:rgba(255,255,255,.6); border-radius:20px;
 }
 
+/* 彈幕 */
+.danmaku-layer{
+  position:fixed; inset:0; pointer-events:none; z-index:50; overflow:hidden;
+}
+.danmaku{
+  position:absolute; white-space:nowrap;
+  font-family:"Noto Serif TC",serif; font-size:1.1rem;
+  color:var(--pink-deep); text-shadow:0 0 8px rgba(255,255,255,.8);
+  animation:dmMove linear forwards;
+}
+@keyframes dmMove{
+  from{ transform:translateX(100vw); }
+  to{ transform:translateX(-100%); }
+}
+
 /* 花瓣 */
 .petal{position:fixed; top:-5%; font-size:14px; color:var(--pink-soft); animation:fall 12s linear infinite; z-index:-1; pointer-events:none}
 @keyframes fall{0%{transform:translateY(-5vh) rotate(0); opacity:0}10%{opacity:.8}100%{transform:translateY(110vh) rotate(360deg); opacity:0}}
@@ -523,6 +538,9 @@ body::before{
     <div id="gameSpace"></div>
   </div>
 </div>
+
+<!-- 彈幕層 -->
+<div class="danmaku-layer" id="dmLayer"></div>
 
 <!-- 燈箱 -->
 <div id="lb">
@@ -869,6 +887,30 @@ document.addEventListener("click", e => {
   if(e.target.closest("button") || e.target.closest("input") || e.target.closest("textarea")) return;
   burst(e.clientX, e.clientY);
 });
+
+/* 彈幕 */
+(function(){
+  const layer = document.getElementById("dmLayer");
+  const msgs = [
+    "我愛妳 ❤️", "想妳了", "笨蛋", "抱抱", "可愛死了",
+    "今天也喜歡妳", "不要走", "妳最可愛", "么么", "心動",
+    "寶貝", "想牽妳", "別餓肚子", "晚安", "早安",
+    "妳是我的", "滾進來睡", "愛妳愛妳愛妳", "想見妳", "妳好漂亮"
+  ];
+  let i = 0;
+  function shoot(){
+    const el = document.createElement("div");
+    el.className = "danmaku";
+    el.textContent = msgs[i % msgs.length];
+    el.style.top = (10 + Math.random()*80) + "%";
+    el.style.animationDuration = (8 + Math.random()*6) + "s";
+    el.style.fontSize = (0.9 + Math.random()*0.6) + "rem";
+    layer.appendChild(el);
+    setTimeout(() => el.remove(), 15000);
+    i++;
+  }
+  setTimeout(() => setInterval(shoot, 2500), 3000);
+})();
 
 /* 音樂 */
 document.getElementById("playBtn").onclick = () => bgm.play();
