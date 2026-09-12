@@ -1538,9 +1538,7 @@ if(typeof uid !== 'undefined' && uid){
       }
     });
   });
-}
 
-);
   document.getElementById("meetBtn").onclick = function(){
     const d = document.getElementById("meetDate").value;
     if(d) db.collection("settings").doc("meetDate").set({date: d});
