@@ -822,6 +822,52 @@ body{counter-reset: section}
     <div><div id="statKiss" style="font-size:1.5rem;color:var(--pink)">0</div><div style="font-size:.8rem;color:#999">次親親</div></div>
   </div>
 
+  <!-- 今日心情 -->
+  <h3 class="stitle">😊 今天心情</h3>
+  <div style="text-align:center">
+    <div id="moodShow" style="font-size:1.2rem;margin-bottom:10px">她還沒更新</div>
+    <div style="display:flex;gap:8px;justify-content:center;font-size:1.5rem">
+      <span class="mood" data-mood="😢" style="cursor:pointer">😢</span>
+      <span class="mood" data-mood="😐" style="cursor:pointer">😐</span>
+      <span class="mood" data-mood="😊" style="cursor:pointer">😊</span>
+      <span class="mood" data-mood="😍" style="cursor:pointer">😍</span>
+      <span class="mood" data-mood="🤩" style="cursor:pointer">🤩</span>
+    </div>
+  </div>
+
+  <!-- 現在在幹嘛 -->
+  <h3 class="stitle">🎮 現在在幹嘛</h3>
+  <div style="text-align:center">
+    <div id="statusShow" style="font-size:1.1rem;color:var(--pink-deep);margin-bottom:10px">她還沒更新</div>
+    <div style="display:flex;gap:5px;justify-content:center;flex-wrap:wrap">
+      <button class="status-btn">🍜吃飯</button>
+      <button class="status-btn">😴睡覺</button>
+      <button class="status-btn">📱滑手機</button>
+      <button class="status-btn">💻工作</button>
+      <button class="status-btn">📖讀書</button>
+      <button class="status-btn">🚶出門</button>
+      <button class="status-btn">🎮玩遊戲</button>
+      <button class="status-btn">💭想妳</button>
+    </div>
+  </div>
+
+  <!-- 今日打卡 -->
+  <h3 class="stitle">📸 今日打卡</h3>
+  <div style="text-align:center">
+    <input type="file" id="checkinInput" accept="image/*" multiple style="display:none">
+    <button class="btn-pink" id="checkinBtn">上傳照片</button>
+    <div id="checkinGrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:400px;margin:15px auto 0"></div>
+  </div>
+
+  <!-- 即時塗鴉 -->
+  <h3 class="stitle">🎨 即時塗鴉</h3>
+  <div style="text-align:center">
+    <canvas id="drawCanvas" width="350" height="250" style="border-radius:16px;background:#fff;border:2px solid var(--pink-soft);touch-action:none"></canvas>
+    <div style="margin-top:8px">
+      <button class="btn-pink" id="clearDraw">清空</button>
+    </div>
+  </div>
+
   <!-- 一起按愛心 -->
   <h3 class="stitle">一起按愛心</h3>
   <div style="text-align:center">
@@ -1548,6 +1594,97 @@ if(typeof uid !== 'undefined' && uid){
     document.getElementById("statHearts").textContent = s.hearts || 0;
     document.getElementById("statKiss").textContent = s.kisses || 0;
   });
+}
+
+/* 今日心情 */
+if(typeof uid !== 'undefined' && uid){
+  document.querySelectorAll(".mood").forEach(m => {
+    m.onclick = () => db.collection("status").doc(uid).set({mood: m.dataset.mood, time: new Date()}, {merge:true});
+  });
+  db.collection("status").onSnapshot(snap => {
+    snap.forEach(d => {
+      if(d.id === uid) return;
+      const s = d.data();
+      document.getElementById("moodShow").textContent = "她現在 " + s.mood;
+    });
+  });
+}
+
+/* 現在在幹嘛 */
+if(typeof uid !== 'undefined' && uid){
+  document.querySelectorAll(".status-btn").forEach(b => {
+    b.onclick = () => db.collection("status").doc(uid).set({what: b.textContent, time: new Date()}, {merge:true});
+  });
+  db.collection("status").onSnapshot(snap => {
+    snap.forEach(d => {
+      if(d.id === uid) return;
+      const s = d.data();
+      document.getElementById("statusShow").textContent = "她在 " + s.what;
+    });
+  });
+}
+
+/* 今日打卡 */
+if(typeof uid !== 'undefined' && uid){
+  document.getElementById("checkinBtn").onclick = () => document.getElementById("checkinInput").click();
+  document.getElementById("checkinInput").onchange = function(){
+    Array.from(this.files).forEach(file => {
+      const reader = new FileReader();
+      reader.onload = function(){
+        // 压縮圖片
+        const img = new Image();
+        img.onload = function(){
+          const canvas = document.createElement("canvas");
+          const scale = Math.min(1, 400/img.width);
+          canvas.width = img.width*scale;
+          canvas.height = img.height*scale;
+          canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
+          db.collection("checkins").add({img: canvas.toDataURL("image/jpeg", 0.6), uid: uid, time: new Date()});
+        };
+        img.src = reader.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+  db.collection("checkins").orderBy("time","desc").limit(20).onSnapshot(snap => {
+    const grid = document.getElementById("checkinGrid");
+    grid.innerHTML = "";
+    snap.forEach(d => {
+      const img = document.createElement("img");
+      img.src = d.data().img;
+      img.style.cssText = "width:100%;border-radius:12px;object-fit:cover;aspect-ratio:1";
+      grid.appendChild(img);
+    });
+  });
+}
+
+/* 即時塗鴉 */
+if(typeof uid !== 'undefined' && uid){
+  const canvas = document.getElementById("drawCanvas");
+  const ctx = canvas.getContext("2d");
+  let drawing = false;
+  function pos(e){
+    const r = canvas.getBoundingClientRect();
+    const t = e.touches ? e.touches[0] : e;
+    return {x: (t.clientX-r.left)*canvas.width/r.width, y: (t.clientY-r.top)*canvas.height/r.height};
+  }
+  canvas.onmousedown = e => { drawing = true; const p = pos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); };
+  canvas.onmousemove = e => {
+    if(!drawing) return;
+    const p = pos(e);
+    ctx.lineTo(p.x, p.y); ctx.strokeStyle = "#e91e63"; ctx.lineWidth = 3; ctx.lineCap = "round"; ctx.stroke();
+    db.collection("draw").doc("board").set({x: p.x, y: p.y, prev: null}, {merge:true});
+  };
+  canvas.onmouseup = () => drawing = false;
+  canvas.ontouchstart = e => { drawing = true; const p = pos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); };
+  canvas.ontouchmove = e => {
+    if(!drawing) return;
+    e.preventDefault();
+    const p = pos(e);
+    ctx.lineTo(p.x, p.y); ctx.strokeStyle = "#e91e63"; ctx.lineWidth = 3; ctx.lineCap = "round"; ctx.stroke();
+  };
+  canvas.ontouchend = () => drawing = false;
+  document.getElementById("clearDraw").onclick = () => { ctx.clearRect(0,0,canvas.width,canvas.height); };
 }
 
 /* 便利貼匯出 */
