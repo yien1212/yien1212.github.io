@@ -572,7 +572,6 @@ body{counter-reset: section}
   let uid = firebase.auth().currentUser ? firebase.auth().currentUser.uid : null;
   firebase.auth().signInAnonymously().then(u => {
     uid = u.user.uid;
-    renderWishes();
     if(!localStorage.getItem("reloaded")){
       localStorage.setItem("reloaded","1");
       location.reload();
