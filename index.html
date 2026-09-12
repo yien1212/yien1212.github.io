@@ -962,6 +962,7 @@ document.querySelectorAll(".tab-btn").forEach(btn => {
 const PW = "1213";
 const start = new Date(2024, 11, 13);
 const bgm = document.getElementById("bgm");
+const phrases = ["今天也辛苦了，我愛妳","離下次見面又近了一天","妳笑起來最好看了","別餓肚子喔","想牽妳的手","今天也要想我喔","妳是我最重要的人"];
 
 /* 解鎖 */
 if(localStorage.getItem("unlocked") === "1"){
@@ -996,7 +997,6 @@ document.getElementById("go").onclick = () => {
 };
 
 /* 計時 */
-const phrases = ["今天也辛苦了，我愛妳","離下次見面又近了一天","妳笑起來最好看了","別餓肚子喔","想牽妳的手","今天也要想我喔","妳是我最重要的人"];
 function startTimer(){
   function up(){
     const d = new Date() - start;
@@ -1949,7 +1949,7 @@ document.getElementById("pauseBtn").onclick = () => bgm.pause();
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <script>
-  const firebaseConfig = {
+  window.firebaseConfig = {
     apiKey: "AIzaSyCDRGa7Pz4n481Hy2ktUwtnnDlFo74lewU",
     authDomain: "yien1212-8a306.firebaseapp.com",
     projectId: "yien1212-8a306",
