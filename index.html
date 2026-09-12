@@ -1621,12 +1621,6 @@ if(true){
       el.innerHTML += `<div style="margin:8px 0;padding:8px 12px;background:#fff;border-radius:12px;font-size:.9rem">💫 ${w.text}</div>`;
     });
   });
-  document.getElementById("bottleSend").onclick = function(){
-    const v = document.getElementById("bottleInput").value.trim();
-    if(!v) return;
-    db.collection("wishes_bottle").add({text:v, uid:uid, time:new Date()});
-    document.getElementById("bottleInput").value = "";
-  };
 }
 
 /* 聲音訊息 */
