@@ -1646,18 +1646,6 @@ window._authReady.then(function(uid){
   });
 });
 
-/* 心願瓶 */
-window._authReady.then(function(uid){
-  db.collection("wishes_bottle").orderBy("time","desc").limit(20).onSnapshot(snap => {
-    const el = document.getElementById("wishBottle");
-    el.innerHTML = "";
-    snap.forEach(d => {
-      const w = d.data();
-      el.innerHTML += `<div style="margin:8px 0;padding:8px 12px;background:#fff;border-radius:12px;font-size:.9rem">💫 ${w.text}</div>`;
-    });
-  });
-});
-
 /* 聲音訊息 */
 window._authReady.then(function(uid){
   let mediaRecorder, chunks = [];
