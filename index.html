@@ -686,17 +686,12 @@ body{counter-reset: section}
     <button class="gift-btn" onclick="sendGift('🎈')">🎈</button>
   </div>
 
-  <!-- 模擬聊天 -->
-  <h3 class="stitle">我們的日常</h3>
-  <div class="chat-box">
-    <div class="chat-msg them"><div class="bubble">在幹嘛</div><div class="chat-time">今天 14:23</div></div>
-    <div class="chat-msg me"><div class="bubble">想妳</div><div class="chat-time">今天 14:23</div></div>
-    <div class="chat-msg them"><div class="bubble">白痴</div><div class="chat-time">今天 14:24</div></div>
-    <div class="chat-msg them"><div class="bubble">吃飯了嗎</div><div class="chat-time">今天 14:24</div></div>
-    <div class="chat-msg me"><div class="bubble">還沒 等妳一起</div><div class="chat-time">今天 14:25</div></div>
-    <div class="chat-msg them"><div class="bubble">滾</div><div class="chat-time">今天 14:25</div></div>
-    <div class="chat-msg me"><div class="bubble">愛妳</div><div class="chat-time">今天 14:26</div></div>
-    <div class="chat-msg them"><div class="bubble">😳</div><div class="chat-time">今天 14:26</div></div>
+  <!-- 我們的日常 -->
+  <h3 class="stitle">我們的日常（每天隨機一段）</h3>
+  <div class="chat-box" id="chatBox">
+    <div id="chatToday" style="font-size:.9rem; line-height:1.8; color:#666; text-align:center">
+      今天還沒有日常...
+    </div>
   </div>
 
   <!-- 煙花 -->
@@ -1090,6 +1085,43 @@ document.addEventListener("click", e => {
   if(e.target.closest("button") || e.target.closest("input") || e.target.closest("textarea")) return;
   burst(e.clientX, e.clientY);
 });
+
+/* 我們的日常 — 從真實 LINE 記錄抽 */
+(function(){
+  const convos = [
+    [{t:"下午11:26",who:"me",text:"我在想你"},{t:"下午11:27",who:"them",text:"白痴"}],
+    [{t:"上午10:35",who:"them",text:"我上車車ㄌ"},{t:"上午10:36",who:"me",text:"好"}],
+    [{t:"上午09:20",who:"them",text:"乖乖"},{t:"上午09:21",who:"me",text:"嗯"}],
+    [{t:"下午11:41",who:"them",text:"你好寶寶"}],
+    [{t:"下午06:52",who:"them",text:"不要洗屁股"}],
+    [{t:"下午08:36",who:"them",text:"幹你娘"},{t:"下午08:37",who:"me",text:"笑死"}],
+    [{t:"上午02:28",who:"me",text:"你如果變成了我最不想靠近的那種人"},{t:"上午02:30",who:"them",text:"不會的"}],
+    [{t:"下午12:44",who:"them",text:"齁我要怎麼講"}],
+    [{t:"下午09:35",who:"them",text:"我他媽真的傻眼"}],
+    [{t:"上午08:52",who:"me",text:"知道妳懶"},{t:"上午08:53",who:"them",text:"滾"}],
+    [{t:"下午03:43",who:"them",text:"你猜我們現在在幹嘛"},{t:"下午03:43",who:"me",text:"上課"},{t:"下午03:43",who:"them",text:"你猜錯了"}],
+    [{t:"下午03:46",who:"them",text:"我們報告100分欸吧"},{t:"下午03:46",who:"me",text:"欸好厲害 超級猛"}],
+    [{t:"上午07:50",who:"me",text:"🤏🏻"}],
+    [{t:"下午02:42",who:"them",text:"…好心態"}],
+    [{t:"下午05:05",who:"them",text:"要也不準備多一點"}],
+    [{t:"上午08:03",who:"them",text:"嗯！"}],
+  ];
+  const today = new Date();
+  const dayIdx = Math.floor((today - new Date(2024,11,13)) / 86400000);
+  const conv = convos[dayIdx % convos.length];
+  const box = document.getElementById("chatToday");
+  box.innerHTML = conv.map(m => 
+    `<div style="margin:8px 0; ${m.who==='me' ? 'text-align:right' : ''}">
+      <span style="display:inline-block; padding:8px 14px; border-radius:16px; 
+        background:${m.who==='me' ? 'var(--pink)' : '#fff'}; 
+        color:${m.who==='me' ? '#fff' : '#555'}; 
+        border:${m.who==='them' ? '1px solid var(--pink-soft)' : 'none'}">
+        ${m.text}
+      </span>
+      <div style="font-size:.7rem; color:#aaa; margin-top:2px">${m.t}</div>
+    </div>`
+  ).join("");
+})();
 
 /* 彈幕手動發送 */
 document.getElementById("dmSend").onclick = function(){
