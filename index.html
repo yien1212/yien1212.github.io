@@ -930,7 +930,7 @@ document.querySelectorAll(".scratchCvs").forEach((c, idx) => {
   c.addEventListener("mousemove", e => {
     if(!s) return;
     const r = c.getBoundingClientRect();
-    sc((e.clientX-r.left)*w/r.width, (e.clientY-r.top)*h/r.height);
+    sc((e.clientX-r.left)*c.width/r.width, (e.clientY-r.top)*c.height/r.height);
   });
   c.addEventListener("touchstart", () => s = true, {passive:true});
   c.addEventListener("touchend", () => s = false);
@@ -938,7 +938,7 @@ document.querySelectorAll(".scratchCvs").forEach((c, idx) => {
     if(!s) return;
     const r = c.getBoundingClientRect();
     const t = e.touches[0];
-    sc((t.clientX-r.left)*w/r.width, (t.clientY-r.top)*h/r.height);
+    sc((t.clientX-r.left)*c.width/r.width, (t.clientY-r.top)*c.height/r.height);
   }, {passive:true});
   const msgs = ["今天也很喜歡妳","抱抱","想牽手","吃飽了沒","妳最好看","愛妳","不要生氣","快睡覺","想妳了","可愛","么么","心動"];
   const ids = ["scratchMsg","scratchMsg2","scratchMsg3"];
