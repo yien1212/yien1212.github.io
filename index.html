@@ -488,9 +488,9 @@
             <figure><img src="couple_helmet.jpg" alt="一起騎車" data-caption="兩個安全帽"><figcaption>一起騎車</figcaption></figure>
             <figure><img src="date_dessert.jpg" alt="甜點約會" data-caption="兩碗甜點"><figcaption>甜點約會</figcaption></figure>
             <figure><img src="trip_hotel.jpg" alt="礁溪旅行" data-caption="礁溪老爺"><figcaption>礁溪旅行</figcaption></figure>
-            <figure><img src="her_selfie1.jpg" alt="女友自拍1" data-caption="睡醒還是很美"><figcaption>她的自拍 1</figcaption></figure>
-            <figure><img src="her_selfie2.jpg" alt="女友自拍2" data-caption="盯著我看"><figcaption>她的自拍 2</figcaption></figure>
-            <figure><img src="her_selfie3.jpg" alt="女友自拍3" data-caption="微笑"><figcaption>她的自拍 3</figcaption></figure>
+            <figure><img src="couple_crown.jpg" alt="兩人合照" data-caption="公主與魔杖"><figcaption>公主與魔杖</figcaption></figure>
+            <figure><img src="cinnamoroll.jpg" alt="Cinnamoroll聯名" data-caption="玉桂狗聯名"><figcaption>Cinnamoroll</figcaption></figure>
+            <figure><img src="cry_face.jpg" alt="哭哭臉" data-caption="怎麼了嘛"><figcaption>怎麼了嘛</figcaption></figure>
         </div>
 
         <!-- 回憶盲盒 -->
@@ -518,6 +518,7 @@
             <textarea id="noteInput" placeholder="想罵我想誇我都可以，寫下來～"></textarea>
             <br>
             <button id="noteBtn">貼上去</button>
+            <button id="copyNoteBtn" style="background:#999;">複製傳給我</button>
             <div id="noteList"></div>
         </div>
 
@@ -645,7 +646,19 @@
             "笨笨的也沒關係，我本來就喜歡原來的妳。",
             "下次見面第一件事，是抱抱。",
             "謝謝妳那時候沒有真的走掉。",
-            "未來的每一天，我都想跟妳一起浪費。"
+            "未來的每一天，我都想跟妳一起浪費。",
+            "妳生氣的時候也可愛，但別常常生氣。",
+            "我手機裡全是妳，滑不滑都一樣。",
+            "妳說想我的時候，我其實已經在想妳了。",
+            "不用每天講情話，我知道。但我還是想講。",
+            "我們吵架的次數沒有我想妳的次數多。",
+            "妳吃東西的樣子比任何甜點都好看。",
+            "下雨天想牽妳，出太陽也想牽妳。",
+            "如果妳累了，我可以變安靜一點。",
+            "我討厭分開，但我更討厭沒有妳。",
+            "妳不用完美，我喜歡的本來就不是完美。",
+            "今天也有好好吃飯嗎？沒有我會生氣。",
+            "想跟妳一起老，老到一起抱怨膝蓋痛。"
         ];
         let lastLine = -1;
         document.getElementById("loveCardBtn").addEventListener("click", () => {
@@ -697,6 +710,14 @@
             localStorage.setItem("notes", JSON.stringify(list));
             ta.value = "";
             renderNotes();
+        };
+        document.getElementById("copyNoteBtn").onclick = function() {
+            const ta = document.getElementById("noteInput");
+            const text = ta.value.trim();
+            if (!text) { alert("先寫點東西啦"); return; }
+            navigator.clipboard.writeText("【便利貼】" + text).then(() => {
+                alert("複製好了！貼到 LINE 傳給我～");
+            });
         };
 
         /* 愛心遊戲 */
