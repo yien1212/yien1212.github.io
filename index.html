@@ -575,7 +575,6 @@ body{counter-reset: section}
       if(u && u.uid){ window.uid = u.uid; resolve(u.uid); }
     });
   });
-  firebase.auth().signInAnonymously().catch(e => console.log("auth err:", e.message));
 </script>
 
 <div class="petal" style="left:8%">🌸</div>
@@ -588,10 +587,18 @@ body{counter-reset: section}
   <div class="lock-emoji">🔐</div>
   <h1>給最重要的人</h1>
   <p>這是只屬於我們的地方</p>
-  <input type="password" id="pw" placeholder="••••">
-  <br>
-  <button id="go">進入</button>
-  <div id="hint" class="hidden" style="color:var(--pink); margin-top:14px; font-size:.85rem">在一起的那天</div>
+  <div id="pwStep">
+    <input type="password" id="pw" placeholder="••••">
+    <br>
+    <button id="go">進入</button>
+    <div id="hint" class="hidden" style="color:var(--pink); margin-top:14px; font-size:.85rem">在一起的那天</div>
+  </div>
+  <div id="roleStep" class="hidden" style="margin-top:10px">
+    <p style="font-size:.9rem;color:#999;margin-bottom:15px">選擇你是誰</p>
+    <button id="roleY" style="display:block;width:220px;margin:10px auto;padding:14px;border:none;border-radius:30px;background:linear-gradient(135deg,var(--pink),var(--pink-deep));color:#fff;font-size:1rem;cursor:pointer;font-family:inherit">我是 Y</button>
+    <button id="roleYun" style="display:block;width:220px;margin:10px auto;padding:14px;border:none;border-radius:30px;background:#fff;color:var(--pink-deep);border:2px solid var(--pink);font-size:1rem;cursor:pointer;font-family:inherit">我是 小昀</button>
+    <div id="roleMsg" style="color:var(--pink);font-size:.85rem;margin-top:10px"></div>
+  </div>
 </div>
 
 <div id="app" class="hidden">
@@ -983,7 +990,6 @@ body{counter-reset: section}
 </div>
 
 <script>
-window._authReady.then(function(uid){
 /* Tab 切換 */
 document.querySelectorAll(".tab-btn").forEach(btn => {
   btn.onclick = function(){
@@ -1002,27 +1008,41 @@ const bgm = document.getElementById("bgm");
 const phrases = ["今天也辛苦了，我愛妳","離下次見面又近了一天","妳笑起來最好看了","別餓肚子喔","想牽妳的手","今天也要想我喔","妳是我最重要的人"];
 let carI = 0, carT;
 
-/* 解鎖 */
-if(localStorage.getItem("unlocked") === "1"){
+/* 進入 App */
+function enterApp(){
   document.getElementById("login").classList.add("hidden");
   const a = document.getElementById("app");
   a.classList.remove("hidden"); a.classList.add("fade-in");
   startTimer(); startGame(); renderBadges();
   initCarousel(); initTimeline();
+  bgm.play().catch(()=>{});
+}
+/* 身份登入 Firebase */
+const ROLES = {y:{email:"y@love.com",name:"Y"}, yun:{email:"yun@love.com",name:"小昀"}};
+function roleLogin(role){
+  const msg = document.getElementById("roleMsg");
+  msg.textContent = "登入中...";
+  firebase.auth().signInWithEmailAndPassword(ROLES[role].email, "121314")
+    .then(u => {
+      window.uid = u.user.uid;
+      window.myRole = role;
+      localStorage.setItem("role", role);
+      enterApp();
+    })
+    .catch(e => { msg.textContent = "登入失敗：" + e.message; });
+}
+document.getElementById("roleY").onclick = () => roleLogin("y");
+document.getElementById("roleYun").onclick = () => roleLogin("yun");
+
+/* 解鎖：先網站密碼，再選身份 */
+function showRole(){
+  document.getElementById("pwStep").classList.add("hidden");
+  document.getElementById("roleStep").classList.remove("hidden");
 }
 document.getElementById("go").onclick = () => {
   if (document.getElementById("pw").value === PW) {
     localStorage.setItem("unlocked","1");
-    document.getElementById("login").classList.add("hidden");
-    const a = document.getElementById("app");
-    a.classList.remove("hidden");
-    a.classList.add("fade-in");
-    startTimer();
-    startGame();
-    renderBadges();
-    initCarousel();
-    initTimeline();
-    bgm.play().catch(()=>{});
+    showRole();
   } else {
     const el = document.getElementById("pw");
     el.style.animation = "none"; el.offsetHeight;
@@ -1031,6 +1051,21 @@ document.getElementById("go").onclick = () => {
     el.value = "";
   }
 };
+/* 已有 session 且記得角色 -> 直接進；有密碼但沒 session -> 選身份 */
+firebase.auth().onAuthStateChanged(u => {
+  if(u){
+    window.uid = u.uid;
+    const savedRole = localStorage.getItem("role");
+    if(localStorage.getItem("unlocked") === "1" && savedRole){
+      window.myRole = savedRole;
+      enterApp();
+    }
+  } else if(localStorage.getItem("unlocked") === "1"){
+    // 解過密碼但沒登入 -> 顯示身份選擇
+    document.getElementById("pwStep").classList.add("hidden");
+    document.getElementById("roleStep").classList.remove("hidden");
+  }
+});
 
 /* 計時 */
 function startTimer(){
@@ -1278,7 +1313,7 @@ function renderWishes(){
 }
 
 /* 共同記帳 */
-if(true){
+window._authReady.then(function(uid){
   document.getElementById("expAdd").onclick = function(){
     const a = parseFloat(document.getElementById("expAmount").value);
     const n = document.getElementById("expNote").value.trim();
@@ -1300,7 +1335,7 @@ if(true){
     list.innerHTML = html || "<div style='color:#999;font-size:.85rem'>還沒有記帳</div>";
     document.getElementById("expTotal").textContent = "總計：" + total + " 元";
   });
-}
+});
 
 /* 每日一問 */
 (function(){
@@ -1309,7 +1344,7 @@ if(true){
 })();
 
 /* 一起按愛心 */
-if(true){
+window._authReady.then(function(uid){
   db.collection("counters").doc("hearts").onSnapshot(doc => {
     const n = doc.exists ? doc.data().count : 0;
     document.getElementById("heartCount2").textContent = n;
@@ -1327,7 +1362,7 @@ if(true){
       }, i*100);
     }
   };
-}
+});
 
 /* 愛心遊戲 */
 function startGame(){
@@ -1417,7 +1452,7 @@ document.addEventListener("click", e => {
 })();
 
 /* 即時聊天 */
-if(true){
+window._authReady.then(function(uid){
   const chatList = document.getElementById("chatList");
   db.collection("chat").orderBy("time","asc").limit(100).onSnapshot(snap => {
     chatList.innerHTML = "";
@@ -1452,10 +1487,10 @@ if(true){
     snap.forEach(d => { if(d.id !== uid) typing = true; });
     document.getElementById("typing").style.display = typing ? "block" : "none";
   });
-}
+});
 
 /* 定位+電量 */
-if(true){
+window._authReady.then(function(uid){
   // 上傳電量
   if(navigator.getBattery){
     navigator.getBattery().then(b => {
@@ -1515,10 +1550,10 @@ if(true){
       document.getElementById("myLoc").innerHTML = `<a href="https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}" target="_blank" style="color:var(--pink)">看地圖</a>`;
     });
   };
-}
+});
 
 /* 在線狀態 */
-if(true){
+window._authReady.then(function(uid){
   // 上傳在線狀態
   db.collection("online").doc(uid).set({online: true, lastSeen: new Date()});
   window.addEventListener("beforeunload", () => {
@@ -1573,10 +1608,10 @@ if(true){
       document.getElementById("anniName").value = "";
     }
   };
-}
+});
 
 /* 誰先睡 */
-if(true){
+window._authReady.then(function(uid){
   document.getElementById("sleepBtn").onclick = function(){
     db.collection("sleep").doc(new Date().toDateString()).set({[uid]: new Date().toLocaleTimeString("zh-TW")}, {merge:true});
   };
@@ -1591,10 +1626,10 @@ if(true){
     else if(her){ el.textContent = "她先說晚安了！"; }
     else { el.textContent = "還沒人睡"; }
   });
-}
+});
 
 /* 愛情分數 */
-if(true){
+window._authReady.then(function(uid){
   const sb = document.getElementById("scoreBtns");
   for(let i=1;i<=10;i++){
     const b = document.createElement("button");
@@ -1609,10 +1644,10 @@ if(true){
     const vals = Object.values(d).filter(v => typeof v === 'number');
     if(vals.length) document.getElementById("loveScore").textContent = (vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(1) + " 分";
   });
-}
+});
 
 /* 心願瓶 */
-if(true){
+window._authReady.then(function(uid){
   db.collection("wishes_bottle").orderBy("time","desc").limit(20).onSnapshot(snap => {
     const el = document.getElementById("wishBottle");
     el.innerHTML = "";
@@ -1621,10 +1656,10 @@ if(true){
       el.innerHTML += `<div style="margin:8px 0;padding:8px 12px;background:#fff;border-radius:12px;font-size:.9rem">💫 ${w.text}</div>`;
     });
   });
-}
+});
 
 /* 聲音訊息 */
-if(true){
+window._authReady.then(function(uid){
   let mediaRecorder, chunks = [];
   document.getElementById("recBtn").onclick = async function(){
     if(mediaRecorder && mediaRecorder.state === "recording"){
@@ -1656,10 +1691,10 @@ if(true){
       el.innerHTML += `<audio controls src="${v.audio}" style="width:100%;margin:5px 0"></audio>`;
     });
   });
-}
+});
 
 /* 線上數據 */
-if(true){
+window._authReady.then(function(uid){
   const today = new Date().toDateString();
   db.collection("stats").doc(today).onSnapshot(doc => {
     if(!doc.exists) return;
@@ -1668,10 +1703,10 @@ if(true){
     document.getElementById("statHearts").textContent = s.hearts || 0;
     document.getElementById("statKiss").textContent = s.kisses || 0;
   });
-}
+});
 
 /* 今日心情 */
-if(true){
+window._authReady.then(function(uid){
   document.querySelectorAll(".mood").forEach(m => {
     m.onclick = () => db.collection("status").doc(uid).set({mood: m.dataset.mood, time: new Date()}, {merge:true});
   });
@@ -1682,10 +1717,10 @@ if(true){
       document.getElementById("moodShow").textContent = "她現在 " + s.mood;
     });
   });
-}
+});
 
 /* 現在在幹嘛 */
-if(true){
+window._authReady.then(function(uid){
   document.querySelectorAll(".status-btn").forEach(b => {
     b.onclick = () => db.collection("status").doc(uid).set({what: b.textContent, time: new Date()}, {merge:true});
   });
@@ -1696,10 +1731,10 @@ if(true){
       document.getElementById("statusShow").textContent = "她在 " + s.what;
     });
   });
-}
+});
 
 /* 今日打卡 */
-if(true){
+window._authReady.then(function(uid){
   document.getElementById("checkinBtn").onclick = () => document.getElementById("checkinInput").click();
   document.getElementById("checkinInput").onchange = function(){
     Array.from(this.files).forEach(file => {
@@ -1730,10 +1765,10 @@ if(true){
       grid.appendChild(img);
     });
   });
-}
+});
 
 /* 即時塗鴉 */
-if(true){
+window._authReady.then(function(uid){
   const canvas = document.getElementById("drawCanvas");
   const ctx = canvas.getContext("2d");
   let drawing = false;
@@ -1759,7 +1794,7 @@ if(true){
   };
   canvas.ontouchend = () => drawing = false;
   document.getElementById("clearDraw").onclick = () => { ctx.clearRect(0,0,canvas.width,canvas.height); };
-}
+});
 
 /* 彈幕手動發送 */
 document.getElementById("dmSend").onclick = function(){
@@ -2010,7 +2045,6 @@ document.querySelectorAll(".photo figure, .card").forEach(el => {
 /* 音樂 */
 document.getElementById("playBtn").onclick = () => bgm.play();
 document.getElementById("pauseBtn").onclick = () => bgm.pause();
-});
 </script>
 
 <script src="https://cdn.botpress.cloud/webchat/v3.5/inject.js"></script>
