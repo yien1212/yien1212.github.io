@@ -260,7 +260,7 @@ body::before{
   font-size:.85rem; line-height:1.5;
   display:flex; align-items:center; justify-content:center; text-align:center;
 }
-.scratchCvs{position:absolute; inset:0; width:100%; height:100%; cursor:grab}
+.scratchCvs{position:absolute; inset:0; width:100%; height:100%; cursor:grab; z-index:2}
 @media(max-width:500px){
   .scratch-grid{grid-template-columns:repeat(3,1fr); gap:6px}
   .scratch-wrap .msg{font-size:.7rem; padding:6px}
@@ -908,18 +908,22 @@ document.getElementById("mystery").onclick = function(){
 };
 
 /* 刮刮樂 */
-window.addEventListener("load", () => {
+function initScratch(){
   document.querySelectorAll(".scratchCvs").forEach((c, idx) => {
+    if(c.dataset.inited) return;
+    c.dataset.inited = "1";
     const x = c.getContext("2d");
     const parent = c.parentElement;
     function sizeCanvas(){
       const w = parent.clientWidth, h = parent.clientHeight;
+      if(w < 10 || h < 10) return;
       c.width = w; c.height = h;
       x.fillStyle = "#c0c0c0"; x.fillRect(0,0,w,h);
       x.fillStyle = "#fff"; x.font = "13px sans-serif"; x.textAlign = "center";
       x.fillText("刮開我", w/2, h/2);
     }
     sizeCanvas();
+    setTimeout(sizeCanvas, 100);
     setTimeout(sizeCanvas, 500);
     let s = false;
     function sc(px,py){
@@ -947,7 +951,8 @@ window.addEventListener("load", () => {
     const ids = ["scratchMsg","scratchMsg2","scratchMsg3"];
     document.getElementById(ids[idx]).textContent = msgs[Math.floor(Math.random()*msgs.length)];
   });
-});
+}
+window.addEventListener("load", () => setTimeout(initScratch, 300));
 
 /* 翻牌 */
 (function(){
