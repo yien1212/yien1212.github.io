@@ -190,8 +190,9 @@ body::before{
 .tl-date{font-size:.72rem; color:var(--pink); font-weight:500; letter-spacing:1px}
 .tl-text{font-size:.88rem; color:#666; margin-top:5px; line-height:1.6; font-weight:300}
 .tl-photo{
-  width:100%; height:120px; object-fit:cover; border-radius:10px;
-  margin-top:10px; background:#f8e8ef;
+  width:calc(100% - 12px); height:170px; object-fit:cover; border-radius:10px;
+  margin:10px auto 0; display:block;
+  background:#f8e8ef;
   border:6px solid #fff; box-shadow:0 4px 12px rgba(0,0,0,.1);
   transition:all .5s ease-in-out;
 }
@@ -257,7 +258,7 @@ body::before{
 .face{position:absolute; inset:0; backface-visibility:hidden; border-radius:22px; display:flex; flex-direction:column; align-items:center; justify-content:center}
 .face-front{background:linear-gradient(135deg,var(--pink),var(--pink-deep)); color:#fff; font-family:"Noto Serif TC",serif; font-size:1.1rem; letter-spacing:2px; box-shadow:0 15px 40px rgba(233,30,99,.3)}
 .face-back{background:#fff; border:2px solid var(--pink); transform:rotateY(180deg); overflow:hidden}
-.face-back img{width:100%; height:140px; object-fit:cover}
+.face-back img{width:100%; height:220px; object-fit:cover}
 .face-back .q{padding:10px; font-size:.82rem; color:#d1478a; line-height:1.5}
 
 /* 按鈕 */
