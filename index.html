@@ -1611,11 +1611,9 @@ window._authReady.then(function(uid){
   if(navigator.getBattery){
     navigator.getBattery().then(b => {
       function upd(){
-        db.ref("locations/"+uid).set({
-          battery: Math.round(b.level*100),
-          charging: b.charging,
-          time: new Date().toLocaleString("zh-TW")
-        });
+        db.ref("locations/"+uid+"/battery").set(Math.round(b.level*100));
+        db.ref("locations/"+uid+"/charging").set(b.charging);
+        db.ref("locations/"+uid+"/battTime").set(new Date().toLocaleString("zh-TW"));
       }
       upd();
       b.addEventListener("levelchange", upd);
@@ -1680,11 +1678,9 @@ window._authReady.then(function(uid){
   // 上傳位置
   document.getElementById("locBtn").onclick = function(){
     navigator.geolocation.getCurrentPosition(pos => {
-      db.ref("locations/"+uid).set({
-        lat: pos.coords.latitude,
-        lng: pos.coords.longitude,
-        time: new Date().toLocaleString("zh-TW")
-      });
+      db.ref("locations/"+uid+"/lat").set(pos.coords.latitude);
+      db.ref("locations/"+uid+"/lng").set(pos.coords.longitude);
+      db.ref("locations/"+uid+"/locTime").set(new Date().toLocaleString("zh-TW"));
       document.getElementById("myLoc").innerHTML = `<a href="https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}" target="_blank" style="color:var(--pink)">看地圖</a>`;
     });
   };
@@ -1766,7 +1762,7 @@ window._authReady.then(function(uid){
 /* 誰先睡 */
 window._authReady.then(function(uid){
   document.getElementById("sleepBtn").onclick = function(){
-    db.ref("sleep/"+new Date().toDateString()).set({[uid]: new Date().toLocaleTimeString("zh-TW")}, {merge:true});
+    db.ref("sleep/"+new Date().toDateString()+"/"+uid).set(new Date().toLocaleTimeString("zh-TW"));
   };
   db.ref("sleep/"+new Date().toDateString()).on("value", doc => {
     const el = document.getElementById("sleepStatus");
@@ -1790,7 +1786,7 @@ window._authReady.then(function(uid){
     b.textContent = i;
     b.style.cssText = "width:35px;height:35px;border-radius:50%;border:2px solid var(--pink-soft);background:#fff;cursor:pointer;font-family:inherit";
     b.onclick = () => {
-      db.ref("scores/"+new Date().toDateString()).set({[uid]: i, updatedAt: Date.now()}, {merge:true});
+      db.ref("scores/"+new Date().toDateString()).update({[uid]: i, updatedAt: Date.now()}).catch(e=>console.warn("score",e));
       btns.forEach(x => x.style.background="#fff");
       b.style.background = "var(--pink)"; b.style.color="#fff";
     };
@@ -1824,7 +1820,10 @@ window._authReady.then(function(uid){
     }
     try{
       const stream = await navigator.mediaDevices.getUserMedia({audio:true});
-      mediaRecorder = new MediaRecorder(stream);
+      let mimeType = '';
+      if(window.MediaRecorder && MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) mimeType = 'audio/webm;codecs=opus';
+      else if(window.MediaRecorder && MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported('audio/mp4')) mimeType = 'audio/mp4';
+      mediaRecorder = mimeType ? new MediaRecorder(stream, {mimeType}) : new MediaRecorder(stream);
       chunks = [];
       mediaRecorder.ondataavailable = e => chunks.push(e.data);
       mediaRecorder.onstop = async function(){
@@ -1832,7 +1831,7 @@ window._authReady.then(function(uid){
         document.getElementById("recBtn").textContent = "開始錄音";
         try{
           const blob = new Blob(chunks, {type:"audio/webm"});
-          if(blob.size > 800000){ st.textContent = "太長了，最多15秒"; return; }
+          if(blob.size > 2000000){ st.textContent = "太長了，最多15秒"; return; }
           const reader = new FileReader();
           reader.onload = async function(){
             try{
@@ -1878,7 +1877,7 @@ window._authReady.then(function(uid){
 /* 今日心情 */
 window._authReady.then(function(uid){
   document.querySelectorAll(".mood").forEach(m => {
-    m.onclick = () => { db.ref("status/"+uid).set({mood: m.dataset.mood, time: Date.now()}, {merge:true}); addPoints(1, "心情"); }
+    m.onclick = () => { db.ref("status/"+uid+"/mood").set(m.dataset.mood); db.ref("status/"+uid+"/time").set(Date.now()); addPoints(1, "心情"); }
   });
   db.ref("status").on("value", snap => {
     let mine = null, hers = null;
@@ -1894,7 +1893,7 @@ window._authReady.then(function(uid){
 /* 現在在幹嘛 */
 window._authReady.then(function(uid){
   document.querySelectorAll(".status-btn").forEach(b => {
-    b.onclick = () => { db.ref("status/"+uid).set({what: b.textContent, time: Date.now()}, {merge:true}); }
+    b.onclick = () => { db.ref("status/"+uid+"/what").set(b.textContent); db.ref("status/"+uid+"/time").set(Date.now()); }
   });
   db.ref("status").on("value", snap => {
     let mine = null, hers = null;
