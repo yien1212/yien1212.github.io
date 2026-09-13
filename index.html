@@ -607,7 +607,7 @@ body{counter-reset: section}
   <!-- HERO -->
   <div class="hero">
     <div class="heart">❤️</div>
-    <h1>妳是小昀ㄛ</h1>
+    <h1 id="heroTitle">我們的故事</h1>
     <p class="sub">— 我們的故事 —</p>
     <div class="big">已經在一起<b id="heroDays">...</b>天</div>
     <div class="scroll">↓</div>
@@ -1017,6 +1017,7 @@ function enterApp(){
   document.getElementById("login").classList.add("hidden");
   const a = document.getElementById("app");
   a.classList.remove("hidden"); a.classList.add("fade-in");
+  document.getElementById("heroTitle").textContent = "妳是" + (window.themName||"") + "ㄛ";
   startTimer(); startGame(); renderBadges();
   initCarousel(); initTimeline();
   bgm.play().catch(()=>{});
@@ -1054,6 +1055,7 @@ function tryLogin(){
     .then(u => {
       window.uid = u.user.uid;
       window.myRole = pendingRole;
+      window.themName = (pendingRole === "y") ? "小昀" : "Y";
       localStorage.setItem("role", pendingRole);
       enterApp();
     })
@@ -1531,10 +1533,15 @@ window._authReady.then(function(uid){
         const a = Math.sin(dLat/2)**2 + Math.cos(me.lat*Math.PI/180)*Math.cos(her.lat*Math.PI/180)*Math.sin(dLng/2)**2;
         const dist = Math.round(R*2*Math.atan2(Math.sqrt(a), Math.sqrt(1-a)));
         document.getElementById("distance").textContent = dist < 1 ? Math.round(dist*1000) + " 公尺" : dist + " 公里";
-        // 天氣
-        fetch(`https://wttr.in/${her.lat},${her.lng}?format=%C+%t&m`).then(r => r.text()).then(w => {
-          document.getElementById("weatherTip").textContent = "她那裡 " + w;
-        }).catch(()=>{});
+        // 天氣（有定位才請求）
+        const wEl = document.getElementById("weatherTip");
+        wEl.textContent = (window.themName||"她") + "那裡天氣..."
+        fetch(`https://wttr.in/${her.lat},${her.lng}?format=%C+%t&m`).then(r => {
+          if(!r.ok) throw new Error('weather');
+          return r.text();
+        }).then(w => {
+          wEl.textContent = (window.themName||"她") + "那裡 " + w;
+        }).catch(()=>{ wEl.textContent = ""; });
       }
     }
   });
@@ -1565,7 +1572,7 @@ window._authReady.then(function(uid){
       const o = d.data();
       const el = document.getElementById("onlineStatus");
       if(o.online){
-        el.textContent = "🟢 她現在在線";
+        el.textContent = "🟢 " + (window.themName||"她") + "現在在線";
       } else if(o.lastSeen){
         const diff = Math.floor((Date.now() - o.lastSeen.toDate())/60000);
         el.textContent = diff < 60 ? "⚪ " + diff + " 分鐘前上線" : "⚪ 剛才上線過";
@@ -1594,7 +1601,10 @@ window._authReady.then(function(uid){
       }
       html += `<div style="background:rgba(255,255,255,.65);backdrop-filter:blur(20px);border-radius:16px;padding:12px;margin:8px 0;display:flex;justify-content:space-between;align-items:center">
         <span style="font-family:'Noto Serif TC',serif;color:var(--pink-deep)">${a.name}</span>
-        <span style="color:var(--pink);font-weight:600">${days === 0 ? "今天！🎉" : days + " 天"}</span>
+        <span style="display:flex;align-items:center;gap:10px">
+          <span style="color:var(--pink);font-weight:600">${days === 0 ? "今天！🎉" : days + " 天"}</span>
+          <button onclick="db.collection('anniversaries').doc('${d.id}').delete()" style="border:none;background:none;cursor:pointer;font-size:1rem;opacity:.5">🗑️</button>
+        </span>
       </div>`;
     });
     list.innerHTML = html || "<div style='color:#999;font-size:.85rem'>還沒有紀念日，加一個吧～</div>";
@@ -1620,9 +1630,9 @@ window._authReady.then(function(uid){
     const d = doc.data();
     const me = d[uid], her = d[Object.keys(d).find(k => k !== uid)];
     if(me && her){
-      el.textContent = me < her ? "你先睡了 🌙" : "她先睡了 😴";
+      el.textContent = me < her ? "你先睡了 🌙" : ((window.themName||"她") + "先睡了 😴");
     } else if(me){ el.textContent = "你說了晚安，等她..."; }
-    else if(her){ el.textContent = "她先說晚安了！"; }
+    else if(her){ el.textContent = (window.themName||"她") + "先說晚安了！"; }
     else { el.textContent = "還沒人睡"; }
   });
 });
@@ -1717,7 +1727,7 @@ window._authReady.then(function(uid){
       if(d.id === uid) mine = s.mood; else hers = s.mood;
     });
     document.getElementById("moodShow").innerHTML =
-      "我：" + (mine||"尚未更新") + " &nbsp;&nbsp; 她：" + (hers||"尚未更新");
+      "我：" + (mine||"尚未更新") + " &nbsp;&nbsp; " + (window.themName||"她") + "：" + (hers||"尚未更新");
   });
 });
 
@@ -1733,7 +1743,7 @@ window._authReady.then(function(uid){
       if(d.id === uid) mine = s.what; else hers = s.what;
     });
     document.getElementById("statusShow").innerHTML =
-      "我：" + (mine||"尚未更新") + "<br>她：" + (hers||"尚未更新");
+      "我：" + (mine||"尚未更新") + "<br>" + (window.themName||"她") + "：" + (hers||"尚未更新");
   });
 });
 
