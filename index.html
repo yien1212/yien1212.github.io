@@ -1590,12 +1590,11 @@ window._authReady.then(function(uid){
         // 天氣（有定位才請求）
         const wEl = document.getElementById("weatherTip");
         wEl.textContent = (window.themName||"她") + "那裡天氣..."
-        fetch(`https://wttr.in/${her.lat},${her.lng}?format=3&lang=zh`).then(r => {
-          if(!r.ok) throw new Error('weather');
-          return r.text();
-        }).then(w => {
-          w = w.replace(/[\x1b\[][0-9;]*m/g,'').replace(/\n/g,' ').trim();
-          wEl.textContent = (window.themName||"她") + "那裡 " + w;
+        fetch(`https://api.open-meteo.com/v1/forecast?latitude=${her.lat}&longitude=${her.lng}&current=temperature_2m,weather_code&timezone=auto`)
+        .then(r => r.json()).then(d => {
+          const codes = {0:"☀️ 晴",1:"🌤 多雲",2:"⛅ 多雲",3:"☁️ 陰",45:"🌫 霧",48:"🌫 霧",51:"🌦 毛毛雨",53:"🌦 毛毛雨",55:"🌧 雨",61:"🌧 小雨",63:"🌧 雨",65:"🌧 大雨",71:"🌨 雪",73:"🌨 雪",75:"❄️ 大雪",80:"🌦 陣雨",81:"🌧 陣雨",82:"⛈ 大雨",95:"⛈ 雷雨"};
+          const w = codes[d.current.weather_code] || "🌡";
+          wEl.textContent = (window.themName||"她") + "那裡 " + w + " " + Math.round(d.current.temperature_2m) + "°C";
         }).catch(()=>{ wEl.textContent = ""; });
       }
     }
