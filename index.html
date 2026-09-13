@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>我們 ❤️</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@200;300;400;600;700&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Noto+Serif+TC:wght@200;300;400;600&display=swap" rel="stylesheet">
 <style>
 :root{
   --pink:#ff6b9d; --pink-deep:#e91e63; --pink-soft:#ffd6e7;
@@ -59,32 +59,44 @@ body::before{
 /* 主容器 */
 #app{max-width:720px; margin:0 auto; padding:0 20px 80px}
 
-/* HERO */
+/* HERO 滿版 */
 .hero{
   min-height:100vh; display:flex; flex-direction:column;
   align-items:center; justify-content:center; text-align:center;
-  position:relative;
+  position:relative; padding:40px 20px;
+  background:linear-gradient(160deg,#fff5f7 0%,#ffe4ec 50%,#fff 100%);
 }
-.hero .heart{font-size:3rem; margin-bottom:20px; animation:beat 1.5s ease-in-out infinite}
+.hero .heart{font-size:2.5rem; margin-bottom:16px; animation:beat 1.5s ease-in-out infinite}
 @keyframes beat{0%,100%{transform:scale(1)}25%{transform:scale(1.15)}50%{transform:scale(1)}75%{transform:scale(1.1)}}
 .hero h1{
-  font-family:"Noto Serif TC",serif; font-weight:200;
-  font-size:2.8rem; color:var(--pink-deep); letter-spacing:8px; line-height:1.4;
+  font-family:"Caveat","Noto Serif TC",cursive;
+  font-weight:400;
+  font-size:3.2rem; color:var(--pink-deep); letter-spacing:2px; line-height:1.3;
+  max-width:600px;
 }
-.hero .sub{color:#bb9; margin-top:14px; font-size:.95rem; letter-spacing:3px}
+.hero .sub{color:#c9a; margin-top:14px; font-size:.9rem; letter-spacing:4px}
 .hero .big{
-  margin-top:30px; font-family:"Noto Serif TC",serif;
-  font-size:1.1rem; color:#888; font-weight:300;
+  margin-top:36px; font-family:"Noto Serif TC",serif;
+  font-size:1rem; color:#999; font-weight:300; letter-spacing:2px;
 }
 .hero .big b{
-  display:block; font-size:3rem; color:var(--pink-deep);
-  font-weight:600; margin-top:8px;
+  display:block; font-size:4.5rem; color:var(--pink-deep);
+  font-weight:700; margin-top:6px; line-height:1;
+  font-variant-numeric:tabular-nums;
+  text-shadow:0 4px 20px rgba(233,30,99,.2);
 }
 .scroll{
-  position:absolute; bottom:30px; color:var(--pink);
-  font-size:1.5rem; animation:bounce 2s infinite;
+  position:absolute; bottom:30px; left:50%; transform:translateX(-50%);
+  color:var(--pink); font-size:1.5rem; animation:bounce 2s infinite;
 }
-@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(10px)}}
+@keyframes bounce{0%,100%{transform:translateY(0);translateX(-50%)}50%{transform:translateY(10px);translateX(-50%)}}
+@media(min-width:768px){
+  .hero{flex-direction:row; text-align:left; gap:60px; justify-content:center}
+  .hero .hero-left{flex:1; max-width:480px}
+  .hero h1{font-size:3.8rem}
+  .hero .big{margin-top:0}
+  .hero .heart{display:none}
+}
 
 /* 區塊標題 */
 .stitle{
@@ -154,11 +166,18 @@ body::before{
 }
 .tl-item{
   position:relative; width:45%; padding:16px 18px;
-  background:rgba(255,255,255,.6); backdrop-filter:blur(10px);
+  background:rgba(255,255,255,.85); backdrop-filter:blur(10px);
   border-radius:16px; margin:14px 0; text-align:left;
-  opacity:0; transform:translateY(20px); transition:all .6s;
+  opacity:0; transform:translateY(20px);
+  transition:all .5s ease-in-out;
+  box-shadow:0 4px 20px rgba(233,30,99,.08);
+}
+.tl-item:hover{
+  transform:scale(1.04) translateY(-4px);
+  box-shadow:0 12px 35px rgba(233,30,99,.18);
 }
 .tl-item.vis{opacity:1; transform:translateY(0)}
+.tl-item.vis:hover{transform:scale(1.04) translateY(-4px)}
 .tl-item:nth-child(odd){left:0}
 .tl-item:nth-child(even){left:55%}
 .tl-item::after{
@@ -168,8 +187,15 @@ body::before{
 }
 .tl-item:nth-child(odd)::after{right:-28px}
 .tl-item:nth-child(even)::after{left:-28px}
-.tl-date{font-size:.72rem; color:var(--pink); font-weight:500}
-.tl-text{font-size:.88rem; color:#666; margin-top:5px; line-height:1.5; font-weight:300}
+.tl-date{font-size:.72rem; color:var(--pink); font-weight:500; letter-spacing:1px}
+.tl-text{font-size:.88rem; color:#666; margin-top:5px; line-height:1.6; font-weight:300}
+.tl-photo{
+  width:100%; height:120px; object-fit:cover; border-radius:10px;
+  margin-top:10px; background:#f8e8ef;
+  border:6px solid #fff; box-shadow:0 4px 12px rgba(0,0,0,.1);
+  transition:all .5s ease-in-out;
+}
+.tl-item:hover .tl-photo{transform:rotate(-2deg) scale(1.03)}
 
 /* 輪播 */
 .carousel{
@@ -606,10 +632,14 @@ body{counter-reset: section}
 
   <!-- HERO -->
   <div class="hero">
-    <div class="heart">❤️</div>
-    <h1 id="heroTitle">我們的故事</h1>
-    <p class="sub">— 我們的故事 —</p>
-    <div class="big">已經在一起<b id="heroDays">...</b>天</div>
+    <div class="hero-left">
+      <div class="heart">❤️</div>
+      <h1 id="heroTitle">我們的故事</h1>
+      <p class="sub">— 我們的故事 —</p>
+    </div>
+    <div class="hero-right">
+      <div class="big">已經在一起<b id="heroDays">...</b>天</div>
+    </div>
     <div class="scroll">↓</div>
   </div>
 
@@ -686,13 +716,13 @@ body{counter-reset: section}
   <!-- 時間軸 -->
   <h3 class="stitle">我們的軌跡</h3>
   <div class="tl">
-    <div class="tl-item"><div class="tl-date">2024 / 12 / 13</div><div class="tl-text">在一起的那天。過程很智障，但結果很好。</div></div>
-    <div class="tl-item"><div class="tl-date">2025 / 10</div><div class="tl-text">兩個安全帽一起騎車兜風。</div></div>
-    <div class="tl-item"><div class="tl-date">2025 / 12</div><div class="tl-text">一起吃甜點、去礁溪老爺住了一晚。</div></div>
-    <div class="tl-item"><div class="tl-date">2026 / 01</div><div class="tl-text">她帶著公主皇冠跟魔杖出現。</div></div>
-    <div class="tl-item"><div class="tl-date">2026 / 02</div><div class="tl-text">睡醒還是要拍一張。</div></div>
-    <div class="tl-item"><div class="tl-date">2026 / 03</div><div class="tl-text">一起吃冰淇淋，她變成冰淇淋。</div></div>
-    <div class="tl-item"><div class="tl-date">現在</div><div class="tl-text">還在繼續。未完待續。</div></div>
+    <div class="tl-item"><div class="tl-date">2024 / 12 / 13</div><div class="tl-text">在一起的那天。過程很智障，但結果很好。</div><img class="tl-photo" src="IMG_8145.JPG" alt=""></div>
+    <div class="tl-item"><div class="tl-date">2025 / 10</div><div class="tl-text">兩個安全帽一起騎車兜風。</div><img class="tl-photo" src="couple_helmet.jpg" alt=""></div>
+    <div class="tl-item"><div class="tl-date">2025 / 12</div><div class="tl-text">一起吃甜點、去礁溪老爺住了一晚。</div><img class="tl-photo" src="date_dessert.jpg" alt=""></div>
+    <div class="tl-item"><div class="tl-date">2026 / 01</div><div class="tl-text">她帶著公主皇冠跟魔杖出現。</div><img class="tl-photo" src="IMG_8168.JPG" alt=""></div>
+    <div class="tl-item"><div class="tl-date">2026 / 02</div><div class="tl-text">睡醒還是要拍一張。</div><img class="tl-photo" src="IMG_5576.jpg" alt=""></div>
+    <div class="tl-item"><div class="tl-date">2026 / 03</div><div class="tl-text">一起吃冰淇淋，她變成冰淇淋。</div><img class="tl-photo" src="giant_icecream.jpg" alt=""></div>
+    <div class="tl-item"><div class="tl-date">現在</div><div class="tl-text">還在繼續。未完待續。</div><img class="tl-photo" src="IMG_6957.jpg" alt=""></div>
   </div>
 
   <!-- 輪播 -->
