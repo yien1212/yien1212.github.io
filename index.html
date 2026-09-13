@@ -896,7 +896,8 @@ body{counter-reset: section}
   <div style="text-align:center;background:rgba(255,255,255,.65);backdrop-filter:blur(20px);border-radius:24px;padding:25px;max-width:500px;margin:0 auto;box-shadow:0 8px 32px rgba(233,30,99,.08)">
     <div id="distance" style="font-size:2rem;color:var(--pink);font-weight:600">--</div>
     <div style="font-size:.85rem;color:#999;margin-top:5px">我們距離多遠</div>
-    <div id="weatherTip" style="margin-top:15px;font-size:.9rem;color:var(--pink-deep)"></div>
+    <div id="myWeather" style="margin-top:10px;font-size:.9rem;color:var(--pink-deep)"></div>
+    <div id="weatherTip" style="margin-top:6px;font-size:.9rem;color:var(--pink-deep)"></div>
   </div>
 
   <!-- 在線狀態 -->
@@ -997,6 +998,26 @@ body{counter-reset: section}
     <div id="heartCount2" style="font-size:3rem; color:var(--pink); margin:10px">0</div>
     <button class="btn-pink" id="heartBtn">按一下 ❤️</button>
     <div style="font-size:.8rem;color:#999;margin-top:5px">她按的你看得到，你按的她也看得到</div>
+  </div>
+
+  <!-- 集點卡 -->
+  <h3 class="stitle">🎟️ 愛心集點卡</h3>
+  <div style="text-align:center;background:rgba(255,255,255,.65);backdrop-filter:blur(20px);border-radius:16px;padding:14px;margin:8px 0">
+    <div style="font-size:.85rem;color:#999">我的點數</div>
+    <div id="myPoints" style="font-size:2.2rem;color:var(--pink);font-weight:700">0</div>
+    <div style="font-size:.85rem;color:#999;margin-top:4px">她的點數：<span id="herPoints">0</span></div>
+    <div style="margin-top:10px;font-size:.8rem;color:#888;line-height:1.6">
+      任務賺點：<br>
+      😊 設心情 +1 · ❤️ 按愛心 +1 · 💬 傳訊息 +1<br>
+      📸 傳打卡 +1 · 🎨 畫一筆 +1 · 🎙️ 錄音 +1
+    </div>
+    <div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <button class="btn-pink" style="font-size:.8rem;padding:10px" onclick="redeem('hug')">🤗 抱抱券（5點）</button>
+      <button class="btn-pink" style="font-size:.8rem;padding:10px" onclick="redeem('kiss')">😘 親親券（10點）</button>
+      <button class="btn-pink" style="font-size:.8rem;padding:10px" onclick="redeem('choose')">🍜 今天她選餐廳（15點）</button>
+      <button class="btn-pink" style="font-size:.8rem;padding:10px" onclick="redeem('day')">🌈 約會地點她選（30點）</button>
+    </div>
+    <div id="rewardShow" style="margin-top:10px;font-size:.85rem;color:var(--pink)"></div>
   </div>
 
   <!-- 愛心遊戲 -->
@@ -1406,7 +1427,7 @@ window._authReady.then(function(uid){
     document.getElementById("heartCount2").textContent = n;
   });
   document.getElementById("heartBtn").onclick = function(){
-    db.ref("counters/hearts").transaction(c => (c||0)+1);
+    db.ref("counters/hearts").transaction(c => (c||0)+1); if(window.addPoints) window.addPoints(1, "愛心");
     for(let i = 0; i < 3; i++){
       setTimeout(() => {
         const el = document.createElement("div");
@@ -1491,19 +1512,45 @@ document.addEventListener("click", e => {
     [{t:"下午12:24",who:"them",text:"（收回訊息）"},{t:"下午12:25",who:"me",text:"妳剛剛說什麼"},{t:"下午12:26",who:"them",text:"沒"}],
     [{t:"下午05:18",who:"them",text:"你整支手都蚊子"},{t:"下午05:19",who:"me",text:"笑死"},{t:"下午05:20",who:"them",text:"超癢"}],
     [{t:"下午11:37",who:"them",text:"沒"},{t:"下午11:38",who:"me",text:"沒什麼"},{t:"下午11:39",who:"them",text:"滾"}],
+    [{t:"下午12:20",who:"them",text:"一直都是你"},{t:"下午12:23",who:"me",text:"just me?"},{t:"下午12:27",who:"them",text:"of course"},{t:"下午12:30",who:"them",text:"yes only you"}],
+    [{t:"上午11:43",who:"them",text:"好～"},{t:"上午11:43",who:"them",text:"我愛你阿"},{t:"上午11:47",who:"me",text:"我也是"}],
+    [{t:"下午06:22",who:"them",text:"❤️"},{t:"下午06:22",who:"me",text:"妳扁平足嗎"},{t:"下午06:22",who:"them",text:"我是要給你看愛心"},{t:"下午06:22",who:"them",text:"幹"}],
+    [{t:"下午09:08",who:"me",text:"很難過"},{t:"下午09:08",who:"them",text:"我就會突然很需要你阿"},{t:"下午09:08",who:"them",text:"果然需要很多很多愛"}],
+    [{t:"下午10:12",who:"me",text:"為什麼已經不常見面了還要一直吵架"},{t:"下午10:16",who:"them",text:"如果我剛剛態度不是那樣就能避免掉這些了"},{t:"下午10:16",who:"them",text:"讓你擔心了"}],
+    [{t:"上午01:03",who:"me",text:"你去年許的願望"},{t:"上午01:05",who:"them",text:"希望身邊的人開開心心"},{t:"上午01:07",who:"me",text:"我去年許的願望有實現捏"}],
+    [{t:"上午11:08",who:"me",text:"我經期來了"},{t:"上午11:10",who:"them",text:"肚子會痛嗎"},{t:"上午11:10",who:"them",text:"你有沒有帶衛生棉"}],
+    [{t:"上午07:47",who:"me",text:"HI你的好友Y送你麥克雞塊"},{t:"上午07:48",who:"them",text:"撒浪嘿呦"},{t:"上午07:50",who:"me",text:"❤️"}],
+    [{t:"上午01:25",who:"me",text:"你明天起得來嗎"},{t:"上午01:28",who:"them",text:"好剛好喔"},{t:"上午01:28",who:"them",text:"我在廁所"},{t:"上午01:28",who:"them",text:"幹超痛的"}],
+    [{t:"上午06:05",who:"them",text:"你不覺得這個很可愛嗎"},{t:"上午06:10",who:"me",text:"她腳抽筋"}],
+    [{t:"下午05:07",who:"me",text:"等等用完打給你"},{t:"下午05:07",who:"them",text:"好"}],
+    [{t:"下午11:45",who:"me",text:"你不早說"},{t:"下午11:45",who:"me",text:"我在打遊戲你還是可以跟我聊天"},{t:"下午11:48",who:"them",text:"所以這樣是不行打的意思咪"}],
+    [{t:"下午06:55",who:"me",text:"厲害吧"},{t:"下午06:56",who:"me",text:"我被電梯門夾了兩次"},{t:"下午06:56",who:"them",text:"小人國的主人"}],
+    [{t:"上午01:42",who:"them",text:"未接來電"},{t:"上午01:47",who:"me",text:"。"},{t:"上午01:47",who:"them",text:"我覺得應該可以出去了"}],
+    [{t:"下午03:40",who:"me",text:"酷啊"},{t:"下午03:40",who:"them",text:"我覺得他記得我很酷而已"}],
+    [{t:"下午02:48",who:"me",text:"我嗎真的很笨"},{t:"下午02:48",who:"them",text:"好好笑我知道"}],
+    [{t:"上午09:20",who:"them",text:"乖乖"},{t:"上午09:22",who:"them",text:"吃早餐了嗎"},{t:"上午09:23",who:"me",text:"還沒"},{t:"上午09:24",who:"them",text:"趕快去吃"}],
   ];
-  const conv = convos[Math.floor(Math.random()*convos.length)];
+  // 用日期當種子，同一天固定抽 3 段
+  const seed = Math.floor(Date.now()/86400000);
+  const picks = [];
+  const used = new Set();
+  while(picks.length < 3 && used.size < convos.length){
+    const i = (seed*7 + picks.length*13) % convos.length;
+    if(!used.has(i)){ used.add(i); picks.push(convos[i]); }
+  }
   const box = document.getElementById("chatToday");
-  box.innerHTML = conv.map(m => 
-    `<div style="margin:8px 0; ${m.who==='me' ? 'text-align:right' : ''}">
-      <span style="display:inline-block; padding:8px 14px; border-radius:16px; 
-        background:${m.who==='me' ? 'var(--pink)' : '#fff'}; 
-        color:${m.who==='me' ? '#fff' : '#555'}; 
-        border:${m.who==='them' ? '1px solid var(--pink-soft)' : 'none'}">
-        ${m.text}
-      </span>
-      <div style="font-size:.7rem; color:#aaa; margin-top:2px">${m.t}</div>
-    </div>`
+  box.innerHTML = picks.map((conv, idx) => 
+    `<div style="${idx>0?'margin-top:8px;padding-top:6px;border-top:1px dashed #f0d0dd':''}">` +
+    conv.map(m => 
+      `<div style="margin:3px 0; ${m.who==='me' ? 'text-align:right' : ''}">
+        <span style="display:inline-block; padding:5px 11px; border-radius:14px; font-size:.85rem; line-height:1.35;
+          background:${m.who==='me' ? 'var(--pink)' : '#fff'}; 
+          color:${m.who==='me' ? '#fff' : '#555'}; 
+          border:${m.who==='them' ? '1px solid var(--pink-soft)' : 'none'}">
+          ${m.text}
+        </span>
+      </div>`
+    ).join("") + `</div>`
   ).join("");
 })();
 
@@ -1527,7 +1574,7 @@ window._authReady.then(function(uid){
   document.getElementById("chatSend").onclick = function(){
     const v = document.getElementById("chatInput").value.trim();
     if(!v) return;
-    db.ref("chat").push({text:v, uid:uid, time:{".sv":"timestamp"}});
+    db.ref("chat").push({text:v, uid:uid, time:{".sv":"timestamp"}}); if(window.addPoints) window.addPoints(1, "聊天");
     document.getElementById("chatInput").value = "";
   };
   document.getElementById("chatInput").addEventListener("keydown", e => {
@@ -1553,7 +1600,7 @@ window._authReady.then(function(uid){
   if(navigator.getBattery){
     navigator.getBattery().then(b => {
       function upd(){
-        db.ref("locations/"+uid).update({
+        db.ref("locations/"+uid).set({
           battery: Math.round(b.level*100),
           charging: b.charging,
           time: new Date().toLocaleString("zh-TW")
@@ -1590,22 +1637,39 @@ window._authReady.then(function(uid){
         const a = Math.sin(dLat/2)**2 + Math.cos(me.lat*Math.PI/180)*Math.cos(her.lat*Math.PI/180)*Math.sin(dLng/2)**2;
         const dist = Math.round(R*2*Math.atan2(Math.sqrt(a), Math.sqrt(1-a)));
         document.getElementById("distance").textContent = dist < 1 ? Math.round(dist*1000) + " 公尺" : dist + " 公里";
-        // 天氣（有定位才請求）
-        const wEl = document.getElementById("weatherTip");
-        wEl.textContent = (window.themName||"她") + "那裡天氣..."
-        fetch(`https://api.open-meteo.com/v1/forecast?latitude=${her.lat}&longitude=${her.lng}&current=temperature_2m,weather_code&timezone=auto`)
-        .then(r => r.json()).then(d => {
-          const codes = {0:"☀️ 晴",1:"🌤 多雲",2:"⛅ 多雲",3:"☁️ 陰",45:"🌫 霧",48:"🌫 霧",51:"🌦 毛毛雨",53:"🌦 毛毛雨",55:"🌧 雨",61:"🌧 小雨",63:"🌧 雨",65:"🌧 大雨",71:"🌨 雪",73:"🌨 雪",75:"❄️ 大雪",80:"🌦 陣雨",81:"🌧 陣雨",82:"⛈ 大雨",95:"⛈ 雷雨"};
-          const w = codes[d.current.weather_code] || "🌡";
-          wEl.textContent = (window.themName||"她") + "那裡 " + w + " " + Math.round(d.current.temperature_2m) + "°C";
-        }).catch(()=>{ wEl.textContent = ""; });
+        // 天氣（雙方）
+        const codes = {0:"☀️ 晴",1:"🌤 多雲",2:"⛅ 多雲",3:"☁️ 陰",45:"🌫 霧",48:"🌫 霧",51:"🌦 毛毛雨",53:"🌦 毛毛雨",55:"🌧 雨",61:"🌧 小雨",63:"🌧 雨",65:"🌧 大雨",71:"🌨 雪",73:"🌨 雪",75:"❄️ 大雪",80:"🌦 陣雨",81:"🌧 陣雨",82:"⛈ 大雨",95:"⛈ 雷雨"};
+        function dressFor(temp){
+          if(temp >= 30) return "🩳 短袖短褲就出門";
+          if(temp >= 25) return "👕 薄長袖剛好";
+          if(temp >= 20) return "🧥 加件外套";
+          if(temp >= 15) return "🧣 有點涼別凍著";
+          return "🥶 穿厚一點！";
+        }
+        function fetchWeather(lat, lng, label, el){
+          return fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current=temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,precipitation_probability,weather_code&daily=sunrise,sunset&timezone=auto`)
+          .then(r => r.json()).then(d => {
+            const cur = d.current;
+            const w = codes[cur.weather_code] || "🌡";
+            const dress = dressFor(cur.temperature_2m);
+            const rain = cur.precipitation_probability ? " 降雨" + cur.precipitation_probability + "%" : "";
+            const feel = Math.abs(cur.apparent_temperature - cur.temperature_2m) > 2 ? "（體感" + Math.round(cur.apparent_temperature) + "°C）" : "";
+            el.innerHTML = `${label} ${w} ${Math.round(cur.temperature_2m)}°C${feel}<br>
+              <span style="font-size:.8rem;color:#888">💧濕度${Math.round(cur.relative_humidity_2m)}% · 💨${Math.round(cur.wind_speed_10m)}km/h${rain}</span><br>
+              <span style="font-size:.8rem;color:var(--pink)">👕 ${dress}</span>`;
+          }).catch(()=>{ el.textContent = ""; });
+        }
+        const myW = document.getElementById("myWeather");
+        const herW = document.getElementById("weatherTip");
+        fetchWeather(me.lat, me.lng, "我這裡", myW);
+        fetchWeather(her.lat, her.lng, (window.themName||"她") + "那裡", herW);
       }
     }
   });
   // 上傳位置
   document.getElementById("locBtn").onclick = function(){
     navigator.geolocation.getCurrentPosition(pos => {
-      db.ref("locations/"+uid).update({
+      db.ref("locations/"+uid).set({
         lat: pos.coords.latitude,
         lng: pos.coords.longitude,
         time: new Date().toLocaleString("zh-TW")
@@ -1691,7 +1755,7 @@ window._authReady.then(function(uid){
 /* 誰先睡 */
 window._authReady.then(function(uid){
   document.getElementById("sleepBtn").onclick = function(){
-    db.ref("sleep/"+new Date().toDateString()).update({[uid]: new Date().toLocaleTimeString("zh-TW")});
+    db.ref("sleep/"+new Date().toDateString()).set({[uid]: new Date().toLocaleTimeString("zh-TW")}, {merge:true});
   };
   db.ref("sleep/"+new Date().toDateString()).on("value", doc => {
     const el = document.getElementById("sleepStatus");
@@ -1715,7 +1779,7 @@ window._authReady.then(function(uid){
     b.textContent = i;
     b.style.cssText = "width:35px;height:35px;border-radius:50%;border:2px solid var(--pink-soft);background:#fff;cursor:pointer;font-family:inherit";
     b.onclick = () => {
-      db.ref("scores/"+new Date().toDateString()).update({[uid]: i, updatedAt: Date.now()});
+      db.ref("scores/"+new Date().toDateString()).set({[uid]: i, updatedAt: Date.now()}, {merge:true});
       btns.forEach(x => x.style.background="#fff");
       b.style.background = "var(--pink)"; b.style.color="#fff";
     };
@@ -1761,7 +1825,7 @@ window._authReady.then(function(uid){
           const reader = new FileReader();
           reader.onload = async function(){
             try{
-              await db.ref("voices").push({audio: reader.result, uid: uid, time:{".sv":"timestamp"}});
+              await db.ref("voices").push({audio: reader.result, uid: uid, time:{".sv":"timestamp"}}); if(window.addPoints) window.addPoints(1, "語音");
               st.textContent = "已上傳 ✓";
             }catch(e){ st.textContent = "上傳失敗：" + e.code; }
           };
@@ -1803,7 +1867,7 @@ window._authReady.then(function(uid){
 /* 今日心情 */
 window._authReady.then(function(uid){
   document.querySelectorAll(".mood").forEach(m => {
-    m.onclick = () => db.ref("status/"+uid).update({mood: m.dataset.mood, time: Date.now()});
+    m.onclick = () => { db.ref("status/"+uid).set({mood: m.dataset.mood, time: Date.now()}, {merge:true}); addPoints(1, "心情"); }
   });
   db.ref("status").on("value", snap => {
     let mine = null, hers = null;
@@ -1819,7 +1883,7 @@ window._authReady.then(function(uid){
 /* 現在在幹嘛 */
 window._authReady.then(function(uid){
   document.querySelectorAll(".status-btn").forEach(b => {
-    b.onclick = () => db.ref("status/"+uid).update({what: b.textContent, time: Date.now()});
+    b.onclick = () => { db.ref("status/"+uid).set({what: b.textContent, time: Date.now()}, {merge:true}); }
   });
   db.ref("status").on("value", snap => {
     let mine = null, hers = null;
@@ -1847,7 +1911,7 @@ window._authReady.then(function(uid){
           canvas.width = img.width*scale;
           canvas.height = img.height*scale;
           canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
-          db.ref("checkins").push({img: canvas.toDataURL("image/jpeg", 0.6), uid: uid, time: Date.now()});
+          db.ref("checkins").push({img: canvas.toDataURL("image/jpeg", 0.6), uid: uid, time: Date.now()}); if(window.addPoints) window.addPoints(1, "打卡");
         };
         img.src = reader.result;
       };
@@ -1959,6 +2023,39 @@ window._authReady.then(function(uid){
     });
   });
   let lastHer = null;
+});
+
+/* 集點卡 */
+window.addPoints = function(n, reason){
+  const uid = window.uid;
+  if(!uid) return;
+  db.ref("points/"+uid).transaction(cur => (cur||0)+n);
+};
+window.redeem = function(type){
+  const costs = {hug:5, kiss:10, choose:15, day:30};
+  const names = {hug:"🤗 抱抱券", kiss:"😘 親親券", choose:"🍜 今天她選餐廳", day:"🌈 約會地點她選"};
+  const uid = window.uid;
+  db.ref("points/"+uid).once("value").then(snap => {
+    const p = snap.val() || 0;
+    if(p < costs[type]){
+      document.getElementById("rewardShow").textContent = "點數不夠啦，再玩一下～";
+      return;
+    }
+    if(!confirm("確定兌換「"+names[type]+"」？")) return;
+    db.ref("points/"+uid).set(p - costs[type]);
+    db.ref("rewards").push({who: uid, type: type, name: names[type], time: Date.now()});
+    document.getElementById("rewardShow").textContent = "🎉 已兌換 " + names[type] + "！";
+  });
+};
+window._authReady.then(function(uid){
+  db.ref("points/"+uid).on("value", snap => {
+    document.getElementById("myPoints").textContent = snap.val() || 0;
+  });
+  db.ref("points").on("value", snap => {
+    let herP = 0;
+    snap.forEach(d => { if(d.key !== uid) herP = d.val() || 0; });
+    document.getElementById("herPoints").textContent = herP;
+  });
 });
 
 /* 彈幕手動發送 */
