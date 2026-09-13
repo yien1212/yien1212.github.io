@@ -1823,26 +1823,31 @@ window._authReady.then(function(uid){
       let mimeType = '';
       if(window.MediaRecorder && MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) mimeType = 'audio/webm;codecs=opus';
       else if(window.MediaRecorder && MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported('audio/mp4')) mimeType = 'audio/mp4';
+      else if(window.MediaRecorder && MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported('audio/webm')) mimeType = 'audio/webm';
       mediaRecorder = mimeType ? new MediaRecorder(stream, {mimeType}) : new MediaRecorder(stream);
       chunks = [];
-      mediaRecorder.ondataavailable = e => chunks.push(e.data);
+      mediaRecorder.ondataavailable = e => { if(e.data && e.data.size) chunks.push(e.data); };
       mediaRecorder.onstop = async function(){
         clearTimeout(maxTimer);
         document.getElementById("recBtn").textContent = "開始錄音";
         try{
-          const blob = new Blob(chunks, {type:"audio/webm"});
+          const blob = new Blob(chunks, {type: mimeType || 'audio/webm'});
+          if(blob.size === 0){ st.textContent = "沒錄到聲音，再試一次"; return; }
           if(blob.size > 2000000){ st.textContent = "太長了，最多15秒"; return; }
+          st.textContent = "上傳中...";
           const reader = new FileReader();
           reader.onload = async function(){
             try{
-              await db.ref("voices").push({audio: reader.result, uid: uid, time:{".sv":"timestamp"}}); if(window.addPoints) window.addPoints(1, "語音");
+              await db.ref("voices").push({audio: reader.result, uid: uid, time:{".sv":"timestamp"}});
+              if(window.addPoints) window.addPoints(1, "語音");
               st.textContent = "已上傳 ✓";
-            }catch(e){ st.textContent = "上傳失敗：" + e.code; }
+            }catch(e){ st.textContent = "上傳失敗：" + (e.message || e.code || e); }
           };
+          reader.onerror = () => { st.textContent = "讀取錄音檔失敗"; };
           reader.readAsDataURL(blob);
         }catch(err){ st.textContent = "錄音錯誤：" + err.message; }
       };
-      mediaRecorder.start();
+      mediaRecorder.start(100);
       document.getElementById("recBtn").textContent = "停止錄音";
       st.textContent = "錄音中...（最多15秒）";
       maxTimer = setTimeout(() => { if(mediaRecorder.state==="recording") mediaRecorder.stop(); }, 15000);
