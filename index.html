@@ -219,15 +219,17 @@ body::before{
 #cPrev{left:10px} #cNext{right:10px}
 
 /* 照片牆 */
-.wall{display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:12px}
+.wall{columns:3; column-gap:12px}
+@media(max-width:600px){.wall{columns:2}}
 .wall figure{
-  margin:0; cursor:pointer; overflow:hidden; border-radius:16px;
+  margin:0 0 12px; cursor:pointer; overflow:hidden; border-radius:16px;
   background:#fff; box-shadow:0 4px 15px rgba(0,0,0,.06);
   transition:all .4s;
+  break-inside:avoid;
 }
 .wall figure:hover{transform:translateY(-5px); box-shadow:0 12px 30px rgba(233,30,99,.2)}
-.wall img{width:100%; height:160px; object-fit:cover; display:block; transition:transform .6s}
-.wall figure:hover img{transform:scale(1.08)}
+.wall img{width:100%; height:auto; display:block; transition:transform .6s}
+.wall figure:hover img{transform:scale(1.05)}
 
 /* 燈箱 */
 #lb{
