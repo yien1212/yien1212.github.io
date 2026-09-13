@@ -1011,6 +1011,17 @@ body{counter-reset: section}
       😊 設心情 +1 · ❤️ 按愛心 +1 · 💬 傳訊息 +1<br>
       📸 傳打卡 +1 · 🎨 畫一筆 +1 · 🎙️ 錄音 +1
     </div>
+    <div style="margin-top:10px;font-size:.8rem;color:var(--pink-deep)">💪 現實任務（手動打卡）</div>
+    <div style="margin-top:6px;display:grid;grid-template-columns:1fr 1fr;gap:6px">
+      <button style="padding:8px;border:1px solid var(--pink-soft);border-radius:12px;background:#fff;cursor:pointer;font-family:inherit;font-size:.82rem" onclick="taskDone('💆 按摩',2)">💆 按摩她 +2</button>
+      <button style="padding:8px;border:1px solid var(--pink-soft);border-radius:12px;background:#fff;cursor:pointer;font-family:inherit;font-size:.82rem" onclick="taskDone('🧹 做家事',2)">🧹 做家事 +2</button>
+      <button style="padding:8px;border:1px solid var(--pink-soft);border-radius:12px;background:#fff;cursor:pointer;font-family:inherit;font-size:.82rem" onclick="taskDone('🐱 餵寵物',2)">🐱 餵寵物 +2</button>
+      <button style="padding:8px;border:1px solid var(--pink-soft);border-radius:12px;background:#fff;cursor:pointer;font-family:inherit;font-size:.82rem" onclick="taskDone('🎾 陪寵物玩',2)">🎾 陪寵物玩 +2</button>
+      <button style="padding:8px;border:1px solid var(--pink-soft);border-radius:12px;background:#fff;cursor:pointer;font-family:inherit;font-size:.82rem" onclick="taskDone('🍳 煮飯',3)">🍳 煮飯給她 +3</button>
+      <button style="padding:8px;border:1px solid var(--pink-soft);border-radius:12px;background:#fff;cursor:pointer;font-family:inherit;font-size:.82rem" onclick="taskDone('🧺 曬衣服',2)">🧺 曬衣服 +2</button>
+      <button style="padding:8px;border:1px solid var(--pink-soft);border-radius:12px;background:#fff;cursor:pointer;font-family:inherit;font-size:.82rem" onclick="taskDone('🛒 買她愛吃的',3)">🛒 買她愛吃的 +3</button>
+      <button style="padding:8px;border:1px solid var(--pink-soft);border-radius:12px;background:#fff;cursor:pointer;font-family:inherit;font-size:.82rem" onclick="taskDone('💌 說好話',1)">💌 說好聽話 +1</button>
+    </div>
     <div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
       <button class="btn-pink" style="font-size:.8rem;padding:10px" onclick="redeem('hug')">🤗 抱抱券（5點）</button>
       <button class="btn-pink" style="font-size:.8rem;padding:10px" onclick="redeem('kiss')">😘 親親券（10點）</button>
@@ -2030,6 +2041,11 @@ window.addPoints = function(n, reason){
   const uid = window.uid;
   if(!uid) return;
   db.ref("points/"+uid).transaction(cur => (cur||0)+n);
+};
+window.taskDone = function(name, n){
+  if(window.addPoints) window.addPoints(n, name);
+  const rs = document.getElementById("rewardShow");
+  rs.textContent = "✅ 完成「" + name + "」+" + n + " 點";
 };
 window.redeem = function(type){
   const costs = {hug:5, kiss:10, choose:15, day:30};
