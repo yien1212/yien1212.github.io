@@ -587,7 +587,7 @@ body{counter-reset: section}
 <body>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 <script>
   firebase.initializeApp({
     apiKey: "AIzaSyCDRGa7Pz4n481Hy2ktUwtnnDlFo74lewU",
@@ -595,9 +595,10 @@ body{counter-reset: section}
     projectId: "yien1212-8a306",
     storageBucket: "yien1212-8a306.firebasestorage.app",
     messagingSenderId: "579288934330",
-    appId: "1:579288934330:web:efbf4f118205d94b4c5f83"
+    appId: "1:579288934330:web:efbf4f118205d94b4c5f83",
+    databaseURL: "https://yien1212-8a306-default-rtdb.firebaseio.com"
   });
-  window.db = firebase.firestore();
+  window.db = firebase.database();
   window.uid = null;
   window._authResolve = null;
   window._authReady = new Promise(res => { window._authResolve = res; });
@@ -1343,8 +1344,8 @@ function renderWishes(){
   const list = document.getElementById("wishList");
   list.innerHTML = "";
   if(uid){
-    db.collection("wishes").doc("state").onSnapshot(doc => {
-      const done = doc.exists ? doc.data().done || [] : [];
+    db.ref("wishes/state").on("value", doc => {
+      const done = doc.exists() ? (doc.val() ? doc.val().done || [] : []) : [];
       list.innerHTML = "";
       wishes.forEach((w,i) => {
         const isDone = done.includes(i);
@@ -1354,7 +1355,7 @@ function renderWishes(){
         d.querySelector("input").onchange = function(){
           let s = [...done];
           if(this.checked) s.push(i); else s = s.filter(x => x !== i);
-          db.collection("wishes").doc("state").set({done:s});
+          db.ref("wishes/state").set({done:s});
         };
         list.appendChild(d);
       });
@@ -1368,15 +1369,17 @@ window._authReady.then(function(uid){
     const a = parseFloat(document.getElementById("expAmount").value);
     const n = document.getElementById("expNote").value.trim();
     if(!a) return;
-    db.collection("expenses").add({amount:a, note:n, uid:uid, time:new Date()});
+    db.ref("expenses").push({amount:a, note:n, uid:uid, time:Date.now()});
     document.getElementById("expAmount").value = "";
     document.getElementById("expNote").value = "";
   };
-  db.collection("expenses").orderBy("time","desc").onSnapshot(snap => {
+  db.ref("expenses").on("value", snap => {
     const list = document.getElementById("expList");
     let total = 0, html = "";
-    snap.forEach(d => {
-      const e = d.data();
+    const items = [];
+    snap.forEach(d => { items.push(d.val()); });
+    items.sort((a,b)=>b.time-a.time);
+    items.forEach(e => {
       total += e.amount;
       html += `<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #f0f0f0;font-size:.9rem">
         <span>${e.note || "消費"}</span><span>$${e.amount}</span>
@@ -1395,12 +1398,12 @@ window._authReady.then(function(uid){
 
 /* 一起按愛心 */
 window._authReady.then(function(uid){
-  db.collection("counters").doc("hearts").onSnapshot(doc => {
-    const n = doc.exists ? doc.data().count : 0;
+  db.ref("counters/hearts").on("value", doc => {
+    const n = doc.exists() ? (doc.val() ? doc.val().count : 0) : 0;
     document.getElementById("heartCount2").textContent = n;
   });
   document.getElementById("heartBtn").onclick = function(){
-    db.collection("counters").doc("hearts").set({count: firebase.firestore.FieldValue.increment(1)});
+    db.ref("counters/hearts").transaction(c => (c||0)+1);
     for(let i = 0; i < 3; i++){
       setTimeout(() => {
         const el = document.createElement("div");
@@ -1504,10 +1507,12 @@ document.addEventListener("click", e => {
 /* 即時聊天 */
 window._authReady.then(function(uid){
   const chatList = document.getElementById("chatList");
-  db.collection("chat").orderBy("time","asc").limit(100).onSnapshot(snap => {
+  db.ref("chat").on("value", snap => {
     chatList.innerHTML = "";
-    snap.forEach(d => {
-      const m = d.data();
+    const msgs = [];
+    snap.forEach(d => { msgs.push(d.val()); });
+    msgs.sort((a,b)=>(a.time||0)-(b.time||0));
+    msgs.slice(-100).forEach(m => {
       const mine = m.uid === uid;
       chatList.innerHTML += `<div style="margin:8px 0;${mine?'text-align:right':''}">
         <span style="display:inline-block;padding:8px 14px;border-radius:16px;
@@ -1519,7 +1524,7 @@ window._authReady.then(function(uid){
   document.getElementById("chatSend").onclick = function(){
     const v = document.getElementById("chatInput").value.trim();
     if(!v) return;
-    db.collection("chat").add({text:v, uid:uid, time:firebase.firestore.FieldValue.serverTimestamp()});
+    db.ref("chat").push({text:v, uid:uid, time:{".sv":"timestamp"}});
     document.getElementById("chatInput").value = "";
   };
   document.getElementById("chatInput").addEventListener("keydown", e => {
@@ -1528,13 +1533,13 @@ window._authReady.then(function(uid){
   // 正在輸入
   let typingTimeout;
   document.getElementById("chatInput").addEventListener("input", () => {
-    db.collection("typing").doc(uid).set({isTyping:true});
+    db.ref("typing/"+uid).set({isTyping:true});
     clearTimeout(typingTimeout);
-    typingTimeout = setTimeout(() => db.collection("typing").doc(uid).set({isTyping:false}), 2000);
+    typingTimeout = setTimeout(() => db.ref("typing/"+uid).set({isTyping:false}), 2000);
   });
-  db.collection("typing").where("isTyping","==",true).onSnapshot(snap => {
+  db.ref("typing").on("value", snap => {
     let typing = false;
-    snap.forEach(d => { if(d.id !== uid) typing = true; });
+    snap.forEach(d => { if(d.key !== uid && d.val().isTyping) typing = true; });
     document.getElementById("typing").style.display = typing ? "block" : "none";
   });
 });
@@ -1545,11 +1550,11 @@ window._authReady.then(function(uid){
   if(navigator.getBattery){
     navigator.getBattery().then(b => {
       function upd(){
-        db.collection("locations").doc(uid).set({
+        db.ref("locations/"+uid).update({
           battery: Math.round(b.level*100),
           charging: b.charging,
           time: new Date().toLocaleString("zh-TW")
-        }, {merge:true});
+        });
       }
       upd();
       b.addEventListener("levelchange", upd);
@@ -1557,14 +1562,14 @@ window._authReady.then(function(uid){
   }
   // 顯示所有人位置 + 距離
   const locs = {};
-  db.collection("locations").onSnapshot(snap => {
+  db.ref("locations").on("value", snap => {
     snap.forEach(d => {
-      const l = d.data();
-      const isMe = d.id === uid;
+      const l = d.val();
+      const isMe = d.key === uid;
       const locEl = document.getElementById(isMe ? "myLoc" : "herLoc");
       const batEl = document.getElementById(isMe ? "myBattery" : "herBattery");
       if(l.lat){
-        locs[d.id] = {lat: l.lat, lng: l.lng};
+        locs[d.key] = {lat: l.lat, lng: l.lng};
         locEl.innerHTML = `<a href="https://www.google.com/maps?q=${l.lat},${l.lng}" target="_blank" style="color:var(--pink)">看地圖</a>`;
       } else {
         locEl.textContent = "還沒上傳";
@@ -1597,11 +1602,11 @@ window._authReady.then(function(uid){
   // 上傳位置
   document.getElementById("locBtn").onclick = function(){
     navigator.geolocation.getCurrentPosition(pos => {
-      db.collection("locations").doc(uid).set({
+      db.ref("locations/"+uid).update({
         lat: pos.coords.latitude,
         lng: pos.coords.longitude,
         time: new Date().toLocaleString("zh-TW")
-      }, {merge:true});
+      });
       document.getElementById("myLoc").innerHTML = `<a href="https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}" target="_blank" style="color:var(--pink)">看地圖</a>`;
     });
   };
@@ -1610,20 +1615,21 @@ window._authReady.then(function(uid){
 /* 在線狀態 */
 window._authReady.then(function(uid){
   // 上傳在線狀態
-  db.collection("online").doc(uid).set({online: true, lastSeen: new Date()});
+  db.ref("online/"+uid).set({online: true, lastSeen: Date.now()});
   window.addEventListener("beforeunload", () => {
-    db.collection("online").doc(uid).set({online: false, lastSeen: new Date()});
+    db.ref("online/"+uid).set({online: false, lastSeen: Date.now()});
   });
-  setInterval(() => db.collection("online").doc(uid).set({online: true, lastSeen: new Date()}), 30000);
+  setInterval(() => db.ref("online/"+uid).set({online: true, lastSeen: Date.now()}), 30000);
   // 看對方
-  db.collection("online").where("uid","!=",uid).onSnapshot(snap => {
+  db.ref("online").on("value", snap => {
     snap.forEach(d => {
-      const o = d.data();
+      if(d.key === uid) return;
+      const o = d.val();
       const el = document.getElementById("onlineStatus");
       if(o.online){
         el.textContent = "🟢 " + (window.themName||"她") + "現在在線";
       } else if(o.lastSeen){
-        const diff = Math.floor((Date.now() - o.lastSeen.toDate())/60000);
+        const diff = Math.floor((Date.now() - o.lastSeen)/60000);
         el.textContent = diff < 60 ? "⚪ " + diff + " 分鐘前上線" : "⚪ 剛才上線過";
       }
     });
@@ -1631,25 +1637,25 @@ window._authReady.then(function(uid){
 
   document.getElementById("meetBtn").onclick = function(){
     const d = document.getElementById("meetDate").value;
-    if(d) db.collection("settings").doc("meetDate").set({date: d});
+    if(d) db.ref("settings/meetDate").set({date: d});
   };
   document.getElementById("meetDel").onclick = function(){
-    db.collection("settings").doc("meetDate").delete();
+    db.ref("settings/meetDate").remove();
   };
-  db.collection("settings").doc("meetDate").onSnapshot(doc => {
+  db.ref("settings/meetDate").on("value", doc => {
     const el = document.getElementById("countdown");
-    if(!doc.exists || !doc.data().date){ el.textContent = "還沒設定"; return; }
-    const t = new Date(doc.data().date);
+    if(!doc.exists() || !doc.val() || !doc.val().date){ el.textContent = "還沒設定"; return; }
+    const t = new Date(doc.val().date);
     const days = Math.ceil((t - new Date())/86400000);
     el.textContent = days <= 0 ? "就是今天！🎉" : "再 " + days + " 天";
   });
 
   /* 紀念日 */
-  db.collection("anniversaries").onSnapshot(snap => {
+  db.ref("anniversaries").on("value", snap => {
     const list = document.getElementById("anniList");
     let html = "";
     snap.forEach(d => {
-      const a = d.data();
+      const a = d.val();
       const target = new Date(a.date);
       const now = new Date();
       let days = Math.ceil((target - now)/86400000);
@@ -1662,7 +1668,7 @@ window._authReady.then(function(uid){
         <span style="font-family:'Noto Serif TC',serif;color:var(--pink-deep)">${a.name}</span>
         <span style="display:flex;align-items:center;gap:10px">
           <span style="color:var(--pink);font-weight:600">${days === 0 ? "今天！🎉" : days + " 天"}</span>
-          <button onclick="db.collection('anniversaries').doc('${d.id}').delete()" style="border:none;background:none;cursor:pointer;font-size:1rem;opacity:.5">🗑️</button>
+          <button onclick="db.ref('anniversaries/${d.key}').remove()" style="border:none;background:none;cursor:pointer;font-size:1rem;opacity:.5">🗑️</button>
         </span>
       </div>`;
     });
@@ -1672,7 +1678,7 @@ window._authReady.then(function(uid){
     const n = document.getElementById("anniName").value.trim();
     const d = document.getElementById("anniDate").value;
     if(n && d){
-      db.collection("anniversaries").add({name:n, date:d});
+      db.ref("anniversaries").push({name:n, date:d});
       document.getElementById("anniName").value = "";
     }
   };
@@ -1681,12 +1687,12 @@ window._authReady.then(function(uid){
 /* 誰先睡 */
 window._authReady.then(function(uid){
   document.getElementById("sleepBtn").onclick = function(){
-    db.collection("sleep").doc(new Date().toDateString()).set({[uid]: new Date().toLocaleTimeString("zh-TW")}, {merge:true});
+    db.ref("sleep/"+new Date().toDateString()).update({[uid]: new Date().toLocaleTimeString("zh-TW")});
   };
-  db.collection("sleep").doc(new Date().toDateString()).onSnapshot(doc => {
+  db.ref("sleep/"+new Date().toDateString()).on("value", doc => {
     const el = document.getElementById("sleepStatus");
-    if(!doc.exists){ el.textContent = "還沒人睡"; return; }
-    const d = doc.data();
+    if(!doc.exists()){ el.textContent = "還沒人睡"; return; }
+    const d = doc.val() || {};
     const me = d[uid], her = d[Object.keys(d).find(k => k !== uid)];
     if(me && her){
       el.textContent = me < her ? "你先睡了 🌙" : ((window.themName||"她") + "先睡了 😴");
@@ -1705,15 +1711,15 @@ window._authReady.then(function(uid){
     b.textContent = i;
     b.style.cssText = "width:35px;height:35px;border-radius:50%;border:2px solid var(--pink-soft);background:#fff;cursor:pointer;font-family:inherit";
     b.onclick = () => {
-      db.collection("scores").doc(new Date().toDateString()).set({[uid]: i, updatedAt: new Date()}, {merge:true});
+      db.ref("scores/"+new Date().toDateString()).update({[uid]: i, updatedAt: Date.now()});
       btns.forEach(x => x.style.background="#fff");
       b.style.background = "var(--pink)"; b.style.color="#fff";
     };
     btns.push(b);
     sb.appendChild(b);
   }
-  db.collection("scores").doc(new Date().toDateString()).onSnapshot(doc => {
-    const d = doc.exists ? doc.data() : {};
+  db.ref("scores/"+new Date().toDateString()).on("value", doc => {
+    const d = doc.exists() ? (doc.val() || {}) : {};
     const my = d[uid];
     // 對方 uid（不等於我）
     let herVal = null;
@@ -1751,7 +1757,7 @@ window._authReady.then(function(uid){
           const reader = new FileReader();
           reader.onload = async function(){
             try{
-              await db.collection("voices").add({audio: reader.result, uid: uid, time: firebase.firestore.FieldValue.serverTimestamp()});
+              await db.ref("voices").push({audio: reader.result, uid: uid, time:{".sv":"timestamp"}});
               st.textContent = "已上傳 ✓";
             }catch(e){ st.textContent = "上傳失敗：" + e.code; }
           };
@@ -1766,11 +1772,13 @@ window._authReady.then(function(uid){
       st.textContent = "無法開麥：" + (e.name==="NotAllowedError" ? "請允許麥克風權限" : e.message);
     }
   };
-  db.collection("voices").orderBy("time","desc").limit(10).onSnapshot(snap => {
+  db.ref("voices").on("value", snap => {
     const el = document.getElementById("voiceList");
     el.innerHTML = "";
-    snap.forEach(d => {
-      const v = d.data();
+    const items = [];
+    snap.forEach(d => items.push(d.val()));
+    items.sort((a,b)=>(b.time||0)-(a.time||0));
+    items.slice(0,10).forEach(v => {
       if(v.audio) el.innerHTML += `<audio controls src="${v.audio}" style="width:100%;margin:5px 0"></audio>`;
     });
   });
@@ -1779,9 +1787,9 @@ window._authReady.then(function(uid){
 /* 線上數據 */
 window._authReady.then(function(uid){
   const today = new Date().toDateString();
-  db.collection("stats").doc(today).onSnapshot(doc => {
-    if(!doc.exists) return;
-    const s = doc.data();
+  db.ref("stats/"+today).on("value", doc => {
+    if(!doc.exists()) return;
+    const s = doc.val() || {};
     document.getElementById("statChat").textContent = s.chat || 0;
     document.getElementById("statHearts").textContent = s.hearts || 0;
     document.getElementById("statKiss").textContent = s.kisses || 0;
@@ -1791,13 +1799,13 @@ window._authReady.then(function(uid){
 /* 今日心情 */
 window._authReady.then(function(uid){
   document.querySelectorAll(".mood").forEach(m => {
-    m.onclick = () => db.collection("status").doc(uid).set({mood: m.dataset.mood, time: new Date()}, {merge:true});
+    m.onclick = () => db.ref("status/"+uid).update({mood: m.dataset.mood, time: Date.now()});
   });
-  db.collection("status").onSnapshot(snap => {
+  db.ref("status").on("value", snap => {
     let mine = null, hers = null;
     snap.forEach(d => {
-      const s = d.data();
-      if(d.id === uid) mine = s.mood; else hers = s.mood;
+      const s = d.val();
+      if(d.key === uid) mine = s.mood; else hers = s.mood;
     });
     document.getElementById("moodShow").innerHTML =
       "我：" + (mine||"尚未更新") + " &nbsp;&nbsp; " + (window.themName||"她") + "：" + (hers||"尚未更新");
@@ -1807,13 +1815,13 @@ window._authReady.then(function(uid){
 /* 現在在幹嘛 */
 window._authReady.then(function(uid){
   document.querySelectorAll(".status-btn").forEach(b => {
-    b.onclick = () => db.collection("status").doc(uid).set({what: b.textContent, time: new Date()}, {merge:true});
+    b.onclick = () => db.ref("status/"+uid).update({what: b.textContent, time: Date.now()});
   });
-  db.collection("status").onSnapshot(snap => {
+  db.ref("status").on("value", snap => {
     let mine = null, hers = null;
     snap.forEach(d => {
-      const s = d.data();
-      if(d.id === uid) mine = s.what; else hers = s.what;
+      const s = d.val();
+      if(d.key === uid) mine = s.what; else hers = s.what;
     });
     document.getElementById("statusShow").innerHTML =
       "我：" + (mine||"尚未更新") + "<br>" + (window.themName||"她") + "：" + (hers||"尚未更新");
@@ -1835,19 +1843,22 @@ window._authReady.then(function(uid){
           canvas.width = img.width*scale;
           canvas.height = img.height*scale;
           canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
-          db.collection("checkins").add({img: canvas.toDataURL("image/jpeg", 0.6), uid: uid, time: new Date()});
+          db.ref("checkins").push({img: canvas.toDataURL("image/jpeg", 0.6), uid: uid, time: Date.now()});
         };
         img.src = reader.result;
       };
       reader.readAsDataURL(file);
     });
   };
-  db.collection("checkins").orderBy("time","desc").limit(20).onSnapshot(snap => {
+  db.ref("checkins").on("value", snap => {
     const grid = document.getElementById("checkinGrid");
     grid.innerHTML = "";
-    snap.forEach(d => {
+    const items = [];
+    snap.forEach(d => items.push(d.val()));
+    items.sort((a,b)=>(b.time||0)-(a.time||0));
+    items.slice(0,20).forEach(v => {
       const img = document.createElement("img");
-      img.src = d.data().img;
+      img.src = v.img;
       img.style.cssText = "width:100%;border-radius:12px;object-fit:cover;aspect-ratio:1";
       grid.appendChild(img);
     });
@@ -1869,7 +1880,7 @@ window._authReady.then(function(uid){
     if(!drawing) return;
     const p = pos(e);
     ctx.lineTo(p.x, p.y); ctx.strokeStyle = "#e91e63"; ctx.lineWidth = 3; ctx.lineCap = "round"; ctx.stroke();
-    db.collection("draw").doc("board").set({x: p.x, y: p.y, prev: null}, {merge:true});
+    db.ref("draw/board").update({x: p.x, y: p.y, prev: null});
   };
   canvas.onmouseup = () => drawing = false;
   canvas.ontouchstart = e => { drawing = true; const p = pos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); };
