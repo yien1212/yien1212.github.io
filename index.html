@@ -1062,17 +1062,9 @@ function tryLogin(){
 document.getElementById("roleGo").onclick = tryLogin;
 document.getElementById("rolePw").addEventListener("keydown", e => { if(e.key==="Enter") tryLogin(); });
 
-/* 已有 session 且記得角色 -> 直接進 */
-firebase.auth().onAuthStateChanged(u => {
-  if(u){
-    window.uid = u.uid;
-    const savedRole = localStorage.getItem("role");
-    if(savedRole){
-      window.myRole = savedRole;
-      enterApp();
-    }
-  }
-});
+/* 每次開網站都要重打密碼：不記住登入，進來就登出 */
+localStorage.removeItem("role");
+firebase.auth().signOut();
 
 /* 計時 */
 function startTimer(){
