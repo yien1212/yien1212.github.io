@@ -1590,10 +1590,11 @@ window._authReady.then(function(uid){
         // 天氣（有定位才請求）
         const wEl = document.getElementById("weatherTip");
         wEl.textContent = (window.themName||"她") + "那裡天氣..."
-        fetch(`https://wttr.in/${her.lat},${her.lng}?format=%C+%t&m`).then(r => {
+        fetch(`https://wttr.in/${her.lat},${her.lng}?format=3&lang=zh`).then(r => {
           if(!r.ok) throw new Error('weather');
           return r.text();
         }).then(w => {
+          w = w.replace(/[\x1b\[][0-9;]*m/g,'').replace(/\n/g,' ').trim();
           wEl.textContent = (window.themName||"她") + "那裡 " + w;
         }).catch(()=>{ wEl.textContent = ""; });
       }
@@ -1629,7 +1630,8 @@ window._authReady.then(function(uid){
       if(o.online){
         el.textContent = "🟢 " + (window.themName||"她") + "現在在線";
       } else if(o.lastSeen){
-        const diff = Math.floor((Date.now() - o.lastSeen)/60000);
+        const ls = typeof o.lastSeen === 'number' ? o.lastSeen : (o.lastSeen.timestamp || Date.now());
+        const diff = Math.max(0, Math.floor((Date.now() - ls)/60000));
         el.textContent = diff < 60 ? "⚪ " + diff + " 分鐘前上線" : "⚪ 剛才上線過";
       }
     });
