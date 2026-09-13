@@ -875,6 +875,7 @@ body{counter-reset: section}
     <div id="countdown" style="font-size:1.5rem">設定日期</div>
     <input type="date" id="meetDate" style="margin-top:10px;padding:8px;border-radius:12px;border:1.5px solid var(--pink-soft)">
     <button class="btn-pink" id="meetBtn" style="margin-top:5px">設定</button>
+    <button id="meetDel" style="margin-top:5px;border:none;background:none;cursor:pointer;font-size:.8rem;color:#aaa;text-decoration:underline">清除下次見面</button>
   </div>
 
   <!-- 誰先睡 -->
@@ -912,7 +913,7 @@ body{counter-reset: section}
   <h3 class="stitle">🎮 現在在幹嘛</h3>
   <div style="text-align:center">
     <div id="statusShow" style="font-size:1.1rem;color:var(--pink-deep);margin-bottom:10px">她還沒更新</div>
-    <div style="display:flex;gap:5px;justify-content:center;flex-wrap:wrap">
+    <div style="display:flex;gap:5px;justify-content:center;flex-wrap:wrap;max-width:400px;margin:0 auto">
       <button class="status-btn">🍜吃飯</button>
       <button class="status-btn">😴睡覺</button>
       <button class="status-btn">📱滑手機</button>
@@ -921,6 +922,18 @@ body{counter-reset: section}
       <button class="status-btn">🚶出門</button>
       <button class="status-btn">🎮玩遊戲</button>
       <button class="status-btn">💭想妳</button>
+      <button class="status-btn">☕喝咖啡</button>
+      <button class="status-btn">🛁洗澡</button>
+      <button class="status-btn">🏃運動</button>
+      <button class="status-btn">🎧聽歌</button>
+      <button class="status-btn">🛒逛街</button>
+      <button class="status-btn">🍿追劇</button>
+      <button class="status-btn">💤發懶</button>
+      <button class="status-btn">💬聊天中</button>
+      <button class="status-btn">🚗開車</button>
+      <button class="status-btn">📸拍照</button>
+      <button class="status-btn">😢心情不好</button>
+      <button class="status-btn">🥰好想妳</button>
     </div>
   </div>
 
@@ -1177,21 +1190,23 @@ document.getElementById("mystery").onclick = function(){
 /* 刮刮樂 */
 function initScratch(){
   const c = document.querySelector(".scratchCvs");
-  if(!c || c.dataset.inited) return;
-  c.dataset.inited = "1";
+  if(!c) return;
   const x = c.getContext("2d");
   const parent = c.parentElement;
   function sizeCanvas(){
     const w = parent.clientWidth, h = parent.clientHeight;
-    if(w < 10 || h < 10) return;
+    if(w < 10 || h < 10) return false;
     c.width = w; c.height = h;
+    x.globalCompositeOperation = "source-over";
     x.fillStyle = "#c0c0c0"; x.fillRect(0,0,w,h);
     x.fillStyle = "#fff"; x.font = "16px sans-serif"; x.textAlign = "center";
     x.fillText("刮開我", w/2, h/2);
+    return true;
   }
-  sizeCanvas();
-  setTimeout(sizeCanvas, 100);
-  setTimeout(sizeCanvas, 500);
+  if(c.dataset.inited) { if(sizeCanvas()){} return; }
+  if(!sizeCanvas()) return;  // 隱藏時尺寸0，不標記，等切過來再初始化
+  c.dataset.inited = "1";
+  setTimeout(sizeCanvas, 200);
   let s = false;
   function sc(px,py){
     x.globalCompositeOperation = "destination-out";
@@ -1584,6 +1599,16 @@ window._authReady.then(function(uid){
     const d = document.getElementById("meetDate").value;
     if(d) db.collection("settings").doc("meetDate").set({date: d});
   };
+  document.getElementById("meetDel").onclick = function(){
+    db.collection("settings").doc("meetDate").delete();
+  };
+  db.collection("settings").doc("meetDate").onSnapshot(doc => {
+    const el = document.getElementById("countdown");
+    if(!doc.exists || !doc.data().date){ el.textContent = "還沒設定"; return; }
+    const t = new Date(doc.data().date);
+    const days = Math.ceil((t - new Date())/86400000);
+    el.textContent = days <= 0 ? "就是今天！🎉" : "再 " + days + " 天";
+  });
 
   /* 紀念日 */
   db.collection("anniversaries").onSnapshot(snap => {
@@ -1640,18 +1665,32 @@ window._authReady.then(function(uid){
 /* 愛情分數 */
 window._authReady.then(function(uid){
   const sb = document.getElementById("scoreBtns");
+  const btns = [];
   for(let i=1;i<=10;i++){
     const b = document.createElement("button");
     b.textContent = i;
     b.style.cssText = "width:35px;height:35px;border-radius:50%;border:2px solid var(--pink-soft);background:#fff;cursor:pointer;font-family:inherit";
-    b.onclick = () => db.collection("scores").doc(new Date().toDateString()).set({[uid]: i}, {merge:true});
+    b.onclick = () => {
+      db.collection("scores").doc(new Date().toDateString()).set({[uid]: i, updatedAt: new Date()}, {merge:true});
+      btns.forEach(x => x.style.background="#fff");
+      b.style.background = "var(--pink)"; b.style.color="#fff";
+    };
+    btns.push(b);
     sb.appendChild(b);
   }
   db.collection("scores").doc(new Date().toDateString()).onSnapshot(doc => {
-    if(!doc.exists) return;
-    const d = doc.data();
-    const vals = Object.values(d).filter(v => typeof v === 'number');
-    if(vals.length) document.getElementById("loveScore").textContent = (vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(1) + " 分";
+    const d = doc.exists ? doc.data() : {};
+    const my = d[uid];
+    // 對方 uid（不等於我）
+    let herVal = null;
+    Object.keys(d).forEach(k => { if(k!==uid && k!=='updatedAt' && typeof d[k]==='number') herVal = d[k]; });
+    const vals = [my, herVal].filter(v => typeof v === 'number');
+    let line = "";
+    if(vals.length) line += (vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(1) + " 分";
+    line += "<div style='font-size:.85rem;color:#999;margin-top:6px'>我：" + (my||"未打") + "　" + (window.themName||"她") + "：" + (herVal||"未打") + "</div>";
+    document.getElementById("loveScore").innerHTML = line || "--";
+    // 高亮我已打的分
+    btns.forEach(x => { x.style.background = (my == x.textContent) ? "var(--pink)" : "#fff"; x.style.color = (my == x.textContent) ? "#fff" : "inherit"; });
   });
 });
 
