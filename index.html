@@ -587,16 +587,15 @@ body{counter-reset: section}
   <div class="lock-emoji">🔐</div>
   <h1>給最重要的人</h1>
   <p>這是只屬於我們的地方</p>
-  <div id="pwStep">
-    <input type="password" id="pw" placeholder="••••">
-    <br>
-    <button id="go">進入</button>
-    <div id="hint" class="hidden" style="color:var(--pink); margin-top:14px; font-size:.85rem">在一起的那天</div>
-  </div>
-  <div id="roleStep" class="hidden" style="margin-top:10px">
+  <div id="roleStep" style="margin-top:10px">
     <p style="font-size:.9rem;color:#999;margin-bottom:15px">選擇你是誰</p>
     <button id="roleY" style="display:block;width:220px;margin:10px auto;padding:14px;border:none;border-radius:30px;background:linear-gradient(135deg,var(--pink),var(--pink-deep));color:#fff;font-size:1rem;cursor:pointer;font-family:inherit">我是 Y</button>
     <button id="roleYun" style="display:block;width:220px;margin:10px auto;padding:14px;border:none;border-radius:30px;background:#fff;color:var(--pink-deep);border:2px solid var(--pink);font-size:1rem;cursor:pointer;font-family:inherit">我是 小昀</button>
+    <div id="pwdBox" class="hidden" style="margin-top:18px">
+      <input type="password" id="rolePw" placeholder="密碼" style="padding:12px 18px;border:2px solid var(--pink-soft);border-radius:25px;font-family:inherit;outline:none">
+      <br><br>
+      <button id="roleGo" style="padding:12px 36px;border:none;border-radius:25px;background:var(--pink);color:#fff;font-family:inherit;cursor:pointer">進入</button>
+    </div>
     <div id="roleMsg" style="color:var(--pink);font-size:.85rem;margin-top:10px"></div>
   </div>
 </div>
@@ -657,13 +656,18 @@ body{counter-reset: section}
   <!-- 今日心情 -->
   <h3 class="stitle">😊 今天心情</h3>
   <div style="text-align:center">
-    <div id="moodShow" style="font-size:1.2rem;margin-bottom:10px">她還沒更新</div>
-    <div style="display:flex;gap:8px;justify-content:center;font-size:1.5rem">
+    <div id="moodShow" style="font-size:1.1rem;margin-bottom:12px;line-height:1.8">按個表情，兩邊都看得到</div>
+    <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;font-size:1.6rem;max-width:340px;margin:0 auto">
       <span class="mood" data-mood="😢" style="cursor:pointer">😢</span>
+      <span class="mood" data-mood="😴" style="cursor:pointer">😴</span>
       <span class="mood" data-mood="😐" style="cursor:pointer">😐</span>
+      <span class="mood" data-mood="😌" style="cursor:pointer">😌</span>
       <span class="mood" data-mood="😊" style="cursor:pointer">😊</span>
+      <span class="mood" data-mood="🥰" style="cursor:pointer">🥰</span>
       <span class="mood" data-mood="😍" style="cursor:pointer">😍</span>
       <span class="mood" data-mood="🤩" style="cursor:pointer">🤩</span>
+      <span class="mood" data-mood="🥺" style="cursor:pointer">🥺</span>
+      <span class="mood" data-mood="😤" style="cursor:pointer">😤</span>
     </div>
   </div>
 
@@ -1018,52 +1022,55 @@ function enterApp(){
   bgm.play().catch(()=>{});
 }
 /* 身份登入 Firebase */
-const ROLES = {y:{email:"y@love.com",name:"Y"}, yun:{email:"yun@love.com",name:"小昀"}};
-function roleLogin(role){
+/* Y 密碼 0812，小昀密碼 0726（前端驗證；Firebase 後端密碼固定） */
+const ROLES = {
+  y:   {email:"chenyien81@gmail.com", name:"Y",    pw:"0812"},
+  yun: {email:"liuyunen34@gmail.com", name:"小昀", pw:"0726"}
+};
+let pendingRole = null;
+function pickRole(role){
+  pendingRole = role;
+  document.getElementById("pwdBox").classList.remove("hidden");
+  document.getElementById("roleMsg").textContent = "（" + ROLES[role].name + " 的密碼）";
+  document.getElementById("rolePw").value = "";
+  document.getElementById("rolePw").focus();
+}
+document.getElementById("roleY").onclick = () => pickRole("y");
+document.getElementById("roleYun").onclick = () => pickRole("yun");
+function tryLogin(){
   const msg = document.getElementById("roleMsg");
+  const pw = document.getElementById("rolePw").value;
+  if(!pendingRole) return;
+  if(pw !== ROLES[pendingRole].pw){
+    const el = document.getElementById("rolePw");
+    el.style.animation = "none"; el.offsetHeight;
+    el.style.animation = "shake .5s";
+    msg.textContent = "密碼不對喔";
+    el.value = "";
+    return;
+  }
   msg.textContent = "登入中...";
-  firebase.auth().signInWithEmailAndPassword(ROLES[role].email, "121314")
+  firebase.auth().signInWithEmailAndPassword(ROLES[pendingRole].email, "121314")
     .then(u => {
       window.uid = u.user.uid;
-      window.myRole = role;
-      localStorage.setItem("role", role);
+      window.myRole = pendingRole;
+      localStorage.setItem("role", pendingRole);
       enterApp();
     })
     .catch(e => { msg.textContent = "登入失敗：" + e.message; });
 }
-document.getElementById("roleY").onclick = () => roleLogin("y");
-document.getElementById("roleYun").onclick = () => roleLogin("yun");
+document.getElementById("roleGo").onclick = tryLogin;
+document.getElementById("rolePw").addEventListener("keydown", e => { if(e.key==="Enter") tryLogin(); });
 
-/* 解鎖：先網站密碼，再選身份 */
-function showRole(){
-  document.getElementById("pwStep").classList.add("hidden");
-  document.getElementById("roleStep").classList.remove("hidden");
-}
-document.getElementById("go").onclick = () => {
-  if (document.getElementById("pw").value === PW) {
-    localStorage.setItem("unlocked","1");
-    showRole();
-  } else {
-    const el = document.getElementById("pw");
-    el.style.animation = "none"; el.offsetHeight;
-    el.style.animation = "shake .5s";
-    document.getElementById("hint").classList.remove("hidden");
-    el.value = "";
-  }
-};
-/* 已有 session 且記得角色 -> 直接進；有密碼但沒 session -> 選身份 */
+/* 已有 session 且記得角色 -> 直接進 */
 firebase.auth().onAuthStateChanged(u => {
   if(u){
     window.uid = u.uid;
     const savedRole = localStorage.getItem("role");
-    if(localStorage.getItem("unlocked") === "1" && savedRole){
+    if(savedRole){
       window.myRole = savedRole;
       enterApp();
     }
-  } else if(localStorage.getItem("unlocked") === "1"){
-    // 解過密碼但沒登入 -> 顯示身份選擇
-    document.getElementById("pwStep").classList.add("hidden");
-    document.getElementById("roleStep").classList.remove("hidden");
   }
 });
 
@@ -1213,7 +1220,7 @@ function initScratch(){
     const t = e.touches[0];
     sc((t.clientX-r.left)*c.width/r.width, (t.clientY-r.top)*c.height/r.height);
   }, {passive:false});
-  const msgs = ["今天也很喜歡妳","抱抱","想牽手","吃飽了沒","妳最好看","愛妳","不要生氣","快睡覺","想妳了","可愛","么么","心動","寶貝","滾進來睡","不要走","我在","餓不餓","冷不冷","想見妳","妳好漂亮","抱緊一點","不要不理我","晚安","早安","今天也要愛妳","別熬夜","乖乖吃飯","我只想陪妳","妳是我的","愛妳愛妳"];
+  const msgs = ["今天也很喜歡妳","抱抱","想牽手","吃飽了沒","妳最好看","愛妳","不要生氣","快睡覺","想妳了","可愛","么么","心動","寶貝","滾進來睡","不要走","我在","餓不餓","冷不冷","想見妳","妳好漂亮","抱緊一點","不要不理我","晚安","早安","今天也要愛妳","別熬夜","乖乖吃飯","我只想陪妳","妳是我的","愛妳愛妳","喝水了沒","今天辛苦妳了","好想蹭妳","手給我","別亂花錢","外套穿了沒","到家跟我說","想聞妳頭髮","妳在干嘛","想捏妳臉","別刷手機了睡覺","今晚夢裡見","愛妳到月亮","不要減肥","妳瘦了嗎","想從背後抱妳","今天也超愛","隨便啦我養妳","不要跟別人太好","我這輩子認真的","餓了說一聲","委屈就跟我說","妳講什麼都好聽","想帶妳去海邊","週末陪我","別哭喔","看到好吃的都想到妳","妳打呼我也愛","早安寶貝","晚安小愛人","今天的風很好想妳","手機快沒電也要想妳","妳說好就好","我都聽妳的","不許跟我說再見","想把妳藏起來","妳開心我就開心","有妳真好","今天想抱妳很久","妳是我的小太陽","不要一個人扛","我永遠站妳這邊","愛妳不是三分鐘熱度","想吃妳做的飯","想幫妳吹頭髮","冬天一起躲被窩","夏天一起吃冰","未來每天都要有妳","妳講的笑話最好笑","妳生氣也可愛","想牽妳去散步","睡前要鬧一下","醒來第一個想妳","別把我吃太快","我是妳的專屬靠墊","想跟妳窩一整天","不管怎樣我都在","喜歡妳的壞習慣","愛妳的全部"];
   document.getElementById("scratchMsg").textContent = msgs[Math.floor(Math.random()*msgs.length)];
 }
 window.addEventListener("load", () => setTimeout(initScratch, 300));
@@ -1648,35 +1655,48 @@ window._authReady.then(function(uid){
 
 /* 聲音訊息 */
 window._authReady.then(function(uid){
-  let mediaRecorder, chunks = [];
+  let mediaRecorder, chunks = [], maxTimer;
   document.getElementById("recBtn").onclick = async function(){
+    const st = document.getElementById("recStatus");
     if(mediaRecorder && mediaRecorder.state === "recording"){
       mediaRecorder.stop();
       return;
     }
-    const stream = await navigator.mediaDevices.getUserMedia({audio:true});
-    mediaRecorder = new MediaRecorder(stream);
-    chunks = [];
-    mediaRecorder.ondataavailable = e => chunks.push(e.data);
-    mediaRecorder.onstop = async function(){
-      const blob = new Blob(chunks, {type:"audio/webm"});
-      const reader = new FileReader();
-      reader.onload = async function(){
-        await db.collection("voices").add({audio: reader.result, uid: uid, time: new Date()});
+    try{
+      const stream = await navigator.mediaDevices.getUserMedia({audio:true});
+      mediaRecorder = new MediaRecorder(stream);
+      chunks = [];
+      mediaRecorder.ondataavailable = e => chunks.push(e.data);
+      mediaRecorder.onstop = async function(){
+        clearTimeout(maxTimer);
+        document.getElementById("recBtn").textContent = "開始錄音";
+        try{
+          const blob = new Blob(chunks, {type:"audio/webm"});
+          if(blob.size > 800000){ st.textContent = "太長了，最多15秒"; return; }
+          const reader = new FileReader();
+          reader.onload = async function(){
+            try{
+              await db.collection("voices").add({audio: reader.result, uid: uid, time: firebase.firestore.FieldValue.serverTimestamp()});
+              st.textContent = "已上傳 ✓";
+            }catch(e){ st.textContent = "上傳失敗：" + e.code; }
+          };
+          reader.readAsDataURL(blob);
+        }catch(err){ st.textContent = "錄音錯誤：" + err.message; }
       };
-      reader.readAsDataURL(blob);
-      document.getElementById("recStatus").textContent = "已上傳";
-    };
-    mediaRecorder.start();
-    document.getElementById("recBtn").textContent = "停止錄音";
-    document.getElementById("recStatus").textContent = "錄音中...";
+      mediaRecorder.start();
+      document.getElementById("recBtn").textContent = "停止錄音";
+      st.textContent = "錄音中...（最多15秒）";
+      maxTimer = setTimeout(() => { if(mediaRecorder.state==="recording") mediaRecorder.stop(); }, 15000);
+    }catch(e){
+      st.textContent = "無法開麥：" + (e.name==="NotAllowedError" ? "請允許麥克風權限" : e.message);
+    }
   };
   db.collection("voices").orderBy("time","desc").limit(10).onSnapshot(snap => {
     const el = document.getElementById("voiceList");
     el.innerHTML = "";
     snap.forEach(d => {
       const v = d.data();
-      el.innerHTML += `<audio controls src="${v.audio}" style="width:100%;margin:5px 0"></audio>`;
+      if(v.audio) el.innerHTML += `<audio controls src="${v.audio}" style="width:100%;margin:5px 0"></audio>`;
     });
   });
 });
@@ -1699,11 +1719,13 @@ window._authReady.then(function(uid){
     m.onclick = () => db.collection("status").doc(uid).set({mood: m.dataset.mood, time: new Date()}, {merge:true});
   });
   db.collection("status").onSnapshot(snap => {
+    let mine = null, hers = null;
     snap.forEach(d => {
-      if(d.id === uid) return;
       const s = d.data();
-      document.getElementById("moodShow").textContent = "她現在 " + s.mood;
+      if(d.id === uid) mine = s.mood; else hers = s.mood;
     });
+    document.getElementById("moodShow").innerHTML =
+      "我：" + (mine||"尚未更新") + " &nbsp;&nbsp; 她：" + (hers||"尚未更新");
   });
 });
 
@@ -1713,11 +1735,13 @@ window._authReady.then(function(uid){
     b.onclick = () => db.collection("status").doc(uid).set({what: b.textContent, time: new Date()}, {merge:true});
   });
   db.collection("status").onSnapshot(snap => {
+    let mine = null, hers = null;
     snap.forEach(d => {
-      if(d.id === uid) return;
       const s = d.data();
-      document.getElementById("statusShow").textContent = "她在 " + s.what;
+      if(d.id === uid) mine = s.what; else hers = s.what;
     });
+    document.getElementById("statusShow").innerHTML =
+      "我：" + (mine||"尚未更新") + "<br>她：" + (hers||"尚未更新");
   });
 });
 
