@@ -570,10 +570,10 @@ body{counter-reset: section}
   });
   window.db = firebase.firestore();
   window.uid = null;
-  window._authReady = new Promise(resolve => {
-    firebase.auth().onAuthStateChanged(u => {
-      if(u && u.uid){ window.uid = u.uid; resolve(u.uid); }
-    });
+  window._authResolve = null;
+  window._authReady = new Promise(res => { window._authResolve = res; });
+  firebase.auth().onAuthStateChanged(u => {
+    if(u && u.uid){ window.uid = u.uid; }
   });
 </script>
 
@@ -1070,6 +1070,7 @@ function tryLogin(){
       window.myRole = pendingRole;
       window.themName = (pendingRole === "y") ? "小昀" : "Y";
       localStorage.setItem("role", pendingRole);
+      if(window._authResolve){ window._authResolve(u.user.uid); window._authResolve = null; }
       enterApp();
     })
     .catch(e => { msg.textContent = "登入失敗：" + e.message; });
