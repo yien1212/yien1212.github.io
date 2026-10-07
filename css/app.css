@@ -426,10 +426,32 @@ HTMLCanvasElement.prototype.getContext = function(type, attrs){
 
 /* 聊天記錄 */
 .chat-box{
-  max-width:500px; margin:0 auto;
+  max-width:500px; margin:0 auto 8px;
   background:rgba(255,255,255,.6); border-radius:20px;
   padding:20px; text-align:left;
 }
+.chat-meta{font-size:.75rem; letter-spacing:.14em; color:#c06; margin-bottom:10px}
+.chat-line{margin:6px 0; display:flex}
+.chat-line.me{justify-content:flex-end}
+.chat-line .who{display:block; font-size:.68rem; opacity:.7; margin-bottom:2px}
+.chat-line .bubble{
+  display:inline-block; max-width:82%; padding:8px 12px; border-radius:16px;
+  font-size:.9rem; line-height:1.45;
+  background:#fff; color:#555; border:1px solid var(--pink-soft);
+}
+.chat-line.me .bubble{background:var(--pink); color:#fff; border:none}
+#chatNext{margin-top:12px; border-radius:999px}
+.talk-lead,.talk-note{font-size:.82rem; color:#886; line-height:1.55; margin:0 0 10px}
+.talk-counts{display:flex; flex-wrap:wrap; gap:6px; margin-bottom:12px}
+.talk-counts span{
+  background:#fff; border:1px solid #ffd0e0; color:#c06;
+  border-radius:999px; padding:4px 10px; font-size:.78rem;
+}
+.talk-row{display:grid; grid-template-columns:3.2rem 1fr 2.6rem; gap:8px; align-items:center; margin:6px 0; font-size:.8rem}
+.talk-row b{font-weight:500; color:#a24}
+.talk-bar{height:8px; border-radius:99px; background:#ffe4ee; overflow:hidden}
+.talk-bar i{display:block; height:100%; width:0; background:linear-gradient(90deg,#ff8fb3,#e91e63); border-radius:99px}
+.talk-import{display:inline-block; margin:4px 0 8px; border-radius:999px; cursor:pointer}
 .chat-msg{
   margin:10px 0; max-width:80%;
 }

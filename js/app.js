@@ -492,73 +492,133 @@ document.addEventListener("click", e => {
   burst(e.clientX, e.clientY);
 });
 
-/* 我們的日常 — 從真實 LINE 記錄抽 */
+/* 我們的日常 — 從真實 LINE 記錄抽出的片段 */
 (function(){
   const convos = [
-    [{t:"下午03:43",who:"them",text:"你猜我們現在在幹嘛"},{t:"下午03:43",who:"me",text:"上課"},{t:"下午03:43",who:"them",text:"💩"},{t:"下午03:43",who:"them",text:"你猜錯了"},{t:"下午03:44",who:"me",text:"報告的怎麼樣"},{t:"下午03:44",who:"me",text:"我明天不想上課嗚嗚"}],
-    [{t:"下午03:46",who:"them",text:"我們報告100分欸吧"},{t:"下午03:46",who:"me",text:"欸好厲害"},{t:"下午03:46",who:"me",text:"超級猛"},{t:"下午03:46",who:"me",text:"你們報告英文的欸"}],
-    [{t:"下午03:44",who:"me",text:"幹我跟你講我買新桌子"},{t:"下午03:44",who:"me",text:"把舊的丟了想說他很快就來"},{t:"下午03:44",who:"me",text:"結果等了快一個月"},{t:"下午03:44",who:"me",text:"...."},{t:"下午03:45",who:"me",text:"這個小桌子超破"}],
-    [{t:"下午11:26",who:"me",text:"我在想你"},{t:"下午11:27",who:"them",text:"白痴"},{t:"下午11:28",who:"me",text:"真的"},{t:"下午11:29",who:"them",text:"滾"}],
-    [{t:"上午10:35",who:"them",text:"我上車車ㄌ"},{t:"上午10:36",who:"me",text:"好"},{t:"上午10:37",who:"me",text:"搭車小心"},{t:"上午10:38",who:"them",text:"嗯"}],
-    [{t:"上午09:20",who:"them",text:"乖乖"},{t:"上午09:21",who:"me",text:"嗯"},{t:"上午09:22",who:"them",text:"吃早餐了嗎"},{t:"上午09:23",who:"me",text:"還沒"},{t:"上午09:24",who:"them",text:"趕快去吃"}],
-    [{t:"下午11:41",who:"them",text:"你好寶寶"},{t:"下午11:42",who:"me",text:"？"},{t:"下午11:43",who:"them",text:"沒有"}],
-    [{t:"下午06:52",who:"them",text:"不要洗屁股"},{t:"下午06:53",who:"me",text:"為什麼"},{t:"下午06:53",who:"them",text:"就不要"}],
-    [{t:"下午08:36",who:"them",text:"幹你娘"},{t:"下午08:37",who:"me",text:"笑死"},{t:"下午08:37",who:"them",text:"真的"},{t:"下午08:38",who:"me",text:"哈哈哈"}],
-    [{t:"上午02:28",who:"me",text:"你如果變成了我最不想靠近的那種人"},{t:"上午02:30",who:"them",text:"不會的"},{t:"上午02:31",who:"me",text:"最好是"}],
-    [{t:"下午12:44",who:"them",text:"齁我要怎麼講"},{t:"下午12:45",who:"me",text:"就說"},{t:"下午12:45",who:"them",text:"我不知道啦"}],
-    [{t:"下午09:35",who:"them",text:"我他媽真的傻眼"},{t:"下午09:36",who:"me",text:"怎麼了"},{t:"下午09:36",who:"them",text:"沒事"}],
-    [{t:"上午08:52",who:"me",text:"知道妳懶"},{t:"上午08:53",who:"them",text:"滾"},{t:"上午08:53",who:"me",text:"哈哈"}],
-    [{t:"下午05:05",who:"them",text:"要也不準備多一點"},{t:"下午05:06",who:"me",text:"好啦"},{t:"下午05:06",who:"them",text:"每次都這樣"}],
-    [{t:"下午03:28",who:"them",text:"好"},{t:"下午03:29",who:"them",text:"哈哈哈"},{t:"下午03:30",who:"me",text:"笑屁"}],
-    [{t:"上午08:03",who:"them",text:"嗯！"},{t:"上午08:04",who:"me",text:"早安"},{t:"上午08:05",who:"them",text:"早"}],
-    [{t:"下午05:56",who:"them",text:"我去哪裡找你"},{t:"下午05:57",who:"me",text:"你在哪"},{t:"下午05:58",who:"them",text:"學校"},{t:"下午05:59",who:"me",text:"等我"}],
-    [{t:"上午09:53",who:"me",text:"我也肚子痛"},{t:"上午09:54",who:"them",text:"怎麼了"},{t:"上午09:55",who:"me",text:"不知道"},{t:"上午09:56",who:"them",text:"喝熱水"}],
-    [{t:"下午06:29",who:"them",text:"好貴"},{t:"下午06:30",who:"me",text:"什麼"},{t:"下午06:31",who:"them",text:"那個飲料"},{t:"下午06:32",who:"me",text:"那別買"}],
-    [{t:"下午02:42",who:"them",text:"…好心態"},{t:"下午02:43",who:"me",text:"？"},{t:"下午02:44",who:"them",text:"沒事"}],
-    [{t:"下午02:08",who:"me",text:"誰要大叫"},{t:"下午02:09",who:"them",text:"不知道"},{t:"下午02:10",who:"me",text:"神經"}],
-    [{t:"下午12:24",who:"them",text:"（收回訊息）"},{t:"下午12:25",who:"me",text:"妳剛剛說什麼"},{t:"下午12:26",who:"them",text:"沒"}],
-    [{t:"下午05:18",who:"them",text:"你整支手都蚊子"},{t:"下午05:19",who:"me",text:"笑死"},{t:"下午05:20",who:"them",text:"超癢"}],
-    [{t:"下午11:37",who:"them",text:"沒"},{t:"下午11:38",who:"me",text:"沒什麼"},{t:"下午11:39",who:"them",text:"滾"}],
-    [{t:"下午12:20",who:"them",text:"一直都是你"},{t:"下午12:23",who:"me",text:"just me?"},{t:"下午12:27",who:"them",text:"of course"},{t:"下午12:30",who:"them",text:"yes only you"}],
-    [{t:"上午11:43",who:"them",text:"好～"},{t:"上午11:43",who:"them",text:"我愛你阿"},{t:"上午11:47",who:"me",text:"我也是"}],
-    [{t:"下午06:22",who:"them",text:"❤️"},{t:"下午06:22",who:"me",text:"妳扁平足嗎"},{t:"下午06:22",who:"them",text:"我是要給你看愛心"},{t:"下午06:22",who:"them",text:"幹"}],
-    [{t:"下午09:08",who:"me",text:"很難過"},{t:"下午09:08",who:"them",text:"我就會突然很需要你阿"},{t:"下午09:08",who:"them",text:"果然需要很多很多愛"}],
-    [{t:"下午10:12",who:"me",text:"為什麼已經不常見面了還要一直吵架"},{t:"下午10:16",who:"them",text:"如果我剛剛態度不是那樣就能避免掉這些了"},{t:"下午10:16",who:"them",text:"讓你擔心了"}],
-    [{t:"上午01:03",who:"me",text:"你去年許的願望"},{t:"上午01:05",who:"them",text:"希望身邊的人開開心心"},{t:"上午01:07",who:"me",text:"我去年許的願望有實現捏"}],
-    [{t:"上午11:08",who:"me",text:"我經期來了"},{t:"上午11:10",who:"them",text:"肚子會痛嗎"},{t:"上午11:10",who:"them",text:"你有沒有帶衛生棉"}],
-    [{t:"上午07:47",who:"me",text:"HI你的好友Y送你麥克雞塊"},{t:"上午07:48",who:"them",text:"撒浪嘿呦"},{t:"上午07:50",who:"me",text:"❤️"}],
-    [{t:"上午01:25",who:"me",text:"你明天起得來嗎"},{t:"上午01:28",who:"them",text:"好剛好喔"},{t:"上午01:28",who:"them",text:"我在廁所"},{t:"上午01:28",who:"them",text:"幹超痛的"}],
-    [{t:"上午06:05",who:"them",text:"你不覺得這個很可愛嗎"},{t:"上午06:10",who:"me",text:"她腳抽筋"}],
-    [{t:"下午05:07",who:"me",text:"等等用完打給你"},{t:"下午05:07",who:"them",text:"好"}],
-    [{t:"下午11:45",who:"me",text:"你不早說"},{t:"下午11:45",who:"me",text:"我在打遊戲你還是可以跟我聊天"},{t:"下午11:48",who:"them",text:"所以這樣是不行打的意思咪"}],
-    [{t:"下午06:55",who:"me",text:"厲害吧"},{t:"下午06:56",who:"me",text:"我被電梯門夾了兩次"},{t:"下午06:56",who:"them",text:"小人國的主人"}],
-    [{t:"上午01:42",who:"them",text:"未接來電"},{t:"上午01:47",who:"me",text:"。"},{t:"上午01:47",who:"them",text:"我覺得應該可以出去了"}],
-    [{t:"下午03:40",who:"me",text:"酷啊"},{t:"下午03:40",who:"them",text:"我覺得他記得我很酷而已"}],
-    [{t:"下午02:48",who:"me",text:"我嗎真的很笨"},{t:"下午02:48",who:"them",text:"好好笑我知道"}],
-    [{t:"上午09:20",who:"them",text:"乖乖"},{t:"上午09:22",who:"them",text:"吃早餐了嗎"},{t:"上午09:23",who:"me",text:"還沒"},{t:"上午09:24",who:"them",text:"趕快去吃"}],
+    {date:"2026/03/22", lines:[["Y","老婆上班加油，掰掰"],["yun","愛你"],["Y","小寶貝"],["Y","我到家裡樓下了"]]},
+    {date:"2025/02/20", lines:[["Y","再猜你應該到家了"],["yun","到家了"],["Y","我愛你寶寶"]]},
+    {date:"2025/07/03", lines:[["yun","要吃牛肉麵嗎"],["Y","寶貝呀我愛你"],["yun","我也愛你⋯我害羞"],["Y","我愛女朋友"]]},
+    {date:"2025/10/04", lines:[["yun","慢慢騎車"],["yun","北鼻 你到家了嗎？"],["yun","你應該已經平安回到家了吧"],["Y","剛到家"]]},
+    {date:"2024/11/26", lines:[["Y","早安安安安安"],["Y","你一定還沒起床"],["yun","早安安！"]]},
+    {date:"2024/11/27", lines:[["yun","我到家跟你說"],["yun","你晚點回家要小心"]]},
+    {date:"2024/12/07", lines:[["yun","害我剛剛很想你的說"],["Y","你吃早餐了嗎"],["Y","我晚點想去星巴克"]]},
+    {date:"2024/12/09", lines:[["yun","在外面要小心"],["yun","晚安安先說"],["Y","我回家打給你嗎"]]},
+    {date:"2024/12/14", lines:[["Y","想你"],["yun","我也好想你"]]},
+    {date:"2024/12/20", lines:[["Y","好的寶寶 想你想你"],["yun","好好笑"]]},
+    {date:"2024/12/22", lines:[["Y","嗚嗚 想你"],["yun","寶寶我來哩！"],["Y","好想好想好想你"]]},
+    {date:"2025/01/25", lines:[["yun","寶寶我剛剛睡著了"],["yun","我好想你我好想你"]]},
+    {date:"2025/01/31", lines:[["yun","早安！我起床了"],["yun","哇嗚他感覺超好吃"],["yun","那個漢堡感覺很呀米"]]},
+    {date:"2025/02/02", lines:[["Y","寶寶到家跟我說"],["Y","你睡著了嗎"],["yun","我到家了喔"]]},
+    {date:"2025/02/16", lines:[["yun","來我懷裡抱抱"]]},
+    {date:"2025/02/25", lines:[["Y","睡不著啦寶寶"],["Y","寶寶我愛你"],["yun","寶寶我到家了哦"]]},
+    {date:"2025/03/18", lines:[["yun","我愛你小寶"],["yun","謝謝你請我吃100天飯飯"],["Y","我愛你寶寶"]]},
+    {date:"2025/04/06", lines:[["yun","想吃甚麼"],["Y","好想吃泡麵哦寶寶"]]},
+    {date:"2025/04/13", lines:[["yun","我到家會跟你說"],["Y","先休息吧"],["Y","晚安"]]},
+    {date:"2025/04/26", lines:[["yun","我愛你小寶寶"],["Y","我好想你"]]},
+    {date:"2025/04/28", lines:[["Y","我愛你"],["Y","你最棒了"],["yun","我也愛你"]]},
+    {date:"2025/05/05", lines:[["Y","到家的打給你"],["yun","注意安全喵"],["Y","小寶我剛到家"]]},
+    {date:"2025/06/07", lines:[["yun","不哭哭 我抱抱"],["yun","有別的想吃的嗎"],["yun","不然明天吃"]]},
+    {date:"2025/07/02", lines:[["yun","也會買飼料給你吃"],["Y","我愛你欸"],["yun","我也愛你欸"]]},
+    {date:"2025/07/04", lines:[["yun","欸感覺很好吃欸"],["yun","我在咬早上剩下的蘋果"],["Y","好吃"]]},
+    {date:"2024/11/21", lines:[["yun","好吃嗎！！"],["Y","好吃！"]]},
+    {date:"2024/12/12", lines:[["Y","感覺好好吃"],["yun","我到家了"],["yun","我還得趕著上課"]]},
+    {date:"2025/07/19", lines:[["yun","你在就好了"],["yun","我好想你"],["Y","除非裡面有布丁"]]}
   ];
-  // 用日期當種子，同一天固定抽 3 段
-  const seed = Math.floor(Date.now()/86400000);
-  const picks = [];
-  const used = new Set();
-  while(picks.length < 3 && used.size < convos.length){
-    const i = (seed*7 + picks.length*13) % convos.length;
-    if(!used.has(i)){ used.add(i); picks.push(convos[i]); }
-  }
+  const topics0 = [["愛你",711],["好吃",659],["想你",543],["回家",393],["想吃",359],["睡覺",350],["抱抱",180],["寶貝",178],["吃飯",156],["老婆",140],["早安",116],["晚安",79]];
   const box = document.getElementById("chatToday");
-  box.innerHTML = picks.map((conv, idx) => 
-    `<div style="${idx>0?'margin-top:8px;padding-top:6px;border-top:1px dashed #f0d0dd':''}">` +
-    conv.map(m => 
-      `<div style="margin:3px 0; ${m.who==='me' ? 'text-align:right' : ''}">
-        <span style="display:inline-block; padding:5px 11px; border-radius:14px; font-size:.85rem; line-height:1.35;
-          background:${m.who==='me' ? 'var(--pink)' : '#fff'}; 
-          color:${m.who==='me' ? '#fff' : '#555'}; 
-          border:${m.who==='them' ? '1px solid var(--pink-soft)' : 'none'}">
-          ${m.text}
-        </span>
-      </div>`
-    ).join("") + `</div>`
-  ).join("");
+  const meta = document.getElementById("chatMeta");
+  let pool = convos;
+  let n = Math.floor(Date.now()/86400000) % pool.length;
+  function esc(s){
+    return String(s).replace(/[&<>"']/g, function(c){
+      return "&#" + c.charCodeAt(0) + ";";
+    });
+  }
+  function show(){
+    const c = pool[n % pool.length];
+    meta.textContent = c.date;
+    box.innerHTML = c.lines.map(function(m){
+      const me = m[0] === "Y";
+      return '<div class="chat-line'+(me?" me":"")+'"><span class="bubble"><span class="who">'+(me?"Y":"小昀")+'</span>'+esc(m[1])+'</span></div>';
+    }).join("");
+  }
+  document.getElementById("chatNext").onclick = function(){
+    n = (n + 1 + Math.floor(Math.random()*3)) % pool.length;
+    show();
+  };
+  show();
+
+  const bars = document.getElementById("talkBars");
+  function drawBars(list){
+    const max = list[0] ? list[0][1] : 1;
+    bars.innerHTML = list.map(function(row){
+      const w = Math.max(6, Math.round(row[1]/max*100));
+      return '<div class="talk-row"><b>'+esc(row[0])+'</b><div class="talk-bar"><i style="width:'+w+'%"></i></div><span>'+row[1]+'</span></div>';
+    }).join("");
+  }
+  drawBars(topics0);
+
+  const keys = ["愛你","好吃","想你","回家","想吃","睡覺","抱抱","寶貝","吃飯","老婆","早安","晚安","上班","麥當勞","星巴克","咖啡"];
+  document.getElementById("talkFile").addEventListener("change", function(){
+    const file = this.files && this.files[0];
+    const status = document.getElementById("talkStatus");
+    if(!file) return;
+    status.textContent = "在這台手機上算…";
+    const reader = new FileReader();
+    reader.onload = function(){
+      const raw = String(reader.result || "");
+      const lines = raw.split(/\r?\n/);
+      let y = 0, yun = 0, photos = 0, date = "", days = {};
+      const hit = {};
+      keys.forEach(function(k){ hit[k] = 0; });
+      const hours = new Array(24).fill(0);
+      const fresh = [];
+      let buf = [];
+      function flush(){
+        if(buf.length < 2) { buf = []; return; }
+        const who = {};
+        buf.forEach(function(m){ who[m[0]] = 1; });
+        if(who.Y && who.yun) fresh.push({date: buf[0][2], lines: buf.map(function(m){ return [m[0], m[1]]; })});
+        buf = [];
+      }
+      lines.forEach(function(line){
+        const d = line.match(/^(\d{4}\/\d{2}\/\d{2})/);
+        if(d && line.indexOf("（") >= 0){ date = d[1]; days[date] = 1; flush(); return; }
+        const m = line.match(/^(上午|下午)(\d{2}:\d{2})\t(.+?)\t(.*)$/);
+        if(!m) return;
+        const who = m[3] === "Y" ? "Y" : "yun";
+        const body = (m[4] || "").trim();
+        if(who === "Y") y++; else yun++;
+        if(body.indexOf("[照片]") === 0) photos++;
+        let hh = parseInt(m[2], 10);
+        if(m[1] === "下午" && hh < 12) hh += 12;
+        if(m[1] === "上午" && hh === 12) hh = 0;
+        hours[hh]++;
+        if(!body || body.charAt(0) === "[" || body.indexOf("http") === 0 || body.charAt(0) === "☎") return;
+        if(/密碼|鍵位|邀請碼|去死|分手/.test(body)) return;
+        keys.forEach(function(k){ if(body.indexOf(k) >= 0) hit[k]++; });
+        if(body.length >= 2 && body.length <= 36 && !/http|密碼|鍵位|去死|分手|操|逼/.test(body)){
+          buf.push([who, body, date]);
+          if(buf.length >= 4) flush();
+        } else flush();
+      });
+      flush();
+      const list = keys.map(function(k){ return [k, hit[k]||0]; }).filter(function(r){ return r[1] > 0; }).sort(function(a,b){ return b[1]-a[1]; }).slice(0,12);
+      if(list.length) drawBars(list);
+      let peak = 0;
+      hours.forEach(function(v,i){ if(v > hours[peak]) peak = i; });
+      document.getElementById("talkWhen").textContent = "這份最常在 " + peak + " 點傳訊息。";
+      document.getElementById("talkCounts").innerHTML =
+        "<span>Y "+y.toLocaleString()+" 則</span><span>小昀 "+yun.toLocaleString()+" 則</span><span>照片 "+photos.toLocaleString()+" 張</span><span>"+Object.keys(days).length+" 天</span>";
+      if(fresh.length){
+        pool = fresh.slice(0, 80);
+        n = 0;
+        show();
+      }
+      status.textContent = "算完了，只留在這台手機。";
+    };
+    reader.readAsText(file);
+  });
 })();
 
 /* 即時聊天 */
