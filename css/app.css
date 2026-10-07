@@ -604,6 +604,13 @@ body{counter-reset: section}
   color:var(--pink-deep); transition:all .2s;
 }
 .status-btn:active{ background:var(--pink-soft); transform:scale(.95); }
+.bpFabWrapper{
+  bottom: calc(78px + env(safe-area-inset-bottom)) !important;
+  z-index: 1200 !important;
+}
+@media (min-width: 768px){
+  .bpFabWrapper{ bottom: 24px !important; }
+}
 .page{ display:none; padding-bottom:calc(96px + env(safe-area-inset-bottom)); }
 .page.active{ display:block; animation:fadeIn .35s ease; }
 .her-card,.bot-card,.album-card{max-width:500px;margin:0 auto}
