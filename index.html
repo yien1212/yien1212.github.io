@@ -1867,68 +1867,30 @@ window._authReady.then(function(uid){
   });
 });
 
-/* 聲音訊息 — ModernAudioRecorder（Web Audio 解鎖 + 全瀏覽器相容 + 降噪） */
-class ModernAudioRecorder {
-  constructor(){ this.mediaRecorder=null; this.chunks=[]; this.stream=null; this.mimeType=''; this.audioCtx=null; }
-  getOptimalMimeType(){
-    const types = ['audio/mp4','audio/webm;codecs=opus','audio/webm','audio/aac','audio/wav'];
+/* 聲音訊息 — 最樸素內聯錄音，無類別封裝，避免層層出錯 */
+window._authReady.then(function(uid){
+  let mediaRecorder = null, chunks = [], stream = null, isRecording = false, maxTimer;
+  const btn = document.getElementById("recBtn");
+  const st = document.getElementById("recStatus");
+
+  function getMime(){
+    const types = ['audio/mp4','audio/webm;codecs=opus','audio/webm','audio/aac'];
     if(typeof MediaRecorder === 'undefined' || !MediaRecorder.isTypeSupported) return '';
     for(const t of types){ try{ if(MediaRecorder.isTypeSupported(t)) return t; }catch(e){} }
     return '';
   }
-  cleanup(){
-    if(this.stream){ this.stream.getTracks().forEach(t=>t.stop()); this.stream=null; }
-    if(this.audioCtx){ this.audioCtx.close().catch(()=>{}); this.audioCtx=null; }
-    this.mediaRecorder=null;
+  function cleanup(){
+    if(stream){ stream.getTracks().forEach(t=>t.stop()); stream=null; }
+    mediaRecorder = null; chunks = [];
   }
-  async start(){
-    if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia)
-      throw new Error("錄音需要 HTTPS 安全連線");
-    // 解鎖 iOS Safari 的 Web Audio
-    const AudioCtx = window.AudioContext || window.webkitAudioContext;
-    if(AudioCtx){
-      this.audioCtx = new AudioCtx();
-      if(this.audioCtx.state === 'suspended'){ try{ await this.audioCtx.resume(); }catch(e){} }
-    }
-    this.stream = await navigator.mediaDevices.getUserMedia({
-      audio: { echoCancellation:true, noiseSuppression:true }
-    });
-    this.chunks = [];
-    this.mimeType = this.getOptimalMimeType();
-    const opts = this.mimeType ? {mimeType:this.mimeType} : {};
-    this.mediaRecorder = new MediaRecorder(this.stream, opts);
-    this.mediaRecorder.ondataavailable = e => { if(e.data && e.data.size) this.chunks.push(e.data); };
-    this.mediaRecorder.start(1000);
-    return this.mimeType;
-  }
-  stop(){
-    return new Promise((resolve,reject)=>{
-      if(!this.mediaRecorder || this.mediaRecorder.state==="inactive"){ reject("錄音尚未開始"); return; }
-      this.mediaRecorder.onstop = () => {
-        const type = this.mediaRecorder.mimeType || this.mimeType || 'audio/mp4';
-        const blob = new Blob(this.chunks, {type});
-        this.cleanup();
-        resolve({blob, type});
-      };
-      this.mediaRecorder.stop();
-    });
-  }
-}
-window._authReady.then(function(uid){
-  const rec = new ModernAudioRecorder();
-  let isRecording = false, maxTimer;
-  const btn = document.getElementById("recBtn");
-  const st = document.getElementById("recStatus");
-
   function resetUI(){
     isRecording = false;
     btn.textContent = "開始錄音";
     btn.disabled = false;
     clearTimeout(maxTimer);
   }
-
   async function uploadBlob(blob){
-    if(blob.size === 0){ st.textContent = "沒錄到聲音，再試一次"; return; }
+    if(!blob || blob.size === 0){ st.textContent = "沒錄到聲音，再試一次"; return; }
     if(blob.size > 2000000){ st.textContent = "太長了，最多15秒"; return; }
     st.textContent = "上傳中...";
     const reader = new FileReader();
@@ -1937,69 +1899,67 @@ window._authReady.then(function(uid){
         await db.ref("voices").push({audio: reader.result, uid: uid, time:{".sv":"timestamp"}});
         if(window.addPoints) window.addPoints(1, "語音");
         st.textContent = "已上傳 ✓";
-      }catch(e){ st.textContent = "上傳失敗：" + (e.message || e.code || e); }
+      }catch(e){ st.textContent = "上傳失敗：" + (e.message||e.code||e); }
     };
     reader.onerror = () => { st.textContent = "讀取錄音檔失敗"; };
     reader.readAsDataURL(blob);
   }
+  function finishRecording(){
+    if(!mediaRecorder) return;
+    const mime = mediaRecorder.mimeType || 'audio/mp4';
+    mediaRecorder.onstop = function(){
+      const blob = new Blob(chunks, {type: mime});
+      cleanup();
+      resetUI();
+      uploadBlob(blob);
+    };
+    try{ mediaRecorder.stop(); }
+    catch(e){ cleanup(); resetUI(); st.textContent = "停止失敗："+e.message; }
+  }
 
-  btn.onclick = async function(){
+  btn.onclick = function(){
     // 停止
     if(isRecording){
       btn.disabled = true;
-      try{
-        if(rec.mediaRecorder && rec.mediaRecorder.state !== "inactive"){
-          rec.mediaRecorder.onstop = async () => {
-            const type = rec.mimeType || 'audio/mp4';
-            const blob = new Blob(rec.chunks, {type});
-            rec.cleanup();
-            resetUI();
-            await uploadBlob(blob);
-          };
-          rec.mediaRecorder.stop();
-        } else {
-          rec.cleanup();
-          resetUI();
-        }
-      }catch(e){
-        rec.cleanup();
-        resetUI();
-        st.textContent = "停止失敗：" + (e.message||e);
-      }
+      finishRecording();
       return;
     }
     // 開始
     btn.disabled = true;
-    try{
-      const mime = await rec.start();
+    st.textContent = "開啟麥克風...";
+
+    // 超時保護：10秒沒開到麥克風就重置
+    const timeout = setTimeout(()=>{
+      cleanup(); resetUI();
+      st.textContent = "麥克風回應逾時，重試一次";
+    }, 10000);
+
+    navigator.mediaDevices.getUserMedia({audio:true}).then(s => {
+      clearTimeout(timeout);
+      stream = s;
+      chunks = [];
+      const mime = getMime();
+      mediaRecorder = mime ? new MediaRecorder(s, {mimeType:mime}) : new MediaRecorder(s);
+      mediaRecorder.ondataavailable = e => { if(e.data && e.data.size) chunks.push(e.data); };
+      mediaRecorder.start(1000);
       isRecording = true;
       btn.disabled = false;
       btn.textContent = "停止錄音";
       st.textContent = "錄音中...（最多15秒）" + (mime ? " ["+mime+"]" : "");
       clearTimeout(maxTimer);
-      maxTimer = setTimeout(()=>{
-        if(isRecording && rec.mediaRecorder && rec.mediaRecorder.state !== "inactive"){
-          rec.mediaRecorder.onstop = async () => {
-            const type = rec.mimeType || 'audio/mp4';
-            const blob = new Blob(rec.chunks, {type});
-            rec.cleanup();
-            resetUI();
-            await uploadBlob(blob);
-          };
-          rec.mediaRecorder.stop();
-        }
-      }, 15000);
-    }catch(e){
-      rec.cleanup();
-      resetUI();
+      maxTimer = setTimeout(()=>{ if(isRecording) finishRecording(); }, 15000);
+    }).catch(e => {
+      clearTimeout(timeout);
+      cleanup(); resetUI();
       if(e.name==="NotAllowedError" || e.name==="PermissionDeniedError")
         st.textContent = "請允許麥克風權限（瀏覽器設定→隱私權→麥克風）";
       else if(e.name==="NotFoundError")
         st.textContent = "找不到麥克風裝置";
       else
-        st.textContent = "無法開麥：" + (e.message || e.name);
-    }
+        st.textContent = "無法開麥：" + (e.message||e.name);
+    });
   };
+
   db.ref("voices").on("value", snap => {
     const el = document.getElementById("voiceList");
     el.innerHTML = "";
