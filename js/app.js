@@ -126,7 +126,6 @@ const carP = [
   ["her_selfie2.jpg","再一張"],
   ["her_selfie3.jpg","看鏡頭"],
   ["her_selfie4.jpg","今天的她"],
-  ["her_uniform.jpg","制服照"],
   ["red_umbrella.jpg","星巴克前面"],
   ["IMG_5576.jpg","笑到肚子痛"],
   ["IMG_6957.jpg","最可愛的一張"]

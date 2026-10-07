@@ -227,6 +227,10 @@ HTMLCanvasElement.prototype.getContext = function(type, attrs){
 }
 .wall figure:hover{transform:translateY(-5px); box-shadow:0 12px 30px rgba(233,30,99,.2)}
 .wall img{width:100%; height:auto; display:block; transition:transform .6s}
+.wall figcaption{
+  padding:8px 10px 10px; text-align:center;
+  font-size:.72rem; letter-spacing:.12em; color:#c06;
+}
 .wall figure:hover img{transform:scale(1.05)}
 
 /* 燈箱 */
