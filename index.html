@@ -16,7 +16,7 @@
 <title>我們 ❤️</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@200;300;400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/app.css?v=9">
+<link rel="stylesheet" href="css/app.css?v=10">
 </head>
 <body>
 
@@ -318,7 +318,7 @@
 
   <h3 class="stitle">常常在聊什麼</h3>
   <div class="chat-box" id="talkBox">
-    <p class="talk-lead">從 2024/11/14 聊到 2026/08/24，643 天。數字是用你們這份 LINE 算的。網站只放日常，密碼、電話和吵架沒有放上來。</p>
+    <p class="talk-lead">從 2024/11/14 聊到 2026/08/24，643 天。下面的數字是這份 LINE 算的，吵架也算在裡面。密碼和電話沒有放上來。</p>
     <div class="talk-counts" id="talkCounts">
       <span>Y 51,911 則</span>
       <span>小昀 62,337 則</span>
@@ -326,6 +326,7 @@
     </div>
     <div id="talkBars"></div>
     <p class="talk-note" id="talkWhen">最常在晚上 10 點傳訊息。</p>
+    <p class="talk-note" id="talkStory" style="white-space:pre-line;text-align:left"></p>
     <label class="btn-pink talk-import">匯入另一份 LINE 記錄<input id="talkFile" type="file" accept=".txt,text/plain" hidden></label>
     <p class="talk-note">選檔只在這台手機上算，不會上傳。</p>
     <p id="talkStatus" class="talk-note"></p>
@@ -360,11 +361,25 @@
   </div>
   <div class="page" id="page-chat">
 
-  <h3 class="stitle">1n的背後靈</h3>
+  <h3 class="stitle">跟誰說話</h3>
   <div class="card bot-card">
-    <p class="talk-note">這是你原本的 Botpress。右下角藍色按鈕就是他，也可以從這裡打開。</p>
-    <button class="btn-pink" id="openBp" type="button">跟背後靈說話</button>
-    <p id="bpStatus" class="talk-note"></p>
+    <div class="chip-row" id="botPick">
+      <button class="chip" id="pickClone" type="button">Y 的分身</button>
+      <button class="chip" id="pickBp" type="button">1n的背後靈</button>
+    </div>
+    <div id="clonePane">
+      <p class="talk-note">用他平常回你的方式。不是本人。</p>
+      <div class="bot-log" id="botLog"></div>
+      <div class="bot-row">
+        <input id="botInput" type="text" maxlength="80" placeholder="跟分身說..." enterkeyhint="send">
+        <button class="btn-pink" id="botSend" type="button">送</button>
+      </div>
+    </div>
+    <div id="bpPane" hidden>
+      <p class="talk-note">這是你原本的 Botpress。右下角藍色按鈕也是他。</p>
+      <button class="btn-pink" id="openBp" type="button">打開背後靈</button>
+      <p id="bpStatus" class="talk-note"></p>
+    </div>
   </div>
 
   <!-- 定位+電量 -->
@@ -573,7 +588,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 <script src="js/guard.js?v=4"></script>
 <script src="js/config.js?v=4"></script>
-<script src="js/app.js?v=9"></script>
+<script src="js/app.js?v=10"></script>
 <script src="https://cdn.botpress.cloud/webchat/v3.5/inject.js"></script>
 <script src="https://files.bpcontent.cloud/2026/01/12/17/20260112175648-Q8N99NKQ.js" defer></script>
 

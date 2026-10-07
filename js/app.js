@@ -32,7 +32,7 @@ function enterApp(){
   a.classList.remove("hidden");
   const title = document.getElementById("heroTitle");
   if(title) title.textContent = window.myRole === "yun" ? "你是小昀恩耶" : "我們的故事";
-  [startTimer, startGame, renderBadges, initCarousel, initTimeline].forEach(fn => {
+  [startTimer, startGame, renderBadges, renderWishes, initCarousel, initTimeline].forEach(fn => {
     try{ fn(); }catch(e){ if(window.Guard) Guard.push(fn.name, e.message, ""); }
   });
   const bgm = document.getElementById("bgm");
@@ -285,19 +285,31 @@ document.getElementById("meterBtn").onclick = () => {
   document.getElementById("meterNum").textContent = n + "%";
   document.getElementById("meterFill").style.width = n + "%";
   document.getElementById("meterMsg").textContent = n >= 98 ? "滿分！妳們註定在一起 ❤️" : "很高！繼續下去就滿分了";
+  localStorage.setItem("meterDone","1");
+  renderBadges();
 };
 
 /* 成就 */
 function renderBadges(){
+  const days = Math.floor((new Date()-start)/86400000);
   const badges = [
     {e:"💘", l:"解鎖密碼", u:true},
-    {e:"📸", l:"看過14張照片", u:true},
+    {e:"📸", l:"看過照片", u:true},
     {e:"🎰", l:"抽過情話", u:localStorage.getItem("luvDrew")==="1"},
     {e:"🎁", l:"抽過盲盒", u:localStorage.getItem("boxDrew")==="1"},
     {e:"🧩", l:"完成翻牌", u:localStorage.getItem("memDone")==="1"},
     {e:"❤️", l:"收集10愛心", u:localStorage.getItem("heart10")==="1"},
     {e:"📝", l:"寫過便利貼", u:localStorage.getItem("noteWrote")==="1"},
-    {e:"🎂", l:"100天", u:Math.floor((new Date()-start)/86400000)>=100},
+    {e:"🎯", l:"轉過任務", u:localStorage.getItem("spinDone")==="1"},
+    {e:"🎙️", l:"錄過音", u:localStorage.getItem("recDone")==="1"},
+    {e:"💬", l:"傳過話", u:localStorage.getItem("chatSent")==="1"},
+    {e:"💗", l:"測過契合", u:localStorage.getItem("meterDone")==="1"},
+    {e:"🍜", l:"決定吃什麼", u:localStorage.getItem("foodPick")==="1"},
+    {e:"🎆", l:"放過煙花", u:localStorage.getItem("fwDone")==="1"},
+    {e:"🧸", l:"送過禮物", u:localStorage.getItem("giftDone")==="1"},
+    {e:"🎂", l:"100天", u:days>=100},
+    {e:"💍", l:"一周年", u:days>=365},
+    {e:"🌟", l:"500天", u:days>=500},
   ];
   document.getElementById("badges").innerHTML = badges.map(b =>
     `<div class="badge ${b.u?"unlocked":"locked"}"><div class="emoji">${b.e}</div><div class="label">${b.l}</div></div>`
@@ -307,7 +319,7 @@ function renderBadges(){
 document.getElementById("loveBtn").addEventListener("click", () => { localStorage.setItem("luvDrew","1"); renderBadges(); });
 document.getElementById("mystery").addEventListener("click", () => { localStorage.setItem("boxDrew","1"); renderBadges(); });
 
-/* 願望清單 - 雲端同步 */
+/* 願望清單 - 先畫出來，登入後再跟雲端同步 */
 function renderWishes(){
   const groups = {
     "旅行": ["一起看海","一起去日本","一起去迪士尼","一起騎車環島","一起泡溫泉","一起去海邊看日出","一起去海邊游泳","一起賞楓","一起賞櫻花","一起去冰山","一起露營","一起住小木屋"],
@@ -318,48 +330,64 @@ function renderWishes(){
   const legacy = ["一起看海","一起跨年","一起去日本","一起養一隻貓","一起做飯","一起露營","一起拍情侶照","一起看煙火","一起養老","一起去迪士尼","一起泡溫泉","一起騎車環島","一起看演唱會","一起種植物","一起組電腦","一起去海邊看日出","一起做蛋糕","一起養隻狗","一起去冰山","一起住小木屋","一起玩雲霄飛車","一起看流星雨","一起逛夜市","一起買情侶裝","一起去貓咪咖啡廳","一起去海邊游泳","一起賞楓","一起拍大頭貼","一起去遊樂園","一起看一輝的演唱會","一起吃壽司","一起去逛街","一起打電動","一起看恐怖片","一起過生日","一起交換禮物","一起賞櫻花"];
   const wishes = Object.values(groups).flat();
   const list = document.getElementById("wishList");
-  list.innerHTML = "";
-  if(uid){
-    db.ref("wishes/state").off();
-    db.ref("wishes/state").on("value", doc => {
-      const raw = doc.exists() && doc.val() ? doc.val().done || [] : [];
-      const done = raw.map(x => typeof x === "number" ? legacy[x] : x).filter(Boolean);
-      const filters = document.getElementById("wishFilters");
-      filters.innerHTML = "";
-      const current = window._wishFilter || "全部";
-      ["全部", ...Object.keys(groups)].forEach(name => {
-        const b = document.createElement("button");
-        b.textContent = name;
-        b.style.cssText = "border:1px solid #ffb3c8;border-radius:999px;padding:6px 12px;background:"+(name===current?"#e91e63":"#fff")+";color:"+(name===current?"#fff":"#e91e63")+";font-family:inherit";
-        b.onclick = () => { window._wishFilter = name; renderWishes(); };
-        filters.appendChild(b);
-      });
-      list.innerHTML = "";
-      const head = document.createElement("div");
-      head.style.cssText = "text-align:center;color:#e91e63;font-size:.85rem;margin-bottom:8px";
-      head.textContent = `完成 ${done.length} / ${wishes.length}`;
-      list.appendChild(head);
-      Object.entries(groups).forEach(([group, items]) => {
-        if(current !== "全部" && current !== group) return;
-        const title = document.createElement("div");
-        title.style.cssText = "margin:12px 0 6px;font-size:.8rem;letter-spacing:2px;color:#c06";
-        title.textContent = group;
-        list.appendChild(title);
-        items.forEach(w => {
-          const isDone = done.includes(w);
-          const d = document.createElement("div");
-          d.className = "wish-item" + (isDone?" done":"");
-          d.innerHTML = `<input type="checkbox" ${isDone?"checked":""}> <span>${w}</span>`;
-          d.querySelector("input").onchange = function(){
-            let s = done.filter(x => wishes.includes(x));
-            if(this.checked) s.push(w); else s = s.filter(x => x !== w);
-            db.ref("wishes/state").set({done:[...new Set(s)]});
-          };
-          list.appendChild(d);
-        });
+  const filters = document.getElementById("wishFilters");
+  if(!list || !filters) return;
+  function paint(done){
+    const current = window._wishFilter || "全部";
+    filters.innerHTML = "";
+    ["全部", ...Object.keys(groups)].forEach(name => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.textContent = name;
+      b.style.cssText = "border:1px solid #ffb3c8;border-radius:999px;padding:6px 12px;background:"+(name===current?"#e91e63":"#fff")+";color:"+(name===current?"#fff":"#e91e63")+";font-family:inherit";
+      b.onclick = function(){ window._wishFilter = name; paint(done); };
+      filters.appendChild(b);
+    });
+    list.innerHTML = "";
+    const head = document.createElement("div");
+    head.style.cssText = "text-align:center;color:#e91e63;font-size:.85rem;margin-bottom:8px";
+    head.textContent = "完成 " + done.length + " / " + wishes.length;
+    list.appendChild(head);
+    Object.entries(groups).forEach(function(entry){
+      const group = entry[0], items = entry[1];
+      if(current !== "全部" && current !== group) return;
+      const title = document.createElement("div");
+      title.style.cssText = "margin:12px 0 6px;font-size:.8rem;letter-spacing:2px;color:#c06";
+      title.textContent = group;
+      list.appendChild(title);
+      items.forEach(function(w){
+        const isDone = done.indexOf(w) >= 0;
+        const d = document.createElement("div");
+        d.className = "wish-item" + (isDone?" done":"");
+        d.innerHTML = '<input type="checkbox"'+(isDone?" checked":"")+'> <span></span>';
+        d.querySelector("span").textContent = w;
+        d.querySelector("input").onchange = function(){
+          let s = done.filter(function(x){ return wishes.indexOf(x) >= 0; });
+          if(this.checked) s.push(w); else s = s.filter(function(x){ return x !== w; });
+          s = Array.from(new Set(s));
+          try{ localStorage.setItem("wishes-done", JSON.stringify(s)); }catch(e){}
+          if(window.db) window.db.ref("wishes/state").set({done:s}).catch(function(){});
+          paint(s);
+        };
+        list.appendChild(d);
       });
     });
   }
+  let local = [];
+  try{ local = JSON.parse(localStorage.getItem("wishes-done") || "[]"); }catch(e){ local = []; }
+  if(!Array.isArray(local)) local = [];
+  paint(local);
+  if(window._wishBound || !window._authReady) return;
+  window._wishBound = true;
+  window._authReady.then(function(){
+    if(!window.db) return;
+    window.db.ref("wishes/state").on("value", function(doc){
+      const raw = doc.exists() && doc.val() ? doc.val().done || [] : [];
+      const done = raw.map(function(x){ return typeof x === "number" ? legacy[x] : x; }).filter(Boolean);
+      try{ localStorage.setItem("wishes-done", JSON.stringify(done)); }catch(e){}
+      paint(done);
+    });
+  });
 }
 
 /* 共同記帳：誰付的、日期、可刪、分開合計 */
@@ -524,7 +552,7 @@ document.addEventListener("click", e => {
     {date:"2024/12/12", lines:[["Y","感覺好好吃"],["yun","我到家了"],["yun","我還得趕著上課"]]},
     {date:"2025/07/19", lines:[["yun","你在就好了"],["yun","我好想你"],["Y","除非裡面有布丁"]]}
   ];
-  const topics0 = [["愛你",711],["好吃",659],["想你",543],["回家",393],["想吃",359],["睡覺",350],["抱抱",180],["寶貝",178],["吃飯",156],["老婆",140],["早安",116],["晚安",79]];
+  const topics0 = [["寶寶",1894],["愛你",711],["好吃",663],["想你",544],["我愛你",437],["回家",393],["想吃",359],["睡覺",350],["對不起",271],["北鼻",244],["討厭",233],["生氣",212],["抱抱",181],["寶貝",178],["吃飯",156],["乖乖",146],["老婆",140],["上課",132],["早安",116],["吵架",91],["晚安",80],["和好",43]];
   const box = document.getElementById("chatToday");
   const meta = document.getElementById("chatMeta");
   let pool = convos;
@@ -557,8 +585,12 @@ document.addEventListener("click", e => {
     }).join("");
   }
   drawBars(topics0);
+  const story = document.getElementById("talkStory");
+  if(story){
+    story.textContent = "114,248 則訊息。小昀講得比較多，62,337 則，Y 是 51,911 則。照片 12,126 張、貼圖 4,199 個、語音 687 則，最常在晚上 10 點。\n聊最多的是叫對方寶寶、說愛、好不好吃、想你、回家有沒有到。也會吵：對不起 271 次、討厭 233、生氣 212、吵架 91，然後和好 43 次。旁邊還有上課、考試、貓狗、麥當勞。";
+  }
 
-  const keys = ["愛你","好吃","想你","回家","想吃","睡覺","抱抱","寶貝","吃飯","老婆","早安","晚安","上班","麥當勞","星巴克","咖啡"];
+  const keys = ["寶寶","愛你","好吃","想你","我愛你","回家","想吃","睡覺","對不起","北鼻","討厭","生氣","抱抱","寶貝","吃飯","乖乖","老婆","上課","早安","吵架","晚安","和好","麥當勞","星巴克"];
   document.getElementById("talkFile").addEventListener("change", function(){
     const file = this.files && this.files[0];
     const status = document.getElementById("talkStatus");
@@ -603,7 +635,7 @@ document.addEventListener("click", e => {
         } else flush();
       });
       flush();
-      const list = keys.map(function(k){ return [k, hit[k]||0]; }).filter(function(r){ return r[1] > 0; }).sort(function(a,b){ return b[1]-a[1]; }).slice(0,12);
+      const list = keys.map(function(k){ return [k, hit[k]||0]; }).filter(function(r){ return r[1] > 0; }).sort(function(a,b){ return b[1]-a[1]; }).slice(0,16);
       if(list.length) drawBars(list);
       let peak = 0;
       hours.forEach(function(v,i){ if(v > hours[peak]) peak = i; });
@@ -642,6 +674,8 @@ window._authReady.then(function(uid){
     const v = document.getElementById("chatInput").value.trim();
     if(!v) return;
     db.ref("chat").push({text:v, uid:uid, time:{".sv":"timestamp"}}); if(window.addPoints) window.addPoints(1, "聊天");
+    localStorage.setItem("chatSent","1");
+    if(typeof renderBadges === "function") renderBadges();
     document.getElementById("chatInput").value = "";
   };
   document.getElementById("chatInput").addEventListener("keydown", e => {
@@ -912,6 +946,8 @@ window._authReady.then(function(uid){
     });
     await db.ref("voices").push({audio: data, uid: window.uid, role: window.myRole||"", mime: blob.type||"audio/mp4", time: Date.now()});
     if(window.addPoints) window.addPoints(1, "語音");
+    localStorage.setItem("recDone","1");
+    if(typeof renderBadges === "function") renderBadges();
     st.textContent = "已送出";
     window._pendingVoice = null;
   }
@@ -1217,6 +1253,8 @@ document.getElementById("dmInput").addEventListener("keydown", e => {
 
 /* 送禮物 */
 window.sendGift = function(emoji){
+  localStorage.setItem("giftDone","1");
+  if(typeof renderBadges === "function") renderBadges();
   for(let i = 0; i < 5; i++){
     setTimeout(() => {
       const el = document.createElement("div");
@@ -1405,18 +1443,31 @@ window.firework = function(){
     }, burst*250);
   }
 };
-document.getElementById("fireworkBtn").onclick = firework;
+document.getElementById("fireworkBtn").onclick = function(){
+  localStorage.setItem("fwDone","1");
+  if(typeof renderBadges === "function") renderBadges();
+  firework();
+};
 
 /* 轉盤：指針固定在上方，結果跟扇形對齊 */
 (function(){
-  const tasks = ["抱抱她","說她可愛","問她吃了沒","親她一下","講情話","說想妳"];
+  const tasks = ["抱抱她","問她吃了沒","叫她乖乖","買她愛吃的","講一句想妳","到家報備","親她一下","騎車慢一點"];
+  const slice = 360 / tasks.length;
   const wheel = document.getElementById("wheel");
   const result = document.getElementById("wheelResult");
+  const colors = ["#ff6b9d","#ffd6e7","#ff8fb3","#ffe4ec"];
+  wheel.style.background = "conic-gradient(" + tasks.map(function(_, i){
+    return colors[i % colors.length] + " " + (i*slice) + "deg " + ((i+1)*slice) + "deg";
+  }).join(",") + ")";
   tasks.forEach((t,i)=>{
     const lab = document.createElement("div");
     lab.className = "wheel-label";
     lab.textContent = t;
-    lab.style.transform = `rotate(${i*60+30}deg) translateY(-68px) rotate(-${i*60+30}deg)`;
+    const deg = i*slice + slice/2;
+    lab.style.transform = "rotate("+deg+"deg) translateY(-62px) rotate(-"+deg+"deg)";
+    lab.style.fontSize = ".62rem";
+    lab.style.width = "64px";
+    lab.style.marginLeft = "-32px";
     wheel.appendChild(lab);
   });
   let angle = 0, spinning = false;
@@ -1424,17 +1475,18 @@ document.getElementById("fireworkBtn").onclick = firework;
     if(spinning) return;
     spinning = true;
     const idx = Math.floor(Math.random()*tasks.length);
-    // 扇形從 0 度順時針，指針在 12 點。轉到該扇形中心對準指針。
-    const targetMod = (360 - (idx*60 + 30)) % 360;
+    const targetMod = (360 - (idx*slice + slice/2)) % 360;
     const current = angle % 360;
     let delta = targetMod - current;
     if(delta < 0) delta += 360;
     angle += 360*5 + delta;
-    wheel.style.transform = `rotate(${angle}deg)`;
+    wheel.style.transform = "rotate("+angle+"deg)";
     result.textContent = "轉動中...";
     setTimeout(() => {
       result.textContent = "今天的任務： " + tasks[idx];
       spinning = false;
+      localStorage.setItem("spinDone","1");
+      if(typeof renderBadges === "function") renderBadges();
     }, 3300);
   };
 })();
@@ -1468,7 +1520,7 @@ document.getElementById("foodBtn").onclick = function(){
   foodSpinTimer = setInterval(()=>{
     res.textContent = foods[Math.floor(Math.random()*foods.length)];
     count++;
-    if(count > 25){ clearInterval(foodSpinTimer); foodSpinTimer=null; btn.textContent="幫我們決定！"; }
+    if(count > 25){ clearInterval(foodSpinTimer); foodSpinTimer=null; btn.textContent="幫我們決定！"; localStorage.setItem("foodPick","1"); if(typeof renderBadges==="function") renderBadges(); }
   }, 80);
 };
 
@@ -1498,6 +1550,8 @@ document.addEventListener("visibilitychange", function(){
       b.onclick = function(){
         const res = document.getElementById("foodResult");
         if(res) res.textContent = name;
+        localStorage.setItem("foodPick","1");
+        if(typeof renderBadges === "function") renderBadges();
       };
       row.appendChild(b);
     });
@@ -1506,6 +1560,8 @@ document.addEventListener("visibilitychange", function(){
   if(foodHer){
     foodHer.onclick = function(){
       document.getElementById("foodResult").textContent = herFoods[Math.floor(Math.random()*herFoods.length)];
+      localStorage.setItem("foodPick","1");
+      if(typeof renderBadges === "function") renderBadges();
     };
   }
 
@@ -1535,7 +1591,7 @@ document.addEventListener("visibilitychange", function(){
       try{ localStorage.setItem(albumKey, url); }catch(e){}
       paintAlbum(url);
       status.textContent = "這台手機先記住了";
-      if(window.db){
+      if(uid){
         window.db.ref("album/baidu").set({url:url, at:Date.now()}).then(function(){
           status.textContent = "存好了，另一台登入後也看得到";
         }).catch(function(){
@@ -1557,6 +1613,28 @@ document.addEventListener("visibilitychange", function(){
     });
   }
 
+  function showPane(which){
+    const clone = document.getElementById("clonePane");
+    const bp = document.getElementById("bpPane");
+    const a = document.getElementById("pickClone");
+    const b = document.getElementById("pickBp");
+    if(!clone || !bp) return;
+    clone.hidden = which !== "clone";
+    bp.hidden = which !== "bp";
+    if(a) a.style.background = which==="clone" ? "#e91e63" : "";
+    if(a) a.style.color = which==="clone" ? "#fff" : "";
+    if(b) b.style.background = which==="bp" ? "#e91e63" : "";
+    if(b) b.style.color = which==="bp" ? "#fff" : "";
+    try{ localStorage.setItem("whoTalk", which); }catch(e){}
+  }
+  const pickClone = document.getElementById("pickClone");
+  const pickBp = document.getElementById("pickBp");
+  if(pickClone) pickClone.onclick = function(){ showPane("clone"); };
+  if(pickBp) pickBp.onclick = function(){ showPane("bp"); };
+  let saved = "clone";
+  try{ saved = localStorage.getItem("whoTalk") || "clone"; }catch(e){}
+  showPane(saved === "bp" ? "bp" : "clone");
+
   const openBp = document.getElementById("openBp");
   if(openBp){
     openBp.onclick = function(){
@@ -1569,4 +1647,58 @@ document.addEventListener("visibilitychange", function(){
       }
     };
   }
+
+  const pairs = [["我也很想你啊 真的", "抱抱寶寶"], ["我到家囉", "我愛你寶寶"], ["我愛你小寶寶", "我好想你"], ["我愛你寶寶", "我也愛你"], ["好吃嗎！！", "好吃！"], ["對不起寶寶", "忘記群發到我了"], ["對不起起起", "我剛到家"], ["豆腐還是百頁好吃", "都好吃"], ["可以用來打遊戲的寶寶", "沒有妳自由也沒有意義了寶寶"], ["好想妳耶小寶寶", "我不是小寶寶"], ["真的感覺很好吃嗚嗚", "當然啊寶寶"], ["超級帥", "寶寶我想你"], ["我想你了", "寶寶你想玩是嗎"], ["好滴", "我想你寶寶"], ["嗯嗯！", "寶寶你到家了嗎"], ["沒4", "謝謝寶寶今天請我吃飯"], ["寶寶 我潑了喔", "好哇寶寶"], ["累累寶寶", "愛妳寶寶"], ["我最愛你了", "我也是哇寶寶"], ["我愛你", "最愛你了"], ["嗨嗨寶寶", "寶寶你在做什麼"], ["你看嘿嘿", "寶寶我愛你"], ["寶寶我幾點可以找你", "寶寶我今天不一定"], ["想抱抱", "寶寶這個願望不算"], ["對不起不小心把你手機磨摔壞了", "為什麼會這樣"], ["沒關係", "寶寶我還是很愛你"], ["等等打給寶寶", "寶寶你還好嗎"], ["你好快到家", "寶寶"], ["我想抱抱", "怎麼啦寶寶"], ["我也愛你哇", "我在想你會不會遇到我媽"], ["我們阿鼻要乖乖的喔", "我想你北鼻"], ["知道寶寶", "你會餓嗎寶寶"], ["我愛你", "開心一點寶寶"], ["感覺不好吃", "看起來不好吃"], ["真的", "我愛你 很愛你寶寶"], ["我相信我有一天會好好表達滴", "欸我真的很愛你欸寶寶"], ["好棒寶寶", "看完了先 回家 等等我小寶寶"], ["所以寶寶我愛你", "那個"], ["不小心睡著沒有跟你說到晚安", "我不想"], ["想你", "我愛你小寶"], ["我愛你", "我愛你"], ["可愛寶寶", "小心走"], ["他就是玻璃心", "就例如說你不好好吃飯"], ["想你", "我也想你"], ["怎麼了", "愛你呀 老婆"], ["抱抱嗚嗚 我好怕你痛", "沒關係呀寶寶"], ["會滴寶寶", "幫然是想你啊"], ["好想你", "我也好想你"], ["我很愛你", "我愛你啊"], ["我是真想你了", "我也想你啊"], ["你應該已經平安回到家了吧", "剛到家"], ["寶寶 騎車小心🫶🏻", "突然想到"], ["我愛你欸", "這個好吃嗎"], ["那確實", "我愛你老婆"], ["兩個嗎", "對愛你老婆"], ["愛你寶寶❤️", "我看"], ["愛你寶寶", "認真"], ["我也想你老婆", "剛剛大家突然沈默10秒"], ["想抱抱", "想你啊"], ["我也愛你寶寶", "加油"], ["我沒吃過別的～你覺得哪版本最好吃", "最貴的最好吃"], ["我也愛你寶寶😋❤️", "小朋友吃飽飽"], ["愛你", "愛你"], ["有啊他就說他在學校暈船這樣", "明天我可以先跟你說早安"], ["ㄛ好啊我都不知道要吃什麼", "回到家洗完澡就清醒了"], ["我剛剛本來要衝去買它欸但太冷了", "欸這個感覺很好吃"], ["晚安", "不會煩啊"], ["早知道不睡覺的", "那個冰火菠蘿感覺很好吃欸"], ["你小心一點ㄛ", "好～"], ["那你回家小心好ㄌ", "下課了了了了"], ["漂亮咪", "好吃嗎"], ["想你", "想我可以打給我"], ["回家小心", "等我回家"], ["認真想你好了", "慢慢想"], ["早點用完早點休息", "晚安"], ["你不喜歡哦", "那個好吃"], ["你看", "欸這個感覺好好吃"], ["好想你", "騙人"], ["我想你", "媽的今天"], ["理我一下下", "感覺好好吃"], ["沒有穿給別人看", "我到吃飯的地方了"], ["哪有不行為什麼不行", "小心一點"], ["棒棒", "感覺不好吃"], ["我剛到家", "我會很愧疚"], ["要小心喔", "知道"], ["回家小心騎", "你還喜歡我嗎"], ["你到家再跟我說", "有吃"], ["為什麼他這麼好吃", "我沒有吃過"], ["我不行接受他", "好吃"], ["明明就超好吃", "他不會跟你搶食物"], ["我也到家嚕", "我也覺得"], ["哈哈哈哈", "會想你"], ["所以你不開心", "卡士達滿好吃的啊"], ["我也想你", "我吃了6個了"], ["真的不會有人跟你搶", "我說很好吃"], ["根本不好吃", "讓我吃到飽"], ["我要暈車了", "我想你"], ["我到家嚕", "知道了"], ["為什麼哈哈哈", "好啊寶寶"], ["我怕你不喜歡我啊", "要去吃飯"]];
+  const log = document.getElementById("botLog");
+  const input = document.getElementById("botInput");
+  const send = document.getElementById("botSend");
+  if(!log || !input || !send) return;
+  function esc(s){
+    return String(s).replace(/[&<>"']/g, function(c){ return "&#"+c.charCodeAt(0)+";"; });
+  }
+  function bubble(me, text){
+    const div = document.createElement("div");
+    div.className = "chat-line"+(me?" me":"");
+    div.innerHTML = '<span class="bubble"><span class="who">'+(me?"小昀":"Y")+'</span>'+esc(text)+'</span>';
+    log.appendChild(div);
+    log.scrollTop = log.scrollHeight;
+  }
+  function grams(s){
+    const g = [];
+    for(let i=0;i<s.length-1;i++) g.push(s.slice(i,i+2));
+    return g;
+  }
+  function reply(q){
+    const s = q.trim();
+    if(!s) return "";
+    const gs = grams(s);
+    let best = "", score = 0;
+    pairs.forEach(function(p){
+      let sc = 0;
+      gs.forEach(function(g){ if(p[0].indexOf(g) >= 0) sc++; });
+      if(p[0] === s) sc += 12;
+      if(sc > score){ score = sc; best = p[1]; }
+    });
+    if(score >= 2 && best) return best;
+    if(/吃|餓|飯|奶茶/.test(s)) return "吃了沒寶寶，想吃什麼跟我說";
+    if(/想你|愛你|想妳|愛妳/.test(s)) return "我也想你，我愛你寶寶";
+    if(/到家|回來|回了/.test(s)) return "到家就好。我愛你";
+    if(/早安|起床/.test(s)) return "早安安，吃早餐了嗎";
+    if(/晚安|睡覺|想睡/.test(s)) return "晚安寶寶，抱抱";
+    if(/對不起|生氣|吵架/.test(s)) return "對不起寶寶。我在";
+    if(/上班|工作|下課|上課/.test(s)) return "加油，我在";
+    if(/不舒服|痛|累/.test(s)) return "先休息。我在，抱抱";
+    const soft = ["嗯我在","怎麼了寶寶","我愛你","到家跟我說"];
+    return soft[s.length % soft.length];
+  }
+  function ask(){
+    const q = input.value.trim();
+    if(!q) return;
+    input.value = "";
+    bubble(true, q);
+    setTimeout(function(){ bubble(false, reply(q)); }, 280);
+  }
+  send.onclick = ask;
+  input.addEventListener("keydown", function(e){ if(e.key === "Enter") ask(); });
+  bubble(false, "我在。想說什麼跟我說，寶寶");
 })();
