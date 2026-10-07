@@ -26,6 +26,7 @@ body{
   min-height:100vh; overflow-x:hidden;
   -webkit-font-smoothing:antialiased;
 }
+body.privacy-blur{ filter:blur(20px); transition:filter .3s; }
 body::before{
   content:""; position:fixed; inset:0; z-index:-2;
   background:
@@ -920,6 +921,13 @@ body{counter-reset: section}
     <div id="wheelResult"></div>
     <br>
     <button class="btn-pink" id="spinBtn">轉！</button>
+  </div>
+
+  <!-- 今天吃什麼 -->
+  <h3 class="stitle">🍜 今天吃什麼</h3>
+  <div style="text-align:center;background:rgba(255,255,255,.65);backdrop-filter:blur(20px);border-radius:16px;padding:20px;margin:8px 0">
+    <div id="foodResult" style="font-size:1.8rem;color:var(--pink);font-weight:600;margin:10px 0;min-height:2.5rem">????</div>
+    <button class="btn-pink" id="foodBtn" style="border-radius:25px;padding:10px 30px">幫我們決定！</button>
   </div>
 
   </div>
@@ -2432,6 +2440,31 @@ document.querySelectorAll(".photo figure, .card").forEach(el => {
 /* 音樂 */
 document.getElementById("playBtn").onclick = () => bgm.play();
 document.getElementById("pauseBtn").onclick = () => bgm.pause();
+
+/* 🍜 今天吃什麼 */
+const foods = ["海底撈 🍲","日式拉麵 🍜","義大利麵 🍝","韓式炸雞 🍗","夜市小吃 🍢","精緻甜點 🍰","麥當勞 🍔","小火鍋 🍲","壽司 🍣","燒烤 🍖","水餃 🥟","滷肉飯 🍚","牛肉麵 🍜","鹹酥雞 🍗","鬆餅 🥞","珍珠奶茶 🧋"];
+let foodSpinTimer = null;
+document.getElementById("foodBtn").onclick = function(){
+  const res = document.getElementById("foodResult");
+  const btn = document.getElementById("foodBtn");
+  if(foodSpinTimer){ clearInterval(foodSpinTimer); foodSpinTimer=null; btn.textContent="幫我們決定！"; return; }
+  btn.textContent = "停止！";
+  let count = 0;
+  foodSpinTimer = setInterval(()=>{
+    res.textContent = foods[Math.floor(Math.random()*foods.length)];
+    count++;
+    if(count > 25){ clearInterval(foodSpinTimer); foodSpinTimer=null; btn.textContent="幫我們決定！"; }
+  }, 80);
+};
+
+/* 🔒 防偷窺：切換分頁時模糊 */
+document.addEventListener("visibilitychange", function(){
+  if(document.hidden){
+    document.body.classList.add("privacy-blur");
+  } else {
+    document.body.classList.remove("privacy-blur");
+  }
+});
 </script>
 
 <script src="https://cdn.botpress.cloud/webchat/v3.5/inject.js"></script>
