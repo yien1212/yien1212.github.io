@@ -16,10 +16,6 @@
 
 const ROLES = window.APP_CONFIG.roles;
 let pendingRole = null;
-async function sha256(text){
-  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
-  return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2,"0")).join("");
-}
 function pickRole(role){
   pendingRole = role;
   document.getElementById("pwdBox").classList.remove("hidden");
@@ -29,37 +25,26 @@ function pickRole(role){
 }
 document.getElementById("roleY").onclick = () => pickRole("y");
 document.getElementById("roleYun").onclick = () => pickRole("yun");
-async function tryLogin(){
+function tryLogin(){
   const msg = document.getElementById("roleMsg");
-  const pw = document.getElementById("rolePw").value;
-  if(!pendingRole) return;
-  if(await sha256(pw) !== ROLES[pendingRole].pinHash){
-    const el = document.getElementById("rolePw");
-    el.style.animation = "none"; el.offsetHeight;
-    el.style.animation = "shake .5s";
+  const pw = document.getElementById("rolePw").value.trim();
+  if(!pendingRole){ msg.textContent = "請先選你是誰"; return; }
+  if(pw !== ROLES[pendingRole].pw){
     msg.textContent = "密碼不對喔";
-    el.value = "";
+    document.getElementById("rolePw").value = "";
     return;
   }
-  msg.textContent = "登入中...";
+  window.myRole = pendingRole;
+  window.themName = pendingRole === "y" ? "小昀" : "Y";
+  window.uid = window.uid || ("local-"+pendingRole);
+  if(window._authResolve){ window._authResolve(window.uid); window._authResolve = null; }
+  enterApp();
   firebase.auth().signInWithEmailAndPassword(ROLES[pendingRole].email, window.APP_CONFIG.dbPass)
-    .then(u => {
-      window.uid = u.user.uid;
-      window.myRole = pendingRole;
-      window.themName = pendingRole === "y" ? "小昀" : "Y";
-      if(window._authResolve){ window._authResolve(u.user.uid); window._authResolve = null; }
-      enterApp();
-    })
-    .catch(e => {
-      msg.textContent = "登入失敗：" + (e.message || "請檢查網路");
-    });
+    .then(u => { window.uid = u.user.uid; })
+    .catch(e => { if(window.Guard) Guard.push("Auth", "雲端登入失敗，頁面仍可使用", e.code||e.message); });
 }
 document.getElementById("roleGo").onclick = tryLogin;
 document.getElementById("rolePw").addEventListener("keydown", e => { if(e.key==="Enter") tryLogin(); });
-
-/* 每次開網站都要重打密碼：不記住登入，進來就登出 */
-localStorage.removeItem("role");
-firebase.auth().signOut();
 
 /* 計時 */
 function startTimer(){
