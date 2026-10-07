@@ -1997,11 +1997,21 @@ window._authReady.then(function(uid){
     items.sort((a,b)=>(b.time||0)-(a.time||0));
     items.slice(0,10).forEach(v => {
       if(v.audio){
-        // 修復舊資料的 MIME 類型：如果是 mp4 內容但標成 webm，自動修正
+        // 檢測真實格式：讀取 base64 解碼後的前12位元組
         let src = v.audio;
-        if(v.mime && !v.audio.startsWith("data:"+v.mime)){
-          src = v.audio.replace(/^data:[^,]+/, "data:"+v.mime);
-        }
+        try {
+          const b64 = v.audio.replace(/^data:[^,]+,/, '');
+          const binary = atob(b64.substring(0, 24));
+          const h4 = binary.charCodeAt(4), h5 = binary.charCodeAt(5), h6 = binary.charCodeAt(6), h7 = binary.charCodeAt(7);
+          const h0 = binary.charCodeAt(0), h1 = binary.charCodeAt(1), h2 = binary.charCodeAt(2), h3 = binary.charCodeAt(3);
+          let realMime = null;
+          if(h4===0x66 && h5===0x74 && h6===0x79 && h7===0x70) realMime = "audio/mp4"; // ftyp = MP4
+          else if(h0===0x1a && h1===0x45 && h2===0xdf && h3===0xa3) realMime = "audio/webm"; // EBML = WebM
+          else if(h0===0x52 && h1===0x49 && h2===0x46 && h3===0x46) realMime = "audio/wav"; // RIFF = WAV
+          if(realMime && !v.audio.startsWith("data:"+realMime)){
+            src = v.audio.replace(/^data:[^,]*/, "data:"+realMime);
+          }
+        } catch(e){}
         el.innerHTML += `<audio controls src="${src}" style="width:100%;margin:5px 0"></audio>`;
       }
     });
