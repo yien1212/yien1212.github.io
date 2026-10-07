@@ -104,7 +104,15 @@ const carP = [
   ["couple_crown.jpg","公主與魔杖"],
   ["cinnamoroll.jpg","玉桂狗聯名"],
   ["giant_icecream.jpg","她變成冰淇淋"],
-  ["icecream_selfie.jpg","張大嘴吃冰"]
+  ["icecream_selfie.jpg","張大嘴吃冰"],
+  ["her_selfie1.jpg","她的自拍"],
+  ["her_selfie2.jpg","再一張"],
+  ["her_selfie3.jpg","看鏡頭"],
+  ["her_selfie4.jpg","今天的她"],
+  ["her_uniform.jpg","制服照"],
+  ["red_umbrella.jpg","星巴克前面"],
+  ["IMG_5576.jpg","笑到肚子痛"],
+  ["IMG_6957.jpg","最可愛的一張"]
 ];
 function initCarousel(){
   function show(i){
@@ -285,38 +293,54 @@ document.getElementById("mystery").addEventListener("click", () => { localStorag
 
 /* 願望清單 - 雲端同步 */
 function renderWishes(){
-  const wishes = [
-    "一起看海","一起跨年","一起去日本","一起養一隻貓","一起做飯",
-    "一起露營","一起拍情侶照","一起看煙火","一起養老",
-    "一起去迪士尼","一起泡溫泉","一起騎車環島","一起看演唱會",
-    "一起種植物","一起組電腦","一起去海邊看日出","一起做蛋糕",
-    "一起養隻狗","一起去冰山","一起住小木屋","一起玩雲霄飛車",
-    "一起看流星雨","一起逛夜市","一起買情侶裝","一起去貓咪咖啡廳",
-    "一起去海邊游泳","一起賞楓","一起拍大頭貼","一起去遊樂園",
-    "一起看一輝的演唱會","一起吃壽司","一起去逛街","一起打電動",
-    "一起看恐怖片","一起過生日","一起交換禮物","一起賞櫻花"
-  ];
+  const groups = {
+    "旅行": ["一起看海","一起去日本","一起去迪士尼","一起騎車環島","一起泡溫泉","一起去海邊看日出","一起去海邊游泳","一起賞楓","一起賞櫻花","一起去冰山","一起露營","一起住小木屋"],
+    "吃": ["一起吃壽司","一起做蛋糕","一起做飯","一起逛夜市"],
+    "玩": ["一起看煙火","一起看演唱會","一起看一輝的演唱會","一起去遊樂園","一起玩雲霄飛車","一起看流星雨","一起去逛街","一起去貓咪咖啡廳","一起拍大頭貼","一起拍情侶照","一起買情侶裝"],
+    "日常": ["一起跨年","一起養一隻貓","一起養隻狗","一起種植物","一起組電腦","一起打電動","一起看恐怖片","一起過生日","一起交換禮物","一起養老"]
+  };
+  const legacy = ["一起看海","一起跨年","一起去日本","一起養一隻貓","一起做飯","一起露營","一起拍情侶照","一起看煙火","一起養老","一起去迪士尼","一起泡溫泉","一起騎車環島","一起看演唱會","一起種植物","一起組電腦","一起去海邊看日出","一起做蛋糕","一起養隻狗","一起去冰山","一起住小木屋","一起玩雲霄飛車","一起看流星雨","一起逛夜市","一起買情侶裝","一起去貓咪咖啡廳","一起去海邊游泳","一起賞楓","一起拍大頭貼","一起去遊樂園","一起看一輝的演唱會","一起吃壽司","一起去逛街","一起打電動","一起看恐怖片","一起過生日","一起交換禮物","一起賞櫻花"];
+  const wishes = Object.values(groups).flat();
   const list = document.getElementById("wishList");
   list.innerHTML = "";
   if(uid){
+    db.ref("wishes/state").off();
     db.ref("wishes/state").on("value", doc => {
-      const done = doc.exists() ? (doc.val() ? doc.val().done || [] : []) : [];
+      const raw = doc.exists() && doc.val() ? doc.val().done || [] : [];
+      const done = raw.map(x => typeof x === "number" ? legacy[x] : x).filter(Boolean);
+      const filters = document.getElementById("wishFilters");
+      filters.innerHTML = "";
+      const current = window._wishFilter || "全部";
+      ["全部", ...Object.keys(groups)].forEach(name => {
+        const b = document.createElement("button");
+        b.textContent = name;
+        b.style.cssText = "border:1px solid #ffb3c8;border-radius:999px;padding:6px 12px;background:"+(name===current?"#e91e63":"#fff")+";color:"+(name===current?"#fff":"#e91e63")+";font-family:inherit";
+        b.onclick = () => { window._wishFilter = name; renderWishes(); };
+        filters.appendChild(b);
+      });
       list.innerHTML = "";
       const head = document.createElement("div");
       head.style.cssText = "text-align:center;color:#e91e63;font-size:.85rem;margin-bottom:8px";
       head.textContent = `完成 ${done.length} / ${wishes.length}`;
       list.appendChild(head);
-      wishes.forEach((w,i) => {
-        const isDone = done.includes(i);
-        const d = document.createElement("div");
-        d.className = "wish-item" + (isDone?" done":"");
-        d.innerHTML = `<input type="checkbox" ${isDone?"checked":""}> <span>${w}</span>`;
-        d.querySelector("input").onchange = function(){
-          let s = [...done];
-          if(this.checked) s.push(i); else s = s.filter(x => x !== i);
-          db.ref("wishes/state").set({done:[...new Set(s)]});
-        };
-        list.appendChild(d);
+      Object.entries(groups).forEach(([group, items]) => {
+        if(current !== "全部" && current !== group) return;
+        const title = document.createElement("div");
+        title.style.cssText = "margin:12px 0 6px;font-size:.8rem;letter-spacing:2px;color:#c06";
+        title.textContent = group;
+        list.appendChild(title);
+        items.forEach(w => {
+          const isDone = done.includes(w);
+          const d = document.createElement("div");
+          d.className = "wish-item" + (isDone?" done":"");
+          d.innerHTML = `<input type="checkbox" ${isDone?"checked":""}> <span>${w}</span>`;
+          d.querySelector("input").onchange = function(){
+            let s = done.filter(x => wishes.includes(x));
+            if(this.checked) s.push(w); else s = s.filter(x => x !== w);
+            db.ref("wishes/state").set({done:[...new Set(s)]});
+          };
+          list.appendChild(d);
+        });
       });
     });
   }
@@ -772,138 +796,110 @@ window._authReady.then(function(uid){
   });
 });
 
-/* 聲音訊息 — 最樸素內聯錄音，無類別封裝，避免層層出錯 */
-window._authReady.then(function(uid){
-  let mediaRecorder = null, chunks = [], stream = null, isRecording = false, maxTimer;
+/* 聲音訊息：先在本機錄，再上傳。不依賴登入才綁按鈕。 */
+(function(){
+  let mediaRecorder = null, chunks = [], stream = null, recording = false, timer = null;
   const btn = document.getElementById("recBtn");
   const st = document.getElementById("recStatus");
+  const preview = document.getElementById("recPreview");
+  if(!btn) return;
 
-  function getMime(){
-    const types = ['audio/mp4','audio/webm;codecs=opus','audio/webm','audio/aac'];
-    if(typeof MediaRecorder === 'undefined' || !MediaRecorder.isTypeSupported) return '';
-    for(const t of types){ try{ if(MediaRecorder.isTypeSupported(t)) return t; }catch(e){} }
-    return '';
+  function pickMime(){
+    if(typeof MediaRecorder === "undefined") return "";
+    const types = ["audio/mp4", "audio/aac", "audio/webm;codecs=opus", "audio/webm"];
+    for(const t of types){
+      try{ if(MediaRecorder.isTypeSupported(t)) return t; }catch(e){}
+    }
+    return "";
   }
-  function cleanup(){
-    if(stream){ stream.getTracks().forEach(t=>t.stop()); stream=null; }
-    mediaRecorder = null; chunks = [];
+  function stopStream(){
+    if(stream){ stream.getTracks().forEach(t => t.stop()); stream = null; }
   }
-  function resetUI(){
-    isRecording = false;
-    btn.textContent = "開始錄音";
-    btn.disabled = false;
-    clearTimeout(maxTimer);
+  function showLocal(blob){
+    preview.src = URL.createObjectURL(blob);
+    preview.style.display = "block";
   }
-  async function uploadBlob(blob){
-    if(!blob || blob.size === 0){ st.textContent = "沒錄到聲音，再試一次"; return; }
-    if(blob.size > 2000000){ st.textContent = "太長了，最多15秒"; return; }
-    st.textContent = "上傳中...";
-    // 檢測真實音訊格式（修復 MediaRecorder.mimeType 與實際內容不符的 bug）
-    const buf = await blob.arrayBuffer();
-    const head = new Uint8Array(buf.slice(0,12));
-    let realMime = blob.type || "audio/mp4";
-    // MP4/ISO BMFF 開頭是 "ftyp"（位元組 4-7）
-    if(head[4]===0x66 && head[5]===0x74 && head[6]===0x79 && head[7]===0x70) realMime = "audio/mp4";
-    // WebM/EBML 開頭是 0x1a 0x45 0xdf 0xa3
-    else if(head[0]===0x1a && head[1]===0x45 && head[2]===0xdf && head[3]===0xa3) realMime = "audio/webm";
-    // WAV 開頭是 "RIFF"
-    else if(head[0]===0x52 && head[1]===0x49 && head[2]===0x46 && head[3]===0x46) realMime = "audio/wav";
-    const fixedBlob = new Blob([buf], {type: realMime});
-    const reader = new FileReader();
-    reader.onload = async function(){
-      try{
-        await db.ref("voices").push({audio: reader.result, uid: uid, mime: realMime, time:{".sv":"timestamp"}});
-        if(window.addPoints) window.addPoints(1, "語音");
-        st.textContent = "已上傳 ✓ (" + realMime + ")";
-      }catch(e){ st.textContent = "上傳失敗：" + (e.message||e.code||e); }
-    };
-    reader.onerror = () => { st.textContent = "讀取錄音檔失敗"; };
-    reader.readAsDataURL(fixedBlob);
-  }
-  function finishRecording(){
-    if(!mediaRecorder) return;
-    const mime = mediaRecorder.mimeType || 'audio/mp4';
-    mediaRecorder.onstop = function(){
-      const blob = new Blob(chunks, {type: mime});
-      cleanup();
-      resetUI();
-      uploadBlob(blob);
-    };
-    try{ mediaRecorder.stop(); }
-    catch(e){ cleanup(); resetUI(); st.textContent = "停止失敗："+e.message; }
-  }
-
-  btn.onclick = function(){
-    // 停止
-    if(isRecording){
-      btn.disabled = true;
-      finishRecording();
+  async function upload(blob){
+    showLocal(blob);
+    if(!window.db || !window.uid){
+      st.textContent = "已錄好，可先播放。登入後再按一次停止就會上傳";
+      window._pendingVoice = blob;
       return;
     }
-    // 開始
-    btn.disabled = true;
-    st.textContent = "開啟麥克風...";
-
-    // 超時保護：10秒沒開到麥克風就重置
-    const timeout = setTimeout(()=>{
-      cleanup(); resetUI();
-      st.textContent = "麥克風回應逾時，重試一次";
-    }, 10000);
-
-    navigator.mediaDevices.getUserMedia({audio:true}).then(s => {
-      clearTimeout(timeout);
-      stream = s;
-      chunks = [];
-      const mime = getMime();
-      mediaRecorder = mime ? new MediaRecorder(s, {mimeType:mime}) : new MediaRecorder(s);
-      mediaRecorder.ondataavailable = e => { if(e.data && e.data.size) chunks.push(e.data); };
-      mediaRecorder.start(1000);
-      isRecording = true;
-      btn.disabled = false;
-      btn.textContent = "停止錄音";
-      st.textContent = "錄音中...（最多15秒）" + (mime ? " ["+mime+"]" : "");
-      clearTimeout(maxTimer);
-      maxTimer = setTimeout(()=>{ if(isRecording) finishRecording(); }, 15000);
-    }).catch(e => {
-      clearTimeout(timeout);
-      cleanup(); resetUI();
-      if(e.name==="NotAllowedError" || e.name==="PermissionDeniedError")
-        st.textContent = "請允許麥克風權限（瀏覽器設定→隱私權→麥克風）";
-      else if(e.name==="NotFoundError")
-        st.textContent = "找不到麥克風裝置";
-      else
-        st.textContent = "無法開麥：" + (e.message||e.name);
+    if(blob.size > 1500000){ st.textContent = "檔案太大，請錄短一點"; return; }
+    st.textContent = "上傳中...";
+    const data = await new Promise((res, rej) => {
+      const reader = new FileReader();
+      reader.onload = () => res(reader.result);
+      reader.onerror = () => rej(reader.error);
+      reader.readAsDataURL(blob);
     });
+    await db.ref("voices").push({audio: data, uid: window.uid, role: window.myRole||"", mime: blob.type||"audio/mp4", time: Date.now()});
+    if(window.addPoints) window.addPoints(1, "語音");
+    st.textContent = "已送出";
+    window._pendingVoice = null;
+  }
+  async function start(){
+    if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+      st.textContent = "這個瀏覽器不能錄音，請用 Safari 或 Chrome 開網址";
+      return;
+    }
+    st.textContent = "正在開麥克風...";
+    btn.disabled = true;
+    try{
+      stream = await navigator.mediaDevices.getUserMedia({audio: {echoCancellation: true, noiseSuppression: true}});
+      const mime = pickMime();
+      chunks = [];
+      mediaRecorder = mime ? new MediaRecorder(stream, {mimeType: mime}) : new MediaRecorder(stream);
+      mediaRecorder.ondataavailable = e => { if(e.data && e.data.size) chunks.push(e.data); };
+      mediaRecorder.onstop = async () => {
+        const blob = new Blob(chunks, {type: mediaRecorder.mimeType || mime || "audio/mp4"});
+        stopStream();
+        recording = false;
+        btn.disabled = false;
+        btn.textContent = "開始錄音";
+        try{ await upload(blob); }
+        catch(e){ st.textContent = "上傳失敗，本機還聽得到：" + (e.message||e.code||""); }
+      };
+      mediaRecorder.start();
+      recording = true;
+      btn.disabled = false;
+      btn.textContent = "停止並送出";
+      st.textContent = "錄音中，再按一次停止";
+      clearTimeout(timer);
+      timer = setTimeout(() => { if(recording && mediaRecorder) mediaRecorder.stop(); }, 20000);
+    }catch(e){
+      stopStream();
+      btn.disabled = false;
+      btn.textContent = "開始錄音";
+      if(e.name === "NotAllowedError") st.textContent = "麥克風被拒絕。iPhone：設定 → Safari → 麥克風 → 允許";
+      else st.textContent = "無法開麥：" + (e.name||e.message||e);
+      if(window.Guard) Guard.push("Mic", st.textContent, "");
+    }
+  }
+  btn.onclick = function(){
+    if(recording && mediaRecorder && mediaRecorder.state === "recording"){
+      mediaRecorder.stop();
+      return;
+    }
+    start();
   };
-
-  db.ref("voices").on("value", snap => {
-    const el = document.getElementById("voiceList");
-    el.innerHTML = "";
-    const items = [];
-    snap.forEach(d => items.push(d.val()));
-    items.sort((a,b)=>(b.time||0)-(a.time||0));
-    items.slice(0,10).forEach(v => {
-      if(v.audio){
-        // 檢測真實格式：讀取 base64 解碼後的前12位元組
-        let src = v.audio;
-        try {
-          const b64 = v.audio.replace(/^data:[^,]+,/, '');
-          const binary = atob(b64.substring(0, 24));
-          const h4 = binary.charCodeAt(4), h5 = binary.charCodeAt(5), h6 = binary.charCodeAt(6), h7 = binary.charCodeAt(7);
-          const h0 = binary.charCodeAt(0), h1 = binary.charCodeAt(1), h2 = binary.charCodeAt(2), h3 = binary.charCodeAt(3);
-          let realMime = null;
-          if(h4===0x66 && h5===0x74 && h6===0x79 && h7===0x70) realMime = "audio/mp4"; // ftyp = MP4
-          else if(h0===0x1a && h1===0x45 && h2===0xdf && h3===0xa3) realMime = "audio/webm"; // EBML = WebM
-          else if(h0===0x52 && h1===0x49 && h2===0x46 && h3===0x46) realMime = "audio/wav"; // RIFF = WAV
-          if(realMime && !v.audio.startsWith("data:"+realMime)){
-            src = v.audio.replace(/^data:[^,]*/, "data:"+realMime+";base64");
-          }
-        } catch(e){}
-        el.innerHTML += `<audio controls src="${src}" style="width:100%;margin:5px 0"></audio>`;
-      }
+  window._authReady.then(function(){
+    if(window._pendingVoice) upload(window._pendingVoice).catch(()=>{});
+    db.ref("voices").limitToLast(8).on("value", snap => {
+      const el = document.getElementById("voiceList");
+      if(!el) return;
+      const items = [];
+      snap.forEach(d => items.push(d.val()));
+      items.sort((a,b)=>(b.time||0)-(a.time||0));
+      el.innerHTML = items.map(v => {
+        if(!v.audio) return "";
+        const who = v.role === "yun" ? "小昀" : v.role === "y" ? "Y" : "";
+        return `<div style="font-size:.75rem;color:#c06;margin-top:8px">${who}</div><audio controls src="${v.audio}" style="width:100%"></audio>`;
+      }).join("");
     });
   });
-});
+})();
 
 /* 線上數據 */
 window._authReady.then(function(uid){
@@ -1378,7 +1374,7 @@ document.getElementById("playBtn").onclick = () => bgm.play();
 document.getElementById("pauseBtn").onclick = () => bgm.pause();
 
 /* 🍜 今天吃什麼 */
-const foods = ["海底撈 🍲","日式拉麵 🍜","義大利麵 🍝","韓式炸雞 🍗","夜市小吃 🍢","精緻甜點 🍰","麥當勞 🍔","小火鍋 🍲","壽司 🍣","燒烤 🍖","水餃 🥟","滷肉飯 🍚","牛肉麵 🍜","鹹酥雞 🍗","鬆餅 🥞","珍珠奶茶 🧋"];
+const foods = ["海底撈 🍲","日式拉麵 🍜","義大利麵 🍝","韓式炸雞 🍗","夜市小吃 🍢","精緻甜點 🍰","麥當勞 🍔","小火鍋 🍲","壽司 🍣","燒烤 🍖","水餃 🥟","滷肉飯 🍚","牛肉麵 🍜","鹹酥雞 🍗","鬆餅 🥞","珍珠奶茶 🧋","雞肉飯 🍗","肉圓 🥟","蚵仔煎 🦪","臭豆腐 🍢","滷味 🍢","鍋燒意麵 🍜","陽春麵 🍜","乾麵加蛋 🍜","排骨便當 🍱","雞腿便當 🍱","壽喜燒 🍲","串燒 🍢","居酒屋 🍶","泰式打拋豬 🍛","越南河粉 🍜","海南雞飯 🍚","麻辣鍋 🌶️","石頭火鍋 🍲","薑母鴨 🍲","羊肉爐 🍲","炒飯 🍳","蛋包飯 🍳","披薩 🍕","漢堡 🍔","炸雞排 🍗","雞蛋糕 🍰","車輪餅 🥞","豆花 🍮","芋圓 🍠","刨冰 🍧","霜淇淋 🍦","可麗餅 🥞","早午餐 🥐","早餐店蛋餅 🥙","蘿蔔糕 🥟","燒餅油條 🥖","粥 🥣","廣東粥 🥣","小籠包 🥟","蒸餃 🥟","鍋貼 🥟","酸菜白肉鍋 🍲","韓式豆腐鍋 🍲","部隊鍋 🍲","石鍋拌飯 🍛","咖哩飯 🍛","豬排飯 🍱","鰻魚飯 🍱","丼飯 🍱","關東煮 🍢","鹽酥雞 🍗","地瓜球 🍠","雞湯 🥣","番茄牛肉麵 🍜","擔仔麵 🍜","炒碼麵 🍜","肉燥飯 🍚","控肉飯 🍚","鵝肉 🍗","薑汁番茄 🍅","熱炒 🥘","快炒店 🥘","自助餐 🍱","全家微波 🏪","自己煮飯 🍳"];
 let foodSpinTimer = null;
 document.getElementById("foodBtn").onclick = function(){
   const res = document.getElementById("foodResult");

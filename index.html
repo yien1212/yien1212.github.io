@@ -179,6 +179,11 @@
     <figure><img loading="lazy" src="icecream_selfie.jpg" data-cap="張大嘴吃冰"><figcaption></figcaption></figure>
     <figure><img loading="lazy" src="red_umbrella.jpg" data-cap="星巴克前面"><figcaption></figcaption></figure>
     <figure><img loading="lazy" src="giant_icecream.jpg" data-cap="她變成冰淇淋"><figcaption></figcaption></figure>
+    <figure><img loading="lazy" src="her_selfie1.jpg" data-cap="她的自拍"><figcaption></figcaption></figure>
+    <figure><img loading="lazy" src="her_selfie2.jpg" data-cap="再一張"><figcaption></figcaption></figure>
+    <figure><img loading="lazy" src="her_selfie3.jpg" data-cap="看鏡頭"><figcaption></figcaption></figure>
+    <figure><img loading="lazy" src="her_selfie4.jpg" data-cap="今天的她"><figcaption></figcaption></figure>
+    <figure><img loading="lazy" src="her_uniform.jpg" data-cap="制服照"><figcaption></figcaption></figure>
   </div>
 
   </div>
@@ -234,6 +239,7 @@
 
   <!-- 願望 -->
   <h3 class="stitle">我們想做的事</h3>
+  <div id="wishFilters" style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:10px"></div>
   <div class="wish-list" id="wishList"></div>
 
   <!-- 共同記帳 -->
@@ -372,7 +378,8 @@
   <h3 class="stitle">🎙️ 聲音訊息</h3>
   <div style="text-align:center">
     <button class="btn-pink" id="recBtn">開始錄音</button>
-    <div id="recStatus" style="margin-top:8px;font-size:.85rem;color:#999"></div>
+    <div id="recStatus" style="margin-top:8px;font-size:.85rem;color:#999">按一下開始，再按一下送出</div>
+    <audio id="recPreview" controls style="width:100%;max-width:400px;margin:10px auto 0;display:none"></audio>
     <div id="voiceList" style="max-width:400px;margin:10px auto 0"></div>
   </div>
 
