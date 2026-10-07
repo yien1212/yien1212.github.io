@@ -127,6 +127,12 @@ body::before{
   box-shadow:0 8px 32px rgba(233,30,99,.08);
 }
 
+/* Canvas 安全包裝：防止繪圖錯誤中斷頁面 */
+const _origGetContext = HTMLCanvasElement.prototype.getContext;
+HTMLCanvasElement.prototype.getContext = function(type, attrs){
+  try{ return _origGetContext.call(this, type, attrs); }
+  catch(e){ console.warn("[Canvas] getContext 失敗，降級處理", e); return null; }
+};
 /* 計時器 */
 .timer-card{text-align:center}
 .timer-card h3{
@@ -605,7 +611,47 @@ body{counter-reset: section}
   firebase.auth().onAuthStateChanged(u => {
     if(u && u.uid){ window.uid = u.uid; }
   });
+
+  /* ===== 全域錯誤攔截與自動修復 ===== */
+  window._errorLog = [];
+  window._pushError = function(type, msg, detail){
+    const entry = {type, msg, detail, time: new Date().toLocaleTimeString("zh-TW")};
+    window._errorLog.unshift(entry);
+    if(window._errorLog.length > 30) window._errorLog.pop();
+    const badge = document.getElementById("errBadge");
+    if(badge){ badge.style.display = "flex"; badge.textContent = window._errorLog.length; }
+    console.warn("[自動捕獲]", type, msg, detail||"");
+  };
+  window.onerror = function(msg, src, line, col, err){
+    window._pushError("JS", String(msg).slice(0,120), (src||"")+":"+line);
+    return true;
+  };
+  window.addEventListener("unhandledrejection", function(e){
+    window._pushError("Promise", String(e.reason||e).slice(0,120), "");
+    e.preventDefault();
+  });
+  window.addEventListener("error", function(e){
+    if(e.target && e.target.tagName === "IMG"){
+      e.target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%23ffd6e7' width='200' height='200'/%3E%3Ctext x='50%25' y='50%25' font-size='40' text-anchor='middle' dy='.3em'%3E%F0%9F%92%95%3C/text%3E%3C/svg%3E";
+      e.target.onerror = null;
+      window._pushError("IMG", "圖片載入失敗", e.target.src||"");
+    }
+  }, true);
+  /* Firebase 連線自動重連 */
+  try{
+    const con = firebase.database().ref(".info/connected");
+    con.on("value", s => {
+      if(s.val() === false){ console.warn("[Firebase] 離線，等待重連..."); }
+    });
+  }catch(e){}
 </script>
+
+<!-- 錯誤日誌浮窗 -->
+<div id="errPanel" style="position:fixed;bottom:80px;right:12px;z-index:99999;max-width:300px;max-height:50vh;overflow-y:auto;background:rgba(40,20,30,.92);color:#ffb3c8;font-size:.75rem;border-radius:12px;padding:10px;display:none;backdrop-filter:blur(10px);line-height:1.5">
+  <div style="font-weight:700;margin-bottom:6px;color:#fff">🐛 錯誤日誌</div>
+  <div id="errList"></div>
+</div>
+<div id="errBadge" onclick="document.getElementById('errPanel').style.display=document.getElementById('errPanel').style.display==='block'?'none':'block';document.getElementById('errList').innerHTML=window._errorLog.map(e=>'<div style=\'margin:4px 0;padding:4px 6px;background:rgba(255,255,255,.08);border-radius:6px\'><b>'+e.type+'</b> '+e.time+'<br>'+e.msg+'</div>').join('')||'<div style=\'color:#888\'>沒有錯誤 ✓</div>'" style="position:fixed;bottom:80px;right:12px;z-index:99998;width:28px;height:28px;border-radius:50%;background:#e91e63;color:#fff;font-size:.7rem;display:none;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.3)">!</div>
 
 <div class="petal" style="left:8%">🌸</div>
 <div class="petal" style="left:28%; animation-delay:2s">🌸</div>
@@ -720,19 +766,19 @@ body{counter-reset: section}
   <!-- 時間軸 -->
   <h3 class="stitle">我們的軌跡</h3>
   <div class="tl">
-    <div class="tl-item"><div class="tl-date">2024 / 12 / 13</div><div class="tl-text">在一起的那天。過程很智障，但結果很好。</div><img class="tl-photo" src="IMG_8145.JPG" alt=""></div>
-    <div class="tl-item"><div class="tl-date">2025 / 10</div><div class="tl-text">兩個安全帽一起騎車兜風。</div><img class="tl-photo" src="couple_helmet.jpg" alt=""></div>
-    <div class="tl-item"><div class="tl-date">2025 / 12</div><div class="tl-text">一起吃甜點、去礁溪老爺住了一晚。</div><img class="tl-photo" src="date_dessert.jpg" alt=""></div>
-    <div class="tl-item"><div class="tl-date">2026 / 01</div><div class="tl-text">她帶著公主皇冠跟魔杖出現。</div><img class="tl-photo" src="IMG_8168.JPG" alt=""></div>
-    <div class="tl-item"><div class="tl-date">2026 / 02</div><div class="tl-text">睡醒還是要拍一張。</div><img class="tl-photo" src="IMG_5576.jpg" alt=""></div>
-    <div class="tl-item"><div class="tl-date">2026 / 03</div><div class="tl-text">一起吃冰淇淋，她變成冰淇淋。</div><img class="tl-photo" src="giant_icecream.jpg" alt=""></div>
-    <div class="tl-item"><div class="tl-date">現在</div><div class="tl-text">還在繼續。未完待續。</div><img class="tl-photo" src="IMG_6957.jpg" alt=""></div>
+    <div class="tl-item"><div class="tl-date">2024 / 12 / 13</div><div class="tl-text">在一起的那天。過程很智障，但結果很好。</div><img loading="lazy" class="tl-photo" src="IMG_8145.JPG" alt=""></div>
+    <div class="tl-item"><div class="tl-date">2025 / 10</div><div class="tl-text">兩個安全帽一起騎車兜風。</div><img loading="lazy" class="tl-photo" src="couple_helmet.jpg" alt=""></div>
+    <div class="tl-item"><div class="tl-date">2025 / 12</div><div class="tl-text">一起吃甜點、去礁溪老爺住了一晚。</div><img loading="lazy" class="tl-photo" src="date_dessert.jpg" alt=""></div>
+    <div class="tl-item"><div class="tl-date">2026 / 01</div><div class="tl-text">她帶著公主皇冠跟魔杖出現。</div><img loading="lazy" class="tl-photo" src="IMG_8168.JPG" alt=""></div>
+    <div class="tl-item"><div class="tl-date">2026 / 02</div><div class="tl-text">睡醒還是要拍一張。</div><img loading="lazy" class="tl-photo" src="IMG_5576.jpg" alt=""></div>
+    <div class="tl-item"><div class="tl-date">2026 / 03</div><div class="tl-text">一起吃冰淇淋，她變成冰淇淋。</div><img loading="lazy" class="tl-photo" src="giant_icecream.jpg" alt=""></div>
+    <div class="tl-item"><div class="tl-date">現在</div><div class="tl-text">還在繼續。未完待續。</div><img loading="lazy" class="tl-photo" src="IMG_6957.jpg" alt=""></div>
   </div>
 
   <!-- 輪播 -->
   <h3 class="stitle">回憶</h3>
   <div class="carousel">
-    <img id="carImg" src="couple_helmet.jpg" alt="">
+    <img loading="lazy" id="carImg" src="couple_helmet.jpg" alt="">
     <div class="cap" id="carCap">兩個安全帽</div>
     <button class="cbtn" id="cPrev">‹</button>
     <button class="cbtn" id="cNext">›</button>
@@ -740,20 +786,20 @@ body{counter-reset: section}
 
   <!-- 照片牆 -->
   <div class="wall" id="wall">
-    <figure><img src="IMG_8145.JPG" data-cap="第一次一起"><figcaption></figcaption></figure>
-    <figure><img src="IMG_8168.JPG" data-cap="偷偷拍的"><figcaption></figcaption></figure>
-    <figure><img src="QQAM2028.JPG" data-cap="出去玩"><figcaption></figcaption></figure>
-    <figure><img src="IMG_5576.jpg" data-cap="笑到肚子痛"><figcaption></figcaption></figure>
-    <figure><img src="IMG_6957.jpg" data-cap="最可愛的一張"><figcaption></figcaption></figure>
-    <figure><img src="couple_helmet.jpg" data-cap="兩個安全帽"><figcaption></figcaption></figure>
-    <figure><img src="date_dessert.jpg" data-cap="兩碗甜點"><figcaption></figcaption></figure>
-    <figure><img src="trip_hotel.jpg" data-cap="礁溪老爺"><figcaption></figcaption></figure>
-    <figure><img src="couple_crown.jpg" data-cap="公主與魔杖"><figcaption></figcaption></figure>
-    <figure><img src="cinnamoroll.jpg" data-cap="玉桂狗聯名"><figcaption></figcaption></figure>
-    <figure><img src="cry_face.jpg" data-cap="怎麼了嘛"><figcaption></figcaption></figure>
-    <figure><img src="icecream_selfie.jpg" data-cap="張大嘴吃冰"><figcaption></figcaption></figure>
-    <figure><img src="red_umbrella.jpg" data-cap="星巴克前面"><figcaption></figcaption></figure>
-    <figure><img src="giant_icecream.jpg" data-cap="她變成冰淇淋"><figcaption></figcaption></figure>
+    <figure><img loading="lazy" src="IMG_8145.JPG" data-cap="第一次一起"><figcaption></figcaption></figure>
+    <figure><img loading="lazy" src="IMG_8168.JPG" data-cap="偷偷拍的"><figcaption></figcaption></figure>
+    <figure><img loading="lazy" src="QQAM2028.JPG" data-cap="出去玩"><figcaption></figcaption></figure>
+    <figure><img loading="lazy" src="IMG_5576.jpg" data-cap="笑到肚子痛"><figcaption></figcaption></figure>
+    <figure><img loading="lazy" src="IMG_6957.jpg" data-cap="最可愛的一張"><figcaption></figcaption></figure>
+    <figure><img loading="lazy" src="couple_helmet.jpg" data-cap="兩個安全帽"><figcaption></figcaption></figure>
+    <figure><img loading="lazy" src="date_dessert.jpg" data-cap="兩碗甜點"><figcaption></figcaption></figure>
+    <figure><img loading="lazy" src="trip_hotel.jpg" data-cap="礁溪老爺"><figcaption></figcaption></figure>
+    <figure><img loading="lazy" src="couple_crown.jpg" data-cap="公主與魔杖"><figcaption></figcaption></figure>
+    <figure><img loading="lazy" src="cinnamoroll.jpg" data-cap="玉桂狗聯名"><figcaption></figcaption></figure>
+    <figure><img loading="lazy" src="cry_face.jpg" data-cap="怎麼了嘛"><figcaption></figcaption></figure>
+    <figure><img loading="lazy" src="icecream_selfie.jpg" data-cap="張大嘴吃冰"><figcaption></figcaption></figure>
+    <figure><img loading="lazy" src="red_umbrella.jpg" data-cap="星巴克前面"><figcaption></figcaption></figure>
+    <figure><img loading="lazy" src="giant_icecream.jpg" data-cap="她變成冰淇淋"><figcaption></figcaption></figure>
   </div>
 
   </div>
@@ -765,7 +811,7 @@ body{counter-reset: section}
     <div class="mystery-inner">
       <div class="face face-front">點我<br>抽一張回憶</div>
       <div class="face face-back">
-        <img id="mystImg" src="" alt="">
+        <img loading="lazy" id="mystImg" src="" alt="">
         <div class="q" id="mystQ"></div>
       </div>
     </div>
@@ -1062,13 +1108,13 @@ body{counter-reset: section}
 <div id="lb">
   <button id="lbC">×</button>
   <button class="lb-btn" id="lbP">‹</button>
-  <img id="lbImg" src="" alt="">
+  <img loading="lazy" id="lbImg" src="" alt="">
   <button class="lb-btn" id="lbN">›</button>
   <div id="lbCap"></div>
 </div>
 
 <div id="music">
-  <audio id="bgm" autoplay loop>
+  <audio id="bgm" loop>
     <source src="你聽得到.mp3" type="audio/mpeg">
   </audio>
   <button id="playBtn">播放音樂</button>
@@ -1104,6 +1150,11 @@ function enterApp(){
   initCarousel(); initTimeline();
   bgm.play().catch(()=>{});
 }
+/* 首次任意點擊也嘗試播放（應對瀏覽器自動播放限制） */
+document.addEventListener("click", function oncePlay(){
+  if(bgm && bgm.paused){ bgm.play().catch(()=>{}); }
+  document.removeEventListener("click", oncePlay);
+}, {once:true});
 /* 身份登入 Firebase */
 /* Y 密碼 0812，小昀密碼 0726（前端驗證；Firebase 後端密碼固定） */
 const ROLES = {
@@ -1313,7 +1364,7 @@ window.addEventListener("load", () => setTimeout(initScratch, 300));
   deck.forEach(src => {
     const card = document.createElement("div");
     card.className = "mem-card";
-    card.innerHTML = `<div class="mem-inner"><div class="mem-front">?</div><div class="mem-back"><img src="${src}"></div></div>`;
+    card.innerHTML = `<div class="mem-inner"><div class="mem-front">?</div><div class="mem-back"><img loading="lazy" src="${src}"></div></div>`;
     card.onclick = () => {
       if(lock || card.classList.contains("flipped") || card.classList.contains("matched")) return;
       card.classList.add("flipped");
