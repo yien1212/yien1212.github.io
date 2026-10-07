@@ -16,7 +16,7 @@
 <title>我們 ❤️</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@200;300;400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/app.css?v=11">
+<link rel="stylesheet" href="css/app.css?v=12">
 </head>
 <body>
 
@@ -71,6 +71,16 @@
     <div class="scroll">↓</div>
   </div>
 
+  <div class="card now-card">
+    <p id="nowLine" class="now-line">今天也在</p>
+    <p id="moonLine" class="talk-note"></p>
+    <div class="pact" id="pact"></div>
+    <button type="button" id="hugBtn" class="hug-btn"><span id="hugFill"></span><em>按住，抱抱</em></button>
+    <p id="hugCount" class="talk-note">今天還沒抱</p>
+    <div class="garden" id="garden" aria-label="窗台上的花"></div>
+    <button type="button" id="flowerBtn" class="btn-pink">送她一朵</button>
+  </div>
+
   <h3 class="stitle">🎙️ 聲音訊息</h3>
   <div style="max-width:500px;margin:0 auto 8px;text-align:center;background:rgba(255,255,255,.78);backdrop-filter:blur(20px);border-radius:24px;padding:22px 18px;box-shadow:0 10px 30px rgba(233,30,99,.12)">
     <p style="font-size:.9rem;color:#777;margin:0 0 14px;line-height:1.6">錄一段給對方。按一下開始，再按一下送出，最長 20 秒。</p>
@@ -92,7 +102,7 @@
   <!-- 即時聊天 -->
   <h3 class="stitle">💬 寫給妳（也跟妳說話）</h3>
   <div style="max-width:500px;margin:0 auto;background:rgba(255,255,255,.7);backdrop-filter:blur(20px);border-radius:24px;padding:20px;box-shadow:0 10px 30px rgba(233,30,99,.15)">
-    <div id="chatList" style="height:300px;overflow-y:auto;background:#fff;border-radius:16px;padding:15px;margin-bottom:5px;border:1px solid var(--pink-soft)"></div>
+    <div id="chatList" style="height:220px;overflow-y:auto;background:#fff;border-radius:16px;padding:15px;margin-bottom:5px;border:1px solid var(--pink-soft)"></div>
     <div id="typing" style="font-size:.8rem;color:var(--pink);margin-bottom:5px;display:none">對方正在輸入...</div>
     <div style="display:flex;gap:8px">
       <input type="text" id="chatInput" placeholder="講話..." style="flex:1;padding:12px 18px;border:2px solid var(--pink-soft);border-radius:25px;font-family:inherit;outline:none;background:#fff">
@@ -102,7 +112,9 @@
 
   <!-- 情書 -->
   <h3 class="stitle">寫給妳</h3>
-  <div style="max-width:600px;margin:0 auto;font-family:'Noto Serif TC',serif;line-height:2;color:#555;background:rgba(255,255,255,.7);backdrop-filter:blur(20px);border-radius:24px;padding:30px;box-shadow:0 10px 30px rgba(233,30,99,.15)">
+  <details class="letter">
+    <summary>展開那封信</summary>
+  <div class="letter-body">
     <p>今天終於又鼓起勇氣講出了我早就想對妳講的話，雖然你好像沒有很意外。我知道我們的關係並不完美，我們也有很多不同的地方，但這些差異才讓我更加確定妳是我想一直喜歡下去的人。</p>
     <p>過去一段時間我們的關係都很奇怪，妳也一直在包容我的無理取鬧跟不負責任。一直以來我都覺得自己是孤單一個人的，很多難過跟痛苦的時候也都是我自己一個人走過來的。再加上因為前任的關係，我很不相信感情，不相信任何一個人，覺得談戀愛就是給自己找麻煩，拖累自己。</p>
     <p>一直以來我好像都沒有認清妳在我心裡的位置，一邊享受妳對我的好，又不想負責任。我很對不起沒有珍惜妳的付出，沒有早點勇敢看清自己的想法，導致我做出了一堆瞎事。謝謝經歷了這些傷害的妳，還願意留一個位置讓我有資格站在妳身邊。</p>
@@ -113,6 +125,7 @@
     <p>這些愛或許不用說出口，但也一直藏在行為裡。我會盡力去做一個合格的女朋友，做一個配得上妳付出的人。希望妳可以一直放心大膽地靠在我的肩膀上，開開心心地當小朋友就好了。</p>
     <p style="text-align:center;color:var(--pink-deep);margin-top:20px">luv u ❤️</p>
   </div>
+  </details>
 
   <!-- 計時 -->
   <h3 class="stitle">我們在一起</h3>
@@ -202,15 +215,9 @@
   </div>
 
   <div class="card album-card">
-    <h3>百度網盤照片</h3>
-    <p class="talk-note">百度不讓別的網站登入你的網盤。把備份裡的照片從手機相簿加進來，就會出現在上面的回憶牆，只存在這台手機。</p>
+    <h3>加進回憶</h3>
+    <p class="talk-note">自己選照片就好。加進來會出現在上面，只留在這台手機。</p>
     <label class="btn-pink talk-import">從相簿加入<input id="memPhotos" type="file" accept="image/*" multiple hidden></label>
-    <input id="baiduUrl" type="url" inputmode="url" placeholder="分享連結 https://pan.baidu.com/s/..." autocomplete="off">
-    <input id="baiduPwd" type="text" maxlength="8" placeholder="提取碼，沒有就留空" autocomplete="off">
-    <div class="album-actions">
-      <button class="btn-pink" id="baiduSave" type="button">儲存連結</button>
-      <a class="btn-pink" id="baiduOpen" href="#" target="_blank" rel="noopener" style="display:none;text-decoration:none">打開網盤</a>
-    </div>
     <p id="baiduStatus" class="talk-note"></p>
   </div>
 
@@ -590,7 +597,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 <script src="js/guard.js?v=5"></script>
 <script src="js/config.js?v=4"></script>
-<script src="js/app.js?v=11"></script>
+<script src="js/app.js?v=12"></script>
 <script src="https://cdn.botpress.cloud/webchat/v3.5/inject.js"></script>
 <script src="https://files.bpcontent.cloud/2026/01/12/17/20260112175648-Q8N99NKQ.js" defer></script>
 

@@ -55,7 +55,8 @@ body::before{
 .hero{
   min-height:auto; display:flex; flex-direction:column;
   align-items:center; justify-content:center; text-align:center;
-  position:relative; padding:36px 20px 28px;
+  position:relative; padding:22px 16px 18px;
+  border-radius:0 0 28px 28px;
   background:linear-gradient(160deg,#fff5f7 0%,#ffe4ec 50%,#fff 100%);
 }
 .hero .heart{font-size:2.5rem; margin-bottom:16px; animation:beat 1.5s ease-in-out infinite}
@@ -63,16 +64,16 @@ body::before{
 .hero h1{
   font-family:"Caveat","Noto Serif TC",cursive;
   font-weight:400;
-  font-size:3.2rem; color:var(--pink-deep); letter-spacing:2px; line-height:1.3;
+  font-size:2.6rem; color:var(--pink-deep); letter-spacing:2px; line-height:1.2;
   max-width:600px;
 }
 .hero .sub{color:#c9a; margin-top:14px; font-size:.9rem; letter-spacing:4px}
 .hero .big{
-  margin-top:36px; font-family:"Noto Serif TC",serif;
+  margin-top:14px; font-family:"Noto Serif TC",serif;
   font-size:1rem; color:#999; font-weight:300; letter-spacing:2px;
 }
 .hero .big b{
-  display:block; font-size:4.5rem; color:var(--pink-deep);
+  display:block; font-size:3.2rem; color:var(--pink-deep);
   font-weight:700; margin-top:6px; line-height:1;
   font-variant-numeric:tabular-nums;
   text-shadow:0 4px 20px rgba(233,30,99,.2);
@@ -91,7 +92,7 @@ body::before{
 .stitle{
   font-family:"Noto Serif TC",serif; font-weight:300;
   font-size:1.3rem; color:var(--pink-deep);
-  text-align:center; margin:32px auto 14px; letter-spacing:4px;
+  text-align:center; margin:22px auto 12px; letter-spacing:3px;
 }
 .stitle::before,.stitle::after{
   content:"—"; color:var(--pink-soft); margin:0 12px;
@@ -647,7 +648,38 @@ body{counter-reset: section}
 }
 .page{ display:none; padding-bottom:calc(96px + env(safe-area-inset-bottom)); }
 .page.active{ display:block; animation:fadeIn .35s ease; }
-.her-card,.bot-card,.album-card{max-width:500px;margin:0 auto}
+.now-card{text-align:center}
+.now-line{font-family:"Noto Serif TC",serif;font-size:1.15rem;color:var(--pink-deep);line-height:1.7;margin:0}
+.pact{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:14px 0}
+.pact button{
+  border:1px solid #ffd0e0;background:#fff;color:#a24;border-radius:999px;
+  padding:8px 12px;font-family:inherit;font-size:.82rem;min-height:40px;
+}
+.pact button.on{background:#e91e63;color:#fff;border-color:#e91e63}
+.hug-btn{
+  position:relative; overflow:hidden; min-width:168px; min-height:52px;
+  border:none; border-radius:999px; background:#ffe4ec; color:#e91e63;
+  font-family:inherit; font-size:1rem; cursor:pointer;
+  touch-action:none; user-select:none;
+}
+.hug-btn em{position:relative; z-index:1; font-style:normal}
+#hugFill{position:absolute; left:0; top:0; bottom:0; width:0; background:linear-gradient(90deg,#ffb3c8,#e91e63); transition:width .05s linear}
+.hug-btn.done #hugFill{width:100%}
+.hug-btn.done em{color:#fff}
+.garden{min-height:36px; margin:12px 0 8px; font-size:1.35rem; letter-spacing:4px; line-height:1.8}
+.letter{max-width:600px;margin:0 auto}
+.letter summary{
+  list-style:none; cursor:pointer; text-align:center;
+  background:rgba(255,255,255,.78); border-radius:18px; padding:14px;
+  color:var(--pink-deep); letter-spacing:2px;
+}
+.letter summary::-webkit-details-marker{display:none}
+.letter-body{
+  margin-top:10px; font-family:"Noto Serif TC",serif; line-height:2; color:#555;
+  background:rgba(255,255,255,.7); border-radius:24px; padding:26px 22px;
+  box-shadow:0 10px 30px rgba(233,30,99,.12);
+}
+.her-card,.bot-card,.album-card,.now-card{max-width:520px;margin:12px auto}
 .her-card h3,.album-card h3{font-size:1rem;font-weight:500;color:var(--pink-deep);margin:0 0 8px}
 .chip-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .chip{border:1px solid #ffd0e0;background:#fff;color:#c06;border-radius:999px;padding:6px 10px;font-size:.78rem;font-family:inherit}

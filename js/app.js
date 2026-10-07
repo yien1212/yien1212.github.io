@@ -1573,55 +1573,6 @@ document.addEventListener("visibilitychange", function(){
     };
   }
 
-  function goodUrl(u){
-    try{
-      const x = new URL(u);
-      return x.protocol === "https:" && /(^|\.)baidu\.com$/.test(x.hostname);
-    }catch(e){ return false; }
-  }
-  function paintAlbum(url){
-    const open = document.getElementById("baiduOpen");
-    const input = document.getElementById("baiduUrl");
-    if(!open || !input) return;
-    if(!url){ open.style.display = "none"; return; }
-    input.value = url;
-    open.href = url;
-    open.style.display = "inline-block";
-  }
-  const albumKey = "baidu-album-v1";
-  try{ const saved = localStorage.getItem(albumKey); if(saved && goodUrl(saved)) paintAlbum(saved); }catch(e){}
-  const saveBtn = document.getElementById("baiduSave");
-  if(saveBtn){
-    saveBtn.onclick = function(){
-      const url = document.getElementById("baiduUrl").value.trim();
-      const status = document.getElementById("baiduStatus");
-      if(!goodUrl(url)){ status.textContent = "要貼 https 開頭的百度網盤連結"; return; }
-      try{ localStorage.setItem(albumKey, url); }catch(e){}
-      paintAlbum(url);
-      const pwdEl = document.getElementById("baiduPwd");
-      const pwd = pwdEl ? pwdEl.value.trim() : "";
-      try{ localStorage.setItem(albumKey+"-pwd", pwd); }catch(e){}
-      status.textContent = "連結記住了。百度不讓網站直接讀照片，請按「從相簿加入」。";
-      if(window.db){
-        window.db.ref("album/baidu").set({url:url, at:Date.now()}).then(function(){
-          status.textContent = "連結兩邊都看得到。照片還是要用「從相簿加入」，百度不開放直接讀。";
-        }).catch(function(){});
-      }
-    };
-  }
-  if(window._authReady){
-    window._authReady.then(function(){
-      if(!window.db) return;
-      window.db.ref("album/baidu").on("value", function(snap){
-        const v = snap.val();
-        if(v && v.url && goodUrl(v.url)){
-          try{ localStorage.setItem(albumKey, v.url); }catch(e){}
-          paintAlbum(v.url);
-        }
-      });
-    });
-  }
-
   function memDb(){
     return new Promise(function(res, rej){
       const req = indexedDB.open("ynn-mem", 1);
@@ -1671,7 +1622,7 @@ document.addEventListener("visibilitychange", function(){
     const tx = db.transaction("photos", "readonly");
     const req = tx.objectStore("photos").getAll();
     req.onsuccess = function(){
-      (req.result || []).forEach(function(item){ addMemFigure(item.src, item.cap || "網盤"); });
+      (req.result || []).forEach(function(item){ addMemFigure(item.src, item.cap || "我們的"); });
       if(window.bindWall) window.bindWall();
     };
   }).catch(function(){});
@@ -1685,14 +1636,14 @@ document.addEventListener("visibilitychange", function(){
       memDb().then(async function(db){
         for(let i = 0; i < files.length; i++){
           const src = await squeeze(files[i]);
-          const item = {id: Date.now() + "-" + i, src: src, cap: "網盤"};
+          const item = {id: Date.now() + "-" + i, src: src, cap: "我們的"};
           await new Promise(function(res, rej){
             const tx = db.transaction("photos", "readwrite");
             tx.objectStore("photos").put(item);
             tx.oncomplete = function(){ res(); };
             tx.onerror = function(){ rej(tx.error); };
           });
-          addMemFigure(src, "網盤");
+          addMemFigure(src, "我們的");
         }
         if(window.bindWall) window.bindWall();
         if(status) status.textContent = "加好了，在上面的照片牆。只存在這台手機。";
@@ -1791,4 +1742,125 @@ document.addEventListener("visibilitychange", function(){
   send.onclick = ask;
   input.addEventListener("keydown", function(e){ if(e.key === "Enter") ask(); });
   bubble(false, "我在。想說什麼跟我說，寶寶");
+})();
+
+/* 此刻、抱抱、窗台、今天三件小事 */
+(function(){
+  const line = document.getElementById("nowLine");
+  const moon = document.getElementById("moonLine");
+  if(line){
+    const h = new Date().getHours();
+    const say = h < 5 ? "還沒睡嗎。我在。"
+      : h < 10 ? "早安安。吃早餐了嗎。"
+      : h < 14 ? "中午了。吃飯了沒，寶寶。"
+      : h < 18 ? "下午也要想我一下。"
+      : h < 22 ? "晚上了。到家跟我說一聲。"
+      : "該睡了。先抱抱。";
+    line.textContent = say;
+  }
+  if(moon){
+    const lp = 2551443;
+    const now = Date.now() / 1000;
+    const born = Date.UTC(2024, 0, 11, 11, 57) / 1000;
+    const phase = ((now - born) % lp + lp) % lp / lp;
+    const names = ["新月","娥眉月","上弦月","盈凸月","滿月","虧凸月","下弦月","殘月"];
+    moon.textContent = "今晚是" + names[Math.floor(phase * 8) % 8];
+  }
+
+  const hugBtn = document.getElementById("hugBtn");
+  const hugFill = document.getElementById("hugFill");
+  const hugCount = document.getElementById("hugCount");
+  let hold = null, start = 0, hugged = false;
+  function setFill(p){ if(hugFill) hugFill.style.width = Math.max(0, Math.min(100, p)) + "%"; }
+  function paintHugs(n){
+    if(!hugCount) return;
+    hugCount.textContent = n ? ("今天抱了 " + n + " 下") : "今天還沒抱";
+  }
+  function finishHug(){
+    if(hugged) return;
+    hugged = true;
+    hugBtn.classList.add("done");
+    setFill(100);
+    const day = new Date().toISOString().slice(0, 10);
+    if(window.db){
+      window.db.ref("ritual/hugs/"+day).transaction(function(c){ return (c || 0) + 1; });
+    } else paintHugs(1);
+    setTimeout(function(){ hugged = false; hugBtn.classList.remove("done"); setFill(0); }, 700);
+  }
+  function tick(){
+    const p = (Date.now() - start) / 1400 * 100;
+    setFill(p);
+    if(p >= 100){ stop(); finishHug(); }
+  }
+  function stop(){
+    if(hold){ clearInterval(hold); hold = null; }
+    if(!hugged) setFill(0);
+  }
+  if(hugBtn){
+    hugBtn.addEventListener("pointerdown", function(e){
+      e.preventDefault();
+      if(hold) return;
+      start = Date.now();
+      hold = setInterval(tick, 40);
+    });
+    hugBtn.addEventListener("pointerup", stop);
+    hugBtn.addEventListener("pointerleave", stop);
+    hugBtn.addEventListener("pointercancel", stop);
+    hugBtn.addEventListener("contextmenu", function(e){ e.preventDefault(); });
+  }
+
+  const garden = document.getElementById("garden");
+  const flowerBtn = document.getElementById("flowerBtn");
+  function paintFlowers(n){
+    if(!garden) return;
+    n = n || 0;
+    if(!n){ garden.textContent = "窗台還空著"; return; }
+    const show = Math.min(n, 16);
+    garden.textContent = new Array(show).fill("🌸").join("") + (n > 16 ? "  +" + (n - 16) : "");
+  }
+  if(flowerBtn){
+    flowerBtn.onclick = function(){
+      if(window.db) window.db.ref("ritual/flowers").transaction(function(c){ return (c || 0) + 1; });
+      else paintFlowers(1);
+    };
+  }
+
+  const pact = document.getElementById("pact");
+  const jobs = [["eat","吃飽了"],["home","到家了"],["miss","說想你"]];
+  function paintPact(val){
+    if(!pact) return;
+    pact.innerHTML = "";
+    const role = window.myRole || "";
+    jobs.forEach(function(job){
+      const who = (val && val[job[0]]) || {};
+      const names = [];
+      if(who.y) names.push("Y");
+      if(who.yun) names.push("小昀");
+      const b = document.createElement("button");
+      b.type = "button";
+      b.textContent = job[1] + (names.length ? " · " + names.join(" ") : "");
+      if(role && who[role]) b.className = "on";
+      b.onclick = function(){
+        if(!window.db || !window.myRole) return;
+        const day = new Date().toISOString().slice(0, 10);
+        const on = b.className === "on";
+        window.db.ref("ritual/pact/"+day+"/"+job[0]+"/"+window.myRole).set(on ? null : true);
+      };
+      pact.appendChild(b);
+    });
+  }
+  paintPact(null);
+  paintHugs(0);
+  paintFlowers(0);
+
+  if(window._authReady){
+    window._authReady.then(function(){
+      if(!window.db) return;
+      window.db.ref("album/baidu").remove().catch(function(){});
+      const day = new Date().toISOString().slice(0, 10);
+      window.db.ref("ritual/hugs/"+day).on("value", function(s){ paintHugs(s.val() || 0); });
+      window.db.ref("ritual/flowers").on("value", function(s){ paintFlowers(s.val() || 0); });
+      window.db.ref("ritual/pact/"+day).on("value", function(s){ paintPact(s.val() || {}); });
+    });
+  }
 })();
