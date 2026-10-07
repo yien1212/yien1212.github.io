@@ -2009,7 +2009,7 @@ window._authReady.then(function(uid){
           else if(h0===0x1a && h1===0x45 && h2===0xdf && h3===0xa3) realMime = "audio/webm"; // EBML = WebM
           else if(h0===0x52 && h1===0x49 && h2===0x46 && h3===0x46) realMime = "audio/wav"; // RIFF = WAV
           if(realMime && !v.audio.startsWith("data:"+realMime)){
-            src = v.audio.replace(/^data:[^,]*/, "data:"+realMime);
+            src = v.audio.replace(/^data:[^,]*/, "data:"+realMime+";base64");
           }
         } catch(e){}
         el.innerHTML += `<audio controls src="${src}" style="width:100%;margin:5px 0"></audio>`;
