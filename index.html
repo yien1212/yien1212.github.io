@@ -1673,7 +1673,7 @@ window._authReady.then(function(uid){
 
 /* 定位+電量 */
 window._authReady.then(function(uid){
-  // 上傳電量
+  // 上傳電量（iOS Safari 不支援 getBattery，會標記 unsupported）
   if(navigator.getBattery){
     navigator.getBattery().then(b => {
       function upd(){
@@ -1683,7 +1683,12 @@ window._authReady.then(function(uid){
       }
       upd();
       b.addEventListener("levelchange", upd);
+      b.addEventListener("chargingchange", upd);
+    }).catch(()=>{
+      db.ref("locations/"+uid+"/battery").set("unsupported");
     });
+  } else {
+    db.ref("locations/"+uid+"/battery").set("unsupported");
   }
   // 顯示所有人位置 + 距離
   const locs = {};
@@ -1699,7 +1704,9 @@ window._authReady.then(function(uid){
       } else {
         locEl.textContent = "還沒上傳";
       }
-      batEl.textContent = l.battery ? "🔋 " + l.battery + "%" : "";
+      if(l.battery === "unsupported") batEl.textContent = "📱 此裝置不支援電量";
+      else if(l.battery) batEl.textContent = "🔋 " + l.battery + "%" + (l.charging ? " ⚡" : "");
+      else batEl.textContent = "未更新";
     });
     // 算距離
     const keys = Object.keys(locs);
@@ -1901,16 +1908,27 @@ window._authReady.then(function(uid){
     if(!blob || blob.size === 0){ st.textContent = "沒錄到聲音，再試一次"; return; }
     if(blob.size > 2000000){ st.textContent = "太長了，最多15秒"; return; }
     st.textContent = "上傳中...";
+    // 檢測真實音訊格式（修復 MediaRecorder.mimeType 與實際內容不符的 bug）
+    const buf = await blob.arrayBuffer();
+    const head = new Uint8Array(buf.slice(0,12));
+    let realMime = blob.type || "audio/mp4";
+    // MP4/ISO BMFF 開頭是 "ftyp"（位元組 4-7）
+    if(head[4]===0x66 && head[5]===0x74 && head[6]===0x79 && head[7]===0x70) realMime = "audio/mp4";
+    // WebM/EBML 開頭是 0x1a 0x45 0xdf 0xa3
+    else if(head[0]===0x1a && head[1]===0x45 && head[2]===0xdf && head[3]===0xa3) realMime = "audio/webm";
+    // WAV 開頭是 "RIFF"
+    else if(head[0]===0x52 && head[1]===0x49 && head[2]===0x46 && head[3]===0x46) realMime = "audio/wav";
+    const fixedBlob = new Blob([buf], {type: realMime});
     const reader = new FileReader();
     reader.onload = async function(){
       try{
-        await db.ref("voices").push({audio: reader.result, uid: uid, time:{".sv":"timestamp"}});
+        await db.ref("voices").push({audio: reader.result, uid: uid, mime: realMime, time:{".sv":"timestamp"}});
         if(window.addPoints) window.addPoints(1, "語音");
-        st.textContent = "已上傳 ✓";
+        st.textContent = "已上傳 ✓ (" + realMime + ")";
       }catch(e){ st.textContent = "上傳失敗：" + (e.message||e.code||e); }
     };
     reader.onerror = () => { st.textContent = "讀取錄音檔失敗"; };
-    reader.readAsDataURL(blob);
+    reader.readAsDataURL(fixedBlob);
   }
   function finishRecording(){
     if(!mediaRecorder) return;
@@ -1975,7 +1993,14 @@ window._authReady.then(function(uid){
     snap.forEach(d => items.push(d.val()));
     items.sort((a,b)=>(b.time||0)-(a.time||0));
     items.slice(0,10).forEach(v => {
-      if(v.audio) el.innerHTML += `<audio controls src="${v.audio}" style="width:100%;margin:5px 0"></audio>`;
+      if(v.audio){
+        // 修復舊資料的 MIME 類型：如果是 mp4 內容但標成 webm，自動修正
+        let src = v.audio;
+        if(v.mime && !v.audio.startsWith("data:"+v.mime)){
+          src = v.audio.replace(/^data:[^,]+/, "data:"+v.mime);
+        }
+        el.innerHTML += `<audio controls src="${src}" style="width:100%;margin:5px 0"></audio>`;
+      }
     });
   });
 });
