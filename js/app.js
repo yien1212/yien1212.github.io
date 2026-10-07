@@ -32,13 +32,23 @@ function enterApp(){
   a.classList.remove("hidden");
   const title = document.getElementById("heroTitle");
   if(title) title.textContent = window.myRole === "yun" ? "你是小昀恩耶" : "我們的故事";
-  ["startTimer","startGame","renderBadges","initCarousel","initTimeline"].forEach(name => {
-    try{ if(typeof window[name] === "function") window[name](); }
-    catch(e){ if(window.Guard) Guard.push(name, e.message, ""); }
+  [startTimer, startGame, renderBadges, initCarousel, initTimeline].forEach(fn => {
+    try{ fn(); }catch(e){ if(window.Guard) Guard.push(fn.name, e.message, ""); }
   });
   const bgm = document.getElementById("bgm");
   if(bgm) bgm.play().catch(()=>{});
 }
+document.querySelectorAll(".tab-btn").forEach(btn => {
+  btn.onclick = function(){
+    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+    btn.classList.add("active");
+    const page = document.getElementById("page-" + btn.dataset.page);
+    if(page) page.classList.add("active");
+    window.scrollTo(0,0);
+    if(btn.dataset.page === "games" && typeof initScratch === "function") setTimeout(initScratch, 100);
+  };
+});
 
 function tryLogin(){
   const msg = document.getElementById("roleMsg");
@@ -67,20 +77,32 @@ const phrases = ["今天也辛苦了，我愛妳","離下次見面又近了一�
 let carI = 0, carT;
 
 /* 計時 */
+function togetherDays(){
+  const now = new Date();
+  const today = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
+  const from = Date.UTC(2024, 11, 13);
+  return Math.max(0, Math.floor((today - from) / 86400000));
+}
 function startTimer(){
+  if(window._timerOn) return;
+  window._timerOn = true;
   function up(){
-    const d = new Date() - start;
-    const days = Math.floor(d/86400000);
-    const h = Math.floor(d/3600000)%24;
-    const m = Math.floor(d/60000)%60;
-    const s = Math.floor(d/1000)%60;
-    document.getElementById("cd").textContent = `${days}天 ${h}時 ${m}分 ${s}秒`;
-    document.getElementById("phrase").textContent = "— " + phrases[days%phrases.length] + " —";
-    document.getElementById("numDays").textContent = days;
-    document.getElementById("numHours").textContent = Math.floor(d/3600000);
-    document.getElementById("heroDays").textContent = days.toLocaleString();
+    const now = new Date();
+    const days = togetherDays();
+    const h = now.getHours(), m = now.getMinutes(), s = now.getSeconds();
+    const cd = document.getElementById("cd");
+    if(cd) cd.textContent = `2024/12/13 起，${days}天 ${h}時 ${m}分 ${s}秒`;
+    const phrase = document.getElementById("phrase");
+    if(phrase) phrase.textContent = "— " + phrases[days%phrases.length] + " —";
+    const numDays = document.getElementById("numDays");
+    if(numDays) numDays.textContent = days;
+    const numHours = document.getElementById("numHours");
+    if(numHours) numHours.textContent = days * 24 + h;
+    const hero = document.getElementById("heroDays");
+    if(hero) hero.textContent = days.toLocaleString();
     const n100 = Math.ceil((days+1)/100)*100;
-    document.getElementById("nextBox").innerHTML = `距離第 <b>${n100}</b> 天還有 <b>${n100-days}</b> 天`;
+    const next = document.getElementById("nextBox");
+    if(next) next.innerHTML = `從 2024/12/13 算起，距離第 <b>${n100}</b> 天還有 <b>${n100-days}</b> 天`;
   }
   up(); setInterval(up, 1000);
 }
