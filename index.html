@@ -15,7 +15,7 @@
 <link rel="apple-touch-icon" sizes="180x180" href="app-icon.png">
 <title>我們 ❤️</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Noto+Serif+TC:wght@200;300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@200;300;400;600&display=swap" rel="stylesheet">
 <style>
 :root{
   --pink:#ff6b9d; --pink-deep:#e91e63; --pink-soft:#ffd6e7;
@@ -100,7 +100,7 @@ body::before{
   position:absolute; bottom:30px; left:50%; transform:translateX(-50%);
   color:var(--pink); font-size:1.5rem; animation:bounce 2s infinite;
 }
-@keyframes bounce{0%,100%{transform:translateY(0);translateX(-50%)}50%{transform:translateY(10px);translateX(-50%)}}
+@keyframes bounce{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,10px)}}
 @media(min-width:768px){
   .hero{flex-direction:row; text-align:left; gap:60px; justify-content:center}
   .hero .hero-left{flex:1; max-width:480px}
@@ -529,23 +529,30 @@ body{counter-reset: section}
 
 /* 轉盤 */
 .wheel-area{text-align:center}
+.wheel-wrap{position:relative; width:220px; height:220px; margin:8px auto 0}
 .wheel{
   width:200px; height:200px;
   border-radius:50%;
   border:6px solid var(--pink);
-  margin:0 auto;
+  margin:10px auto 0;
   position:relative;
-  transition:transform 3s cubic-bezier(.2,.8,.2,1);
+  transition:transform 3.2s cubic-bezier(.17,.67,.2,1);
   background:conic-gradient(
     #ff6b9d 0deg 60deg, #ffd6e7 60deg 120deg,
-    #ff6b9d 120deg 180deg, #ffd6e7 180deg 240deg,
+    #ff8fb3 120deg 180deg, #ffe4ec 180deg 240deg,
     #ff6b9d 240deg 300deg, #ffd6e7 300deg 360deg
   );
+  box-shadow:0 10px 28px rgba(233,30,99,.18);
+}
+.wheel-label{
+  position:absolute; left:50%; top:50%; width:70px; margin-left:-35px; margin-top:-10px;
+  font-size:.72rem; color:#5a2340; font-weight:600; text-align:center; pointer-events:none;
 }
 .wheel-pointer{
-  position:absolute; top:-15px; left:50%;
+  position:absolute; top:-2px; left:50%;
   transform:translateX(-50%);
-  font-size:1.5rem; color:var(--pink-deep);
+  font-size:1.4rem; color:var(--pink-deep); z-index:2;
+  text-shadow:0 2px 0 #fff;
 }
 #wheelResult{margin-top:15px; font-family:"Noto Serif TC",serif; color:var(--pink-deep); font-size:1.1rem; min-height:30px}
 
@@ -882,7 +889,14 @@ body{counter-reset: section}
 
   <!-- 每日一問 -->
   <h3 class="stitle">今天的問題</h3>
-  <div class="card" id="dailyQ">載入中...</div>
+  <div class="card" id="dailyCard">
+    <div id="dailyQ" style="font-family:'Noto Serif TC',serif;font-size:1.05rem;line-height:1.7">載入中...</div>
+    <div id="dailyAnswers" style="margin-top:12px;font-size:.9rem;color:#666"></div>
+    <div style="display:flex;gap:8px;margin-top:12px">
+      <input id="dailyInput" placeholder="寫下你的回答" style="flex:1;padding:10px 12px;border-radius:12px;border:1.5px solid var(--pink-soft);font-family:inherit">
+      <button class="btn-pink" id="dailySend" style="padding:10px 16px">送出</button>
+    </div>
+  </div>
 
   <!-- 彈幕發送 -->
   <h3 class="stitle">發彈幕騷擾她</h3>
@@ -918,10 +932,11 @@ body{counter-reset: section}
   <!-- 轉盤 -->
   <h3 class="stitle">轉個任務</h3>
   <div class="wheel-area">
-    <div class="wheel" id="wheel">
+    <div class="wheel-wrap">
       <div class="wheel-pointer">▼</div>
+      <div class="wheel" id="wheel"></div>
     </div>
-    <div id="wheelResult"></div>
+    <div id="wheelResult">轉一下，今天的任務</div>
     <br>
     <button class="btn-pink" id="spinBtn">轉！</button>
   </div>
@@ -929,7 +944,7 @@ body{counter-reset: section}
   <!-- 今天吃什麼 -->
   <h3 class="stitle">🍜 今天吃什麼</h3>
   <div style="text-align:center;background:rgba(255,255,255,.65);backdrop-filter:blur(20px);border-radius:16px;padding:20px;margin:8px 0">
-    <div id="foodResult" style="font-size:1.8rem;color:var(--pink);font-weight:600;margin:10px 0;min-height:2.5rem">????</div>
+    <div id="foodResult" style="font-size:1.8rem;color:var(--pink);font-weight:600;margin:10px 0;min-height:2.5rem">按一下決定</div>
     <button class="btn-pink" id="foodBtn" style="border-radius:25px;padding:10px 30px">幫我們決定！</button>
   </div>
 
@@ -1451,6 +1466,10 @@ function renderWishes(){
     db.ref("wishes/state").on("value", doc => {
       const done = doc.exists() ? (doc.val() ? doc.val().done || [] : []) : [];
       list.innerHTML = "";
+      const head = document.createElement("div");
+      head.style.cssText = "text-align:center;color:#e91e63;font-size:.85rem;margin-bottom:8px";
+      head.textContent = `完成 ${done.length} / ${wishes.length}`;
+      list.appendChild(head);
       wishes.forEach((w,i) => {
         const isDone = done.includes(i);
         const d = document.createElement("div");
@@ -1459,7 +1478,7 @@ function renderWishes(){
         d.querySelector("input").onchange = function(){
           let s = [...done];
           if(this.checked) s.push(i); else s = s.filter(x => x !== i);
-          db.ref("wishes/state").set({done:s});
+          db.ref("wishes/state").set({done:[...new Set(s)]});
         };
         list.appendChild(d);
       });
@@ -1467,37 +1486,69 @@ function renderWishes(){
   }
 }
 
-/* 共同記帳 */
+/* 共同記帳：誰付的、日期、可刪、分開合計 */
 window._authReady.then(function(uid){
+  const names = {y:"Y", yun:"小昀"};
   document.getElementById("expAdd").onclick = function(){
     const a = parseFloat(document.getElementById("expAmount").value);
     const n = document.getElementById("expNote").value.trim();
-    if(!a) return;
-    db.ref("expenses").push({amount:a, note:n, uid:uid, time:Date.now()});
+    if(!a || a <= 0) return;
+    db.ref("expenses").push({amount:a, note:n, uid:uid, role:window.myRole||"", time:Date.now()});
     document.getElementById("expAmount").value = "";
     document.getElementById("expNote").value = "";
   };
   db.ref("expenses").on("value", snap => {
     const list = document.getElementById("expList");
-    let total = 0, html = "";
+    let total = 0, by = {y:0, yun:0};
     const items = [];
-    snap.forEach(d => { items.push(d.val()); });
-    items.sort((a,b)=>b.time-a.time);
+    snap.forEach(d => { items.push({id:d.key, ...d.val()}); });
+    items.sort((a,b)=>(b.time||0)-(a.time||0));
+    list.innerHTML = "";
+    if(!items.length){
+      list.innerHTML = "<div style='color:#999;font-size:.85rem'>還沒有記帳</div>";
+    }
     items.forEach(e => {
-      total += e.amount;
-      html += `<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #f0f0f0;font-size:.9rem">
-        <span>${e.note || "消費"}</span><span>$${e.amount}</span>
-      </div>`;
+      total += Number(e.amount)||0;
+      if(by[e.role] != null) by[e.role] += Number(e.amount)||0;
+      const when = e.time ? new Date(e.time).toLocaleDateString("zh-TW",{month:"numeric",day:"numeric"}) : "";
+      const row = document.createElement("div");
+      row.style.cssText = "display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #f0f0f0;font-size:.9rem";
+      row.innerHTML = `<span>${when} ${names[e.role]||""} ${e.note||"消費"}</span><span style="white-space:nowrap">$${e.amount} <button data-id="${e.id}" style="border:none;background:none;color:#e91e63;cursor:pointer">刪</button></span>`;
+      row.querySelector("button").onclick = function(){ db.ref("expenses/"+this.dataset.id).remove(); };
+      list.appendChild(row);
     });
-    list.innerHTML = html || "<div style='color:#999;font-size:.85rem'>還沒有記帳</div>";
-    document.getElementById("expTotal").textContent = "總計：" + total + " 元";
+    document.getElementById("expTotal").textContent = `總計 ${total} 元　Y ${by.y}　小昀 ${by.yun}`;
   });
 });
 
-/* 每日一問 */
+/* 每日一問：同一天題目固定，兩邊回答即時同步 */
 (function(){
   const qs = ["今天最開心的一件事？","我們第一次約會去哪？","妳覺得我哪裡最可愛？","想跟我去哪旅行？","今天有想我嗎？","喜歡我叫妳什麼？","下次見面想做什麼？","覺得我哪一點最吸引妳？","想一起完成什麼事？","最近一次想我是什麼時候？","我們哪個瞬間最浪漫？","妳覺得我們哪裡最像？","第一次牽手是什麼感覺？","最想收到我送什麼禮物？","哪句情話最打動妳？","我們最適合一起做什麼？","想跟我養什麼動物？","最喜歡我什麼習慣？","什麼時候覺得認定我了？","想一起住什麼樣的房子？","第一次見面覺得我是什麼樣的人？","現在最想我做什麼？","哪件事最讓妳感動？","想一起看什麼電影？","哪個季節最適合我們？","最想跟我去吃什麼？","哪個瞬間覺得我可愛？","想跟我挑戰什麼新事物？","最喜歡抱著我的時候？","什麼時候覺得我很帥？","想一起慶祝什麼節日？","哪件事只有我們懂？","覺得我哪裡需要改進？","想一起拍什麼風格的照片？","最想對我說什麼心裡話？","哪個地方最讓妳放鬆？","想一起學什麼技能？","哪段回憶最寶貴？","現在最想吃什麼？","想跟我在哪裡過生日？","哪句話最讓妳心動？","想一起看什麼夜景？","覺得我們的愛情像什麼？","最想收到什麼驚喜？","什麼時候最想抱抱我？","想一起做什麼瘋狂的事？","哪個習慣讓妳覺得窩心？","未來想跟我一起去哪？","現在的心情用一個詞形容","我愛妳用台語怎麼說"];
+  const dayKey = new Date().toISOString().slice(0,10);
   document.getElementById("dailyQ").textContent = qs[Math.floor(Date.now()/86400000) % qs.length];
+  function paint(val){
+    const box = document.getElementById("dailyAnswers");
+    if(!box) return;
+    const names = {y:"Y", yun:"小昀"};
+    const parts = ["y","yun"].map(k => {
+      const a = val && val[k];
+      return `<div style="padding:8px 0;border-top:1px solid #f3d5e2"><b style="color:#e91e63">${names[k]}</b>　${a ? a.text : "還沒回答"}</div>`;
+    });
+    box.innerHTML = parts.join("");
+  }
+  window._authReady.then(function(){
+    const ref = db.ref("daily/"+dayKey);
+    ref.on("value", s => paint(s.val()||{}));
+    document.getElementById("dailySend").onclick = function(){
+      const t = document.getElementById("dailyInput").value.trim();
+      if(!t || !window.myRole) return;
+      ref.child(window.myRole).set({text:t, time:Date.now()});
+      document.getElementById("dailyInput").value = "";
+    };
+    document.getElementById("dailyInput").addEventListener("keydown", e => {
+      if(e.key === "Enter") document.getElementById("dailySend").click();
+    });
+  });
 })();
 
 /* 一起按愛心 */
@@ -2441,24 +2492,35 @@ window.firework = function(){
 };
 document.getElementById("fireworkBtn").onclick = firework;
 
-/* 轉盤 */
+/* 轉盤：指針固定在上方，結果跟扇形對齊 */
 (function(){
-  const tasks = [
-    "抱抱她","說她可愛","問她吃了沒","親她一下","講情話","陪她講廢話",
-    "幫她吹頭髮","牽她的手","記得說晚安","說想妳","買早餐給她","叫她寶貝",
-    "不要生她氣","聽她抱怨","牽她去廁所","幫她按壓","撒嬌","叫她滾然後抱抱"
-  ];
+  const tasks = ["抱抱她","說她可愛","問她吃了沒","親她一下","講情話","說想妳"];
   const wheel = document.getElementById("wheel");
   const result = document.getElementById("wheelResult");
-  let angle = 0;
+  tasks.forEach((t,i)=>{
+    const lab = document.createElement("div");
+    lab.className = "wheel-label";
+    lab.textContent = t;
+    lab.style.transform = `rotate(${i*60+30}deg) translateY(-68px) rotate(-${i*60+30}deg)`;
+    wheel.appendChild(lab);
+  });
+  let angle = 0, spinning = false;
   document.getElementById("spinBtn").onclick = function(){
-    const spin = 360*4 + Math.floor(Math.random()*360);
-    angle += spin;
+    if(spinning) return;
+    spinning = true;
+    const idx = Math.floor(Math.random()*tasks.length);
+    // 扇形從 0 度順時針，指針在 12 點。轉到該扇形中心對準指針。
+    const targetMod = (360 - (idx*60 + 30)) % 360;
+    const current = angle % 360;
+    let delta = targetMod - current;
+    if(delta < 0) delta += 360;
+    angle += 360*5 + delta;
     wheel.style.transform = `rotate(${angle}deg)`;
+    result.textContent = "轉動中...";
     setTimeout(() => {
-      const idx = Math.floor(((360 - (angle % 360)) / 60) % 6);
-      result.textContent = "👉 " + tasks[idx];
-    }, 3200);
+      result.textContent = "今天的任務： " + tasks[idx];
+      spinning = false;
+    }, 3300);
   };
 })();
 
