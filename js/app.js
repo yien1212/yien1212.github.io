@@ -1480,3 +1480,134 @@ document.addEventListener("visibilitychange", function(){
     document.body.classList.remove("privacy-blur");
   }
 });
+
+
+/* 小昀的口味、百度相簿、Y 的分身 */
+(function(){
+  const herFoods = ["麥當勞早餐","牛肉麵","排骨酥","鮭魚","提拉米蘇","泡麵","蘋果","星巴克","漢堡","壽司","滷味","鬆餅"];
+  const cares = ["吃早餐了嗎","騎車慢一點，到家跟我說","今天想吃什麼","早安安，乖乖","先抱抱再講話"];
+  const careEl = document.getElementById("herCare");
+  if(careEl) careEl.textContent = cares[Math.floor(Date.now()/86400000) % cares.length];
+  const row = document.getElementById("herFoods");
+  if(row){
+    herFoods.forEach(function(name){
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "chip";
+      b.textContent = name;
+      b.onclick = function(){
+        const res = document.getElementById("foodResult");
+        if(res) res.textContent = name;
+      };
+      row.appendChild(b);
+    });
+  }
+  const foodHer = document.getElementById("foodHer");
+  if(foodHer){
+    foodHer.onclick = function(){
+      document.getElementById("foodResult").textContent = herFoods[Math.floor(Math.random()*herFoods.length)];
+    };
+  }
+
+  function goodUrl(u){
+    try{
+      const x = new URL(u);
+      return x.protocol === "https:" && /(^|\.)baidu\.com$/.test(x.hostname);
+    }catch(e){ return false; }
+  }
+  function paintAlbum(url){
+    const open = document.getElementById("baiduOpen");
+    const input = document.getElementById("baiduUrl");
+    if(!open || !input) return;
+    if(!url){ open.style.display = "none"; return; }
+    input.value = url;
+    open.href = url;
+    open.style.display = "inline-block";
+  }
+  const albumKey = "baidu-album-v1";
+  try{ const saved = localStorage.getItem(albumKey); if(saved && goodUrl(saved)) paintAlbum(saved); }catch(e){}
+  const saveBtn = document.getElementById("baiduSave");
+  if(saveBtn){
+    saveBtn.onclick = function(){
+      const url = document.getElementById("baiduUrl").value.trim();
+      const status = document.getElementById("baiduStatus");
+      if(!goodUrl(url)){ status.textContent = "要貼 https 開頭的百度網盤連結"; return; }
+      try{ localStorage.setItem(albumKey, url); }catch(e){}
+      paintAlbum(url);
+      status.textContent = "這台手機先記住了";
+      if(window.db){
+        window.db.ref("album/baidu").set({url:url, at:Date.now()}).then(function(){
+          status.textContent = "存好了，另一台登入後也看得到";
+        }).catch(function(){
+          status.textContent = "這台先記住了，雲端晚一點再同步";
+        });
+      }
+    };
+  }
+  if(window._authReady){
+    window._authReady.then(function(){
+      if(!window.db) return;
+      window.db.ref("album/baidu").on("value", function(snap){
+        const v = snap.val();
+        if(v && v.url && goodUrl(v.url)){
+          try{ localStorage.setItem(albumKey, v.url); }catch(e){}
+          paintAlbum(v.url);
+        }
+      });
+    });
+  }
+
+  const pairs = [["我也很想你啊 真的", "抱抱寶寶"], ["我到家囉", "我愛你寶寶"], ["我愛你小寶寶", "我好想你"], ["我愛你寶寶", "我也愛你"], ["好吃嗎！！", "好吃！"], ["豆腐還是百頁好吃", "都好吃"], ["可以用來打遊戲的寶寶", "沒有妳自由也沒有意義了寶寶"], ["好想妳耶小寶寶", "我不是小寶寶"], ["真的感覺很好吃嗚嗚", "當然啊寶寶"], ["超級帥", "寶寶我想你"], ["我想你了", "寶寶你想玩是嗎"], ["好滴", "我想你寶寶"], ["嗯嗯！", "寶寶你到家了嗎"], ["沒4", "謝謝寶寶今天請我吃飯"], ["寶寶 我潑了喔", "好哇寶寶"], ["累累寶寶", "愛妳寶寶"], ["我最愛你了", "我也是哇寶寶"], ["我愛你", "最愛你了"], ["嗨嗨寶寶", "寶寶你在做什麼"], ["你看嘿嘿", "寶寶我愛你"], ["寶寶我幾點可以找你", "寶寶我今天不一定"], ["想抱抱", "寶寶這個願望不算"], ["沒關係", "寶寶我還是很愛你"], ["等等打給寶寶", "寶寶你還好嗎"], ["你好快到家", "寶寶"], ["我想抱抱", "怎麼啦寶寶"], ["我們阿鼻要乖乖的喔", "我想你北鼻"], ["知道寶寶", "你會餓嗎寶寶"], ["我愛你", "開心一點寶寶"], ["感覺不好吃", "看起來不好吃"], ["真的", "我愛你 很愛你寶寶"], ["我相信我有一天會好好表達滴", "欸我真的很愛你欸寶寶"], ["好棒寶寶", "看完了先 回家 等等我小寶寶"], ["所以寶寶我愛你", "那個"], ["不小心睡著沒有跟你說到晚安", "我不想"], ["想你", "我愛你小寶"], ["我愛你", "我愛你"], ["可愛寶寶", "小心走"], ["他就是玻璃心", "就例如說你不好好吃飯"], ["想你", "我也想你"], ["怎麼了", "愛你呀 老婆"], ["抱抱嗚嗚 我好怕你痛", "沒關係呀寶寶"], ["會滴寶寶", "幫然是想你啊"], ["好想你", "我也好想你"], ["我很愛你", "我愛你啊"], ["我是真想你了", "我也想你啊"], ["你應該已經平安回到家了吧", "剛到家"], ["寶寶 騎車小心🫶🏻", "突然想到"], ["我愛你欸", "這個好吃嗎"], ["那確實", "我愛你老婆"], ["兩個嗎", "對愛你老婆"], ["愛你寶寶❤️", "我看"], ["愛你寶寶", "認真"], ["我也想你老婆", "剛剛大家突然沈默10秒"], ["想抱抱", "想你啊"], ["我也愛你寶寶", "加油"], ["我沒吃過別的～你覺得哪版本最好吃", "最貴的最好吃"], ["我也愛你寶寶😋❤️", "小朋友吃飽飽"], ["愛你", "愛你"], ["ㄛ好啊我都不知道要吃什麼", "回到家洗完澡就清醒了"], ["我剛剛本來要衝去買它欸但太冷了", "欸這個感覺很好吃"], ["晚安", "不會煩啊"], ["早知道不睡覺的", "那個冰火菠蘿感覺很好吃欸"], ["你小心一點ㄛ", "好～"], ["那你回家小心好ㄌ", "下課了了了了"], ["漂亮咪", "好吃嗎"], ["想你", "想我可以打給我"], ["回家小心", "等我回家"], ["認真想你好了", "慢慢想"], ["早點用完早點休息", "晚安"], ["你不喜歡哦", "那個好吃"], ["你看", "欸這個感覺好好吃"], ["好想你", "騙人"], ["理我一下下", "感覺好好吃"], ["沒有穿給別人看", "我到吃飯的地方了"], ["哪有不行為什麼不行", "小心一點"], ["棒棒", "感覺不好吃"], ["我剛到家", "我會很愧疚"], ["要小心喔", "知道"], ["你看", "我剛到家"], ["回家小心騎", "你還喜歡我嗎"], ["你到家再跟我說", "有吃"], ["為什麼他這麼好吃", "我沒有吃過"], ["我不行接受他", "好吃"], ["明明就超好吃", "他不會跟你搶食物"], ["我也到家嚕", "我也覺得"], ["對不起寶寶", "忘記群發到我了"], ["哈哈哈哈", "會想你"], ["所以你不開心", "卡士達滿好吃的啊"], ["我也想你", "我吃了6個了"], ["真的不會有人跟你搶", "我說很好吃"], ["根本不好吃", "讓我吃到飽"], ["我要暈車了", "我想你"], ["我到家嚕", "知道了"], ["為什麼哈哈哈", "好啊寶寶"], ["我怕你不喜歡我啊", "要去吃飯"], ["寶寶", "我在"], ["小心", "一直聊天"], ["睡飽重要", "想你重要"], ["我到家了ㄛ", "哇愛哩"], ["我到士林再跟你說", "好 小心走路"], ["不ㄗ", "寶寶你先去洗澡"], ["到家跟妳說", "怎麼不開心"], ["想你了", "想我想到不開心嘛"], ["因為不開心", "寶寶寶寶我有空就去找妳！"], ["接到你電話", "寶寶 電話可以再打沒關係"], ["好滴", "寶寶 我 快 到 了了了"], ["我們才剛見完捏", "寶寶你難道不想我嗎"], ["去吃飯了了了應該", "我躲在棉被裡"], ["水連", "寶寶你有不開心嗎"], ["耶比", "怎麼了寶寶"], ["？？", "寶寶你看！"], ["寶寶好棒", "狠狠的稱讚我"], ["不是就是要更大力嗎", "可以嗎可以嗎寶寶"], ["寶寶", "上課上到一半"], ["我說我想你", "..."], ["我起床了", "哈嚕寶寶"], ["為什麼我看不到", "因為在摯友ㄛ寶寶"], ["哈哈哈哈哈哈哈", "那個感覺不好吃"], ["我嗎", "對啊寶寶"]];
+  const log = document.getElementById("botLog");
+  const input = document.getElementById("botInput");
+  const send = document.getElementById("botSend");
+  if(!log || !input || !send) return;
+  function esc(s){
+    return String(s).replace(/[&<>"']/g, function(c){ return "&#"+c.charCodeAt(0)+";"; });
+  }
+  function bubble(me, text){
+    const div = document.createElement("div");
+    div.className = "chat-line"+(me?" me":"");
+    div.innerHTML = '<span class="bubble"><span class="who">'+(me?"小昀":"Y")+'</span>'+esc(text)+'</span>';
+    log.appendChild(div);
+    log.scrollTop = log.scrollHeight;
+  }
+  function grams(s){
+    const g = [];
+    for(let i=0;i<s.length-1;i++) g.push(s.slice(i,i+2));
+    return g;
+  }
+  function reply(q){
+    const s = q.trim();
+    if(!s) return "";
+    const gs = grams(s);
+    let best = "", score = 0;
+    pairs.forEach(function(p){
+      let sc = 0;
+      gs.forEach(function(g){ if(p[0].indexOf(g) >= 0) sc++; });
+      if(p[0] === s) sc += 12;
+      if(sc > score){ score = sc; best = p[1]; }
+    });
+    if(score >= 2 && best) return best;
+    if(/吃|餓|飯|奶茶/.test(s)) return "吃了沒寶寶，想吃什麼跟我說";
+    if(/想你|愛你|想妳|愛妳/.test(s)) return "我也想你，我愛你寶寶";
+    if(/到家|回來|回了/.test(s)) return "到家就好。我愛你";
+    if(/早安|起床/.test(s)) return "早安安，吃早餐了嗎";
+    if(/晚安|睡覺|想睡/.test(s)) return "晚安寶寶，抱抱";
+    if(/上班|工作|下課/.test(s)) return "加油，我在";
+    if(/不舒服|痛|累/.test(s)) return "先休息。我在，抱抱";
+    const soft = ["嗯我在","怎麼了寶寶","我愛你","到家跟我說"];
+    return soft[s.length % soft.length];
+  }
+  function ask(){
+    const q = input.value.trim();
+    if(!q) return;
+    input.value = "";
+    bubble(true, q);
+    const a = reply(q);
+    setTimeout(function(){ bubble(false, a); }, 280);
+  }
+  send.onclick = ask;
+  input.addEventListener("keydown", function(e){ if(e.key === "Enter") ask(); });
+  bubble(false, "我在。想說什麼跟我說，寶寶");
+})();

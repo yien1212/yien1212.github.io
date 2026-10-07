@@ -16,7 +16,7 @@
 <title>我們 ❤️</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@200;300;400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/app.css?v=7">
+<link rel="stylesheet" href="css/app.css?v=8">
 </head>
 <body>
 
@@ -80,6 +80,14 @@
     <div id="voiceList" style="max-width:400px;margin:8px auto 0"></div>
   </div>
 
+  <div class="card her-card">
+    <h3>今天的小昀</h3>
+    <p class="talk-note" id="herNick">想被叫乖乖、小寶寶、寶貝、老婆</p>
+    <p id="herCare" style="margin:8px 0;color:#a24"></p>
+    <div class="chip-row" id="herFoods"></div>
+    <p class="talk-note" style="margin-top:8px">不吃椒麻。吃早餐、騎車慢、到家說一聲，她會開心。</p>
+  </div>
+
   <!-- 情書 -->
   <!-- 即時聊天 -->
   <h3 class="stitle">💬 寫給妳（也跟妳說話）</h3>
@@ -116,7 +124,7 @@
   <div class="stats">
     <div class="stat"><div class="n" id="numDays">-</div><div class="l">天</div></div>
     <div class="stat"><div class="n" id="numHours">-</div><div class="l">小時</div></div>
-    <div class="stat"><div class="n">14</div><div class="l">張照片</div></div>
+    <div class="stat"><div class="n">18</div><div class="l">張照片</div></div>
   </div>
   <div class="next" id="nextBox"></div>
 
@@ -191,6 +199,17 @@
     <figure data-cap="再一張"><img loading="lazy" src="her_selfie2.jpg" alt="再一張"><figcaption>再一張</figcaption></figure>
     <figure data-cap="看鏡頭"><img loading="lazy" src="her_selfie3.jpg" alt="看鏡頭"><figcaption>看鏡頭</figcaption></figure>
     <figure data-cap="今天的她"><img loading="lazy" src="her_selfie4.jpg" alt="今天的她"><figcaption>今天的她</figcaption></figure>
+  </div>
+
+  <div class="card album-card">
+    <h3>百度網盤照片備份</h3>
+    <p class="talk-note">我進不了你們的網盤。在百度網盤把照片資料夾設成分享，複製連結貼這裡，兩邊登入後都看得到。</p>
+    <input id="baiduUrl" type="url" inputmode="url" placeholder="https://pan.baidu.com/s/..." autocomplete="off">
+    <div class="album-actions">
+      <button class="btn-pink" id="baiduSave" type="button">儲存連結</button>
+      <a class="btn-pink" id="baiduOpen" href="#" target="_blank" rel="noopener" style="display:none;text-decoration:none">打開相簿</a>
+    </div>
+    <p id="baiduStatus" class="talk-note"></p>
   </div>
 
   </div>
@@ -334,11 +353,22 @@
   <h3 class="stitle">🍜 今天吃什麼</h3>
   <div style="text-align:center;background:rgba(255,255,255,.65);backdrop-filter:blur(20px);border-radius:16px;padding:20px;margin:8px 0">
     <div id="foodResult" style="font-size:1.8rem;color:var(--pink);font-weight:600;margin:10px 0;min-height:2.5rem">按一下決定</div>
-    <button class="btn-pink" id="foodBtn" style="border-radius:25px;padding:10px 30px">幫我們決定！</button>
+    <button class="btn-pink" id="foodBtn" type="button" style="border-radius:25px;padding:10px 22px">全部餐廳</button>
+    <button class="btn-pink" id="foodHer" type="button" style="border-radius:25px;padding:10px 22px;margin-left:8px">照小昀的口味</button>
   </div>
 
   </div>
   <div class="page" id="page-chat">
+
+  <h3 class="stitle">Y 的分身</h3>
+  <div class="card bot-card">
+    <p class="talk-note">不是本人。他不在的時候，用他平常跟你說話的方式先回你。</p>
+    <div class="bot-log" id="botLog"></div>
+    <div class="bot-row">
+      <input id="botInput" type="text" maxlength="80" placeholder="跟分身說..." enterkeyhint="send">
+      <button class="btn-pink" id="botSend" type="button">送</button>
+    </div>
+  </div>
 
   <!-- 定位+電量 -->
   <h3 class="stitle">📍 我們在哪</h3>
@@ -546,7 +576,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 <script src="js/guard.js?v=4"></script>
 <script src="js/config.js?v=4"></script>
-<script src="js/app.js?v=7"></script>
+<script src="js/app.js?v=8"></script>
 <script src="https://cdn.botpress.cloud/webchat/v3.5/inject.js"></script>
 <script src="https://files.bpcontent.cloud/2026/01/12/17/20260112175648-Q8N99NKQ.js" defer></script>
 
