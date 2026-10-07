@@ -9,7 +9,7 @@
   firebase.auth().onAuthStateChanged(u => { if(u && u.uid) window.uid = u.uid; });
   try{
     firebase.database().ref(".info/connected").on("value", s => {
-      if(s.val() === false) Guard.push("Net", "即時資料庫離線，會自動重連", "");
+      if(s.val() === false) Guard.push("Net", "即時資料庫離線，會自動重連", "", true);
     });
   }catch(e){ Guard.push("Net", "連線監聽失敗", e.message); }
 })();
@@ -143,25 +143,32 @@ function initCarousel(){
 }
 
 /* 燈箱 */
-const figs = Array.from(document.querySelectorAll("#wall figure"));
+function wallFigs(){ return Array.from(document.querySelectorAll("#wall figure")); }
 const lb = document.getElementById("lb");
 let lbI = 0;
 function openLB(i){ lbI = i; showLB(); lb.classList.add("open"); }
 function showLB(){
+  const figs = wallFigs();
   const f = figs[lbI];
+  if(!f) return;
   document.getElementById("lbImg").src = f.querySelector("img").src;
-  document.getElementById("lbCap").textContent = f.dataset.cap + "  (" + (lbI+1) + "/" + figs.length + ")";
+  document.getElementById("lbCap").textContent = (f.dataset.cap || "") + "  (" + (lbI+1) + "/" + figs.length + ")";
 }
-figs.forEach((f,i) => f.onclick = () => openLB(i));
+function bindWall(){
+  wallFigs().forEach((f,i) => { f.onclick = () => openLB(i); });
+}
+bindWall();
+window.bindWall = bindWall;
 document.getElementById("lbC").onclick = () => lb.classList.remove("open");
-document.getElementById("lbP").onclick = (e) => { e.stopPropagation(); lbI = (lbI-1+figs.length)%figs.length; showLB(); };
-document.getElementById("lbN").onclick = (e) => { e.stopPropagation(); lbI = (lbI+1)%figs.length; showLB(); };
+document.getElementById("lbP").onclick = (e) => { e.stopPropagation(); const n = wallFigs().length; lbI = (lbI-1+n)%n; showLB(); };
+document.getElementById("lbN").onclick = (e) => { e.stopPropagation(); const n = wallFigs().length; lbI = (lbI+1)%n; showLB(); };
 lb.onclick = (e) => { if(e.target === lb) lb.classList.remove("open"); };
 document.addEventListener("keydown", e => {
   if(!lb.classList.contains("open")) return;
+  const n = wallFigs().length;
   if(e.key==="Escape") lb.classList.remove("open");
-  if(e.key==="ArrowLeft"){ lbI=(lbI-1+figs.length)%figs.length; showLB(); }
-  if(e.key==="ArrowRight"){ lbI=(lbI+1)%figs.length; showLB(); }
+  if(e.key==="ArrowLeft"){ lbI=(lbI-1+n)%n; showLB(); }
+  if(e.key==="ArrowRight"){ lbI=(lbI+1)%n; showLB(); }
 });
 
 /* 情話 */
@@ -194,7 +201,8 @@ document.getElementById("loveBtn").onclick = () => {
 
 /* 盲盒 */
 document.getElementById("mystery").onclick = function(){
-  const f = figs[Math.floor(Math.random()*figs.length)];
+  const pool = wallFigs();
+  const f = pool[Math.floor(Math.random()*pool.length)];
   document.getElementById("mystImg").src = f.querySelector("img").src;
   document.getElementById("mystQ").textContent = f.dataset.cap + " — " + lines[Math.floor(Math.random()*lines.length)];
   this.classList.add("flipped");
@@ -1590,13 +1598,14 @@ document.addEventListener("visibilitychange", function(){
       if(!goodUrl(url)){ status.textContent = "要貼 https 開頭的百度網盤連結"; return; }
       try{ localStorage.setItem(albumKey, url); }catch(e){}
       paintAlbum(url);
-      status.textContent = "這台手機先記住了";
-      if(uid){
+      const pwdEl = document.getElementById("baiduPwd");
+      const pwd = pwdEl ? pwdEl.value.trim() : "";
+      try{ localStorage.setItem(albumKey+"-pwd", pwd); }catch(e){}
+      status.textContent = "連結記住了。百度不讓網站直接讀照片，請按「從相簿加入」。";
+      if(window.db){
         window.db.ref("album/baidu").set({url:url, at:Date.now()}).then(function(){
-          status.textContent = "存好了，另一台登入後也看得到";
-        }).catch(function(){
-          status.textContent = "這台先記住了，雲端晚一點再同步";
-        });
+          status.textContent = "連結兩邊都看得到。照片還是要用「從相簿加入」，百度不開放直接讀。";
+        }).catch(function(){});
       }
     };
   }
@@ -1609,6 +1618,87 @@ document.addEventListener("visibilitychange", function(){
           try{ localStorage.setItem(albumKey, v.url); }catch(e){}
           paintAlbum(v.url);
         }
+      });
+    });
+  }
+
+  function memDb(){
+    return new Promise(function(res, rej){
+      const req = indexedDB.open("ynn-mem", 1);
+      req.onupgradeneeded = function(){ req.result.createObjectStore("photos", {keyPath:"id"}); };
+      req.onsuccess = function(){ res(req.result); };
+      req.onerror = function(){ rej(req.error); };
+    });
+  }
+  function addMemFigure(src, cap){
+    const wall = document.getElementById("wall");
+    if(!wall) return;
+    const fig = document.createElement("figure");
+    fig.dataset.cap = cap;
+    const img = document.createElement("img");
+    img.alt = cap;
+    img.src = src;
+    img.loading = "lazy";
+    const fc = document.createElement("figcaption");
+    fc.textContent = cap;
+    fig.appendChild(img);
+    fig.appendChild(fc);
+    wall.appendChild(fig);
+  }
+  function squeeze(file){
+    return new Promise(function(res, rej){
+      const img = new Image();
+      const url = URL.createObjectURL(file);
+      img.onload = function(){
+        const max = 960;
+        let w = img.naturalWidth || img.width, h = img.naturalHeight || img.height;
+        const scale = Math.min(1, max / Math.max(w, h));
+        w = Math.max(1, Math.round(w * scale));
+        h = Math.max(1, Math.round(h * scale));
+        const canvas = document.createElement("canvas");
+        canvas.width = w; canvas.height = h;
+        const g = canvas.getContext("2d");
+        if(!g){ URL.revokeObjectURL(url); rej(new Error("canvas")); return; }
+        g.drawImage(img, 0, 0, w, h);
+        URL.revokeObjectURL(url);
+        res(canvas.toDataURL("image/jpeg", 0.72));
+      };
+      img.onerror = function(){ URL.revokeObjectURL(url); rej(new Error("image")); };
+      img.src = url;
+    });
+  }
+  memDb().then(function(db){
+    const tx = db.transaction("photos", "readonly");
+    const req = tx.objectStore("photos").getAll();
+    req.onsuccess = function(){
+      (req.result || []).forEach(function(item){ addMemFigure(item.src, item.cap || "網盤"); });
+      if(window.bindWall) window.bindWall();
+    };
+  }).catch(function(){});
+  const memInput = document.getElementById("memPhotos");
+  if(memInput){
+    memInput.addEventListener("change", function(){
+      const files = Array.from(memInput.files || []).filter(function(f){ return f.type.indexOf("image/") === 0; }).slice(0, 12);
+      const status = document.getElementById("baiduStatus");
+      if(!files.length){ return; }
+      if(status) status.textContent = "正在加進回憶…";
+      memDb().then(async function(db){
+        for(let i = 0; i < files.length; i++){
+          const src = await squeeze(files[i]);
+          const item = {id: Date.now() + "-" + i, src: src, cap: "網盤"};
+          await new Promise(function(res, rej){
+            const tx = db.transaction("photos", "readwrite");
+            tx.objectStore("photos").put(item);
+            tx.oncomplete = function(){ res(); };
+            tx.onerror = function(){ rej(tx.error); };
+          });
+          addMemFigure(src, "網盤");
+        }
+        if(window.bindWall) window.bindWall();
+        if(status) status.textContent = "加好了，在上面的照片牆。只存在這台手機。";
+        memInput.value = "";
+      }).catch(function(){
+        if(status) status.textContent = "這張沒加上，換小一點的照片再試";
       });
     });
   }

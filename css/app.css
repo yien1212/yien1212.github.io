@@ -464,7 +464,7 @@ body::before{
 
 /* 回到頂部 */
 #backTop{
-  position:fixed; bottom:30px; right:20px;
+  position:fixed;
   width:48px; height:48px; border-radius:50%;
   background:rgba(255,255,255,.8); backdrop-filter:blur(10px);
   border:1.5px solid var(--pink-soft);
@@ -604,12 +604,46 @@ body{counter-reset: section}
   color:var(--pink-deep); transition:all .2s;
 }
 .status-btn:active{ background:var(--pink-soft); transform:scale(.95); }
+:root{ --dock: calc(68px + env(safe-area-inset-bottom)); }
+#errBadge{
+  position:fixed; top:calc(10px + env(safe-area-inset-top)); right:max(10px, env(safe-area-inset-right));
+  z-index:1300; width:28px; height:28px; border:none; border-radius:50%;
+  background:#e91e63; color:#fff; font-size:.75rem; cursor:pointer;
+  box-shadow:0 2px 8px rgba(0,0,0,.25);
+}
+#errBadge[hidden]{ display:none; }
+#errPanel{
+  display:none; position:fixed; top:calc(46px + env(safe-area-inset-top));
+  right:max(10px, env(safe-area-inset-right)); z-index:1300;
+  width:min(300px, calc(100vw - 24px)); max-height:min(42vh, 320px); overflow:auto;
+  background:rgba(40,20,30,.94); color:#ffb3c8; font-size:.75rem;
+  border-radius:12px; padding:10px; line-height:1.5;
+}
+#errPanel.open{ display:block; }
+#errPanel .err-head{ display:flex; justify-content:space-between; align-items:center; color:#fff; margin-bottom:6px; }
+#errPanel button{ border:none; background:transparent; color:#fff; font-family:inherit; cursor:pointer; }
 .bpFabWrapper{
-  bottom: calc(78px + env(safe-area-inset-bottom)) !important;
-  z-index: 1200 !important;
+  bottom: calc(var(--dock) + 10px) !important;
+  right: max(12px, env(safe-area-inset-right)) !important;
+  left: auto !important;
+  z-index: 1100 !important;
+}
+.bpMessagePreview,
+.bpFABMessagePreview{
+  bottom: calc(var(--dock) + 78px) !important;
 }
 @media (min-width: 768px){
-  .bpFabWrapper{ bottom: 24px !important; }
+  .bpWebchat{
+    bottom: calc(var(--dock) + 72px) !important;
+    right: max(16px, env(safe-area-inset-right)) !important;
+    max-height: calc(100vh - var(--dock) - 110px) !important;
+  }
+}
+#backTop{
+  bottom: calc(var(--dock) + 10px);
+  right: auto;
+  left: max(12px, env(safe-area-inset-left));
+  z-index: 1100;
 }
 .page{ display:none; padding-bottom:calc(96px + env(safe-area-inset-bottom)); }
 .page.active{ display:block; animation:fadeIn .35s ease; }
