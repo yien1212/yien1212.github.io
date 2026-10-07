@@ -433,33 +433,131 @@ window._authReady.then(function(uid){
   });
 });
 
-/* 每日一問：同一天題目固定，兩邊回答即時同步 */
+/* 每日戀愛默契：台北時間凌晨換題，兩邊都答完才揭曉 */
 (function(){
-  const qs = ["今天最開心的一件事？","我們第一次約會去哪？","妳覺得我哪裡最可愛？","想跟我去哪旅行？","今天有想我嗎？","喜歡我叫妳什麼？","下次見面想做什麼？","覺得我哪一點最吸引妳？","想一起完成什麼事？","最近一次想我是什麼時候？","我們哪個瞬間最浪漫？","妳覺得我們哪裡最像？","第一次牽手是什麼感覺？","最想收到我送什麼禮物？","哪句情話最打動妳？","我們最適合一起做什麼？","想跟我養什麼動物？","最喜歡我什麼習慣？","什麼時候覺得認定我了？","想一起住什麼樣的房子？","第一次見面覺得我是什麼樣的人？","現在最想我做什麼？","哪件事最讓妳感動？","想一起看什麼電影？","哪個季節最適合我們？","最想跟我去吃什麼？","哪個瞬間覺得我可愛？","想跟我挑戰什麼新事物？","最喜歡抱著我的時候？","什麼時候覺得我很帥？","想一起慶祝什麼節日？","哪件事只有我們懂？","覺得我哪裡需要改進？","想一起拍什麼風格的照片？","最想對我說什麼心裡話？","哪個地方最讓妳放鬆？","想一起學什麼技能？","哪段回憶最寶貴？","現在最想吃什麼？","想跟我在哪裡過生日？","哪句話最讓妳心動？","想一起看什麼夜景？","覺得我們的愛情像什麼？","最想收到什麼驚喜？","什麼時候最想抱抱我？","想一起做什麼瘋狂的事？","哪個習慣讓妳覺得窩心？","未來想跟我一起去哪？","現在的心情用一個詞形容","我愛妳用台語怎麼說"];
-  const dayKey = new Date().toISOString().slice(0,10);
-  document.getElementById("dailyQ").textContent = qs[Math.floor(Date.now()/86400000) % qs.length];
-  function paint(val){
-    const box = document.getElementById("dailyAnswers");
-    if(!box) return;
-    const names = {y:"Y", yun:"小昀"};
-    const parts = ["y","yun"].map(k => {
-      const a = val && val[k];
-      return `<div style="padding:8px 0;border-top:1px solid #f3d5e2"><b style="color:#e91e63">${names[k]}</b>　${a ? a.text : "還沒回答"}</div>`;
-    });
-    box.innerHTML = parts.join("");
+  const qs = [
+    "對方最吸引你的地方？","如果今天只能傳一句話給我，你會說什麼？","我做過最讓你心動的小事？",
+    "你覺得我生氣的時候，該怎麼哄？","我們的關係用一種食物形容？","這週最想一起做的事？",
+    "你最常想起我的哪個瞬間？","如果現在傳送到對方身邊，第一句話是？","我哪個稱呼你最喜歡？",
+    "吵架之後，你其實最需要什麼？","你心裡的完美約會是哪一種？","現在最想吃的那一口是什麼？",
+    "如果我只能改一個地方，你希望是？","你什麼時候確定喜歡我的？","我們以後的家裡一定要有什麼？",
+    "你覺得我還不了解你的哪一面？","今天最想被我怎麼對待？","我哪次沒有即時回你，你其實在想什麼？",
+    "如果只能留一件我們的回憶？","你想被我記住的一個小習慣？","第一次見面，你覺得我是什麼樣的人？",
+    "什麼時候最想被我抱一下？","你覺得我們最像的地方？","下次見面，第一件想做的事？",
+    "我說過哪句話讓你記到現在？","如果給今天的我們打分，為什麼？","你悶悶的時候，希望我做什麼？",
+    "我們最適合一起浪費的一個下午？","你最喜歡我看著你的哪一種時候？","如果明天放假，想跟我去吃什麼？",
+    "你覺得我偷偷在意你的哪件事？","哪一個季節最像我們？","你想跟我一起學會的事？",
+    "我讓你覺得被照顧到的一次？","你不想讓別人知道、只想跟我說的話？","如果可以重來一天，你想重過哪一天？",
+    "你覺得我笑起來的時候像什麼？","我們之間只有我們懂的一個笑話？","你希望我以後一直叫你什麼？",
+    "現在的心情，用一種甜點形容？","如果我晚回家，你希望我先傳什麼？","你最想跟我去的一個地方？",
+    "我哪裡讓你覺得可以靠過來？","今天有沒有一個瞬間突然想我？","你想一起完成、但還沒做的事？",
+    "如果只能選一個，抱抱還是親親？","你覺得我最不像話、但你還是喜歡的點？","我們認識之前，你以為戀愛是什麼？",
+    "現在最想聽到我說的一句話？","如果把我放進你的一天，你會把我安在哪裡？"
+  ];
+  function taipeiParts(){
+    return new Intl.DateTimeFormat("en-GB", {
+      timeZone: "Asia/Taipei", year:"numeric", month:"2-digit", day:"2-digit",
+      hour:"2-digit", minute:"2-digit", second:"2-digit", hourCycle:"h23"
+    }).formatToParts(new Date());
   }
-  window._authReady.then(function(){
-    const ref = db.ref("daily/"+dayKey);
-    ref.on("value", s => paint(s.val()||{}));
-    document.getElementById("dailySend").onclick = function(){
-      const t = document.getElementById("dailyInput").value.trim();
-      if(!t || !window.myRole) return;
-      ref.child(window.myRole).set({text:t, time:Date.now()});
-      document.getElementById("dailyInput").value = "";
-    };
-    document.getElementById("dailyInput").addEventListener("keydown", e => {
-      if(e.key === "Enter") document.getElementById("dailySend").click();
+  function part(list, type){ return Number(list.find(function(p){ return p.type === type; }).value); }
+  function dayKey(){
+    const list = taipeiParts();
+    const y = part(list, "year"), m = part(list, "month"), d = part(list, "day");
+    return y + "-" + String(m).padStart(2,"0") + "-" + String(d).padStart(2,"0");
+  }
+  function dayIndex(){
+    const list = taipeiParts();
+    return Math.floor(Date.UTC(part(list,"year"), part(list,"month")-1, part(list,"day")) / 86400000);
+  }
+  function esc(s){
+    return String(s).replace(/[&<>"']/g, function(c){ return "&#" + c.charCodeAt(0) + ";"; });
+  }
+  let audioCtx = null;
+  function arm(){
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if(!AC) return;
+    if(!audioCtx) audioCtx = new AC();
+    if(audioCtx.state === "suspended") audioCtx.resume();
+  }
+  function ding(){
+    if(!audioCtx) return;
+    const t0 = audioCtx.currentTime;
+    [880, 1320].forEach(function(freq, i){
+      const o = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      o.type = "sine";
+      o.frequency.value = freq;
+      const start = t0 + i * 0.12;
+      g.gain.setValueAtTime(0.0001, start);
+      g.gain.exponentialRampToValueAtTime(0.18, start + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, start + 0.28);
+      o.connect(g); g.connect(audioCtx.destination);
+      o.start(start); o.stop(start + 0.3);
     });
+  }
+  document.addEventListener("pointerdown", arm, { once: true });
+
+  const qEl = document.getElementById("dailyQ");
+  const box = document.getElementById("dailyAnswers");
+  const lock = document.getElementById("dailyLock");
+  const card = document.getElementById("dailyCard");
+  let currentKey = dayKey();
+  qEl.textContent = qs[dayIndex() % qs.length];
+  let ref = null;
+  let firstPaint = true;
+  let wasBoth = false;
+
+  function paint(val){
+    if(!box) return;
+    const mine = window.myRole;
+    const y = val && val.y && val.y.text;
+    const u = val && val.yun && val.yun.text;
+    const both = !!(y && u);
+    function row(k, text){
+      const names = { y: "Y", yun: "小昀" };
+      let body = "還沒回答";
+      if(text){
+        if(both || mine === k) body = esc(text);
+        else body = "寫好了，先保密";
+      }
+      return '<div class="daily-row"><b>' + names[k] + '</b><span>' + body + '</span></div>';
+    }
+    box.innerHTML = row("y", y) + row("yun", u);
+    if(lock) lock.textContent = both ? "叮。兩邊都答了。" : "還差一個人，答完才看得到對方。";
+    if(card) card.classList.toggle("revealed", both);
+    if(both && !wasBoth && !firstPaint) ding();
+    wasBoth = both;
+    firstPaint = false;
+  }
+
+  function listen(){
+    if(!window.db) return;
+    if(ref) ref.off();
+    firstPaint = true;
+    wasBoth = false;
+    currentKey = dayKey();
+    qEl.textContent = qs[dayIndex() % qs.length];
+    ref = db.ref("daily/" + currentKey);
+    ref.on("value", function(s){ paint(s.val() || {}); });
+    const send = document.getElementById("dailySend");
+    const input = document.getElementById("dailyInput");
+    send.onclick = function(){
+      arm();
+      const text = input.value.trim();
+      if(!text || !window.myRole) return;
+      ref.child(window.myRole).set({ text: text, time: Date.now() });
+      input.value = "";
+    };
+  }
+
+  window._authReady.then(listen);
+  const parts = taipeiParts();
+  const left = 86400 - (part(parts,"hour")*3600 + part(parts,"minute")*60 + part(parts,"second"));
+  setTimeout(function(){ listen(); }, left * 1000 + 800);
+
+  document.getElementById("dailyInput").addEventListener("keydown", function(e){
+    if(e.key === "Enter") document.getElementById("dailySend").click();
   });
 })();
 
@@ -1544,13 +1642,15 @@ document.addEventListener("visibilitychange", function(){
 
 /* 小昀的口味、百度相簿、Y 的分身 */
 (function(){
-  const herFoods = ["麥當勞早餐","牛肉麵","排骨酥","鮭魚","提拉米蘇","泡麵","蘋果","星巴克","漢堡","壽司","滷味","鬆餅"];
+  const herFoods = ["麥當勞早餐","麥香雞","牛肉麵","排骨酥","鮭魚","提拉米蘇","泡麵","蘋果","星巴克","漢堡","壽司","滷味","鬆餅","布丁","蛋"];
+  const usualFoods = ["麥當勞","泡麵","牛肉麵","星巴克","蘋果","漢堡","壽司","蛋","冰淇淋","早餐","甜點","滷味"];
   const cares = ["吃早餐了嗎","騎車慢一點，到家跟我說","今天想吃什麼","早安安，乖乖","先抱抱再講話"];
   const careEl = document.getElementById("herCare");
   if(careEl) careEl.textContent = cares[Math.floor(Date.now()/86400000) % cares.length];
-  const row = document.getElementById("herFoods");
-  if(row){
-    herFoods.forEach(function(name){
+  function fillFoods(id, list){
+    const row = document.getElementById(id);
+    if(!row) return;
+    list.forEach(function(name){
       const b = document.createElement("button");
       b.type = "button";
       b.className = "chip";
@@ -1563,6 +1663,17 @@ document.addEventListener("visibilitychange", function(){
       };
       row.appendChild(b);
     });
+  }
+  fillFoods("herFoods", herFoods);
+  fillFoods("likeFoods", herFoods);
+  fillFoods("usualFoods", usualFoods);
+  const foodUsual = document.getElementById("foodUsual");
+  if(foodUsual){
+    foodUsual.onclick = function(){
+      document.getElementById("foodResult").textContent = usualFoods[Math.floor(Math.random()*usualFoods.length)];
+      localStorage.setItem("foodPick","1");
+      if(typeof renderBadges === "function") renderBadges();
+    };
   }
   const foodHer = document.getElementById("foodHer");
   if(foodHer){

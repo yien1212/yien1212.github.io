@@ -16,7 +16,7 @@
 <title>我們 ❤️</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@200;300;400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/app.css?v=12">
+<link rel="stylesheet" href="css/app.css?v=13">
 </head>
 <body>
 
@@ -290,9 +290,11 @@
   </div>
 
   <!-- 每日一問 -->
-  <h3 class="stitle">今天的問題</h3>
+  <h3 class="stitle">每日戀愛默契</h3>
   <div class="card" id="dailyCard">
+    <p class="talk-note">每天凌晨 0 點換一題。兩邊都送出，才看得到對方的答案。</p>
     <div id="dailyQ" style="font-family:'Noto Serif TC',serif;font-size:1.05rem;line-height:1.7">載入中...</div>
+    <div id="dailyLock" class="talk-note"></div>
     <div id="dailyAnswers" style="margin-top:12px;font-size:.9rem;color:#666"></div>
     <div style="display:flex;gap:8px;margin-top:12px">
       <input id="dailyInput" placeholder="寫下你的回答" style="flex:1;padding:10px 12px;border-radius:12px;border:1.5px solid var(--pink-soft);font-family:inherit">
@@ -361,10 +363,16 @@
 
   <!-- 今天吃什麼 -->
   <h3 class="stitle">🍜 今天吃什麼</h3>
-  <div style="text-align:center;background:rgba(255,255,255,.65);backdrop-filter:blur(20px);border-radius:16px;padding:20px;margin:8px 0">
+  <div class="food-board">
+    <h4>小昀喜歡吃</h4>
+    <div class="chip-row" id="likeFoods"></div>
+    <p class="talk-note">不吃椒麻。</p>
+    <h4>我們平常吃</h4>
+    <div class="chip-row" id="usualFoods"></div>
     <div id="foodResult" style="font-size:1.8rem;color:var(--pink);font-weight:600;margin:10px 0;min-height:2.5rem">按一下決定</div>
     <button class="btn-pink" id="foodBtn" type="button" style="border-radius:25px;padding:10px 22px">全部餐廳</button>
     <button class="btn-pink" id="foodHer" type="button" style="border-radius:25px;padding:10px 22px;margin-left:8px">照小昀的口味</button>
+    <button class="btn-pink" id="foodUsual" type="button" style="border-radius:25px;padding:10px 22px;margin-left:8px;margin-top:8px">照平常吃的</button>
   </div>
 
   </div>
@@ -597,7 +605,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 <script src="js/guard.js?v=5"></script>
 <script src="js/config.js?v=4"></script>
-<script src="js/app.js?v=12"></script>
+<script src="js/app.js?v=13"></script>
 <script src="https://cdn.botpress.cloud/webchat/v3.5/inject.js"></script>
 <script src="https://files.bpcontent.cloud/2026/01/12/17/20260112175648-Q8N99NKQ.js" defer></script>
 
