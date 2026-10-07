@@ -25,6 +25,21 @@ function pickRole(role){
 }
 document.getElementById("roleY").onclick = () => pickRole("y");
 document.getElementById("roleYun").onclick = () => pickRole("yun");
+
+function enterApp(){
+  document.getElementById("login").classList.add("hidden");
+  const a = document.getElementById("app");
+  a.classList.remove("hidden");
+  const title = document.getElementById("heroTitle");
+  if(title) title.textContent = window.myRole === "yun" ? "你是小昀恩耶" : "我們的故事";
+  ["startTimer","startGame","renderBadges","initCarousel","initTimeline"].forEach(name => {
+    try{ if(typeof window[name] === "function") window[name](); }
+    catch(e){ if(window.Guard) Guard.push(name, e.message, ""); }
+  });
+  const bgm = document.getElementById("bgm");
+  if(bgm) bgm.play().catch(()=>{});
+}
+
 function tryLogin(){
   const msg = document.getElementById("roleMsg");
   const pw = document.getElementById("rolePw").value.trim();
