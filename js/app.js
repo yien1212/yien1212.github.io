@@ -788,7 +788,7 @@ window._authReady.then(function(uid){
 
 /* 聲音訊息：先在本機錄，再上傳。不依賴登入才綁按鈕。 */
 (function(){
-  let mediaRecorder = null, chunks = [], stream = null, recording = false, timer = null;
+  let mediaRecorder = null, chunks = [], stream = null, recording = false, timer = null, tick = null, startedAt = 0;
   const btn = document.getElementById("recBtn");
   const st = document.getElementById("recStatus");
   const preview = document.getElementById("recPreview");
@@ -843,6 +843,7 @@ window._authReady.then(function(uid){
       mediaRecorder = mime ? new MediaRecorder(stream, {mimeType: mime}) : new MediaRecorder(stream);
       mediaRecorder.ondataavailable = e => { if(e.data && e.data.size) chunks.push(e.data); };
       mediaRecorder.onstop = async () => {
+        clearInterval(tick);
         const blob = new Blob(chunks, {type: mediaRecorder.mimeType || mime || "audio/mp4"});
         stopStream();
         recording = false;
@@ -853,12 +854,18 @@ window._authReady.then(function(uid){
       };
       mediaRecorder.start();
       recording = true;
+      startedAt = Date.now();
       btn.disabled = false;
       btn.textContent = "停止並送出";
-      st.textContent = "錄音中，再按一次停止";
+      clearInterval(tick);
+      tick = setInterval(() => {
+        const sec = Math.floor((Date.now() - startedAt) / 1000);
+        st.textContent = "錄音中 " + sec + " 秒，再按一次送出";
+      }, 250);
       clearTimeout(timer);
       timer = setTimeout(() => { if(recording && mediaRecorder) mediaRecorder.stop(); }, 20000);
     }catch(e){
+      clearInterval(tick);
       stopStream();
       btn.disabled = false;
       btn.textContent = "開始錄音";
