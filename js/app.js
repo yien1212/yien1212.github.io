@@ -23,7 +23,7 @@ async function sha256(text){
 function pickRole(role){
   pendingRole = role;
   document.getElementById("pwdBox").classList.remove("hidden");
-  document.getElementById("roleMsg").textContent = ROLES[role].name + "，輸入暗語";
+  document.getElementById("roleMsg").textContent = ROLES[role].name + " 的密碼";
   document.getElementById("rolePw").value = "";
   document.getElementById("rolePw").focus();
 }
@@ -37,21 +37,13 @@ async function tryLogin(){
     const el = document.getElementById("rolePw");
     el.style.animation = "none"; el.offsetHeight;
     el.style.animation = "shake .5s";
-    msg.textContent = "暗語不對喔";
+    msg.textContent = "密碼不對喔";
     el.value = "";
     return;
   }
-  const dbKey = (document.getElementById("dbKey").value || sessionStorage.getItem("dbKey") || "").trim();
-  if(!dbKey){
-    msg.textContent = "暗語對了。再填一次資料庫鑰匙（只留在這次分頁，不寫進程式碼）";
-    document.getElementById("dbKey").classList.remove("hidden");
-    document.getElementById("dbKey").focus();
-    return;
-  }
   msg.textContent = "登入中...";
-  firebase.auth().signInWithEmailAndPassword(ROLES[pendingRole].email, dbKey)
+  firebase.auth().signInWithEmailAndPassword(ROLES[pendingRole].email, window.APP_CONFIG.dbPass)
     .then(u => {
-      sessionStorage.setItem("dbKey", dbKey);
       window.uid = u.user.uid;
       window.myRole = pendingRole;
       window.themName = pendingRole === "y" ? "小昀" : "Y";
@@ -59,13 +51,11 @@ async function tryLogin(){
       enterApp();
     })
     .catch(e => {
-      Guard.push("Auth", "資料庫登入失敗", e.code || e.message);
-      msg.textContent = "資料庫鑰匙不對，或網路中斷";
+      msg.textContent = "登入失敗：" + (e.message || "請檢查網路");
     });
 }
 document.getElementById("roleGo").onclick = tryLogin;
 document.getElementById("rolePw").addEventListener("keydown", e => { if(e.key==="Enter") tryLogin(); });
-document.getElementById("dbKey").addEventListener("keydown", e => { if(e.key==="Enter") tryLogin(); });
 
 /* 每次開網站都要重打密碼：不記住登入，進來就登出 */
 localStorage.removeItem("role");

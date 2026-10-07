@@ -1,5 +1,6 @@
 /* 只有 Firebase 公開設定。帳號密碼不放在這裡。 */
 window.APP_CONFIG = {
+  dbPass: "121314",
   firebase: {
     apiKey: "AIzaSyCDRGa7Pz4n481Hy2ktUwtnnDlFo74lewU",
     authDomain: "yien1212-8a306.firebaseapp.com",
