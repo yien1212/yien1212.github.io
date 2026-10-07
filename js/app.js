@@ -61,6 +61,11 @@ function tryLogin(){
 document.getElementById("roleGo").onclick = tryLogin;
 document.getElementById("rolePw").addEventListener("keydown", e => { if(e.key==="Enter") tryLogin(); });
 
+/* 在一起的起點：2024/12/13 */
+const start = new Date(2024, 11, 13);
+const phrases = ["今天也辛苦了，我愛妳","離下次見面又近了一天","妳笑起來最好看了","別餓肚子喔","想牽妳的手","今天也要想我喔","妳是我最重要的人"];
+let carI = 0, carT;
+
 /* 計時 */
 function startTimer(){
   function up(){
