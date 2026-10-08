@@ -16,7 +16,7 @@
 <title>我們 ❤️</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@200;300;400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/app.css?v=20">
+<link rel="stylesheet" href="css/app.css?v=21">
 </head>
 <body>
 
@@ -246,8 +246,10 @@
 
   <!-- 願望 -->
   <h3 class="stitle">我們想做的事</h3>
-  <div id="wishFilters" style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:10px"></div>
-  <div class="wish-list" id="wishList"></div>
+  <div class="card wish-card">
+    <div class="wish-tabs" id="wishFilters"></div>
+    <div class="wish-list" id="wishList"></div>
+  </div>
 
   <!-- 共同記帳 -->
   <h3 class="stitle">💰 約會記帳</h3>
@@ -286,6 +288,7 @@
       <input type="text" id="dmInput" maxlength="24" placeholder="打一句，讓它飛過去">
       <button id="dmSend" type="button">發送</button>
     </div>
+    <p id="dmStatus" class="talk-note"></p>
   </div>
 
   <!-- 送禮物 -->
@@ -301,6 +304,7 @@
   <!-- 我們的日常 -->
   <h3 class="stitle">我們的日常（隨機一段）</h3>
   <div class="chat-box" id="chatBox">
+    <div class="chip-row" id="chatFilters"></div>
     <div id="chatMeta" class="chat-meta"></div>
     <div id="chatToday"></div>
     <button class="btn-pink" id="chatNext" type="button">換一段</button>
@@ -594,7 +598,7 @@
 <script src="js/guard.js?v=6"></script>
 <script src="js/config.js?v=4"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-<script src="js/app.js?v=22"></script>
+<script src="js/app.js?v=23"></script>
 <script src="https://cdn.botpress.cloud/webchat/v3.5/inject.js"></script>
 <script src="https://files.bpcontent.cloud/2026/01/12/17/20260112175648-Q8N99NKQ.js" defer></script>
 

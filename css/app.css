@@ -326,13 +326,23 @@ body::before{
 .badge.unlocked .label{color:var(--pink-deep); font-weight:500}
 
 /* 願望 */
-.wish-list{max-width:500px; margin:0 auto; text-align:left}
-.wish-item{
-  background:rgba(255,255,255,.6); padding:12px 16px;
-  border-radius:14px; margin:8px 0; display:flex; align-items:center; gap:10px;
+.wish-list{max-width:520px; margin:0 auto; text-align:left}
+.wish-card{max-width:520px; margin:0 auto; padding:16px 14px 10px}
+.wish-tabs{display:flex; gap:8px; overflow-x:auto; padding:2px 2px 12px; -webkit-overflow-scrolling:touch}
+.wish-tabs button{
+  flex:0 0 auto; min-height:40px; padding:8px 14px; border-radius:999px;
+  border:1px solid #ffb3c8; background:#fff; color:#e91e63;
+  font-family:inherit; font-size:.88rem; cursor:pointer; touch-action:manipulation;
 }
-.wish-item.done{opacity:.5; text-decoration:line-through}
-.wish-item input{width:18px; height:18px; accent-color:var(--pink)}
+.wish-tabs button.on{background:#e91e63; color:#fff; border-color:#e91e63}
+.wish-item{
+  background:#fff; padding:12px 14px; min-height:48px;
+  border-radius:14px; margin:8px 0; display:flex; align-items:center; gap:12px;
+  border:1px solid #ffd6e7; cursor:pointer; touch-action:manipulation;
+}
+.wish-item.done{opacity:.55}
+.wish-item.done span{text-decoration:line-through}
+.wish-item input{width:22px; height:22px; accent-color:var(--pink); pointer-events:none}
 
 /* 每日 */
 #dailyQ{
@@ -720,12 +730,18 @@ a.btn-pink{display:inline-flex; align-items:center; justify-content:center; text
 .daily-row span{ flex:1; }
 #dailyCard.revealed{ animation:fadeIn .45s ease; }
 .sync-top{display:flex;justify-content:space-between;gap:8px;font-size:.82rem;color:#a24;margin:4px 0 8px}
-.sync-choices{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:12px}
-.sync-choices button{
-  min-height:44px; padding:10px 16px; border-radius:999px;
-  border:1.5px solid #ffd0e0; background:#fff; color:#a24;
-  font-family:inherit; font-size:.95rem;
+#dailyCard{
+  backdrop-filter:none; -webkit-backdrop-filter:none;
+  background:#fff; position:relative; z-index:6;
 }
+.sync-choices{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:12px; position:relative; z-index:8}
+.sync-choices button{
+  min-height:48px; padding:12px 16px; border-radius:999px;
+  border:1.5px solid #ffd0e0; background:#fff; color:#a24;
+  font-family:inherit; font-size:1rem; cursor:pointer;
+  touch-action:manipulation; position:relative; z-index:8;
+}
+.sync-choices button:active{transform:scale(.97)}
 .sync-choices button.mine{background:#e91e63;color:#fff;border-color:#e91e63}
 .sync-choices button.theirs{box-shadow:inset 0 0 0 2px #e91e63}
 .sync-choices button.match{background:#e91e63;color:#fff;border-color:#e91e63}
