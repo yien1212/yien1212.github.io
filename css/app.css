@@ -250,7 +250,7 @@ body::before{
 /* 盲盒 */
 .mystery{max-width:300px; margin:20px auto; perspective:1200px; cursor:pointer}
 .mystery-inner{
-  position:relative; width:100%; height:220px;
+  position:relative; width:100%; height:300px;
   transition:transform .8s cubic-bezier(.2,.8,.2,1);
   transform-style:preserve-3d;
 }
@@ -258,8 +258,12 @@ body::before{
 .face{position:absolute; inset:0; backface-visibility:hidden; border-radius:22px; display:flex; flex-direction:column; align-items:center; justify-content:center}
 .face-front{background:linear-gradient(135deg,var(--pink),var(--pink-deep)); color:#fff; font-family:"Noto Serif TC",serif; font-size:1.1rem; letter-spacing:2px; box-shadow:0 15px 40px rgba(233,30,99,.3)}
 .face-back{background:#fff; border:2px solid var(--pink); transform:rotateY(180deg); overflow:hidden}
-.face-back img{width:100%; height:220px; object-fit:cover}
-.face-back .q{padding:10px; font-size:.82rem; color:#d1478a; line-height:1.5}
+.face-back img{width:100%; height:210px; flex:0 0 210px; object-fit:cover}
+.face-back .q{
+  flex:1; width:100%; margin:0; padding:8px 12px 10px; box-sizing:border-box;
+  font-size:.78rem; line-height:1.45; color:#a24; text-align:center;
+  overflow:auto; background:#fff;
+}
 
 /* 按鈕 */
 .btn-pink{
@@ -484,13 +488,16 @@ body::before{
 }
 #backTop.show{opacity:1; pointer-events:auto}
 
-/* 章節編號 */
-.stitle{position:relative; padding-left:30px}
+/* 章節編號：跟在標題旁邊，不要蓋住字 */
+.stitle{position:relative; padding-left:0}
 .stitle::before{
   counter-increment: section;
   content:"0" counter(section);
-  position:absolute; left:0; top:50%;
-  transform:translateY(-50%);
+  position:static;
+  transform:none;
+  display:inline-block;
+  margin:0 8px 0 0;
+  vertical-align:middle;
   font-size:.75rem; color:var(--pink);
   letter-spacing:2px; font-weight:400;
 }
@@ -683,9 +690,10 @@ button, .chip, .mood, .tab-btn, .cbtn{ touch-action:manipulation; }
 #errPanel .err-head{ display:flex; justify-content:space-between; align-items:center; color:#fff; margin-bottom:6px; }
 #errPanel button{ border:none; background:transparent; color:#fff; font-family:inherit; cursor:pointer; }
 .bpFabWrapper{
-  bottom: calc(var(--dock) + 10px) !important;
-  right: max(12px, env(safe-area-inset-right)) !important;
-  left: auto !important;
+  top: 46% !important;
+  bottom: auto !important;
+  left: max(6px, env(safe-area-inset-left)) !important;
+  right: auto !important;
   z-index: 1100 !important;
   pointer-events: auto !important;
 }
@@ -708,9 +716,11 @@ button, .chip, .mood, .tab-btn, .cbtn{ touch-action:manipulation; }
 }
 @media (min-width: 768px){
   .bpWebchat{
-    bottom: calc(var(--dock) + 72px) !important;
-    right: max(16px, env(safe-area-inset-right)) !important;
-    max-height: calc(100vh - var(--dock) - 110px) !important;
+    top: 12% !important;
+    bottom: auto !important;
+    left: max(16px, env(safe-area-inset-left)) !important;
+    right: auto !important;
+    max-height: calc(100vh - 140px) !important;
   }
 }
 #backTop{

@@ -376,11 +376,12 @@ document.getElementById("loveBtn").onclick = () => {
 /* 盲盒 */
 document.getElementById("mystery").onclick = function(){
   const pool = wallFigs();
+  if(!pool.length) return;
   const f = pool[Math.floor(Math.random()*pool.length)];
-  document.getElementById("mystImg").src = f.querySelector("img").src;
-  document.getElementById("mystQ").textContent = f.dataset.cap + " — " + lines[Math.floor(Math.random()*lines.length)];
+  const img = f.querySelector("img");
+  document.getElementById("mystImg").src = (f.dataset.full || (img && img.src) || "");
+  document.getElementById("mystQ").textContent = (f.dataset.cap || "我們的") + "。再點一次換一張";
   this.classList.add("flipped");
-  setTimeout(() => this.classList.remove("flipped"), 4000);
 };
 
 /* 刮刮樂 */
@@ -430,34 +431,71 @@ function initScratch(){
 }
 window.addEventListener("load", () => setTimeout(initScratch, 300));
 
-/* 翻牌 */
+/* 翻牌：每次從全部照片裡抽 8 組 */
 (function(){
-  const ps = ["mem/t/kiss.jpg","mem/t/close.jpg","mem/t/elevator.jpg","mem/t/bridge.jpg","mem/t/heart.jpg","mem/t/shoes.jpg"];
-  const deck = [...ps, ...ps].sort(() => Math.random()-0.5);
+  const FALLBACK = ["mem/t/kiss.jpg","mem/t/close.jpg","mem/t/elevator.jpg","mem/t/bridge.jpg","mem/t/heart.jpg","mem/t/shoes.jpg","mem/t/meal.jpg","mem/t/lift.jpg","mem/t/hands.jpg","mem/t/ticket.jpg","mem/t/meerkat.jpg","mem/t/sand.jpg"];
   const g = document.getElementById("memGrid");
-  let first = null, lock = false, mat = 0;
-  deck.forEach(src => {
-    const card = document.createElement("div");
-    card.className = "mem-card";
-    card.innerHTML = `<div class="mem-inner"><div class="mem-front">?</div><div class="mem-back"><img loading="lazy" src="${src}"></div></div>`;
-    card.onclick = () => {
-      if(lock || card.classList.contains("flipped") || card.classList.contains("matched")) return;
-      card.classList.add("flipped");
-      if(!first){ first = card; return; }
-      lock = true;
-      const ok = first.querySelector("img").src === card.querySelector("img").src;
-      setTimeout(() => {
-        if(ok){
-          first.classList.add("matched"); card.classList.add("matched");
-          mat++;
-          if(mat === ps.length) document.getElementById("memStat").textContent = "全部配對成功！妳好聰明 ❤️";
-        } else {
-          first.classList.remove("flipped"); card.classList.remove("flipped");
-        }
-        first = null; lock = false;
-      }, 600);
-    };
-    g.appendChild(card);
+  const stat = document.getElementById("memStat");
+  let first = null, lock = false, mat = 0, pairs = 0;
+  function shuffle(a){
+    const b = a.slice();
+    for(let i = b.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      const t = b[i]; b[i] = b[j]; b[j] = t;
+    }
+    return b;
+  }
+  function build(list){
+    const pool = (list || []).filter(Boolean);
+    const n = Math.min(8, pool.length);
+    const picks = shuffle(pool).slice(0, n);
+    const deck = shuffle(picks.concat(picks));
+    g.innerHTML = "";
+    first = null; lock = false; mat = 0; pairs = n;
+    if(stat) stat.textContent = "這次 " + n + " 組。配對相同的照片";
+    deck.forEach(function(src){
+      const card = document.createElement("div");
+      card.className = "mem-card";
+      card.innerHTML = '<div class="mem-inner"><div class="mem-front">?</div><div class="mem-back"><img loading="lazy" alt="" src="'+src+'"></div></div>';
+      card.onclick = function(){
+        if(lock || card.classList.contains("flipped") || card.classList.contains("matched")) return;
+        card.classList.add("flipped");
+        if(!first){ first = card; return; }
+        lock = true;
+        const ok = first.querySelector("img").src === card.querySelector("img").src;
+        setTimeout(function(){
+          if(ok){
+            first.classList.add("matched"); card.classList.add("matched");
+            mat++;
+            if(mat === pairs){
+              if(stat) stat.textContent = "全部配對成功";
+              try{ localStorage.setItem("memDone","1"); }catch(e){}
+              if(typeof renderBadges === "function") renderBadges();
+            }
+          } else {
+            first.classList.remove("flipped"); card.classList.remove("flipped");
+          }
+          first = null; lock = false;
+        }, 600);
+      };
+      g.appendChild(card);
+    });
+  }
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = "btn-pink";
+  btn.textContent = "換一組";
+  btn.style.display = "block";
+  btn.style.margin = "14px auto 0";
+  btn.onclick = function(){ build(window._memPool || FALLBACK); };
+  if(stat) stat.insertAdjacentElement("afterend", btn);
+  fetch("mem/photos.json").then(function(r){ return r.json(); }).then(function(data){
+    const list = (data || []).map(function(p){ return p.t; }).filter(Boolean);
+    window._memPool = list.length ? list : FALLBACK;
+    build(window._memPool);
+  }).catch(function(){
+    window._memPool = FALLBACK;
+    build(FALLBACK);
   });
 })();
 
@@ -2714,7 +2752,7 @@ document.addEventListener("visibilitychange", function(){
         window.botpress.open();
         if(status) status.textContent = "";
       } else if(status){
-        status.textContent = "背後靈還在載入，等一下或看右下角藍色按鈕";
+        status.textContent = "背後靈還在載入，等一下或看左邊藍色按鈕";
       }
     };
   }
