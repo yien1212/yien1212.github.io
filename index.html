@@ -16,7 +16,7 @@
 <title>我們 ❤️</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@200;300;400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/app.css?v=18">
+<link rel="stylesheet" href="css/app.css?v=19">
 </head>
 <body>
 
@@ -240,17 +240,7 @@
   <div class="mem-grid" id="memGrid"></div>
   <div id="memStat">翻牌配對相同的照片</div>
 
-  <!-- 愛情指數 -->
-  <h3 class="stitle">愛情指數</h3>
-  <div class="card" id="meterBox">
-    <div id="meterNum">--%</div>
-    <div id="meterBar"><div id="meterFill"></div></div>
-    <div id="meterMsg">按按鈕測我們的契合度</div>
-    <br>
-    <button class="btn-pink" id="meterBtn">測一下</button>
-  </div>
-
-  <!-- 成就 -->
+  <!-- 翻牌 -->
   <h3 class="stitle">解鎖成就</h3>
   <div class="badges" id="badges"></div>
 
@@ -274,31 +264,28 @@
   <!-- 每日一問 -->
   <h3 class="stitle">戀愛默契</h3>
   <div class="card" id="dailyCard">
-    <p class="talk-note">像 Sumone 一樣，一題一題答。你先答，對方的答案會先藏起來。兩邊都送出才打開。選項如果一樣，算一次默契。</p>
-    <div class="sync-top">
-      <span id="syncPos">1</span>
-      <span id="syncScore"></span>
-    </div>
-    <div id="syncKind" class="talk-note"></div>
-    <div id="dailyQ" style="font-family:'Noto Serif TC',serif;font-size:1.08rem;line-height:1.7">載入中...</div>
+    <p class="talk-note" id="dailyDay">今天</p>
+    <div id="qPick" style="font-family:'Noto Serif TC',serif;font-size:1.05rem;line-height:1.7"></div>
     <div id="syncChoices" class="sync-choices"></div>
-    <div id="syncText" style="gap:8px;margin-top:12px">
+    <div id="pickLock" class="talk-note"></div>
+    <div id="pickAnswers"></div>
+    <div id="qText" style="font-family:'Noto Serif TC',serif;font-size:1.05rem;line-height:1.7;margin-top:18px"></div>
+    <div id="syncText" class="show" style="gap:8px;margin-top:12px">
       <input id="dailyInput" placeholder="寫下你的回答" style="flex:1;padding:10px 12px;border-radius:12px;border:1.5px solid var(--pink-soft);font-family:inherit">
       <button class="btn-pink" id="dailySend" type="button" style="padding:10px 16px">送出</button>
     </div>
-    <div id="dailyLock" class="talk-note"></div>
-    <div id="dailyAnswers" style="margin-top:8px;font-size:.9rem;color:#666"></div>
-    <div class="sync-nav">
-      <button type="button" id="syncPrev">上一題</button>
-      <button type="button" id="syncNext">下一題</button>
-    </div>
+    <div id="textLock" class="talk-note"></div>
+    <div id="textAnswers"></div>
   </div>
 
   <!-- 彈幕發送 -->
-  <h3 class="stitle">發彈幕騷擾她</h3>
+  <h3 class="stitle">發彈幕</h3>
   <div class="dm-send">
-    <input type="text" id="dmInput" placeholder="想對她說的話...">
-    <button id="dmSend">發送</button>
+    <div class="chip-row" id="dmPresets"></div>
+    <div class="dm-row">
+      <input type="text" id="dmInput" maxlength="24" placeholder="打一句，讓它飛過去">
+      <button id="dmSend" type="button">發送</button>
+    </div>
   </div>
 
   <!-- 送禮物 -->
@@ -357,6 +344,14 @@
   </div>
 
   <!-- 轉盤 -->
+  <h3 class="stitle">做過就留著</h3>
+  <div class="card" id="ideaCard">
+    <h4>吃</h4><div class="chip-row" id="ideaEat"></div>
+    <h4>玩</h4><div class="chip-row" id="ideaPlay"></div>
+    <h4>日常</h4><div class="chip-row" id="ideaDay"></div>
+    <h4>出國</h4><div class="chip-row" id="ideaTrip"></div>
+    <p id="ideaNote" class="talk-note"></p>
+  </div>
   <h3 class="stitle">轉個任務</h3>
   <div class="wheel-area">
     <div class="wheel-wrap">
@@ -371,15 +366,9 @@
   <!-- 今天吃什麼 -->
   <h3 class="stitle">🍜 今天吃什麼</h3>
   <div class="food-board">
-    <h4>小昀喜歡吃</h4>
-    <div class="chip-row" id="likeFoods"></div>
-    <p class="talk-note">不吃椒麻。</p>
-    <h4>我們平常吃</h4>
-    <div class="chip-row" id="usualFoods"></div>
-    <div id="foodResult" style="font-size:1.8rem;color:var(--pink);font-weight:600;margin:10px 0;min-height:2.5rem">按一下決定</div>
-    <button class="btn-pink" id="foodBtn" type="button" style="border-radius:25px;padding:10px 22px">全部餐廳</button>
-    <button class="btn-pink" id="foodHer" type="button" style="border-radius:25px;padding:10px 22px;margin-left:8px">照小昀的口味</button>
-    <button class="btn-pink" id="foodUsual" type="button" style="border-radius:25px;padding:10px 22px;margin-left:8px;margin-top:8px">照平常吃的</button>
+    <div id="foodResult">按一下抽</div>
+    <button class="btn-pink" id="foodBtn" type="button">隨機抽</button>
+    <a class="btn-pink" id="foodMap" href="https://www.google.com/maps/search/?api=1&query=%E9%A4%90%E5%BB%B3" target="_blank" rel="noopener">附近的店</a>
   </div>
 
   </div>
@@ -437,15 +426,6 @@
   <!-- 在線狀態 -->
   <h3 class="stitle">🟢 在線狀態</h3>
   <div style="text-align:center;font-family:'Noto Serif TC',serif;color:var(--pink-deep)" id="onlineStatus">載入中...</div>
-
-<!-- 下次見面倒數 -->
-  <h3 class="stitle">⏰ 下次見面</h3>
-  <div style="text-align:center;font-family:'Noto Serif TC',serif;color:var(--pink-deep)">
-    <div id="countdown" style="font-size:1.5rem">設定日期</div>
-    <input type="date" id="meetDate" style="margin-top:10px;padding:8px;border-radius:12px;border:1.5px solid var(--pink-soft)">
-    <button class="btn-pink" id="meetBtn" style="margin-top:5px">設定</button>
-    <button id="meetDel" style="margin-top:5px;border:none;background:none;cursor:pointer;font-size:.8rem;color:#aaa;text-decoration:underline">清除下次見面</button>
-  </div>
 
   <!-- 誰先睡 -->
   <h3 class="stitle">🌙 誰先睡</h3>
@@ -510,12 +490,12 @@
   <h3 class="stitle">🎨 即時塗鴉</h3>
   <div style="text-align:center">
     <div style="font-size:.85rem;color:var(--pink-deep);margin-bottom:6px">✏️ 我的畫板</div>
-    <canvas id="myDraw" width="350" height="250" style="border-radius:16px;background:#fff;border:2px solid var(--pink-soft);touch-action:none"></canvas>
+    <canvas id="myDraw" width="350" height="250"></canvas>
     <div style="margin-top:8px">
       <button class="btn-pink" id="clearMyDraw">清空我的</button>
     </div>
     <div style="font-size:.85rem;color:var(--pink-deep);margin:14px 0 6px">💗 <span id="herDrawLabel">她的畫板</span>（即時看她畫）</div>
-    <canvas id="herDraw" width="350" height="250" style="border-radius:16px;background:#fff;border:2px solid var(--pink-soft)"></canvas>
+    <canvas id="herDraw" width="350" height="250"></canvas>
   </div>
 
   <!-- 一起按愛心 -->
@@ -613,7 +593,7 @@
 <script src="js/guard.js?v=6"></script>
 <script src="js/config.js?v=4"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-<script src="js/app.js?v=19"></script>
+<script src="js/app.js?v=20"></script>
 <script src="https://cdn.botpress.cloud/webchat/v3.5/inject.js"></script>
 <script src="https://files.bpcontent.cloud/2026/01/12/17/20260112175648-Q8N99NKQ.js" defer></script>
 

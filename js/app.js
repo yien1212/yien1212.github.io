@@ -247,7 +247,7 @@ function initScratch(){
     const t = e.touches[0];
     sc((t.clientX-r.left)*c.width/r.width, (t.clientY-r.top)*c.height/r.height);
   }, {passive:false});
-  const msgs = ["今天也很喜歡妳","抱抱","想牽手","吃飽了沒","妳最好看","愛妳","不要生氣","快睡覺","想妳了","可愛","么么","心動","寶貝","滾進來睡","不要走","我在","餓不餓","冷不冷","想見妳","妳好漂亮","抱緊一點","不要不理我","晚安","早安","今天也要愛妳","別熬夜","乖乖吃飯","我只想陪妳","妳是我的","愛妳愛妳","喝水了沒","今天辛苦妳了","好想蹭妳","手給我","別亂花錢","外套穿了沒","到家跟我說","想聞妳頭髮","妳在干嘛","想捏妳臉","別刷手機了睡覺","今晚夢裡見","愛妳到月亮","不要減肥","妳瘦了嗎","想從背後抱妳","今天也超愛","隨便啦我養妳","不要跟別人太好","我這輩子認真的","餓了說一聲","委屈就跟我說","妳講什麼都好聽","想帶妳去海邊","週末陪我","別哭喔","看到好吃的都想到妳","妳打呼我也愛","早安寶貝","晚安小愛人","今天的風很好想妳","手機快沒電也要想妳","妳說好就好","我都聽妳的","不許跟我說再見","想把妳藏起來","妳開心我就開心","有妳真好","今天想抱妳很久","妳是我的小太陽","不要一個人扛","我永遠站妳這邊","愛妳不是三分鐘熱度","想吃妳做的飯","想幫妳吹頭髮","冬天一起躲被窩","夏天一起吃冰","未來每天都要有妳","妳講的笑話最好笑","妳生氣也可愛","想牽妳去散步","睡前要鬧一下","醒來第一個想妳","別把我吃太快","我是妳的專屬靠墊","想跟妳窩一整天","不管怎樣我都在","喜歡妳的壞習慣","愛妳的全部"];
+  const msgs = ["今天也很喜歡妳","抱抱","想牽手","吃飽了沒","妳最好看","愛妳","不要生氣","快睡覺","想妳了","可愛","么么","心動","寶貝","滾進來睡","不要走","我在","餓不餓","冷不冷","想見妳","妳好漂亮","抱緊一點","不要不理我","晚安","早安","今天也要愛妳","別熬夜","乖乖吃飯","我只想陪妳","妳是我的","愛妳愛妳","喝水了沒","今天辛苦妳了","好想蹭妳","手給我","別亂花錢","外套穿了沒","到家跟我說","想聞妳頭髮","妳在干嘛","想捏妳臉","別刷手機了睡覺","今晚夢裡見","愛妳到月亮","不要減肥","妳瘦了嗎","想從背後抱妳","今天也超愛","隨便啦我養妳","不要跟別人太好","我這輩子認真的","餓了說一聲","委屈就跟我說","妳講什麼都好聽","想帶妳去海邊","週末陪我","別哭喔","看到好吃的都想到妳","妳打呼我也愛","早安寶貝","晚安小愛人","今天的風很好想妳","手機快沒電也要想妳","妳說好就好","我都聽妳的","不許跟我說再見","想把妳藏起來","妳開心我就開心","有妳真好","今天想抱妳很久","妳是我的小太陽","不要一個人扛","我永遠站妳這邊","愛妳不是三分鐘熱度","想吃妳做的飯","想幫妳吹頭髮","冬天一起躲被窩","夏天一起吃冰","未來每天都要有妳","妳講的笑話最好笑","妳生氣也可愛","想牽妳去散步","睡前要鬧一下","醒來第一個想妳","別把我吃太快","我是妳的專屬靠墊","想跟妳窩一整天","不管怎樣我都在","喜歡妳的壞習慣","愛妳的全部","到家說一聲","吃早餐了嗎","騎車慢一點","不吃椒麻我記得","麥當勞早餐","想被叫乖乖","抱抱再講話","星巴克見","牛肉麵我請","提拉米蘇留一塊","蘋果洗好了","滷味不要太辣","鬆餅加冰淇淋","布丁給你","壽司你先夾","蛋你要幾顆","泡麵我煮","漢堡分你一半","鮭魚今天烤","排骨酥好喝","乖乖過來","小寶寶","老婆看這裡","寶貝吃飯","北鼻慢一點","我在樓下","想你了快回","今晚早點睡","外套穿上","雨天不要淋","考試加油","下課打給我","照片傳一張","語音我聽","晚安先說","早安安"];
   document.getElementById("scratchMsg").textContent = msgs[Math.floor(Math.random()*msgs.length)];
 }
 window.addEventListener("load", () => setTimeout(initScratch, 300));
@@ -282,16 +282,6 @@ window.addEventListener("load", () => setTimeout(initScratch, 300));
     g.appendChild(card);
   });
 })();
-
-/* 愛情指數 */
-document.getElementById("meterBtn").onclick = () => {
-  const n = 95 + Math.floor(Math.random()*6);
-  document.getElementById("meterNum").textContent = n + "%";
-  document.getElementById("meterFill").style.width = n + "%";
-  document.getElementById("meterMsg").textContent = n >= 98 ? "滿分！妳們註定在一起 ❤️" : "很高！繼續下去就滿分了";
-  localStorage.setItem("meterDone","1");
-  renderBadges();
-};
 
 /* 成就 */
 function renderBadges(){
@@ -429,197 +419,389 @@ window._authReady.then(function(uid){
   });
 });
 
-/* 戀愛默契：Sumone 式題庫，兩邊都答完才揭曉 */
+/* 戀愛默契：每天兩題，一題選擇、一題問答。題庫 300。 */
 (function(){
-  const bank = [
-    {id:"p1", kind:"pick", q:"週末比較想？", options:["躺著","出門逛"]},
-    {id:"p2", kind:"pick", q:"現在最想吃？", options:["麥當勞","牛肉麵","壽司","甜點"]},
-    {id:"p3", kind:"pick", q:"生氣的時候想要？", options:["抱抱","先安靜一下"]},
-    {id:"p4", kind:"pick", q:"訊息比較像我們？", options:["一直聊","想到再傳"]},
-    {id:"p5", kind:"pick", q:"最喜歡被叫？", options:["寶寶","乖乖","老婆","寶貝"]},
-    {id:"p6", kind:"pick", q:"約會比較想？", options:["吃飯","騎車","待在家"]},
-    {id:"p7", kind:"pick", q:"今天的早餐？", options:["要吃","可以不吃"]},
-    {id:"p8", kind:"pick", q:"吵架之後先做？", options:["傳訊息","打過去","等對方先開口"]},
-    {id:"p9", kind:"pick", q:"下雨天？", options:["一起淋一下","等雨停"]},
-    {id:"p10", kind:"pick", q:"比較想收到？", options:["一句想你","一杯飲料","一個抱抱"]},
-    {id:"p11", kind:"pick", q:"晚上比較想？", options:["打電話","傳訊息","見面"]},
-    {id:"p12", kind:"pick", q:"旅行比較想去？", options:["海邊","山上","城市","哪裡都行"]},
-    {id:"p13", kind:"pick", q:"照片比較想拍？", options:["拍你","拍我","拍我們"]},
-    {id:"p14", kind:"pick", q:"吃宵夜？", options:["可以","今天不要"]},
-    {id:"p15", kind:"pick", q:"我晚回的時候你會？", options:["再傳一次","等我","有點生氣"]},
-    {id:"p16", kind:"pick", q:"完美的一天結尾？", options:["說晚安","抱抱","一起睡"]},
-    {id:"w1", kind:"who", q:"誰比較愛吃醋？", options:["Y","小昀"]},
-    {id:"w2", kind:"who", q:"誰比較黏？", options:["Y","小昀"]},
-    {id:"w3", kind:"who", q:"誰比較會先說對不起？", options:["Y","小昀"]},
-    {id:"w4", kind:"who", q:"誰比較會晚回訊息？", options:["Y","小昀"]},
-    {id:"w5", kind:"who", q:"誰比較會先說想你？", options:["Y","小昀"]},
-    {id:"w6", kind:"who", q:"誰比較容易生氣？", options:["Y","小昀"]},
-    {id:"w7", kind:"who", q:"誰比較會買吃的給對方？", options:["Y","小昀"]},
-    {id:"w8", kind:"who", q:"誰騎車比較需要被提醒慢一點？", options:["Y","小昀"]},
-    {id:"w9", kind:"who", q:"誰比較會先道歉之後又講一句？", options:["Y","小昀"]},
-    {id:"w10", kind:"who", q:"誰比較想每天聽到愛你？", options:["Y","小昀"]},
-    {id:"w11", kind:"who", q:"誰比較會記得對方吃了沒？", options:["Y","小昀"]},
-    {id:"w12", kind:"who", q:"誰比較會把情緒藏起來？", options:["Y","小昀"]},
-    {id:"t1", kind:"text", q:"對方最吸引你的地方？"},
-    {id:"t2", kind:"text", q:"如果今天只能傳一句話，你會說什麼？"},
-    {id:"t3", kind:"text", q:"我做過最讓你心動的小事？"},
-    {id:"t4", kind:"text", q:"你覺得我生氣的時候，該怎麼哄？"},
-    {id:"t5", kind:"text", q:"我們的關係用一種食物形容？"},
-    {id:"t6", kind:"text", q:"這週最想一起做的事？"},
-    {id:"t7", kind:"text", q:"你最常想起我的哪個瞬間？"},
-    {id:"t8", kind:"text", q:"吵架之後，你其實最需要什麼？"},
-    {id:"t9", kind:"text", q:"你什麼時候確定喜歡我的？"},
-    {id:"t10", kind:"text", q:"我們以後的家裡一定要有什麼？"},
-    {id:"t11", kind:"text", q:"你覺得我還不了解你的哪一面？"},
-    {id:"t12", kind:"text", q:"如果只能留一件我們的回憶？"},
-    {id:"t13", kind:"text", q:"下次見面，第一件想做的事？"},
-    {id:"t14", kind:"text", q:"我說過哪句話讓你記到現在？"},
-    {id:"t15", kind:"text", q:"你悶悶的時候，希望我做什麼？"},
-    {id:"t16", kind:"text", q:"如果明天放假，想跟我去吃什麼？"},
-    {id:"t17", kind:"text", q:"現在最想聽到我說的一句話？"},
-    {id:"t18", kind:"text", q:"你想一起完成、但還沒做的事？"},
-    {id:"t19", kind:"text", q:"第一次見面，你覺得我是什麼樣的人？"},
-    {id:"t20", kind:"text", q:"你希望我以後一直叫你什麼？"}
+  const picks = [
+["海邊的島？", ["玩水", "發呆", "吃"]],
+["粥適合？", ["早上", "不舒服的時候", "都可以"]],
+["你先睡我？", ["我會說晚安", "你先去", "抱一下再睡"]],
+["椒麻？", ["不要", "一點點也不要", "你記得就好"]],
+["今天的語氣？", ["溫柔", "鬧一下", "正常就好"]],
+["想出門的話？", ["你來接語氣", "約地方", "看天氣"]],
+["吵架後先？", ["道歉", "抱抱", "等一下再講"]],
+["漢堡？", ["分你一口", "各吃各的", "你吃肉我吃邊"]],
+["不想聽的？", ["全名", "太生疏", "隨便你"]],
+["別人找你？", ["你知道就好", "跟我講", "看情況"]],
+["我們的節奏？", ["黏一點", "各自忙也會找", "你帶我就好"]],
+["小籠包？", ["你先吃", "一起", "湯汁小心"]],
+["下雨還出門？", ["不去", "去你那邊", "看你"]],
+["清邁？", ["慢慢走", "吃", "下午休息"]],
+["晚安想收到？", ["晚安寶寶", "今天辛苦了", "明天見"]],
+["北海道？", ["吃", "看風景", "買伴手禮"]],
+["旅途中迷路？", ["你看手機", "我看", "一起猜"]],
+["拉麵湯喝嗎？", ["喝", "不喝", "分你一半"]],
+["布丁？", ["給你", "我先", "一起挖"]],
+["若今天只能做一件？", ["好好吃飯", "傳一句想你", "早點睡"]],
+["看海？", ["想", "有風也去", "你陪我就好"]],
+["燒烤想去？", ["這週", "下次", "看你有沒有空"]],
+["你放假我？", ["約吃飯", "讓你睡", "一起浪費"]],
+["星巴克的話想？", ["坐著聊天", "外帶走", "你請"]],
+["今天想靠近一點？", ["想", "還好", "晚上再說"]],
+["泰國的話比較想？", ["吃", "海邊", "睡到自然醒"]],
+["壽司誰先夾？", ["你先", "我先", "轉盤決定"]],
+["有夜市的城市？", ["晚上吃", "白天睡", "你選攤"]],
+["辣度？", ["小辣", "不辣", "你問我"]],
+["累的時候？", ["抱抱", "少說話", "早點回家"]],
+["最後想聽？", ["想你", "晚安", "你在就好"]],
+["夜市比較想吃？", ["滷味", "小吃", "甜的"]],
+["這週想完成的小事？", ["吃一頓", "散個步", "早點睡一天"]],
+["開心的時候第一個？", ["告訴你", "傳照片", "叫你名字"]],
+["忙完要不要找我？", ["要", "你先忙", "看時間"]],
+["傘帶了嗎這種提醒？", ["要", "我會煩", "你記得就好"]],
+["牛肉麵大小？", ["小碗", "大碗", "你吃完我再看"]],
+["今天的默契題你？", ["認真答", "隨便答", "看心情"]],
+["早餐通常想？", ["一起吃", "自己先吃", "你叫我吃"]],
+["甜度？", ["正常", "少甜", "你喝過再說"]],
+["訊息已讀後？", ["馬上回", "忙完回", "回一個表情"]],
+["禮物比較想？", ["吃的", "用的", "你人來就好"]],
+["到家要報備？", ["要", "重要的時候要", "你也要"]],
+["日本的話第一件？", ["吃", "逛", "拍一張"]],
+["炸雞配？", ["你", "汽水", "就這樣"]],
+["甜點放最後？", ["要", "先吃", "看心情"]],
+["今天的餐誰付？", ["我", "你", "輪流"]],
+["我先睡你？", ["跟我說晚安", "你再忙", "留一句話"]],
+["我鬧你的時候？", ["順著我", "回我", "抱一下"]],
+["若題目很難？", ["仍要答", "跳過不行", "寫短一點"]],
+["最喜歡被叫？", ["寶寶", "乖乖", "老婆", "寶貝"]],
+["韓國的話第一件？", ["吃", "逛", "買東西"]],
+["我無理取鬧時？", ["先哄", "講道理", "帶我去吃"]],
+["鬆餅想加？", ["冰淇淋", "水果", "原味"]],
+["京都？", ["走路", "吃", "早一點睡"]],
+["我騎車你？", ["叫我慢", "等我到家", "傳一個愛心"]],
+["睡前十分鐘想？", ["講電話", "傳訊息", "安靜陪著"]],
+["蘋果？", ["你洗好給我", "我自己洗", "現在就吃"]],
+["吃醋的時候要我？", ["解釋", "抱一下", "嚴肅一點"]],
+["語音還是文字？", ["語音", "文字", "看當時"]],
+["想照顧你的一天？", ["問你吃了沒", "聽你說話", "什麼都不問"]],
+["想撒嬌時叫你？", ["寶寶", "老公", "名字"]],
+["小錢記下來？", ["記", "不用", "大筆再記"]],
+["委屈的時候？", ["跟你說", "先自己待著", "要你問"]],
+["週末晚上？", ["看電影", "追劇", "早點睡"]],
+["晚餐誰決定？", ["你", "我", "輪流"]],
+["便當今天？", ["雞腿", "排骨", "你挑"]],
+["突然想見？", ["就說", "約時間", "傳一張照片"]],
+["到家第一句想聽？", ["我到家了", "想你", "吃了嗎"]],
+["我吃醋的時候？", ["哄我", "笑我", "帶我去吃"]],
+["答完想？", ["看你的", "等晚上講", "就這樣"]],
+["太晚吃宵夜？", ["可以", "少一點", "你決定"]],
+["紀念品？", ["吃的", "小東西", "照片就好"]],
+["法國的話比較想？", ["走路", "吃", "坐著看你"]],
+["水族館？", ["想", "看你", "排進想做的事"]],
+["一起走路要？", ["牽手", "並排", "你慢一點等我"]],
+["下一次出門？", ["吃飯", "短途", "你定"]],
+["下雪的地方？", ["堆一下", "拍照", "喝熱的"]],
+["無聊的時候？", ["找你", "自己滑", "一起滑"]],
+["水餃幾顆？", ["你決定", "我少一點", "一樣多"]],
+["撒嬌可以嗎？", ["可以", "看時機", "你先開始"]],
+["冷的時候？", ["外套", "抱抱", "熱飲"]],
+["騎車的時候要我？", ["叫我慢一點", "到了再聊", "陪我講"]],
+["不想出門的話？", ["你陪我躺", "傳語音", "早點說"]],
+["回程想？", ["睡覺", "講這趟", "約下一趟"]],
+["和好的暗號？", ["想你", "吃東西", "抱抱"]],
+["書局要去嗎？", ["要", "下次", "你先看"]],
+["選一樣算贏？", ["算", "差一點也可愛", "看題目"]],
+["壞的一天你希望我？", ["聽", "帶你吃", "什麼都不問先抱"]],
+["想聽的稱呼？", ["寶寶", "乖乖", "老婆"]],
+["冰淇淋要？", ["分一口", "自己一球", "看你"]],
+["滷味要？", ["不要太辣", "正常辣", "你夾給我"]],
+["現在想喝？", ["熱的", "冰的", "星巴克"]],
+["你忙的時候我？", ["等你", "傳一句就好", "不要已讀"]],
+["平日晚上？", ["吃飯", "通話", "各自忙完再找"]],
+["首爾？", ["吃", "逛", "你帶路"]],
+["你回答時的樣子？", ["我想看", "不用形容", "晚上說給我"]],
+["喝水要被提醒？", ["要", "不要", "看你心情"]],
+["火鍋誰先下？", ["你", "我", "一起"]],
+["熱的時候？", ["冰的", "吹冷氣", "少走一點"]],
+["追劇進度？", ["等我", "你先看", "一起"]],
+["你不理我時我？", ["再傳一次", "等你", "說我想你"]],
+["兩個人的旅館？", ["早點回去", "點心", "不排行程"]],
+["鬧彆扭誰先開口？", ["你", "我", "看誰比較想"]],
+["排骨酥？", ["喝湯", "配飯", "分你"]],
+["等一下見的話先？", ["吃飯", "走路", "坐著"]],
+["提拉米蘇？", ["留一塊給你", "當場吃完", "下次再買"]],
+["看到好吃的會？", ["拍給你", "先吃掉", "等你一起"]],
+["考試週我？", ["少鬧你", "陪你", "問你吃了沒"]],
+["最有效的哄法？", ["想你", "吃的", "抱緊"]],
+["我想你的時候？", ["直接說", "傳語音", "打給你"]],
+["沖繩？", ["海邊", "吃", "不要排太滿"]],
+["生氣的時候要我？", ["抱抱", "先安靜", "講清楚"]],
+["訊息比較像我們？", ["一直聊", "想到再傳"]],
+["早安想收到？", ["吃早餐了嗎", "想你", "語音"]],
+["超商逛一圈？", ["可以", "買零食", "只買水"]],
+["午安有需要？", ["不用", "問吃了沒", "隨便一句"]],
+["照片想收？", ["日常", "自拍", "好吃的"]],
+["泡麵怎麼吃？", ["你煮", "我煮", "一起煮"]],
+["你想我的時候？", ["我也要知道", "用抱抱講", "晚上說"]],
+["出門要說？", ["要", "你記得問", "不用"]],
+["電話可以嗎？", ["可以", "簡短就好", "晚點"]],
+["點餐我會記得？", ["不放椒麻", "加蛋", "你再說"]],
+["唱歌的話？", ["你唱", "我聽", "一起亂唱"]],
+["下雨天比較想？", ["待在家", "出去找你", "傳語音"]],
+["想被誇的時候？", ["直接說", "用語音", "抱一下就好"]],
+["拍照要幾張？", ["多拍", "一張就好", "你決定好看的"]],
+["你騎車我？", ["提醒我慢", "到了說", "不要講電話"]],
+["若只能留一個習慣？", ["到家說一聲", "每天想你", "一起吃飯"]],
+["週末上午比較想？", ["補眠", "出門吃", "你決定"]],
+["熬夜你會？", ["罵我", "陪我", "叫我去睡"]],
+["冰量？", ["正常冰", "少冰", "熱的"]],
+["分開一整天，先傳？", ["想你", "今天怎樣", "照片"]],
+["你更想收到？", ["語音", "文字", "人"]],
+["蛋餅要？", ["加蛋", "加起司", "原味"]],
+["想被照顧的一天？", ["餵我", "陪我", "讓我賴著"]],
+["早餐沒吃？", ["你唸我", "你帶", "下次一起"]],
+["今天的甜？", ["要", "不要", "看你"]],
+["現在最想吃哪種？", ["麥當勞", "牛肉麵", "壽司", "甜點"]],
+["假日中午想去？", ["吃飯", "逛街", "待在家"]],
+["暫時見不到？", ["多傳訊息", "語音", "晚上好好講"]],
+["別人誇你？", ["跟我說", "不用報", "我會吃醋但想聽"]],
+["外套這種事？", ["你提醒我", "我自己會", "互看"]],
+["麥當勞早餐幾點？", ["早一點", "快遲到再衝", "你叫我"]],
+["我更常讓你？", ["安心", "想吃", "想笑"]],
+["旅途中想被叫？", ["寶寶", "乖乖", "老婆"]],
+["鮭魚今天？", ["烤", "生魚片", "你煮"]],
+["好的一天用什麼收尾？", ["想你", "吃的", "早點睡"]],
+["一起挑片？", ["你選", "我選", "輪流"]],
+["逛街誰走得慢？", ["我", "你", "一起慢"]]
   ];
-  const kindName = { pick:"二選一", who:"誰比較會", text:"心裡話" };
+  const texts = [
+"今天過得怎樣，用三個字。",
+"我說過哪句話你還記得？",
+"你答這題時，最希望我怎麼回你？",
+"現在最想聽到我說的一句話？",
+"你希望我吃醋的時候怎麼表現？",
+"你想對以前的我們說什麼？",
+"你希望我們的聊天，最後總是停在什麼樣的句子？",
+"如果把今天做成一句情話，你會寫什麼？",
+"早上一睜眼，你希望手機上有什麼？",
+"哪一次你覺得被我照顧到？",
+"如果我只能改一個壞習慣，你選哪個？",
+"你想跟我一起養成的下一個習慣是什麼？",
+"你覺得哪一餐最像我們？",
+"你最後一次笑出來，跟我有沒有關係？",
+"今天的我們，你想怎麼形容？",
+"你現在最想我做的一個很小的動作？",
+"看到好吃的，你第一個想分享給誰、為什麼是我？",
+"我做過哪件小事讓你心動？",
+"一件你做得很好、希望我說出口的事？",
+"如果明天放假，想跟我去吃什麼？",
+"你吃醋的時候，最想聽我解釋到什麼程度？",
+"你最近一次想我，是在做什麼的時候？",
+"今天先到家的人，你希望留下什麼給另一個？",
+"有哪一句叮嚀，你聽完會比較安心？",
+"最適合一起浪費的一個下午，會怎麼過？",
+"用一種食物形容現在的我們。",
+"你覺得我哪一句最短、但你最愛聽？",
+"一件你已經做得夠多、希望我別再催的事？",
+"你最想分享給我的一種味道？",
+"你覺得我記得你的口味時，你是什麼感覺？",
+"你騎車時最希望我不要做什麼？",
+"你悶的時候，希望我做什麼、或不做什麼？",
+"今天最想讓我記住的一件小事？",
+"什麼時候最想被我抱一下？",
+"你覺得我還不了解你的哪一面？",
+"你什麼時候會認真說想我？",
+"如果明年也在一起，你想先去哪個地方？",
+"兩個人住一晚，你希望晚上怎麼過？",
+"和好之後，你想做的第一件小事？",
+"有句話只想跟我說，是什麼？",
+"你委屈時，要我先抱你還是先聽你說？",
+"寫一句你希望明天的我一醒來就看到的話。",
+"我哪次回得晚，你當時在想什麼？",
+"星巴克如果要坐著，你想聊什麼？",
+"如果只傳一句，你會打什麼？",
+"若今天的題目由你出，你會問我什麼？",
+"快睡著時你會想起我們的哪一段？",
+"如果行程全空，你會把第一個小時給我什麼？",
+"你想被我接住的樣子，是什麼樣？",
+"一起走路時，你心裡通常在想什麼？",
+"今天的天空如果要傳給我，你會配什麼字？",
+"你說沒事的時候，我應該再問一次嗎？",
+"睡前最後一眼，你希望是什麼？",
+"我忘記做的小事裡，哪一件你希望我補上？",
+"你不想被問、但希望我懂的事是什麼？",
+"去韓國，最想跟我做的一件事？",
+"去日本的第一餐，你想吃什麼？",
+"照片你想多拍我，還是多拍風景？",
+"你想對以後的我們約好什麼？",
+"你最常想起我的哪個畫面？",
+"你最想被我投餵的一樣東西？",
+"你覺得我生氣時，怎樣哄比較有用？",
+"夜市你會想拉我去哪一攤？",
+"如果只能留一段我們的回憶？",
+"你希望我依賴你多一點，還是你依賴我？",
+"你不想吃的東西，希望我怎麼問就好？",
+"用一句話，讓我知道你今天還在。",
+"你希望我在你忙完抬頭時，剛好說了什麼？",
+"如果今天很開心，你想怎麼告訴我？",
+"去泰國，你想把行程排松還是排滿，為什麼？",
+"你覺得你什麼時候最需要我，說具體一點。",
+"吵架之後，你其實最需要什麼？",
+"你心裡的家，有沒有一個屬於我們的角落？",
+"現在的心情，用一種甜點形容。",
+"如果現在就在旁邊，你會先做哪個小動作？",
+"今天有沒有一個瞬間突然想我？",
+"以後的日常裡，一定要留什麼習慣？",
+"哪種提醒你不會煩：吃飯、外套、還是慢一點？",
+"你什麼時候最想叫我笨蛋？",
+"下雨天你會想傳給我什麼？",
+"第一次見面，你覺得我是什麼樣子？",
+"若把想我的程度說成一種距離，是多近？",
+"你騎車或走路時，會不會突然想到我，想到什麼？",
+"今天想被我怎麼對待，用你自己的話講。",
+"語音裡你希望我先講什麼？",
+"如果只能再點一次餐，你會為我點什麼？",
+"這週最想一起做的一件事？",
+"在車上你最希望我提醒你什麼？",
+"你覺得我什麼時候最像我？",
+"外食的話，你今天想走進哪一種店？",
+"出國時你想負責吃，還是負責帶路？",
+"有沒有一件小事，希望我今天做到？",
+"你覺得我們還少一個什麼樣的儀式？",
+"你覺得我什麼時候最可愛，說具體一點。",
+"我們吵架時，你最不希望我說出口的話？",
+"到家說一聲，對你來說重要在哪？",
+"忙的日子裡，你還想保留跟我的哪十分鐘？",
+"聽到我聲音時，你會有什麼反應？",
+"一起老了以後，你想抱怨我什麼？",
+"騎車慢一點這句，你聽了是什麼感覺？",
+"見到面時，你想先做的第一件事？",
+"你理想中的早餐，是跟我一起還是我叫你吃？",
+"現在就想預約的一個週末，要做什麼？",
+"你想接住我的時候，通常會說什麼？",
+"你想被誇的點，今天是哪一個？",
+"吃飽的時候你最想跟我說什麼？",
+"你覺得我們最像的地方？",
+"你到家後，最想跟我說的通常不是平安，那是什麼？",
+"你什麼時候確定喜歡我？",
+"你覺得我偷偷在意你的哪件事？",
+"若把我們的一天畫成三格，你會放哪三格？",
+"你生氣但還想被抱的時候，要我怎麼判斷？",
+"還想一起完成、但還沒做的事？",
+"你說過最心軟的一句是什麼？",
+"有個地方你想帶我去，是哪裡，為什麼？",
+"如果今天很累，你想收到我怎樣的訊息？",
+"你希望我擔心你的方式，是問還是等你說？",
+"如果是你煮，你會做哪一道給我？",
+"不吃椒麻這件事，你希望我怎麼記得？",
+"海邊的話，你想留下什麼樣的照片？",
+"你旅遊時最需要我配合的是什麼？",
+"如果我煮一頓，你想吃什麼？",
+"有沒有一件事你裝不在意，但其實很在意？",
+"今天吃飯前後，你希望我出現在哪個時刻？",
+"甜的還是鹹的，今天的你站哪一邊，為什麼？",
+"你想在那個地方對我說的一句話？",
+"你希望我無聊時來找你，還是讓你先忙完？",
+"今天的你，想被叫寶寶、乖乖，還是別的，為什麼？",
+"你想跟我約的下一頓是什麼時候、吃什麼？",
+"你想跟我練習的一句話是什麼？",
+"空的日子裡，你想怎麼浪費在我身上？",
+"有沒有一個稱呼，是你只想讓我叫的？",
+"你想被我看很久的時候，是什麼時候？",
+"你希望我以後固定叫你什麼？",
+"你想留住我的哪個習慣？",
+"考試或忙完，你希望我先問什麼？",
+"你希望我永遠不要改的一點是什麼？",
+"我晚回的時候，你其實希望我補哪一句？",
+"看到我名字時，你心裡的第一句是什麼？",
+"最後，今天的你想跟我說晚安，還是再說一點？",
+"你旅遊時最容易開心的點是什麼？",
+"如果去下雪的地方，你想先做什麼？",
+"想帶回來的伴手禮是什麼？",
+"如果只能留下我的一個聲音，你留哪一句？",
+"你願意為我改掉的一個小動作是什麼？",
+"一起挑晚餐時，你其實在意什麼？",
+"你覺得我們的好吃，是食物還是在一起？",
+"旅途中迷路了，你會先跟我說什麼？",
+"分開一整天後，你最想先知道我的什麼？",
+"你想跟我收集的，是票根、食物還是對話？"
+  ];
+  function taipeiDay(){
+    return new Intl.DateTimeFormat("en-CA", { timeZone:"Asia/Taipei", year:"numeric", month:"2-digit", day:"2-digit" }).format(new Date());
+  }
+  function dayNum(){
+    const parts = taipeiDay().split("-").map(Number);
+    return Math.floor(Date.UTC(parts[0], parts[1]-1, parts[2]) / 86400000);
+  }
+  const day = taipeiDay();
+  const num = dayNum();
+  const pick = picks[num % picks.length];
+  const ask = texts[num % texts.length];
   const names = { y:"Y", yun:"小昀" };
-  let i = 0;
-  try{ i = Math.max(0, Math.min(bank.length-1, parseInt(localStorage.getItem("syncq-i")||"0", 10) || 0)); }catch(e){}
-  const data = {};
-  let wasBoth = false;
-  let audioCtx = null;
-  function arm(){
-    const AC = window.AudioContext || window.webkitAudioContext;
-    if(!AC) return;
-    if(!audioCtx) audioCtx = new AC();
-    if(audioCtx.state === "suspended") audioCtx.resume();
-  }
-  function ding(){
-    if(!audioCtx) return;
-    const t0 = audioCtx.currentTime;
-    [880, 1320].forEach(function(freq, n){
-      const o = audioCtx.createOscillator();
-      const g = audioCtx.createGain();
-      o.type = "sine";
-      o.frequency.value = freq;
-      const start = t0 + n * 0.12;
-      g.gain.setValueAtTime(0.0001, start);
-      g.gain.exponentialRampToValueAtTime(0.18, start + 0.02);
-      g.gain.exponentialRampToValueAtTime(0.0001, start + 0.28);
-      o.connect(g); g.connect(audioCtx.destination);
-      o.start(start); o.stop(start + 0.3);
-    });
-  }
-  document.addEventListener("pointerdown", arm, { once:true });
+  let data = {};
   function esc(s){
-    return String(s).replace(/[&<>"']/g, function(c){ return "&#" + c.charCodeAt(0) + ";"; });
+    return String(s).replace(/[&<>"']/g, function(c){ return "&#"+c.charCodeAt(0)+";"; });
   }
-  function answerOf(id, role){
-    const row = data[id];
+  function val(part, role){
+    const row = data[part];
     return row && row[role] && row[role].text ? String(row[role].text) : "";
   }
-  function save(text){
-    const q = bank[i];
-    if(!q || !text || !window.myRole || !window.db) return;
-    window.db.ref("syncq/"+q.id+"/"+window.myRole).set({ text:text, time:Date.now() });
-  }
-  function scoreText(){
-    let both = 0, hit = 0;
-    bank.forEach(function(q){
-      if(q.kind === "text") return;
-      const a = answerOf(q.id, "y");
-      const b = answerOf(q.id, "yun");
-      if(a && b){ both++; if(a === b) hit++; }
-    });
-    const el = document.getElementById("syncScore");
-    if(el) el.textContent = both ? ("默契 " + hit + " / " + both) : "還沒有對過的題";
+  function row(part, role){
+    const text = val(part, role);
+    const mine = window.myRole || "";
+    const both = !!(val(part,"y") && val(part,"yun"));
+    let body = "還沒回答";
+    if(text) body = (both || mine === role) ? esc(text) : "寫好了，先保密";
+    return '<div class="daily-row"><b>'+names[role]+'</b><span>'+body+'</span></div>';
   }
   function paint(){
-    const q = bank[i];
-    const qEl = document.getElementById("dailyQ");
-    const kind = document.getElementById("syncKind");
-    const pos = document.getElementById("syncPos");
-    const choices = document.getElementById("syncChoices");
-    const textBox = document.getElementById("syncText");
-    const box = document.getElementById("dailyAnswers");
-    const lock = document.getElementById("dailyLock");
-    const card = document.getElementById("dailyCard");
-    if(!q || !qEl) return;
+    const dayEl = document.getElementById("dailyDay");
+    if(dayEl) dayEl.textContent = Number(day.slice(5,7)) + "月" + Number(day.slice(8,10)) + "日";
+    const qPick = document.getElementById("qPick");
+    const qText = document.getElementById("qText");
+    if(qPick) qPick.textContent = pick[0];
+    if(qText) qText.textContent = ask;
+    const y = val("pick","y"), u = val("pick","yun");
+    const bothP = !!(y && u);
     const mine = window.myRole || "";
-    const y = answerOf(q.id, "y");
-    const u = answerOf(q.id, "yun");
-    const both = !!(y && u);
-    const mineText = mine === "y" ? y : (mine === "yun" ? u : "");
-    qEl.textContent = q.q;
-    if(kind) kind.textContent = kindName[q.kind] || "";
-    if(pos) pos.textContent = (i+1) + " / " + bank.length;
+    const mineP = mine === "y" ? y : (mine === "yun" ? u : "");
+    const choices = document.getElementById("syncChoices");
+    if(!choices) return;
     choices.innerHTML = "";
-    if(q.options){
-      textBox.classList.remove("show");
-      q.options.forEach(function(opt){
-        const b = document.createElement("button");
-        b.type = "button";
-        b.textContent = opt;
-        if(both){
-          if(y === u && opt === y) b.className = "match";
-          else {
-            if(opt === mineText) b.className = "mine";
-            if((opt === y && mine !== "y") || (opt === u && mine !== "yun")) b.className = (b.className ? b.className + " " : "") + "theirs";
-          }
-        } else if(opt === mineText) b.className = "mine";
-        b.onclick = function(){
-          if(both) return;
-          arm();
-          save(opt);
-        };
-        choices.appendChild(b);
-      });
-    } else {
-      textBox.classList.add("show");
-    }
-    function row(k, text){
-      let body = "還沒回答";
-      if(text){
-        if(both || mine === k) body = esc(text);
-        else body = "寫好了，先保密";
-      }
-      return '<div class="daily-row"><b>' + names[k] + '</b><span>' + body + '</span></div>';
-    }
-    if(box) box.innerHTML = row("y", y) + row("yun", u);
-    if(lock){
-      if(both && q.options && y === u) lock.textContent = "對上了。";
-      else if(both && q.options) lock.textContent = "兩邊都答了，這題不一樣。";
-      else if(both) lock.textContent = "兩邊都說了。";
-      else lock.textContent = "還差一個人。答完才看得到對方。";
-    }
-    if(card) card.classList.toggle("revealed", both);
-    if(both && !wasBoth) ding();
-    wasBoth = both;
-    scoreText();
-    try{ localStorage.setItem("syncq-i", String(i)); }catch(e){}
+    pick[1].forEach(function(opt){
+      const b = document.createElement("button");
+      b.type = "button";
+      b.textContent = opt;
+      if(bothP && y === u && opt === y) b.className = "match";
+      else if(opt === mineP) b.className = "mine";
+      else if(bothP && (opt === y || opt === u)) b.className = "theirs";
+      b.disabled = !!mineP;
+      b.onclick = function(){
+        if(mineP || !window.db || !window.myRole) return;
+        window.db.ref("daily2/"+day+"/pick/"+window.myRole).set({text:opt, time:Date.now()});
+      };
+      choices.appendChild(b);
+    });
+    document.getElementById("pickAnswers").innerHTML = row("pick","y") + row("pick","yun");
+    const pLock = document.getElementById("pickLock");
+    if(pLock) pLock.textContent = bothP ? (y === u ? "一樣" : "不一樣") : "";
+    const yt = val("text","y"), ut = val("text","yun");
+    const bothT = !!(yt && ut);
+    document.getElementById("textAnswers").innerHTML = row("text","y") + row("text","yun");
+    const tLock = document.getElementById("textLock");
+    if(tLock) tLock.textContent = bothT ? "都說了" : "";
+    const mineT = mine === "y" ? yt : (mine === "yun" ? ut : "");
+    const input = document.getElementById("dailyInput");
+    const send = document.getElementById("dailySend");
+    if(input) input.disabled = !!mineT;
+    if(send) send.disabled = !!mineT;
   }
-  document.getElementById("syncPrev").onclick = function(){
-    wasBoth = true;
-    i = (i - 1 + bank.length) % bank.length;
-    const q = bank[i];
-    wasBoth = !!(answerOf(q.id,"y") && answerOf(q.id,"yun"));
-    paint();
-  };
-  document.getElementById("syncNext").onclick = function(){
-    wasBoth = true;
-    i = (i + 1) % bank.length;
-    const q = bank[i];
-    wasBoth = !!(answerOf(q.id,"y") && answerOf(q.id,"yun"));
-    paint();
-  };
   document.getElementById("dailySend").onclick = function(){
-    arm();
     const input = document.getElementById("dailyInput");
     const text = input.value.trim();
-    if(!text) return;
-    const q = bank[i];
-    if(answerOf(q.id,"y") && answerOf(q.id,"yun")) return;
-    save(text);
+    const mine = window.myRole || "";
+    const mineT = mine === "y" ? val("text","y") : (mine === "yun" ? val("text","yun") : "");
+    if(!text || mineT || !window.db || !window.myRole) return;
+    window.db.ref("daily2/"+day+"/text/"+window.myRole).set({text:text, time:Date.now()});
     input.value = "";
   };
   document.getElementById("dailyInput").addEventListener("keydown", function(e){
@@ -629,19 +811,8 @@ window._authReady.then(function(uid){
   if(window._authReady){
     window._authReady.then(function(){
       if(!window.db) return;
-      let primed = false;
-      window.db.ref("syncq").on("value", function(s){
-        const q = bank[i];
-        const before = !!(q && answerOf(q.id,"y") && answerOf(q.id,"yun"));
-        const val = s.val() || {};
-        Object.keys(data).forEach(function(k){ delete data[k]; });
-        Object.keys(val).forEach(function(k){ data[k] = val[k]; });
-        if(!primed){
-          primed = true;
-          wasBoth = !!(q && answerOf(q.id,"y") && answerOf(q.id,"yun"));
-        } else {
-          wasBoth = before;
-        }
+      window.db.ref("daily2/"+day).on("value", function(s){
+        data = s.val() || {};
         paint();
       });
     });
@@ -1225,21 +1396,6 @@ window._authReady.then(function(uid){
     });
   });
 
-  document.getElementById("meetBtn").onclick = function(){
-    const d = document.getElementById("meetDate").value;
-    if(d) db.ref("settings/meetDate").set({date: d});
-  };
-  document.getElementById("meetDel").onclick = function(){
-    db.ref("settings/meetDate").remove();
-  };
-  db.ref("settings/meetDate").on("value", doc => {
-    const el = document.getElementById("countdown");
-    if(!doc.exists() || !doc.val() || !doc.val().date){ el.textContent = "還沒設定"; return; }
-    const t = new Date(doc.val().date);
-    const days = Math.ceil((t - new Date())/86400000);
-    el.textContent = days <= 0 ? "就是今天！🎉" : "再 " + days + " 天";
-  });
-
   /* 紀念日 */
   db.ref("anniversaries").on("value", snap => {
     const list = document.getElementById("anniList");
@@ -1530,8 +1686,8 @@ window._authReady.then(function(uid){
 
   function pos(canvas, e){
     const r = canvas.getBoundingClientRect();
-    const t = e.touches ? e.touches[0] : e;
-    return {x: (t.clientX-r.left)*canvas.width/r.width, y: (t.clientY-r.top)*canvas.height/r.height};
+    if(r.width < 8 || r.height < 8) return null;
+    return {x: (e.clientX - r.left) * canvas.width / r.width, y: (e.clientY - r.top) * canvas.height / r.height};
   }
   function stroke(ctx, from, to, color){
     ctx.beginPath();
@@ -1541,74 +1697,68 @@ window._authReady.then(function(uid){
     ctx.stroke();
   }
 
-  // 我的画板
-  myCanvas.onmousedown = e => {
+  function okPt(p){
+    return p && isFinite(p.x) && isFinite(p.y) && p.x >= 0 && p.y >= 0 && p.x <= 360 && p.y <= 270;
+  }
+  function far(a, b){
+    if(!okPt(a) || !okPt(b)) return true;
+    const dx = a.x - b.x, dy = a.y - b.y;
+    return dx*dx + dy*dy > 70*70;
+  }
+
+  myCanvas.style.touchAction = "none";
+  myCanvas.onpointerdown = function(e){
+    myCanvas.setPointerCapture(e.pointerId);
     myDrawing = true;
     lastPt = pos(myCanvas, e);
-    db.ref("draw/"+uid).push({t:'start', x:lastPt.x, y:lastPt.y});
+    if(!okPt(lastPt)) return;
+    db.ref("draw/"+uid).push({t:"start", x:lastPt.x, y:lastPt.y, at:Date.now()});
   };
-  myCanvas.onmousemove = e => {
+  myCanvas.onpointermove = function(e){
     if(!myDrawing) return;
     const p = pos(myCanvas, e);
+    if(!okPt(p) || far(lastPt, p)){ lastPt = p; return; }
     stroke(myCtx, lastPt, p, "#e91e63");
-    db.ref("draw/"+uid).push({t:'move', x:p.x, y:p.y});
+    db.ref("draw/"+uid).push({t:"move", x:p.x, y:p.y, at:Date.now()});
     lastPt = p;
   };
-  myCanvas.onmouseup = () => {
-    myDrawing = false;
-    db.ref("draw/"+uid).push({t:'end'});
-  };
-  myCanvas.ontouchstart = e => {
-    myDrawing = true;
-    const p = pos(myCanvas, e);
-    lastPt = p;
-    db.ref("draw/"+uid).push({t:'start', x:p.x, y:p.y});
-  };
-  myCanvas.ontouchmove = e => {
-    if(!myDrawing) return;
-    e.preventDefault();
-    const p = pos(myCanvas, e);
-    stroke(myCtx, lastPt, p, "#e91e63");
-    db.ref("draw/"+uid).push({t:'move', x:p.x, y:p.y});
-    lastPt = p;
-  };
-  myCanvas.ontouchend = () => {
-    myDrawing = false;
-    db.ref("draw/"+uid).push({t:'end'});
-  };
+  function stopDraw(){ myDrawing = false; lastPt = null; }
+  myCanvas.onpointerup = stopDraw;
+  myCanvas.onpointercancel = stopDraw;
 
   document.getElementById("clearMyDraw").onclick = () => {
     myCtx.clearRect(0,0,myCanvas.width,myCanvas.height);
-    db.ref("draw/"+uid).push({t:'clear'});
+    db.ref("draw/"+uid).push({t:"clear", at:Date.now()});
   };
 
-  // 对方画板：监听对方 uid 的笔迹流
-  const themRef = db.ref("draw").orderByKey().limitToLast(1);
-  // 找对方 uid：监听所有 draw 下的 key
+  const heard = {};
   db.ref("draw").on("child_added", snap => {
     const otherUid = snap.key;
-    if(otherUid === uid) return;
+    if(otherUid === uid || heard[otherUid]) return;
+    heard[otherUid] = 1;
     document.getElementById("herDrawLabel").textContent = (window.themName||"她") + "的畫板";
-    herCtx.clearRect(0,0,herCanvas.width,herCanvas.height);
-    // 回放对方已有笔迹
-    snap.ref.on("child_added", s => {
-      const ev = s.val();
-      if(ev.t === 'start'){
-        herCtx.beginPath();
-        herCtx.moveTo(ev.x, ev.y);
-        herDrawing = true;
-        lastHer = ev;
-      } else if(ev.t === 'move' && herDrawing){
-        stroke(herCtx, lastHer, ev, "#673ab7");
-        lastHer = ev;
-      } else if(ev.t === 'end'){
-        herDrawing = false;
-      } else if(ev.t === 'clear'){
+    let lastHer = null;
+    let drawing = false;
+    snap.ref.limitToLast(400).on("child_added", s => {
+      const ev = s.val() || {};
+      if(typeof ev.at !== "number") return;
+      if(ev.t === "clear"){
         herCtx.clearRect(0,0,herCanvas.width,herCanvas.height);
+        lastHer = null;
+        drawing = false;
+        return;
       }
+      if(ev.t === "end"){ drawing = false; lastHer = null; return; }
+      if(!okPt(ev)) return;
+      if(ev.t === "start" || !drawing || far(lastHer, ev)){
+        lastHer = ev;
+        drawing = true;
+        return;
+      }
+      stroke(herCtx, lastHer, ev, "#673ab7");
+      lastHer = ev;
     });
   });
-  let lastHer = null;
 });
 
 /* 集點卡 */
@@ -1649,25 +1799,56 @@ window._authReady.then(function(uid){
   });
 });
 
-/* 彈幕手動發送 */
-document.getElementById("dmSend").onclick = function(){
-  const v = document.getElementById("dmInput").value.trim();
-  if(!v) return;
+/* 彈幕：有人發才飛，不再自己一直刷 */
+function shootDm(text){
   const layer = document.getElementById("dmLayer");
+  const clean = String(text || "").trim().slice(0, 24);
+  if(!layer || !clean) return;
   const el = document.createElement("div");
   el.className = "danmaku";
-  el.textContent = v;
-  el.style.top = (10 + Math.random()*80) + "%";
-  el.style.animationDuration = "6s";
-  el.style.fontSize = "1.2rem";
-  el.style.color = "#e91e63";
+  el.textContent = clean;
+  const ink = ["#e91e63","#c2185b","#ad1457","#d81b60"];
+  el.style.color = ink[clean.length % ink.length];
+  el.style.top = (6 + Math.random()*22) + "%";
+  el.style.animationDuration = (8 + Math.random()*3) + "s";
+  el.style.fontSize = (clean.length > 8 ? .95 : 1.15) + "rem";
   layer.appendChild(el);
-  setTimeout(() => el.remove(), 8000);
-  document.getElementById("dmInput").value = "";
+  setTimeout(function(){ el.remove(); }, 12000);
+}
+document.getElementById("dmSend").onclick = function(){
+  const input = document.getElementById("dmInput");
+  const v = input.value.trim();
+  if(!v) return;
+  input.value = "";
+  if(window.db) window.db.ref("danmaku").push({text:v.slice(0,24), at:Date.now()});
+  else shootDm(v);
 };
 document.getElementById("dmInput").addEventListener("keydown", e => {
   if(e.key === "Enter") document.getElementById("dmSend").click();
 });
+["想你","吃了嗎","到家了嗎","抱抱","在嗎","看我","笨蛋","晚安","慢一點","傳語音"].forEach(function(word){
+  const row = document.getElementById("dmPresets");
+  if(!row) return;
+  const b = document.createElement("button");
+  b.type = "button";
+  b.className = "chip";
+  b.textContent = word;
+  b.onclick = function(){
+    document.getElementById("dmInput").value = word;
+    document.getElementById("dmSend").click();
+  };
+  row.appendChild(b);
+});
+if(window._authReady){
+  window._authReady.then(function(){
+    if(!window.db) return;
+    let skip = true;
+    window.db.ref("danmaku").limitToLast(1).on("child_added", function(s){
+      if(skip){ skip = false; return; }
+      shootDm((s.val()||{}).text);
+    });
+  });
+}
 
 /* 送禮物 */
 window.sendGift = function(emoji){
@@ -1690,29 +1871,7 @@ window.sendGift = function(emoji){
   }
 };
 
-/* 彈幕 */
-(function(){
-  const layer = document.getElementById("dmLayer");
-  const msgs = [
-    "我愛妳 ❤️", "想妳了", "笨蛋", "抱抱", "可愛死了",
-    "今天也喜歡妳", "不要走", "妳最可愛", "么么", "心動",
-    "寶貝", "想牽妳", "別餓肚子", "晚安", "早安",
-    "妳是我的", "滾進來睡", "愛妳愛妳愛妳", "想見妳", "妳好漂亮"
-  ];
-  let i = 0;
-  function shoot(){
-    const el = document.createElement("div");
-    el.className = "danmaku";
-    el.textContent = msgs[i % msgs.length];
-    el.style.top = (10 + Math.random()*80) + "%";
-    el.style.animationDuration = (8 + Math.random()*6) + "s";
-    el.style.fontSize = (0.9 + Math.random()*0.6) + "rem";
-    layer.appendChild(el);
-    setTimeout(() => el.remove(), 15000);
-    i++;
-  }
-  setTimeout(() => setInterval(shoot, 2500), 3000);
-})();
+/* 彈幕自動飛過的舊版已關掉，改成有人發才出現 */
 
 /* 滾動進度條 + 回到頂部 */
 window.addEventListener("scroll", () => {
@@ -1869,7 +2028,24 @@ document.getElementById("fireworkBtn").onclick = function(){
 
 /* 轉盤：指針固定在上方，結果跟扇形對齊 */
 (function(){
-  const tasks = ["抱抱她","問她吃了沒","叫她乖乖","買她愛吃的","講一句想妳","到家報備","親她一下","騎車慢一點"];
+  const tasks = [
+    {w:"抱抱", t:"抱抱她"},
+    {w:"吃飯", t:"問她吃了沒"},
+    {w:"乖乖", t:"叫她乖乖"},
+    {w:"愛吃", t:"買她愛吃的"},
+    {w:"想你", t:"講一句想你"},
+    {w:"報備", t:"到家跟她說一聲"},
+    {w:"慢騎", t:"騎車慢一點"},
+    {w:"語音", t:"傳一段語音給她"},
+    {w:"累嗎", t:"問她累不累"},
+    {w:"晚餐", t:"一起決定晚餐"},
+    {w:"晚安", t:"跟她說晚安"},
+    {w:"誇她", t:"誇她一句"},
+    {w:"早餐", t:"問她早餐吃了沒"},
+    {w:"照片", t:"傳一張今天的照片"},
+    {w:"外套", t:"問她外套穿了沒"},
+    {w:"椒麻", t:"點餐記得不要椒麻"}
+  ];
   const slice = 360 / tasks.length;
   const wheel = document.getElementById("wheel");
   const result = document.getElementById("wheelResult");
@@ -1880,12 +2056,13 @@ document.getElementById("fireworkBtn").onclick = function(){
   tasks.forEach((t,i)=>{
     const lab = document.createElement("div");
     lab.className = "wheel-label";
-    lab.textContent = t;
+    lab.textContent = t.w;
     const deg = i*slice + slice/2;
-    lab.style.transform = "rotate("+deg+"deg) translateY(-62px) rotate(-"+deg+"deg)";
-    lab.style.fontSize = ".62rem";
-    lab.style.width = "64px";
-    lab.style.marginLeft = "-32px";
+    lab.style.transform = "rotate("+deg+"deg) translateY(-68px) rotate(-"+deg+"deg)";
+    lab.style.fontSize = ".68rem";
+    lab.style.width = "28px";
+    lab.style.marginLeft = "-14px";
+    lab.style.lineHeight = "1.1";
     wheel.appendChild(lab);
   });
   let angle = 0, spinning = false;
@@ -1901,7 +2078,7 @@ document.getElementById("fireworkBtn").onclick = function(){
     wheel.style.transform = "rotate("+angle+"deg)";
     result.textContent = "轉動中...";
     setTimeout(() => {
-      result.textContent = "今天的任務： " + tasks[idx];
+      result.textContent = "今天的任務： " + tasks[idx].t;
       spinning = false;
       localStorage.setItem("spinDone","1");
       if(typeof renderBadges === "function") renderBadges();
@@ -1910,7 +2087,7 @@ document.getElementById("fireworkBtn").onclick = function(){
 })();
 
 /* 3D 照片傾斜 */
-document.querySelectorAll(".photo figure, .card").forEach(el => {
+document.querySelectorAll(".photo figure").forEach(el => {
   el.addEventListener("mousemove", e => {
     const r = el.getBoundingClientRect();
     const x = (e.clientX - r.left)/r.width - .5;
@@ -1959,15 +2136,103 @@ let foodSpinTimer = null;
 document.getElementById("foodBtn").onclick = function(){
   const res = document.getElementById("foodResult");
   const btn = document.getElementById("foodBtn");
-  if(foodSpinTimer){ clearInterval(foodSpinTimer); foodSpinTimer=null; btn.textContent="幫我們決定！"; return; }
-  btn.textContent = "停止！";
+  if(foodSpinTimer){ clearInterval(foodSpinTimer); foodSpinTimer=null; btn.textContent="隨機抽"; return; }
+  btn.textContent = "停止";
   let count = 0;
   foodSpinTimer = setInterval(()=>{
     res.textContent = foods[Math.floor(Math.random()*foods.length)];
     count++;
-    if(count > 25){ clearInterval(foodSpinTimer); foodSpinTimer=null; btn.textContent="幫我們決定！"; localStorage.setItem("foodPick","1"); if(typeof renderBadges==="function") renderBadges(); }
+    if(count > 25){
+      clearInterval(foodSpinTimer); foodSpinTimer=null; btn.textContent="隨機抽";
+      localStorage.setItem("foodPick","1");
+      const map = document.getElementById("foodMap");
+      const plain = String(res.textContent || "").replace(/[^\u4e00-\u9fffA-Za-z0-9]/g, "");
+      if(map) map.href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent((plain || "餐廳") + " 附近");
+      if(typeof renderBadges==="function") renderBadges();
+    }
   }, 80);
 };
+
+
+document.getElementById("foodMap").addEventListener("click", function(e){
+  e.preventDefault();
+  const fallback = this.href;
+  function openAt(lat, lng){
+    const url = (lat != null) ? ("https://www.google.com/maps/search/" + encodeURIComponent("餐廳") + "/@" + lat + "," + lng + ",15z") : fallback;
+    window.open(url, "_blank", "noopener");
+  }
+  if(!navigator.geolocation){ openAt(); return; }
+  navigator.geolocation.getCurrentPosition(function(p){
+    openAt(p.coords.latitude.toFixed(5), p.coords.longitude.toFixed(5));
+  }, function(){ openAt(); }, {timeout:4000, maximumAge:120000});
+});
+
+
+
+/* 做過就留著 */
+(function(){
+  const groups = {
+    ideaEat: ["麥當勞早餐","牛肉麵","壽司","星巴克","滷味","鬆餅","泡麵","提拉米蘇","漢堡","蘋果","布丁","冰淇淋","火鍋","夜市","拉麵","水餃","炸雞","蛋餅","粥","燒烤","小籠包","排骨酥","鮭魚","便當","甜點","不放椒麻的那一餐"],
+    ideaPlay: ["騎車兜風","看電影","逛街","打遊戲","逛夜市","看海","唱歌","拍一組照片","一起追劇","逛超商","散步","逛書局","水族館","坐著發呆","看煙火","雨天不出門"],
+    ideaDay: ["一起吃早餐","到家說一聲","傳一段語音","說晚安","騎車慢一點","抱抱","問吃了沒","傳一張照片","講一句想你","叫一聲乖乖","早點睡","牽手走一段","說早安","提醒穿外套","忙完找對方"],
+    ideaTrip: ["日本","韓國","泰國","法國","海邊的島","下雪的地方","有夜市的城市","兩個人的旅館","京都","首爾","沖繩","北海道","清邁","慢慢走的城市"]
+  };
+  let done = {};
+  try{ done = JSON.parse(localStorage.getItem("idea-done") || "{}"); }catch(e){}
+  function save(){
+    try{ localStorage.setItem("idea-done", JSON.stringify(done)); }catch(e){}
+    if(window.db) window.db.ref("ideas/done").set(done);
+  }
+  function paint(){
+    let n = 0;
+    Object.keys(groups).forEach(function(id){
+      const row = document.getElementById(id);
+      if(!row) return;
+      row.innerHTML = "";
+      groups[id].forEach(function(name){
+        const key = id + ":" + name;
+        if(done[key]) n++;
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "chip" + (done[key] ? " done" : "");
+        b.textContent = name;
+        b.onclick = function(){
+          if(done[key]) delete done[key];
+          else done[key] = true;
+          save();
+          paint();
+        };
+        row.appendChild(b);
+      });
+    });
+    const note = document.getElementById("ideaNote");
+    if(note) note.textContent = n ? ("做過 " + n + " 件，下次打開還在。") : "點一下就記成做過。";
+  }
+  paint();
+  if(window._authReady){
+    window._authReady.then(function(){
+      if(!window.db) return;
+      let ready = false;
+      window.db.ref("ideas/done").on("value", function(s){
+        const v = s.val();
+        if(!ready){
+          ready = true;
+          const merged = Object.assign({}, v || {}, done);
+          done = merged;
+          try{ localStorage.setItem("idea-done", JSON.stringify(done)); }catch(e){}
+          paint();
+          if(JSON.stringify(v || {}) !== JSON.stringify(merged)) window.db.ref("ideas/done").set(merged);
+          return;
+        }
+        if(v && typeof v === "object"){
+          done = v;
+          try{ localStorage.setItem("idea-done", JSON.stringify(done)); }catch(e){}
+          paint();
+        }
+      });
+    });
+  }
+})();
 
 /* 🔒 防偷窺：切換分頁時模糊 */
 document.addEventListener("visibilitychange", function(){
@@ -2139,49 +2404,43 @@ document.addEventListener("visibilitychange", function(){
     };
   }
 
-  const pairs = [["我也很想你啊 真的", "抱抱寶寶"], ["我到家囉", "我愛你寶寶"], ["我愛你小寶寶", "我好想你"], ["我愛你寶寶", "我也愛你"], ["好吃嗎！！", "好吃！"], ["對不起寶寶", "忘記群發到我了"], ["對不起起起", "我剛到家"], ["豆腐還是百頁好吃", "都好吃"], ["可以用來打遊戲的寶寶", "沒有妳自由也沒有意義了寶寶"], ["好想妳耶小寶寶", "我不是小寶寶"], ["真的感覺很好吃嗚嗚", "當然啊寶寶"], ["超級帥", "寶寶我想你"], ["我想你了", "寶寶你想玩是嗎"], ["好滴", "我想你寶寶"], ["嗯嗯！", "寶寶你到家了嗎"], ["沒4", "謝謝寶寶今天請我吃飯"], ["寶寶 我潑了喔", "好哇寶寶"], ["累累寶寶", "愛妳寶寶"], ["我最愛你了", "我也是哇寶寶"], ["我愛你", "最愛你了"], ["嗨嗨寶寶", "寶寶你在做什麼"], ["你看嘿嘿", "寶寶我愛你"], ["寶寶我幾點可以找你", "寶寶我今天不一定"], ["想抱抱", "寶寶這個願望不算"], ["對不起不小心把你手機磨摔壞了", "為什麼會這樣"], ["沒關係", "寶寶我還是很愛你"], ["等等打給寶寶", "寶寶你還好嗎"], ["你好快到家", "寶寶"], ["我想抱抱", "怎麼啦寶寶"], ["我也愛你哇", "我在想你會不會遇到我媽"], ["我們阿鼻要乖乖的喔", "我想你北鼻"], ["知道寶寶", "你會餓嗎寶寶"], ["我愛你", "開心一點寶寶"], ["感覺不好吃", "看起來不好吃"], ["真的", "我愛你 很愛你寶寶"], ["我相信我有一天會好好表達滴", "欸我真的很愛你欸寶寶"], ["好棒寶寶", "看完了先 回家 等等我小寶寶"], ["所以寶寶我愛你", "那個"], ["不小心睡著沒有跟你說到晚安", "我不想"], ["想你", "我愛你小寶"], ["我愛你", "我愛你"], ["可愛寶寶", "小心走"], ["他就是玻璃心", "就例如說你不好好吃飯"], ["想你", "我也想你"], ["怎麼了", "愛你呀 老婆"], ["抱抱嗚嗚 我好怕你痛", "沒關係呀寶寶"], ["會滴寶寶", "幫然是想你啊"], ["好想你", "我也好想你"], ["我很愛你", "我愛你啊"], ["我是真想你了", "我也想你啊"], ["你應該已經平安回到家了吧", "剛到家"], ["寶寶 騎車小心🫶🏻", "突然想到"], ["我愛你欸", "這個好吃嗎"], ["那確實", "我愛你老婆"], ["兩個嗎", "對愛你老婆"], ["愛你寶寶❤️", "我看"], ["愛你寶寶", "認真"], ["我也想你老婆", "剛剛大家突然沈默10秒"], ["想抱抱", "想你啊"], ["我也愛你寶寶", "加油"], ["我沒吃過別的～你覺得哪版本最好吃", "最貴的最好吃"], ["我也愛你寶寶😋❤️", "小朋友吃飽飽"], ["愛你", "愛你"], ["有啊他就說他在學校暈船這樣", "明天我可以先跟你說早安"], ["ㄛ好啊我都不知道要吃什麼", "回到家洗完澡就清醒了"], ["我剛剛本來要衝去買它欸但太冷了", "欸這個感覺很好吃"], ["晚安", "不會煩啊"], ["早知道不睡覺的", "那個冰火菠蘿感覺很好吃欸"], ["你小心一點ㄛ", "好～"], ["那你回家小心好ㄌ", "下課了了了了"], ["漂亮咪", "好吃嗎"], ["想你", "想我可以打給我"], ["回家小心", "等我回家"], ["認真想你好了", "慢慢想"], ["早點用完早點休息", "晚安"], ["你不喜歡哦", "那個好吃"], ["你看", "欸這個感覺好好吃"], ["好想你", "騙人"], ["我想你", "媽的今天"], ["理我一下下", "感覺好好吃"], ["沒有穿給別人看", "我到吃飯的地方了"], ["哪有不行為什麼不行", "小心一點"], ["棒棒", "感覺不好吃"], ["我剛到家", "我會很愧疚"], ["要小心喔", "知道"], ["回家小心騎", "你還喜歡我嗎"], ["你到家再跟我說", "有吃"], ["為什麼他這麼好吃", "我沒有吃過"], ["我不行接受他", "好吃"], ["明明就超好吃", "他不會跟你搶食物"], ["我也到家嚕", "我也覺得"], ["哈哈哈哈", "會想你"], ["所以你不開心", "卡士達滿好吃的啊"], ["我也想你", "我吃了6個了"], ["真的不會有人跟你搶", "我說很好吃"], ["根本不好吃", "讓我吃到飽"], ["我要暈車了", "我想你"], ["我到家嚕", "知道了"], ["為什麼哈哈哈", "好啊寶寶"], ["我怕你不喜歡我啊", "要去吃飯"]];
-  const log = document.getElementById("botLog");
-  const input = document.getElementById("botInput");
-  const send = document.getElementById("botSend");
-  if(!log || !input || !send) return;
-  function esc(s){
-    return String(s).replace(/[&<>"']/g, function(c){ return "&#"+c.charCodeAt(0)+";"; });
-  }
-  function bubble(me, text){
-    const div = document.createElement("div");
-    div.className = "chat-line"+(me?" me":"");
-    div.innerHTML = '<span class="bubble"><span class="who">'+(me?"小昀":"Y")+'</span>'+esc(text)+'</span>';
-    log.appendChild(div);
-    log.scrollTop = log.scrollHeight;
-  }
-  function grams(s){
-    const g = [];
-    for(let i=0;i<s.length-1;i++) g.push(s.slice(i,i+2));
-    return g;
-  }
   function reply(q){
     const s = q.trim();
     if(!s) return "";
-    const gs = grams(s);
-    let best = "", score = 0;
-    pairs.forEach(function(p){
-      let sc = 0;
-      gs.forEach(function(g){ if(p[0].indexOf(g) >= 0) sc++; });
-      if(p[0] === s) sc += 12;
-      if(sc > score){ score = sc; best = p[1]; }
-    });
-    if(score >= 2 && best) return best;
-    if(/吃|餓|飯|奶茶/.test(s)) return "吃了沒寶寶，想吃什麼跟我說";
-    if(/想你|愛你|想妳|愛妳/.test(s)) return "我也想你，我愛你寶寶";
-    if(/到家|回來|回了/.test(s)) return "到家就好。我愛你";
-    if(/早安|起床/.test(s)) return "早安安，吃早餐了嗎";
-    if(/晚安|睡覺|想睡/.test(s)) return "晚安寶寶，抱抱";
-    if(/對不起|生氣|吵架/.test(s)) return "對不起寶寶。我在";
-    if(/上班|工作|下課|上課/.test(s)) return "加油，我在";
-    if(/不舒服|痛|累/.test(s)) return "先休息。我在，抱抱";
-    const soft = ["嗯我在","怎麼了寶寶","我愛你","到家跟我說"];
-    return soft[s.length % soft.length];
+    const rules = [
+      [/椒麻/, "椒麻不要。換別的"],
+      [/吃了沒|吃飯了沒|吃飽|吃了嗎|餓|早餐|午餐|晚餐|宵夜|麥當勞|奶茶|壽司|火鍋|拉麵|便當/, "吃了嗎寶寶。想吃什麼跟我說"],
+      [/想你|想妳|想我/, "我也想你"],
+      [/愛你|愛妳|喜歡你|喜歡妳/, "我也愛你寶寶"],
+      [/到家|回來了|我到了|平安|下樓|出門了/, "到家就好。我愛你"],
+      [/早安|早啊|起床/, "早安安。早餐吃了沒"],
+      [/晚安|睡了|想睡|好睏|睏了/, "晚安寶寶。抱抱"],
+      [/對不起|抱歉|我錯了/, "沒關係。我在"],
+      [/生氣|吵架|不爽|不理我/, "先不要氣。我在"],
+      [/好累|好痛|不舒服|生病|累死/, "先休息。我在"],
+      [/在幹嘛|在干嘛|在嗎|在嘛|做什麼|在不在/, "在。想你"],
+      [/哈哈|笑死|好好笑|XD|xd|呵呵/, "哈哈哈哈哈"],
+      [/騎車|開車|機車|慢一點|小心/, "慢一點。到家說一聲"],
+      [/上課|上班|考試|功課|學校|下班|開會/, "加油寶寶。我等你"],
+      [/好看|好可愛|漂亮|好帥/, "本來就好看"],
+      [/笨蛋|傻瓜/, "才不是。我喜歡你"],
+      [/乖乖|寶寶|老婆|寶貝/, "嗯。我在"],
+      [/嗯+|好哦|好喔|好呀|好啊|知道了|收到|OK|ok|好滴/, "嗯。我愛你寶寶"],
+      [/忙|等一下|等等|待會/, "好。忙完找我"],
+      [/冷|好熱|下雨|風大/, "外套穿了沒"],
+      [/照片|自拍|拍給/, "傳給我看"],
+      [/多少錢|好貴|想買/, "想要就跟我說"],
+      [/誰|別人/, "我只看你"],
+      [/[？?]$|嗎$/, "你說。我在聽"]
+    ];
+    for(let i = 0; i < rules.length; i++){
+      if(rules[i][0].test(s)) return rules[i][1];
+    }
+    if(s.length <= 2) return "嗯。然後呢";
+    if(s.length <= 8) return "我看到了";
+    return "我在。你繼續說";
   }
+
   function ask(){
     const q = input.value.trim();
     if(!q) return;
@@ -2191,5 +2450,5 @@ document.addEventListener("visibilitychange", function(){
   }
   send.onclick = ask;
   input.addEventListener("keydown", function(e){ if(e.key === "Enter") ask(); });
-  bubble(false, "我在。想說什麼跟我說，寶寶");
+  bubble(false, "在。想說什麼，寶寶");
 })();
