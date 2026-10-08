@@ -429,46 +429,64 @@ window._authReady.then(function(uid){
   });
 });
 
-/* 每日戀愛默契：台北時間凌晨換題，兩邊都答完才揭曉 */
+/* 戀愛默契：Sumone 式題庫，兩邊都答完才揭曉 */
 (function(){
-  const qs = [
-    "對方最吸引你的地方？","如果今天只能傳一句話給我，你會說什麼？","我做過最讓你心動的小事？",
-    "你覺得我生氣的時候，該怎麼哄？","我們的關係用一種食物形容？","這週最想一起做的事？",
-    "你最常想起我的哪個瞬間？","如果現在傳送到對方身邊，第一句話是？","我哪個稱呼你最喜歡？",
-    "吵架之後，你其實最需要什麼？","你心裡的完美約會是哪一種？","現在最想吃的那一口是什麼？",
-    "如果我只能改一個地方，你希望是？","你什麼時候確定喜歡我的？","我們以後的家裡一定要有什麼？",
-    "你覺得我還不了解你的哪一面？","今天最想被我怎麼對待？","我哪次沒有即時回你，你其實在想什麼？",
-    "如果只能留一件我們的回憶？","你想被我記住的一個小習慣？","第一次見面，你覺得我是什麼樣的人？",
-    "什麼時候最想被我抱一下？","你覺得我們最像的地方？","下次見面，第一件想做的事？",
-    "我說過哪句話讓你記到現在？","如果給今天的我們打分，為什麼？","你悶悶的時候，希望我做什麼？",
-    "我們最適合一起浪費的一個下午？","你最喜歡我看著你的哪一種時候？","如果明天放假，想跟我去吃什麼？",
-    "你覺得我偷偷在意你的哪件事？","哪一個季節最像我們？","你想跟我一起學會的事？",
-    "我讓你覺得被照顧到的一次？","你不想讓別人知道、只想跟我說的話？","如果可以重來一天，你想重過哪一天？",
-    "你覺得我笑起來的時候像什麼？","我們之間只有我們懂的一個笑話？","你希望我以後一直叫你什麼？",
-    "現在的心情，用一種甜點形容？","如果我晚回家，你希望我先傳什麼？","你最想跟我去的一個地方？",
-    "我哪裡讓你覺得可以靠過來？","今天有沒有一個瞬間突然想我？","你想一起完成、但還沒做的事？",
-    "如果只能選一個，抱抱還是親親？","你覺得我最不像話、但你還是喜歡的點？","我們認識之前，你以為戀愛是什麼？",
-    "現在最想聽到我說的一句話？","如果把我放進你的一天，你會把我安在哪裡？"
+  const bank = [
+    {id:"p1", kind:"pick", q:"週末比較想？", options:["躺著","出門逛"]},
+    {id:"p2", kind:"pick", q:"現在最想吃？", options:["麥當勞","牛肉麵","壽司","甜點"]},
+    {id:"p3", kind:"pick", q:"生氣的時候想要？", options:["抱抱","先安靜一下"]},
+    {id:"p4", kind:"pick", q:"訊息比較像我們？", options:["一直聊","想到再傳"]},
+    {id:"p5", kind:"pick", q:"最喜歡被叫？", options:["寶寶","乖乖","老婆","寶貝"]},
+    {id:"p6", kind:"pick", q:"約會比較想？", options:["吃飯","騎車","待在家"]},
+    {id:"p7", kind:"pick", q:"今天的早餐？", options:["要吃","可以不吃"]},
+    {id:"p8", kind:"pick", q:"吵架之後先做？", options:["傳訊息","打過去","等對方先開口"]},
+    {id:"p9", kind:"pick", q:"下雨天？", options:["一起淋一下","等雨停"]},
+    {id:"p10", kind:"pick", q:"比較想收到？", options:["一句想你","一杯飲料","一個抱抱"]},
+    {id:"p11", kind:"pick", q:"晚上比較想？", options:["打電話","傳訊息","見面"]},
+    {id:"p12", kind:"pick", q:"旅行比較想去？", options:["海邊","山上","城市","哪裡都行"]},
+    {id:"p13", kind:"pick", q:"照片比較想拍？", options:["拍你","拍我","拍我們"]},
+    {id:"p14", kind:"pick", q:"吃宵夜？", options:["可以","今天不要"]},
+    {id:"p15", kind:"pick", q:"我晚回的時候你會？", options:["再傳一次","等我","有點生氣"]},
+    {id:"p16", kind:"pick", q:"完美的一天結尾？", options:["說晚安","抱抱","一起睡"]},
+    {id:"w1", kind:"who", q:"誰比較愛吃醋？", options:["Y","小昀"]},
+    {id:"w2", kind:"who", q:"誰比較黏？", options:["Y","小昀"]},
+    {id:"w3", kind:"who", q:"誰比較會先說對不起？", options:["Y","小昀"]},
+    {id:"w4", kind:"who", q:"誰比較會晚回訊息？", options:["Y","小昀"]},
+    {id:"w5", kind:"who", q:"誰比較會先說想你？", options:["Y","小昀"]},
+    {id:"w6", kind:"who", q:"誰比較容易生氣？", options:["Y","小昀"]},
+    {id:"w7", kind:"who", q:"誰比較會買吃的給對方？", options:["Y","小昀"]},
+    {id:"w8", kind:"who", q:"誰騎車比較需要被提醒慢一點？", options:["Y","小昀"]},
+    {id:"w9", kind:"who", q:"誰比較會先道歉之後又講一句？", options:["Y","小昀"]},
+    {id:"w10", kind:"who", q:"誰比較想每天聽到愛你？", options:["Y","小昀"]},
+    {id:"w11", kind:"who", q:"誰比較會記得對方吃了沒？", options:["Y","小昀"]},
+    {id:"w12", kind:"who", q:"誰比較會把情緒藏起來？", options:["Y","小昀"]},
+    {id:"t1", kind:"text", q:"對方最吸引你的地方？"},
+    {id:"t2", kind:"text", q:"如果今天只能傳一句話，你會說什麼？"},
+    {id:"t3", kind:"text", q:"我做過最讓你心動的小事？"},
+    {id:"t4", kind:"text", q:"你覺得我生氣的時候，該怎麼哄？"},
+    {id:"t5", kind:"text", q:"我們的關係用一種食物形容？"},
+    {id:"t6", kind:"text", q:"這週最想一起做的事？"},
+    {id:"t7", kind:"text", q:"你最常想起我的哪個瞬間？"},
+    {id:"t8", kind:"text", q:"吵架之後，你其實最需要什麼？"},
+    {id:"t9", kind:"text", q:"你什麼時候確定喜歡我的？"},
+    {id:"t10", kind:"text", q:"我們以後的家裡一定要有什麼？"},
+    {id:"t11", kind:"text", q:"你覺得我還不了解你的哪一面？"},
+    {id:"t12", kind:"text", q:"如果只能留一件我們的回憶？"},
+    {id:"t13", kind:"text", q:"下次見面，第一件想做的事？"},
+    {id:"t14", kind:"text", q:"我說過哪句話讓你記到現在？"},
+    {id:"t15", kind:"text", q:"你悶悶的時候，希望我做什麼？"},
+    {id:"t16", kind:"text", q:"如果明天放假，想跟我去吃什麼？"},
+    {id:"t17", kind:"text", q:"現在最想聽到我說的一句話？"},
+    {id:"t18", kind:"text", q:"你想一起完成、但還沒做的事？"},
+    {id:"t19", kind:"text", q:"第一次見面，你覺得我是什麼樣的人？"},
+    {id:"t20", kind:"text", q:"你希望我以後一直叫你什麼？"}
   ];
-  function taipeiParts(){
-    return new Intl.DateTimeFormat("en-GB", {
-      timeZone: "Asia/Taipei", year:"numeric", month:"2-digit", day:"2-digit",
-      hour:"2-digit", minute:"2-digit", second:"2-digit", hourCycle:"h23"
-    }).formatToParts(new Date());
-  }
-  function part(list, type){ return Number(list.find(function(p){ return p.type === type; }).value); }
-  function dayKey(){
-    const list = taipeiParts();
-    const y = part(list, "year"), m = part(list, "month"), d = part(list, "day");
-    return y + "-" + String(m).padStart(2,"0") + "-" + String(d).padStart(2,"0");
-  }
-  function dayIndex(){
-    const list = taipeiParts();
-    return Math.floor(Date.UTC(part(list,"year"), part(list,"month")-1, part(list,"day")) / 86400000);
-  }
-  function esc(s){
-    return String(s).replace(/[&<>"']/g, function(c){ return "&#" + c.charCodeAt(0) + ";"; });
-  }
+  const kindName = { pick:"二選一", who:"誰比較會", text:"心裡話" };
+  const names = { y:"Y", yun:"小昀" };
+  let i = 0;
+  try{ i = Math.max(0, Math.min(bank.length-1, parseInt(localStorage.getItem("syncq-i")||"0", 10) || 0)); }catch(e){}
+  const data = {};
+  let wasBoth = false;
   let audioCtx = null;
   function arm(){
     const AC = window.AudioContext || window.webkitAudioContext;
@@ -479,12 +497,12 @@ window._authReady.then(function(uid){
   function ding(){
     if(!audioCtx) return;
     const t0 = audioCtx.currentTime;
-    [880, 1320].forEach(function(freq, i){
+    [880, 1320].forEach(function(freq, n){
       const o = audioCtx.createOscillator();
       const g = audioCtx.createGain();
       o.type = "sine";
       o.frequency.value = freq;
-      const start = t0 + i * 0.12;
+      const start = t0 + n * 0.12;
       g.gain.setValueAtTime(0.0001, start);
       g.gain.exponentialRampToValueAtTime(0.18, start + 0.02);
       g.gain.exponentialRampToValueAtTime(0.0001, start + 0.28);
@@ -492,26 +510,74 @@ window._authReady.then(function(uid){
       o.start(start); o.stop(start + 0.3);
     });
   }
-  document.addEventListener("pointerdown", arm, { once: true });
-
-  const qEl = document.getElementById("dailyQ");
-  const box = document.getElementById("dailyAnswers");
-  const lock = document.getElementById("dailyLock");
-  const card = document.getElementById("dailyCard");
-  let currentKey = dayKey();
-  qEl.textContent = qs[dayIndex() % qs.length];
-  let ref = null;
-  let firstPaint = true;
-  let wasBoth = false;
-
-  function paint(val){
-    if(!box) return;
-    const mine = window.myRole;
-    const y = val && val.y && val.y.text;
-    const u = val && val.yun && val.yun.text;
+  document.addEventListener("pointerdown", arm, { once:true });
+  function esc(s){
+    return String(s).replace(/[&<>"']/g, function(c){ return "&#" + c.charCodeAt(0) + ";"; });
+  }
+  function answerOf(id, role){
+    const row = data[id];
+    return row && row[role] && row[role].text ? String(row[role].text) : "";
+  }
+  function save(text){
+    const q = bank[i];
+    if(!q || !text || !window.myRole || !window.db) return;
+    window.db.ref("syncq/"+q.id+"/"+window.myRole).set({ text:text, time:Date.now() });
+  }
+  function scoreText(){
+    let both = 0, hit = 0;
+    bank.forEach(function(q){
+      if(q.kind === "text") return;
+      const a = answerOf(q.id, "y");
+      const b = answerOf(q.id, "yun");
+      if(a && b){ both++; if(a === b) hit++; }
+    });
+    const el = document.getElementById("syncScore");
+    if(el) el.textContent = both ? ("默契 " + hit + " / " + both) : "還沒有對過的題";
+  }
+  function paint(){
+    const q = bank[i];
+    const qEl = document.getElementById("dailyQ");
+    const kind = document.getElementById("syncKind");
+    const pos = document.getElementById("syncPos");
+    const choices = document.getElementById("syncChoices");
+    const textBox = document.getElementById("syncText");
+    const box = document.getElementById("dailyAnswers");
+    const lock = document.getElementById("dailyLock");
+    const card = document.getElementById("dailyCard");
+    if(!q || !qEl) return;
+    const mine = window.myRole || "";
+    const y = answerOf(q.id, "y");
+    const u = answerOf(q.id, "yun");
     const both = !!(y && u);
+    const mineText = mine === "y" ? y : (mine === "yun" ? u : "");
+    qEl.textContent = q.q;
+    if(kind) kind.textContent = kindName[q.kind] || "";
+    if(pos) pos.textContent = (i+1) + " / " + bank.length;
+    choices.innerHTML = "";
+    if(q.options){
+      textBox.classList.remove("show");
+      q.options.forEach(function(opt){
+        const b = document.createElement("button");
+        b.type = "button";
+        b.textContent = opt;
+        if(both){
+          if(y === u && opt === y) b.className = "match";
+          else {
+            if(opt === mineText) b.className = "mine";
+            if((opt === y && mine !== "y") || (opt === u && mine !== "yun")) b.className = (b.className ? b.className + " " : "") + "theirs";
+          }
+        } else if(opt === mineText) b.className = "mine";
+        b.onclick = function(){
+          if(both) return;
+          arm();
+          save(opt);
+        };
+        choices.appendChild(b);
+      });
+    } else {
+      textBox.classList.add("show");
+    }
     function row(k, text){
-      const names = { y: "Y", yun: "小昀" };
       let body = "還沒回答";
       if(text){
         if(both || mine === k) body = esc(text);
@@ -519,42 +585,67 @@ window._authReady.then(function(uid){
       }
       return '<div class="daily-row"><b>' + names[k] + '</b><span>' + body + '</span></div>';
     }
-    box.innerHTML = row("y", y) + row("yun", u);
-    if(lock) lock.textContent = both ? "叮。兩邊都答了。" : "還差一個人，答完才看得到對方。";
+    if(box) box.innerHTML = row("y", y) + row("yun", u);
+    if(lock){
+      if(both && q.options && y === u) lock.textContent = "對上了。";
+      else if(both && q.options) lock.textContent = "兩邊都答了，這題不一樣。";
+      else if(both) lock.textContent = "兩邊都說了。";
+      else lock.textContent = "還差一個人。答完才看得到對方。";
+    }
     if(card) card.classList.toggle("revealed", both);
-    if(both && !wasBoth && !firstPaint) ding();
+    if(both && !wasBoth) ding();
     wasBoth = both;
-    firstPaint = false;
+    scoreText();
+    try{ localStorage.setItem("syncq-i", String(i)); }catch(e){}
   }
-
-  function listen(){
-    if(!window.db) return;
-    if(ref) ref.off();
-    firstPaint = true;
-    wasBoth = false;
-    currentKey = dayKey();
-    qEl.textContent = qs[dayIndex() % qs.length];
-    ref = db.ref("daily/" + currentKey);
-    ref.on("value", function(s){ paint(s.val() || {}); });
-    const send = document.getElementById("dailySend");
+  document.getElementById("syncPrev").onclick = function(){
+    wasBoth = true;
+    i = (i - 1 + bank.length) % bank.length;
+    const q = bank[i];
+    wasBoth = !!(answerOf(q.id,"y") && answerOf(q.id,"yun"));
+    paint();
+  };
+  document.getElementById("syncNext").onclick = function(){
+    wasBoth = true;
+    i = (i + 1) % bank.length;
+    const q = bank[i];
+    wasBoth = !!(answerOf(q.id,"y") && answerOf(q.id,"yun"));
+    paint();
+  };
+  document.getElementById("dailySend").onclick = function(){
+    arm();
     const input = document.getElementById("dailyInput");
-    send.onclick = function(){
-      arm();
-      const text = input.value.trim();
-      if(!text || !window.myRole) return;
-      ref.child(window.myRole).set({ text: text, time: Date.now() });
-      input.value = "";
-    };
-  }
-
-  window._authReady.then(listen);
-  const parts = taipeiParts();
-  const left = 86400 - (part(parts,"hour")*3600 + part(parts,"minute")*60 + part(parts,"second"));
-  setTimeout(function(){ listen(); }, left * 1000 + 800);
-
+    const text = input.value.trim();
+    if(!text) return;
+    const q = bank[i];
+    if(answerOf(q.id,"y") && answerOf(q.id,"yun")) return;
+    save(text);
+    input.value = "";
+  };
   document.getElementById("dailyInput").addEventListener("keydown", function(e){
     if(e.key === "Enter") document.getElementById("dailySend").click();
   });
+  paint();
+  if(window._authReady){
+    window._authReady.then(function(){
+      if(!window.db) return;
+      let primed = false;
+      window.db.ref("syncq").on("value", function(s){
+        const q = bank[i];
+        const before = !!(q && answerOf(q.id,"y") && answerOf(q.id,"yun"));
+        const val = s.val() || {};
+        Object.keys(data).forEach(function(k){ delete data[k]; });
+        Object.keys(val).forEach(function(k){ data[k] = val[k]; });
+        if(!primed){
+          primed = true;
+          wasBoth = !!(q && answerOf(q.id,"y") && answerOf(q.id,"yun"));
+        } else {
+          wasBoth = before;
+        }
+        paint();
+      });
+    });
+  }
 })();
 
 /* 一起按愛心 */

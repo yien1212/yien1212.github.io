@@ -16,7 +16,7 @@
 <title>我們 ❤️</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@200;300;400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/app.css?v=15">
+<link rel="stylesheet" href="css/app.css?v=16">
 </head>
 <body>
 
@@ -280,15 +280,25 @@
   </div>
 
   <!-- 每日一問 -->
-  <h3 class="stitle">每日戀愛默契</h3>
+  <h3 class="stitle">戀愛默契</h3>
   <div class="card" id="dailyCard">
-    <p class="talk-note">每天凌晨 0 點換一題。兩邊都送出，才看得到對方的答案。</p>
-    <div id="dailyQ" style="font-family:'Noto Serif TC',serif;font-size:1.05rem;line-height:1.7">載入中...</div>
-    <div id="dailyLock" class="talk-note"></div>
-    <div id="dailyAnswers" style="margin-top:12px;font-size:.9rem;color:#666"></div>
-    <div style="display:flex;gap:8px;margin-top:12px">
+    <p class="talk-note">像 Sumone 一樣，一題一題答。你先答，對方的答案會先藏起來。兩邊都送出才打開。選項如果一樣，算一次默契。</p>
+    <div class="sync-top">
+      <span id="syncPos">1</span>
+      <span id="syncScore"></span>
+    </div>
+    <div id="syncKind" class="talk-note"></div>
+    <div id="dailyQ" style="font-family:'Noto Serif TC',serif;font-size:1.08rem;line-height:1.7">載入中...</div>
+    <div id="syncChoices" class="sync-choices"></div>
+    <div id="syncText" style="gap:8px;margin-top:12px">
       <input id="dailyInput" placeholder="寫下你的回答" style="flex:1;padding:10px 12px;border-radius:12px;border:1.5px solid var(--pink-soft);font-family:inherit">
-      <button class="btn-pink" id="dailySend" style="padding:10px 16px">送出</button>
+      <button class="btn-pink" id="dailySend" type="button" style="padding:10px 16px">送出</button>
+    </div>
+    <div id="dailyLock" class="talk-note"></div>
+    <div id="dailyAnswers" style="margin-top:8px;font-size:.9rem;color:#666"></div>
+    <div class="sync-nav">
+      <button type="button" id="syncPrev">上一題</button>
+      <button type="button" id="syncNext">下一題</button>
     </div>
   </div>
 
@@ -615,7 +625,7 @@
 <script src="js/guard.js?v=6"></script>
 <script src="js/config.js?v=4"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-<script src="js/app.js?v=15"></script>
+<script src="js/app.js?v=16"></script>
 <script src="https://cdn.botpress.cloud/webchat/v3.5/inject.js"></script>
 <script src="https://files.bpcontent.cloud/2026/01/12/17/20260112175648-Q8N99NKQ.js" defer></script>
 

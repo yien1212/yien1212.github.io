@@ -707,3 +707,20 @@ body{counter-reset: section}
 .daily-row b{ color:#e91e63; min-width:2.6em; }
 .daily-row span{ flex:1; }
 #dailyCard.revealed{ animation:fadeIn .45s ease; }
+.sync-top{display:flex;justify-content:space-between;gap:8px;font-size:.82rem;color:#a24;margin:4px 0 8px}
+.sync-choices{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:12px}
+.sync-choices button{
+  min-height:44px; padding:10px 16px; border-radius:999px;
+  border:1.5px solid #ffd0e0; background:#fff; color:#a24;
+  font-family:inherit; font-size:.95rem;
+}
+.sync-choices button.mine{background:#e91e63;color:#fff;border-color:#e91e63}
+.sync-choices button.theirs{box-shadow:inset 0 0 0 2px #e91e63}
+.sync-choices button.match{background:#e91e63;color:#fff;border-color:#e91e63}
+.sync-nav{display:flex;gap:8px;justify-content:center;margin-top:14px}
+.sync-nav button{
+  min-height:40px; padding:8px 18px; border-radius:999px;
+  border:1px solid #ffd0e0; background:#fff; color:#a24; font-family:inherit;
+}
+#syncText{display:none}
+#syncText.show{display:flex}
