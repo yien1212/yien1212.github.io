@@ -217,7 +217,7 @@ function showLB(){
     full = raw.indexOf("mem/t/") === 0 ? ("mem/" + raw.slice(6)) : (img.src || "");
   }
   document.getElementById("lbImg").src = full;
-  document.getElementById("lbCap").textContent = (f.dataset.cap || "") + "  (" + (lbI+1) + "/" + figs.length + ")";
+  document.getElementById("lbCap").textContent = (lbI + 1) + " / " + figs.length;
 }
 function bindWall(){
   wallFigs().forEach((f,i) => { f.onclick = () => openLB(i); });
@@ -388,10 +388,41 @@ document.getElementById("loveBtn").onclick = () => {
 document.getElementById("mystery").onclick = function(){
   const pool = wallFigs();
   if(!pool.length) return;
-  const f = pool[Math.floor(Math.random()*pool.length)];
+  const f = pool[Math.floor(Math.random() * pool.length)];
   const img = f.querySelector("img");
   document.getElementById("mystImg").src = (f.dataset.full || (img && img.src) || "");
-  document.getElementById("mystQ").textContent = (f.dataset.cap || "我們的") + "。再點一次換一張";
+  const cap = f.dataset.cap || "";
+  const line = (function(c){
+    const rows = [
+      [/雨/, "雨天也想牽你的手"],
+      [/親|吻/, "這一親，我記到現在"],
+      [/鏡/, "鏡子裡也想再靠近一點"],
+      [/口罩/, "口罩底下也是在笑"],
+      [/窩|睡/, "就這樣靠著，不用起來"],
+      [/寫/, "字可以亂，人不要走"],
+      [/花/, "花給你，人我留著"],
+      [/狗/, "狗可以兩隻，人我只要你"],
+      [/娃娃/, "娃娃一堆，人只要你"],
+      [/電動|遊戲/, "你打，我在旁邊"],
+      [/吃|飯|湯|烤|零食|蛋糕|草莓/, "看你吃，我就開心"],
+      [/電梯|抱/, "門開之前，先抱一下"],
+      [/門票|動物園|玻璃|狐獴/, "走到哪都想跟你並排"],
+      [/電影/, "燈黑掉的時候，手是你的"],
+      [/沙/, "沙會被海帶走，你不要"],
+      [/夜市/, "人很多，我只看你"],
+      [/鞋/, "鞋帶我幫你弄"],
+      [/橋/, "這座橋是我們一起走的"],
+      [/心/, "比給你的，不是比給別人"],
+      [/車|騎/, "坐你旁邊就好"],
+      [/毛線/, "慢慢織，我等你"]
+    ];
+    for(let i = 0; i < rows.length; i++){
+      if(rows[i][0].test(c)) return rows[i][1];
+    }
+    return "這張我看到就想你";
+  })(cap);
+  const q = document.getElementById("mystQ");
+  if(q) q.textContent = line;
   this.classList.add("flipped");
 };
 
@@ -1773,23 +1804,39 @@ window._authReady.then(function(uid){
   };
 });
 
-/* 誰先睡 */
-window._authReady.then(function(uid){
-  document.getElementById("sleepBtn").onclick = function(){
-    db.ref("sleep/"+new Date().toDateString()+"/"+uid).set(new Date().toLocaleTimeString("zh-TW"));
-  };
-  db.ref("sleep/"+new Date().toDateString()).on("value", doc => {
-    const el = document.getElementById("sleepStatus");
-    if(!doc.exists()){ el.textContent = "還沒人睡"; return; }
-    const d = doc.val() || {};
-    const me = d[uid], her = d[Object.keys(d).find(k => k !== uid)];
+/* 誰先睡：先改畫面，再寫上去，按了一定有反應 */
+(function(){
+  const btn = document.getElementById("sleepBtn");
+  const el = document.getElementById("sleepStatus");
+  if(!btn || !el) return;
+  function dayKey(){ return new Date().toISOString().slice(0, 10); }
+  function paint(d, uid){
+    d = d || {};
+    const me = d[uid];
+    let her = null, herKey = "";
+    Object.keys(d).forEach(function(k){ if(k !== uid){ her = d[k]; herKey = k; } });
     if(me && her){
-      el.textContent = me < her ? "你先睡了 🌙" : ((window.themName||"她") + "先睡了 😴");
-    } else if(me){ el.textContent = "你說了晚安，等她..."; }
-    else if(her){ el.textContent = (window.themName||"她") + "先說晚安了！"; }
+      el.textContent = Number(me) <= Number(her) ? "你先睡了" : ((window.themName || "她") + "先睡了");
+    } else if(me){ el.textContent = "你說了晚安，等她"; }
+    else if(her){ el.textContent = (window.themName || "她") + "先說晚安了"; }
     else { el.textContent = "還沒人睡"; }
-  });
-});
+  }
+  btn.type = "button";
+  btn.onclick = function(){
+    el.textContent = "你說了晚安，等她";
+    const uid = window.uid;
+    if(!window.db || !uid) return;
+    window.db.ref("sleep/" + dayKey() + "/" + uid).set(Date.now()).catch(function(){});
+  };
+  if(window._authReady){
+    window._authReady.then(function(uid){
+      if(!window.db) return;
+      window.db.ref("sleep/" + dayKey()).on("value", function(doc){
+        paint(doc.exists() ? (doc.val() || {}) : {}, uid);
+      });
+    });
+  }
+})();
 
 /* 愛情分數 */
 window._authReady.then(function(uid){
@@ -2834,7 +2881,20 @@ document.addEventListener("visibilitychange", function(){
     bubble(true, q);
     setTimeout(function(){ bubble(false, reply(q)); }, 280);
   }
-  send.onclick = ask;
-  input.addEventListener("keydown", function(e){ if(e.key === "Enter") ask(); });
-  bubble(false, "在。想說什麼，寶寶");
+  const input = document.getElementById("botInput");
+  const send = document.getElementById("botSend");
+  const log = document.getElementById("botLog");
+  function bubble(mine, text){
+    if(!log) return;
+    const row = document.createElement("div");
+    row.className = "bot-line " + (mine ? "me" : "them");
+    row.textContent = text;
+    log.appendChild(row);
+    log.scrollTop = log.scrollHeight;
+  }
+  if(send && input){
+    send.onclick = ask;
+    input.addEventListener("keydown", function(e){ if(e.key === "Enter") ask(); });
+    bubble(false, "在。想說什麼");
+  }
 })();
