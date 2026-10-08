@@ -17,16 +17,23 @@
   window.Guard = { log, push, report: push };
 
   window.addEventListener("error", function(e){
-    if(e.target && e.target.tagName === "IMG"){
-      e.target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%23ffd6e7' width='200' height='200'/%3E%3Ctext x='50%25' y='50%25' font-size='40' text-anchor='middle' dy='.3em'%3E%E2%9D%A4%3C/text%3E%3C/svg%3E";
-      e.target.onerror = null;
-      push("IMG", "圖片載入失敗，已換成愛心占位", e.target.getAttribute("src")||"", true);
+    const target = e.target;
+    if(target && target !== window && target.tagName){
+      if(target.tagName === "IMG"){
+        target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%23ffd6e7' width='200' height='200'/%3E%3Ctext x='50%25' y='50%25' font-size='40' text-anchor='middle' dy='.3em'%3E%E2%9D%A4%3C/text%3E%3C/svg%3E";
+        target.onerror = null;
+      }
       return;
     }
-    push("JS", e.message || "script error", (e.filename||"")+":"+(e.lineno||""));
+    const msg = String(e.message || "");
+    if(!msg || msg === "Script error." || msg === "script error") return;
+    push("JS", msg, (e.filename||"")+":"+(e.lineno||""));
   }, true);
   window.addEventListener("unhandledrejection", function(e){
-    push("Promise", e.reason && e.reason.message ? e.reason.message : e.reason, "");
+    const reason = e.reason;
+    const msg = reason && reason.message ? String(reason.message) : String(reason || "");
+    if(!msg || /offline|network|離線|permission_denied|PERMISSION_DENIED/i.test(msg)) return;
+    push("Promise", msg, "");
   });
 
   const orig = HTMLCanvasElement.prototype.getContext;
