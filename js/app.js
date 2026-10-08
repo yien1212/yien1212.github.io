@@ -187,7 +187,20 @@ const carP = [
   ["mem/pups.jpg","兩隻小狗"],
   ["mem/okbus.jpg","車上"],
   ["mem/toys.jpg","一堆娃娃"],
-  ["mem/nightgame.jpg","晚上打電動"]
+  ["mem/nightgame.jpg","晚上打電動"],
+  ["mem/tickets.jpg","兩張車票"],
+  ["mem/train2.jpg","火車上"],
+  ["mem/shore.jpg","沙灘寫字"],
+  ["mem/cups.jpg","兩杯"],
+  ["mem/noodles2.jpg","麵跟飲料"],
+  ["mem/crayon.jpg","蠟筆風車"],
+  ["mem/arcade.jpg","打電動"],
+  ["mem/feast.jpg","吃一桌"],
+  ["mem/brunch.jpg","邊看邊吃"],
+  ["mem/onsen.jpg","晚上泡一下"],
+  ["mem/peck2.jpg","電梯裡親一下"],
+  ["mem/lift4.jpg","電梯鏡子"],
+  ["mem/blanket.jpg","一起睡"]
 ];
 function initCarousel(){
   function show(i){
@@ -404,6 +417,10 @@ document.getElementById("mystery").onclick = function(){
       [/狗/, "狗可以兩隻，人我只要你"],
       [/娃娃/, "娃娃一堆，人只要你"],
       [/電動|遊戲/, "你打，我在旁邊"],
+      [/火車|車票/, "第一次出遠門，坐你旁邊"],
+      [/泡/, "晚上就這樣靠著"],
+      [/蠟筆/, "顏色慢慢塗，我等你"],
+      [/麵|杯/, "吃的我請"],
       [/吃|飯|湯|烤|零食|蛋糕|草莓/, "看你吃，我就開心"],
       [/電梯|抱/, "門開之前，先抱一下"],
       [/門票|動物園|玻璃|狐獴/, "走到哪都想跟你並排"],

@@ -320,5 +320,96 @@
     "c": "晚上打電動",
     "w": 480,
     "h": 640
+  },
+  {
+    "t": "mem/t/tickets.jpg",
+    "f": "mem/tickets.jpg",
+    "c": "兩張車票",
+    "w": 480,
+    "h": 640
+  },
+  {
+    "t": "mem/t/train2.jpg",
+    "f": "mem/train2.jpg",
+    "c": "火車上",
+    "w": 480,
+    "h": 640
+  },
+  {
+    "t": "mem/t/shore.jpg",
+    "f": "mem/shore.jpg",
+    "c": "沙灘寫字",
+    "w": 480,
+    "h": 640
+  },
+  {
+    "t": "mem/t/cups.jpg",
+    "f": "mem/cups.jpg",
+    "c": "兩杯",
+    "w": 480,
+    "h": 640
+  },
+  {
+    "t": "mem/t/noodles2.jpg",
+    "f": "mem/noodles2.jpg",
+    "c": "麵跟飲料",
+    "w": 480,
+    "h": 640
+  },
+  {
+    "t": "mem/t/crayon.jpg",
+    "f": "mem/crayon.jpg",
+    "c": "蠟筆風車",
+    "w": 480,
+    "h": 640
+  },
+  {
+    "t": "mem/t/arcade.jpg",
+    "f": "mem/arcade.jpg",
+    "c": "打電動",
+    "w": 480,
+    "h": 640
+  },
+  {
+    "t": "mem/t/feast.jpg",
+    "f": "mem/feast.jpg",
+    "c": "吃一桌",
+    "w": 480,
+    "h": 640
+  },
+  {
+    "t": "mem/t/brunch.jpg",
+    "f": "mem/brunch.jpg",
+    "c": "邊看邊吃",
+    "w": 480,
+    "h": 640
+  },
+  {
+    "t": "mem/t/onsen.jpg",
+    "f": "mem/onsen.jpg",
+    "c": "晚上泡一下",
+    "w": 480,
+    "h": 640
+  },
+  {
+    "t": "mem/t/peck2.jpg",
+    "f": "mem/peck2.jpg",
+    "c": "電梯裡親一下",
+    "w": 480,
+    "h": 559
+  },
+  {
+    "t": "mem/t/lift4.jpg",
+    "f": "mem/lift4.jpg",
+    "c": "電梯鏡子",
+    "w": 480,
+    "h": 640
+  },
+  {
+    "t": "mem/t/blanket.jpg",
+    "f": "mem/blanket.jpg",
+    "c": "一起睡",
+    "w": 480,
+    "h": 640
   }
 ]
