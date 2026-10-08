@@ -75,5 +75,68 @@
     "c": "草莓跟一千",
     "w": 480,
     "h": 640
+  },
+  {
+    "t": "mem/t/soup.jpg",
+    "f": "mem/soup.jpg",
+    "c": "兩碗湯",
+    "w": 480,
+    "h": 640
+  },
+  {
+    "t": "mem/t/grill.jpg",
+    "f": "mem/grill.jpg",
+    "c": "烤東西",
+    "w": 480,
+    "h": 640
+  },
+  {
+    "t": "mem/t/snacks.jpg",
+    "f": "mem/snacks.jpg",
+    "c": "零食抱滿",
+    "w": 480,
+    "h": 640
+  },
+  {
+    "t": "mem/t/cake.jpg",
+    "f": "mem/cake.jpg",
+    "c": "蛋糕跟禮物",
+    "w": 480,
+    "h": 640
+  },
+  {
+    "t": "mem/t/bags.jpg",
+    "f": "mem/bags.jpg",
+    "c": "袋子跟耳機",
+    "w": 480,
+    "h": 640
+  },
+  {
+    "t": "mem/t/hood.jpg",
+    "f": "mem/hood.jpg",
+    "c": "電梯前面",
+    "w": 480,
+    "h": 640
+  },
+  {
+    "t": "mem/t/hug.jpg",
+    "f": "mem/hug.jpg",
+    "c": "電梯裡抱一下",
+    "w": 480,
+    "h": 640
+  },
+  {
+    "t": "mem/t/ring.jpg",
+    "f": "mem/ring.jpg",
+    "c": "戒指跟手鍊",
+    "w": 480,
+    "h": 640
+  },
+  {
+    "t": "mem/t/ride.jpg",
+    "f": "mem/ride.jpg",
+    "c": "紅安全帽",
+    "w": 480,
+    "h": 640
   }
 ]

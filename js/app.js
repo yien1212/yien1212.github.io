@@ -121,7 +121,16 @@ const carP = [
   ["mem/lift.jpg","電梯裡靠一下"],
   ["mem/hands.jpg","手上的心"],
   ["mem/lean.jpg","頭髮掉下來"],
-  ["mem/berry.jpg","草莓跟一千"]
+  ["mem/berry.jpg","草莓跟一千"],
+  ["mem/soup.jpg","兩碗湯"],
+  ["mem/grill.jpg","烤東西"],
+  ["mem/snacks.jpg","零食抱滿"],
+  ["mem/cake.jpg","蛋糕跟禮物"],
+  ["mem/bags.jpg","袋子跟耳機"],
+  ["mem/hood.jpg","電梯前面"],
+  ["mem/hug.jpg","電梯裡抱一下"],
+  ["mem/ring.jpg","戒指跟手鍊"],
+  ["mem/ride.jpg","紅安全帽"]
 ];
 function initCarousel(){
   function show(i){
