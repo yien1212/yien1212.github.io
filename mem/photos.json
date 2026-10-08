@@ -138,5 +138,40 @@
     "c": "紅安全帽",
     "w": 480,
     "h": 640
+  },
+  {
+    "t": "mem/t/ticket.jpg",
+    "f": "mem/ticket.jpg",
+    "c": "兩張門票",
+    "w": 480,
+    "h": 640
+  },
+  {
+    "t": "mem/t/meerkat.jpg",
+    "f": "mem/meerkat.jpg",
+    "c": "狐獴站好",
+    "w": 480,
+    "h": 640
+  },
+  {
+    "t": "mem/t/zoo.jpg",
+    "f": "mem/zoo.jpg",
+    "c": "靠在一起",
+    "w": 480,
+    "h": 640
+  },
+  {
+    "t": "mem/t/glass.jpg",
+    "f": "mem/glass.jpg",
+    "c": "玻璃上比心",
+    "w": 480,
+    "h": 640
+  },
+  {
+    "t": "mem/t/peace.jpg",
+    "f": "mem/peace.jpg",
+    "c": "比耶",
+    "w": 480,
+    "h": 640
   }
 ]
