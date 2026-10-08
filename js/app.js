@@ -6,7 +6,16 @@
   window.uid = null;
   window._authResolve = null;
   window._authReady = new Promise(res => { window._authResolve = res; });
-  firebase.auth().onAuthStateChanged(u => { if(u && u.uid) window.uid = u.uid; });
+  firebase.auth().onAuthStateChanged(u => {
+    if(!u || !u.uid) return;
+    const roles = window.APP_CONFIG && window.APP_CONFIG.roles;
+    const want = window.myRole && roles && roles[window.myRole] && roles[window.myRole].email;
+    if(want && u.email && u.email.toLowerCase() !== String(want).toLowerCase()){
+      firebase.auth().signOut().catch(function(){});
+      return;
+    }
+    window.uid = u.uid;
+  });
 })();
 
 const ROLES = window.APP_CONFIG.roles;
@@ -57,12 +66,34 @@ function tryLogin(){
   }
   window.myRole = pendingRole;
   window.themName = pendingRole === "y" ? "小昀" : "Y";
-  window.uid = window.uid || ("local-"+pendingRole);
-  if(window._authResolve){ window._authResolve(window.uid); window._authResolve = null; }
-  enterApp();
-  firebase.auth().signInWithEmailAndPassword(ROLES[pendingRole].email, window.APP_CONFIG.dbPass)
-    .then(u => { window.uid = u.user.uid; })
-    .catch(e => { if(window.Guard) Guard.push("Auth", "雲端登入失敗，頁面仍可使用", e.code||e.message); });
+  const email = ROLES[pendingRole].email;
+  const goBtn = document.getElementById("roleGo");
+  if(goBtn) goBtn.disabled = true;
+  msg.textContent = "進來了…";
+  let entered = false;
+  function finish(uid){
+    if(entered) return;
+    entered = true;
+    window.uid = uid || ("local-" + pendingRole);
+    if(window._authResolve){ window._authResolve(window.uid); window._authResolve = null; }
+    if(goBtn) goBtn.disabled = false;
+    enterApp();
+  }
+  function startSignIn(){
+    firebase.auth().signInWithEmailAndPassword(email, window.APP_CONFIG.dbPass)
+      .then(function(u){ finish(u.user && u.user.uid); })
+      .catch(function(e){
+        if(window.Guard) Guard.push("Auth", "雲端登入失敗，頁面仍可使用", e && (e.code || e.message) || "");
+        finish("local-" + pendingRole);
+      });
+  }
+  const cur = firebase.auth().currentUser;
+  if(cur && cur.email && cur.email.toLowerCase() !== String(email).toLowerCase()){
+    firebase.auth().signOut().then(startSignIn).catch(startSignIn);
+  } else {
+    startSignIn();
+  }
+  setTimeout(function(){ finish("local-" + pendingRole); }, 8000);
 }
 document.getElementById("roleGo").onclick = tryLogin;
 document.getElementById("rolePw").addEventListener("keydown", e => { if(e.key==="Enter") tryLogin(); });
@@ -1673,7 +1704,7 @@ window._authReady.then(function(uid){
         target.setFullYear(now.getFullYear() + 1);
         days = Math.ceil((target - now)/86400000);
       }
-      html += `<div style="background:rgba(255,255,255,.65);backdrop-filter:blur(20px);border-radius:16px;padding:12px;margin:8px 0;display:flex;justify-content:space-between;align-items:center">
+      html += `<div style="background:#fff;border-radius:16px;padding:12px;margin:8px 0;display:flex;justify-content:space-between;align-items:center">
         <span style="font-family:'Noto Serif TC',serif;color:var(--pink-deep)">${a.name}</span>
         <span style="display:flex;align-items:center;gap:10px">
           <span style="color:var(--pink);font-weight:600">${days === 0 ? "今天！🎉" : days + " 天"}</span>
@@ -2678,6 +2709,7 @@ document.addEventListener("visibilitychange", function(){
   if(openBp){
     openBp.onclick = function(){
       const status = document.getElementById("bpStatus");
+      tameBp();
       if(window.botpress && typeof window.botpress.open === "function"){
         window.botpress.open();
         if(status) status.textContent = "";
@@ -2686,6 +2718,28 @@ document.addEventListener("visibilitychange", function(){
       }
     };
   }
+
+  function tameBp(){
+    const kids = document.body ? document.body.children : [];
+    for(let i = 0; i < kids.length; i++){
+      const el = kids[i];
+      const mark = String(el.id || "") + " " + String(el.className && el.className.baseVal != null ? el.className.baseVal : el.className || "");
+      if(!/bp|botpress/i.test(mark)) continue;
+      const r = el.getBoundingClientRect();
+      if(r.width > window.innerWidth * 0.7 && r.height > window.innerHeight * 0.7){
+        el.style.pointerEvents = "none";
+      }
+    }
+    document.querySelectorAll(".bpFabWrapper, .bpWebchat, .bpMessagePreview, .bpFABMessagePreview").forEach(function(el){
+      el.style.pointerEvents = "auto";
+    });
+  }
+  tameBp();
+  let bpTick = 0;
+  new MutationObserver(function(){
+    if(bpTick) return;
+    bpTick = requestAnimationFrame(function(){ bpTick = 0; tameBp(); });
+  }).observe(document.documentElement, {childList:true, subtree:true});
 
   function reply(q){
     const s = q.trim();

@@ -16,7 +16,7 @@
 <title>我們 ❤️</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@200;300;400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/app.css?v=23">
+<link rel="stylesheet" href="css/app.css?v=24">
 </head>
 <body>
 
@@ -72,7 +72,7 @@
   </div>
 
   <h3 class="stitle">🎙️ 聲音訊息</h3>
-  <div style="max-width:500px;margin:0 auto 8px;text-align:center;background:rgba(255,255,255,.78);backdrop-filter:blur(20px);border-radius:24px;padding:22px 18px;box-shadow:0 10px 30px rgba(233,30,99,.12)">
+  <div style="max-width:500px;margin:0 auto 8px;text-align:center;background:rgba(255,255,255,.78);background:rgba(255,255,255,.96);border-radius:24px;padding:22px 18px;box-shadow:0 10px 30px rgba(233,30,99,.12)">
     <p style="font-size:.9rem;color:#777;margin:0 0 14px;line-height:1.6">錄一段給對方。按一下開始，再按一下送出，最長 20 秒。</p>
     <button class="btn-pink" id="recBtn" style="min-height:48px;min-width:168px;border-radius:999px;font-size:1rem">開始錄音</button>
     <div id="recStatus" style="margin-top:10px;font-size:.9rem;color:#777">按一下開始，再按一下送出</div>
@@ -83,7 +83,7 @@
   <!-- 情書 -->
   <!-- 即時聊天 -->
   <h3 class="stitle">💬 寫給妳（也跟妳說話）</h3>
-  <div style="max-width:500px;margin:0 auto;background:rgba(255,255,255,.7);backdrop-filter:blur(20px);border-radius:24px;padding:20px;box-shadow:0 10px 30px rgba(233,30,99,.15)">
+  <div style="max-width:500px;margin:0 auto;background:rgba(255,255,255,.7);background:rgba(255,255,255,.96);border-radius:24px;padding:20px;box-shadow:0 10px 30px rgba(233,30,99,.15)">
     <div id="chatList" style="height:220px;overflow-y:auto;background:#fff;border-radius:16px;padding:15px;margin-bottom:5px;border:1px solid var(--pink-soft)"></div>
     <div id="typing" style="font-size:.8rem;color:var(--pink);margin-bottom:5px;display:none">對方正在輸入...</div>
     <div style="display:flex;gap:8px">
@@ -291,7 +291,7 @@
 
   <!-- 共同記帳 -->
   <h3 class="stitle">💰 約會記帳</h3>
-  <div style="max-width:500px;margin:0 auto;background:rgba(255,255,255,.65);backdrop-filter:blur(20px);border-radius:24px;padding:20px">
+  <div style="max-width:500px;margin:0 auto;background:rgba(255,255,255,.65);background:rgba(255,255,255,.96);border-radius:24px;padding:20px">
     <div style="display:flex;gap:8px;margin-bottom:10px">
       <input type="number" id="expAmount" placeholder="金額" style="flex:1;padding:10px;border-radius:12px;border:1.5px solid var(--pink-soft)">
       <input type="text" id="expNote" placeholder="買了什麼" style="flex:1;padding:10px;border-radius:12px;border:1.5px solid var(--pink-soft)">
@@ -432,7 +432,7 @@
 
   <!-- 定位+電量 -->
   <h3 class="stitle">📍 我們在哪</h3>
-  <div style="max-width:500px;margin:0 auto;background:rgba(255,255,255,.7);backdrop-filter:blur(20px);border-radius:24px;padding:25px;box-shadow:0 10px 30px rgba(233,30,99,.15)">
+  <div style="max-width:500px;margin:0 auto;background:rgba(255,255,255,.7);background:rgba(255,255,255,.96);border-radius:24px;padding:25px;box-shadow:0 10px 30px rgba(233,30,99,.15)">
     <div style="display:flex;gap:15px;text-align:center">
       <div style="flex:1">
         <div style="font-size:.85rem;color:#999;margin-bottom:5px">我</div>
@@ -451,7 +451,7 @@
 
   <!-- 愛情雷達 -->
   <h3 class="stitle">📡 愛情雷達</h3>
-  <div style="text-align:center;background:rgba(255,255,255,.65);backdrop-filter:blur(20px);border-radius:24px;padding:25px;max-width:500px;margin:0 auto;box-shadow:0 8px 32px rgba(233,30,99,.08)">
+  <div style="text-align:center;background:rgba(255,255,255,.65);background:rgba(255,255,255,.96);border-radius:24px;padding:25px;max-width:500px;margin:0 auto;box-shadow:0 8px 32px rgba(233,30,99,.08)">
     <div id="distance" style="font-size:2rem;color:var(--pink);font-weight:600">--</div>
     <div style="font-size:.85rem;color:#999;margin-top:5px">我們距離多遠</div>
     <div id="myWeather" style="margin-top:10px;font-size:.9rem;color:var(--pink-deep)"></div>
@@ -543,7 +543,7 @@
 
   <!-- 集點卡 -->
   <h3 class="stitle">🎟️ 愛心集點卡</h3>
-  <div style="text-align:center;background:rgba(255,255,255,.65);backdrop-filter:blur(20px);border-radius:16px;padding:14px;margin:8px 0">
+  <div style="text-align:center;background:rgba(255,255,255,.65);background:rgba(255,255,255,.96);border-radius:16px;padding:14px;margin:8px 0">
     <div style="font-size:.85rem;color:#999">我的點數</div>
     <div id="myPoints" style="font-size:2.2rem;color:var(--pink);font-weight:700">0</div>
     <div style="font-size:.85rem;color:#999;margin-top:4px">她的點數：<span id="herPoints">0</span></div>
@@ -628,7 +628,7 @@
 <script src="js/guard.js?v=6"></script>
 <script src="js/config.js?v=4"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-<script src="js/app.js?v=31"></script>
+<script src="js/app.js?v=32"></script>
 <script src="https://cdn.botpress.cloud/webchat/v3.5/inject.js"></script>
 <script src="https://files.bpcontent.cloud/2026/01/12/17/20260112175648-Q8N99NKQ.js" defer></script>
 
