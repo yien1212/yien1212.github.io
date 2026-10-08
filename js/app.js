@@ -47,6 +47,7 @@ document.querySelectorAll(".tab-btn").forEach(btn => {
     if(page) page.classList.add("active");
     window.scrollTo(0,0);
     if(btn.dataset.page === "games" && typeof initScratch === "function") setTimeout(initScratch, 100);
+    if(btn.dataset.page === "games" && window._resizeTalk) setTimeout(window._resizeTalk, 60);
   };
 });
 
@@ -696,6 +697,111 @@ document.addEventListener("click", e => {
     story.textContent = "114,248 則訊息。小昀講得比較多，62,337 則，Y 是 51,911 則。照片 12,126 張、貼圖 4,199 個、語音 687 則，最常在晚上 10 點。\n聊最多的是叫對方寶寶、說愛、好不好吃、想你、回家有沒有到。也會吵：對不起 271 次、討厭 233、生氣 212、吵架 91，然後和好 43 次。旁邊還有上課、考試、貓狗、麥當勞。";
   }
 
+
+  const hours0 = [5834,3296,3467,1987,1378,935,1027,1702,2043,2540,3596,5151,5746,5430,6724,6328,6775,7115,6590,6490,5769,8009,9002,7314];
+  const monthLabels = ["24/11","24/12","25/01","25/02","25/03","25/04","25/05","25/06","25/07","25/08","25/09","25/10","25/11","25/12","26/01","26/02","26/03","26/04","26/05","26/06","26/07","26/08"];
+  const monthVals = [6414,11853,7661,10594,4841,13899,11449,6035,6301,3867,3135,5423,2263,896,1554,7617,2995,2814,1372,1198,1393,674];
+  const pinks = ["#e91e63","#ff8fb3","#ffd0e0","#c45c26"];
+  const charts = {};
+  function chartOk(){ return window.Chart && document.getElementById("whoChart"); }
+  function makeChart(id, cfg){
+    if(!chartOk()) return;
+    const el = document.getElementById(id);
+    if(!el) return;
+    if(charts[id]) charts[id].destroy();
+    charts[id] = new Chart(el, cfg);
+  }
+  function baseOpts(legend){
+    return { responsive:true, maintainAspectRatio:false, plugins:{ legend:{ display:legend, labels:{ boxWidth:10 } } } };
+  }
+  function paintWho(y, yun){
+    makeChart("whoChart", {
+      type:"doughnut",
+      data:{ labels:["Y","小昀"], datasets:[{ data:[y,yun], backgroundColor:["#e91e63","#ffb3c8"], borderWidth:0 }] },
+      options:baseOpts(true)
+    });
+  }
+  function paintType(text, sticker, photo, other){
+    makeChart("typeChart", {
+      type:"doughnut",
+      data:{ labels:["文字","貼圖","照片","其他"], datasets:[{ data:[text,sticker,photo,other], backgroundColor:pinks, borderWidth:0 }] },
+      options:baseOpts(true)
+    });
+  }
+  function paintHours(arr){
+    makeChart("hourChart", {
+      type:"bar",
+      data:{ labels:arr.map(function(_,i){ return i; }), datasets:[{ label:"幾點在傳", data:arr, backgroundColor:"#ff8fb3", borderRadius:4 }] },
+      options:Object.assign(baseOpts(false), { scales:{ x:{ ticks:{ maxTicksLimit:8 } }, y:{ ticks:{ display:false } } } })
+    });
+  }
+  function paintMonths(labels, vals){
+    makeChart("monthChart", {
+      type:"line",
+      data:{ labels:labels, datasets:[{ label:"每個月幾則", data:vals, borderColor:"#e91e63", backgroundColor:"rgba(233,30,99,.15)", fill:true, tension:.35, pointRadius:2 }] },
+      options:Object.assign(baseOpts(false), { scales:{ x:{ ticks:{ maxTicksLimit:6 } }, y:{ ticks:{ display:false } } } })
+    });
+  }
+  paintWho(51911, 62337);
+  paintType(94848, 4199, 12126, 3075);
+  paintHours(hours0);
+  paintMonths(monthLabels, monthVals);
+  window._talkCharts = { paintWho:paintWho, paintHours:paintHours, paintMonths:paintMonths, paintType:paintType };
+
+  const radarYears = {
+    "2024":[74,67,71,45,35],
+    "2025":[88,52,74,78,72],
+    "2026":[85,52,65,42,61]
+  };
+  const radarNotes = {
+    "2024":"剛在一起。吃醋高一點，還沒那麼黏，五分鐘內會回的比例 74%。",
+    "2025":"最黏、最大方，搞笑和默契也最高。五分鐘內會回的比例 88%。",
+    "2026":"訊息變少，黏人的話少了，但默契還在。這是比例，不是總量。"
+  };
+  let radar;
+  function showRadar(year){
+    const note = document.getElementById("radarNote");
+    if(note) note.textContent = radarNotes[year] || "";
+    document.querySelectorAll("#radarYears .chip").forEach(function(b){
+      b.classList.toggle("on", b.dataset.year === year);
+    });
+    if(!window.Chart || !document.getElementById("radarChart")) return;
+    const data = radarYears[year];
+    if(radar){
+      radar.data.datasets[0].data = data;
+      radar.update();
+      return;
+    }
+    radar = new Chart(document.getElementById("radarChart"), {
+      type:"radar",
+      data:{
+        labels:["默契","愛吃醋","搞笑","黏人","大方"],
+        datasets:[{
+          label:year,
+          data:data,
+          backgroundColor:"rgba(233,30,99,.28)",
+          borderColor:"#e91e63",
+          pointBackgroundColor:"#e91e63",
+          borderWidth:2
+        }]
+      },
+      options:{
+        responsive:true,
+        maintainAspectRatio:false,
+        scales:{ r:{ suggestedMin:0, suggestedMax:100, ticks:{ display:false }, pointLabels:{ font:{ size:12 } }, grid:{ color:"rgba(233,30,99,.15)" }, angleLines:{ color:"rgba(233,30,99,.2)" } } },
+        plugins:{ legend:{ display:false } }
+      }
+    });
+  }
+  document.querySelectorAll("#radarYears .chip").forEach(function(b){
+    b.onclick = function(){ showRadar(b.dataset.year); };
+  });
+  showRadar("2025");
+  window._resizeTalk = function(){
+    Object.keys(charts).forEach(function(id){ if(charts[id]) charts[id].resize(); });
+    if(radar) radar.resize();
+  };
+
   const keys = ["寶寶","愛你","好吃","想你","我愛你","回家","想吃","睡覺","對不起","北鼻","討厭","生氣","抱抱","寶貝","吃飯","乖乖","老婆","上課","早安","吵架","晚安","和好","麥當勞","星巴克"];
   document.getElementById("talkFile").addEventListener("change", function(){
     const file = this.files && this.files[0];
@@ -746,6 +852,10 @@ document.addEventListener("click", e => {
       let peak = 0;
       hours.forEach(function(v,i){ if(v > hours[peak]) peak = i; });
       document.getElementById("talkWhen").textContent = "這份最常在 " + peak + " 點傳訊息。";
+      if(window._talkCharts){
+        window._talkCharts.paintWho(y, yun);
+        window._talkCharts.paintHours(hours);
+      }
       document.getElementById("talkCounts").innerHTML =
         "<span>Y "+y.toLocaleString()+" 則</span><span>小昀 "+yun.toLocaleString()+" 則</span><span>照片 "+photos.toLocaleString()+" 張</span><span>"+Object.keys(days).length+" 天</span>";
       if(fresh.length){

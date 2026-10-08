@@ -16,7 +16,7 @@
 <title>我們 ❤️</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@200;300;400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/app.css?v=13">
+<link rel="stylesheet" href="css/app.css?v=14">
 </head>
 <body>
 
@@ -334,13 +334,32 @@
       <span>Y 51,911 則</span>
       <span>小昀 62,337 則</span>
       <span>照片 12,126 張</span>
+      <span>貼圖 4,199 個</span>
     </div>
+    <div class="chart-grid">
+      <div class="chart-card"><div class="chart-box"><canvas id="whoChart"></canvas></div></div>
+      <div class="chart-card"><div class="chart-box"><canvas id="typeChart"></canvas></div></div>
+    </div>
+    <div class="chart-card"><div class="chart-box"><canvas id="hourChart"></canvas></div></div>
+    <div class="chart-card"><div class="chart-box wide"><canvas id="monthChart"></canvas></div></div>
     <div id="talkBars"></div>
     <p class="talk-note" id="talkWhen">最常在晚上 10 點傳訊息。</p>
     <p class="talk-note" id="talkStory" style="white-space:pre-line;text-align:left"></p>
     <label class="btn-pink talk-import">匯入另一份 LINE 記錄<input id="talkFile" type="file" accept=".txt,text/plain" hidden></label>
     <p class="talk-note">選檔只在這台手機上算，不會上傳。</p>
     <p id="talkStatus" class="talk-note"></p>
+  </div>
+
+  <h3 class="stitle">感情雷達</h3>
+  <div class="card radar-card">
+    <p class="talk-note">五個分數是從聊天比例算出來的感覺，不是心理測驗。點年份，形狀會跟著變。</p>
+    <div class="chip-row" id="radarYears">
+      <button type="button" class="chip" data-year="2024">2024</button>
+      <button type="button" class="chip on" data-year="2025">2025</button>
+      <button type="button" class="chip" data-year="2026">2026</button>
+    </div>
+    <div class="chart-box tall"><canvas id="radarChart"></canvas></div>
+    <p id="radarNote" class="talk-note"></p>
   </div>
 
   <!-- 煙花 -->
@@ -605,7 +624,8 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 <script src="js/guard.js?v=5"></script>
 <script src="js/config.js?v=4"></script>
-<script src="js/app.js?v=13"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="js/app.js?v=14"></script>
 <script src="https://cdn.botpress.cloud/webchat/v3.5/inject.js"></script>
 <script src="https://files.bpcontent.cloud/2026/01/12/17/20260112175648-Q8N99NKQ.js" defer></script>
 
