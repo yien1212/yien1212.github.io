@@ -551,6 +551,8 @@ body{counter-reset: section}
   text-shadow:0 2px 0 #fff;
 }
 #wheelResult{margin-top:15px; font-family:"Noto Serif TC",serif; color:var(--pink-deep); font-size:1.1rem; min-height:30px}
+#wheelDone{margin-top:10px}
+#wheelLog{margin:10px 0 4px}
 
 /* 3D 卡片傾斜 */
 .card3d{transition:transform 0.2s ease-out; transform-style:preserve-3d}

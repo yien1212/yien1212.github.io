@@ -2029,27 +2029,50 @@ document.getElementById("fireworkBtn").onclick = function(){
 /* 轉盤：指針固定在上方，結果跟扇形對齊 */
 (function(){
   const tasks = [
-    {w:"抱抱", t:"抱抱她"},
+    {w:"抱抱", t:"給她一個抱抱"},
     {w:"請吃", t:"請她吃一頓"},
     {w:"乖乖", t:"叫她一聲乖乖"},
-    {w:"買吃", t:"買一份她愛吃的"},
+    {w:"買吃", t:"買一份她愛吃的給她"},
     {w:"想你", t:"跟她說一句想你"},
     {w:"傳話", t:"傳一句只給她的話"},
     {w:"語音", t:"傳一段語音給她"},
     {w:"陪聊", t:"陪她講十分鐘"},
-    {w:"晚餐", t:"一起決定晚餐"},
+    {w:"晚餐", t:"把今天的晚餐定下來"},
     {w:"晚安", t:"跟她說晚安"},
     {w:"誇她", t:"誇她一句"},
     {w:"照片", t:"傳一張照片給她"},
     {w:"驚喜", t:"給她一個小驚喜"},
     {w:"小事", t:"幫她做一件小事"},
     {w:"請喝", t:"請她喝一杯"},
-    {w:"點餐", t:"幫她點一餐"}
+    {w:"點餐", t:"幫她點好一餐"}
   ];
   const slice = 360 / tasks.length;
   const wheel = document.getElementById("wheel");
   const result = document.getElementById("wheelResult");
+  const doneBtn = document.getElementById("wheelDone");
+  const logEl = document.getElementById("wheelLog");
   const colors = ["#ff6b9d","#ffd6e7","#ff8fb3","#ffe4ec"];
+  let log = [];
+  try{ log = JSON.parse(localStorage.getItem("wheel-log") || "[]"); }catch(e){}
+  if(!Array.isArray(log)) log = [];
+  let pending = "";
+  let writing = false;
+  function saveLocal(){
+    try{ localStorage.setItem("wheel-log", JSON.stringify(log)); }catch(e){}
+  }
+  function paintLog(){
+    if(!logEl) return;
+    const recent = log.slice(-6).map(function(x){ return x.t; });
+    logEl.textContent = recent.length ? ("做完的：" + recent.join("、")) : "轉到一件，做完再按完成。下次打開還在。";
+  }
+  function remember(item){
+    if(!item || !item.t || !item.at) return;
+    if(log.some(function(x){ return x.at === item.at && x.t === item.t; })) return;
+    log.push(item);
+    log.sort(function(a,b){ return a.at - b.at; });
+    if(log.length > 30) log = log.slice(-30);
+  }
+  paintLog();
   wheel.style.background = "conic-gradient(" + tasks.map(function(_, i){
     return colors[i % colors.length] + " " + (i*slice) + "deg " + ((i+1)*slice) + "deg";
   }).join(",") + ")";
@@ -2069,6 +2092,8 @@ document.getElementById("fireworkBtn").onclick = function(){
   document.getElementById("spinBtn").onclick = function(){
     if(spinning) return;
     spinning = true;
+    pending = "";
+    if(doneBtn) doneBtn.hidden = true;
     const idx = Math.floor(Math.random()*tasks.length);
     const targetMod = (360 - (idx*slice + slice/2)) % 360;
     const current = angle % 360;
@@ -2078,12 +2103,44 @@ document.getElementById("fireworkBtn").onclick = function(){
     wheel.style.transform = "rotate("+angle+"deg)";
     result.textContent = "轉動中...";
     setTimeout(() => {
-      result.textContent = "今天的任務： " + tasks[idx].t;
+      pending = tasks[idx].t;
+      result.textContent = "要做的一件事： " + pending;
+      if(doneBtn) doneBtn.hidden = false;
       spinning = false;
       localStorage.setItem("spinDone","1");
       if(typeof renderBadges === "function") renderBadges();
     }, 3300);
   };
+  if(doneBtn) doneBtn.onclick = function(){
+    if(!pending) return;
+    const item = {t: pending, at: Date.now()};
+    remember(item);
+    saveLocal();
+    writing = true;
+    if(window.db) window.db.ref("wheelLog").set(log);
+    writing = false;
+    pending = "";
+    doneBtn.hidden = true;
+    result.textContent = "這件做完了";
+    paintLog();
+  };
+  if(window._authReady){
+    window._authReady.then(function(){
+      if(!window.db) return;
+      window.db.ref("wheelLog").on("value", function(s){
+        if(writing) return;
+        const v = s.val();
+        const arr = Array.isArray(v) ? v : (v && typeof v === "object" ? Object.keys(v).map(function(k){ return v[k]; }) : null);
+        if(!arr) return;
+        const before = log.length;
+        arr.forEach(remember);
+        if(log.length !== before){
+          saveLocal();
+          paintLog();
+        }
+      });
+    });
+  }
 })();
 
 /* 3D 照片傾斜 */

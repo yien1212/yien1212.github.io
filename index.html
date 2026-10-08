@@ -16,7 +16,7 @@
 <title>我們 ❤️</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@200;300;400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/app.css?v=19">
+<link rel="stylesheet" href="css/app.css?v=20">
 </head>
 <body>
 
@@ -358,9 +358,10 @@
       <div class="wheel-pointer">▼</div>
       <div class="wheel" id="wheel"></div>
     </div>
-    <div id="wheelResult">轉一下，今天的任務</div>
-    <br>
-    <button class="btn-pink" id="spinBtn">轉！</button>
+    <div id="wheelResult">轉一下，抽出一件要做完的事</div>
+    <button class="btn-pink" id="wheelDone" type="button" hidden>這件做完了</button>
+    <p id="wheelLog" class="talk-note"></p>
+    <button class="btn-pink" id="spinBtn" type="button">轉！</button>
   </div>
 
   <!-- 今天吃什麼 -->
@@ -593,7 +594,7 @@
 <script src="js/guard.js?v=6"></script>
 <script src="js/config.js?v=4"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-<script src="js/app.js?v=21"></script>
+<script src="js/app.js?v=22"></script>
 <script src="https://cdn.botpress.cloud/webchat/v3.5/inject.js"></script>
 <script src="https://files.bpcontent.cloud/2026/01/12/17/20260112175648-Q8N99NKQ.js" defer></script>
 
