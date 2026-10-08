@@ -136,7 +136,7 @@ function initCarousel(){
 }
 
 /* 燈箱 */
-function wallFigs(){ return Array.from(document.querySelectorAll("#wall figure, #wallMine figure")); }
+function wallFigs(){ return Array.from(document.querySelectorAll(".mem-row .tl-item, #wall figure, #wallMine figure")); }
 const lb = document.getElementById("lb");
 let lbI = 0;
 function openLB(i){ lbI = i; showLB(); lb.classList.add("open"); }
@@ -145,11 +145,24 @@ function showLB(){
   const f = figs[lbI];
   if(!f) return;
   const img = f.querySelector("img");
-  document.getElementById("lbImg").src = f.dataset.full || (img && img.dataset.full) || (img && img.src) || "";
+  let full = f.dataset.full || (img && img.dataset.full) || "";
+  if(!full && img){
+    const raw = img.getAttribute("src") || "";
+    full = raw.indexOf("mem/t/") === 0 ? ("mem/" + raw.slice(6)) : (img.src || "");
+  }
+  document.getElementById("lbImg").src = full;
   document.getElementById("lbCap").textContent = (f.dataset.cap || "") + "  (" + (lbI+1) + "/" + figs.length + ")";
 }
 function bindWall(){
   wallFigs().forEach((f,i) => { f.onclick = () => openLB(i); });
+  document.querySelectorAll(".mem-row").forEach(row => {
+    if(row.dataset.swipe) return;
+    row.dataset.swipe = "1";
+    let x0 = 0, moved = false;
+    row.addEventListener("pointerdown", e => { x0 = e.clientX; moved = false; });
+    row.addEventListener("pointermove", e => { if(Math.abs(e.clientX - x0) > 10) moved = true; });
+    row.addEventListener("click", e => { if(moved){ e.stopPropagation(); e.preventDefault(); } }, true);
+  });
 }
 bindWall();
 window.bindWall = bindWall;
@@ -250,6 +263,13 @@ fetch("mem/photos.json").then(function(r){ return r.json(); }).then(function(lis
   if(!Array.isArray(list) || !list.length) return;
   wallAll = list;
   const wall = document.getElementById("wall");
+  const rowCount = document.querySelectorAll(".mem-row .tl-item").length;
+  if(rowCount >= list.length){
+    if(wall){ wall.innerHTML = ""; wall.dataset.shown = String(list.length); }
+    updateWallMore();
+    bindWall();
+    return;
+  }
   const have = wall ? wall.querySelectorAll("figure").length : 0;
   if(!wall) return;
   if(list.length > WALL_PAGE || list.length !== have) resetWall();
