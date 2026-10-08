@@ -40,5 +40,40 @@
     "c": "蹲下來弄鞋子",
     "w": 480,
     "h": 639
+  },
+  {
+    "t": "mem/t/meal.jpg",
+    "f": "mem/meal.jpg",
+    "c": "吃到一半",
+    "w": 480,
+    "h": 854
+  },
+  {
+    "t": "mem/t/lift.jpg",
+    "f": "mem/lift.jpg",
+    "c": "電梯裡靠一下",
+    "w": 480,
+    "h": 640
+  },
+  {
+    "t": "mem/t/hands.jpg",
+    "f": "mem/hands.jpg",
+    "c": "手上的心",
+    "w": 480,
+    "h": 640
+  },
+  {
+    "t": "mem/t/lean.jpg",
+    "f": "mem/lean.jpg",
+    "c": "頭髮掉下來",
+    "w": 480,
+    "h": 845
+  },
+  {
+    "t": "mem/t/berry.jpg",
+    "f": "mem/berry.jpg",
+    "c": "草莓跟一千",
+    "w": 480,
+    "h": 640
   }
 ]

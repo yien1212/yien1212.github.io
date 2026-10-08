@@ -116,7 +116,12 @@ const carP = [
   ["mem/elevator.jpg","電梯裡"],
   ["mem/bridge.jpg","晚上的橋"],
   ["mem/heart.jpg","比了一個心"],
-  ["mem/shoes.jpg","蹲下來弄鞋子"]
+  ["mem/shoes.jpg","蹲下來弄鞋子"],
+  ["mem/meal.jpg","吃到一半"],
+  ["mem/lift.jpg","電梯裡靠一下"],
+  ["mem/hands.jpg","手上的心"],
+  ["mem/lean.jpg","頭髮掉下來"],
+  ["mem/berry.jpg","草莓跟一千"]
 ];
 function initCarousel(){
   function show(i){
@@ -245,9 +250,11 @@ fetch("mem/photos.json").then(function(r){ return r.json(); }).then(function(lis
   if(!Array.isArray(list) || !list.length) return;
   wallAll = list;
   const wall = document.getElementById("wall");
-  if(list.length > WALL_PAGE) resetWall();
-  else if(wall){
-    wall.dataset.shown = String(wall.querySelectorAll("figure").length);
+  const have = wall ? wall.querySelectorAll("figure").length : 0;
+  if(!wall) return;
+  if(list.length > WALL_PAGE || list.length !== have) resetWall();
+  else {
+    wall.dataset.shown = String(have);
     updateWallMore();
   }
 }).catch(function(){});
