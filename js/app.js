@@ -131,7 +131,7 @@ function initCarousel(){
 }
 
 /* 燈箱 */
-function wallFigs(){ return Array.from(document.querySelectorAll("#wall figure")); }
+function wallFigs(){ return Array.from(document.querySelectorAll("#wall figure, #wallMine figure")); }
 const lb = document.getElementById("lb");
 let lbI = 0;
 function openLB(i){ lbI = i; showLB(); lb.classList.add("open"); }
@@ -139,7 +139,8 @@ function showLB(){
   const figs = wallFigs();
   const f = figs[lbI];
   if(!f) return;
-  document.getElementById("lbImg").src = f.querySelector("img").src;
+  const img = f.querySelector("img");
+  document.getElementById("lbImg").src = f.dataset.full || (img && img.dataset.full) || (img && img.src) || "";
   document.getElementById("lbCap").textContent = (f.dataset.cap || "") + "  (" + (lbI+1) + "/" + figs.length + ")";
 }
 function bindWall(){
@@ -147,6 +148,109 @@ function bindWall(){
 }
 bindWall();
 window.bindWall = bindWall;
+
+const WALL_PAGE = 24;
+let wallAll = null;
+let wallAuto = 0;
+const localItems = [];
+let localShown = 0;
+function makeWallFig(it){
+  const fig = document.createElement("figure");
+  fig.dataset.cap = it.c || "";
+  fig.dataset.full = it.f || it.t || "";
+  const img = document.createElement("img");
+  img.alt = it.c || "";
+  img.decoding = "async";
+  img.loading = "lazy";
+  if(it.w && it.h){ img.width = it.w; img.height = it.h; }
+  img.src = it.t || it.f;
+  const fc = document.createElement("figcaption");
+  fc.textContent = it.c || "";
+  fig.appendChild(img);
+  fig.appendChild(fc);
+  return fig;
+}
+function updateWallMore(){
+  const btn = document.getElementById("wallMore");
+  const hint = document.getElementById("wallHint");
+  const wall = document.getElementById("wall");
+  if(!btn || !wall) return;
+  const shown = parseInt(wall.dataset.shown || "0", 10) || 0;
+  const siteLeft = wallAll ? Math.max(0, wallAll.length - shown) : 0;
+  const localLeft = Math.max(0, localItems.length - localShown);
+  const left = siteLeft + localLeft;
+  btn.hidden = left <= 0;
+  btn.textContent = left > 0 ? "再看一些（還有 " + left + " 張）" : "再看一些";
+  if(hint){
+    const total = (wallAll ? wallAll.length : shown) + localItems.length;
+    hint.textContent = total > WALL_PAGE
+      ? "先顯示一部分，共 " + total + " 張。點開才載大圖。"
+      : "牆上先放小圖，點開才載清楚的。一次只載一段，很多張也不會卡住。";
+  }
+}
+function paintMore(n){
+  const wall = document.getElementById("wall");
+  if(!wall || !wallAll) return;
+  const shown = parseInt(wall.dataset.shown || "0", 10) || 0;
+  const next = Math.min(wallAll.length, shown + n);
+  if(next <= shown){ updateWallMore(); return; }
+  const frag = document.createDocumentFragment();
+  for(let i = shown; i < next; i++) frag.appendChild(makeWallFig(wallAll[i]));
+  wall.appendChild(frag);
+  wall.dataset.shown = String(next);
+  bindWall();
+  updateWallMore();
+}
+function paintLocal(n){
+  const mine = document.getElementById("wallMine");
+  if(!mine) return;
+  const next = Math.min(localItems.length, localShown + n);
+  if(next <= localShown){ updateWallMore(); return; }
+  const frag = document.createDocumentFragment();
+  for(let i = localShown; i < next; i++) frag.appendChild(makeWallFig(localItems[i]));
+  mine.appendChild(frag);
+  mine.hidden = false;
+  localShown = next;
+  bindWall();
+  updateWallMore();
+}
+function resetWall(){
+  const wall = document.getElementById("wall");
+  if(!wall) return;
+  wall.innerHTML = "";
+  wall.dataset.shown = "0";
+  paintMore(WALL_PAGE);
+}
+window.noteLocalPhoto = function(src, cap){
+  localItems.push({t: src, f: src, c: cap || "我們的"});
+  if(localShown < WALL_PAGE) paintLocal(1);
+  else updateWallMore();
+};
+function moreWall(){
+  if(localShown < localItems.length){ paintLocal(WALL_PAGE); return; }
+  paintMore(WALL_PAGE);
+}
+const wallMoreBtn = document.getElementById("wallMore");
+if(wallMoreBtn) wallMoreBtn.onclick = function(){ moreWall(); };
+if(wallMoreBtn && "IntersectionObserver" in window){
+  new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if(!e.isIntersecting || wallMoreBtn.hidden || wallAuto >= 2) return;
+      wallAuto++;
+      moreWall();
+    });
+  }, {rootMargin:"240px"}).observe(wallMoreBtn);
+}
+fetch("mem/photos.json").then(function(r){ return r.json(); }).then(function(list){
+  if(!Array.isArray(list) || !list.length) return;
+  wallAll = list;
+  const wall = document.getElementById("wall");
+  if(list.length > WALL_PAGE) resetWall();
+  else if(wall){
+    wall.dataset.shown = String(wall.querySelectorAll("figure").length);
+    updateWallMore();
+  }
+}).catch(function(){});
 document.getElementById("lbC").onclick = () => lb.classList.remove("open");
 document.getElementById("lbP").onclick = (e) => { e.stopPropagation(); const n = wallFigs().length; lbI = (lbI-1+n)%n; showLB(); };
 document.getElementById("lbN").onclick = (e) => { e.stopPropagation(); const n = wallFigs().length; lbI = (lbI+1)%n; showLB(); };
@@ -246,7 +350,7 @@ window.addEventListener("load", () => setTimeout(initScratch, 300));
 
 /* 翻牌 */
 (function(){
-  const ps = ["mem/kiss.jpg","mem/close.jpg","mem/elevator.jpg","mem/bridge.jpg","mem/heart.jpg","mem/shoes.jpg"];
+  const ps = ["mem/t/kiss.jpg","mem/t/close.jpg","mem/t/elevator.jpg","mem/t/bridge.jpg","mem/t/heart.jpg","mem/t/shoes.jpg"];
   const deck = [...ps, ...ps].sort(() => Math.random()-0.5);
   const g = document.getElementById("memGrid");
   let first = null, lock = false, mat = 0;
@@ -2420,14 +2524,17 @@ document.addEventListener("visibilitychange", function(){
     });
   }
   function addMemFigure(src, cap){
+    if(window.noteLocalPhoto){ window.noteLocalPhoto(src, cap); return; }
     const wall = document.getElementById("wall");
     if(!wall) return;
     const fig = document.createElement("figure");
     fig.dataset.cap = cap;
+    fig.dataset.full = src;
     const img = document.createElement("img");
     img.alt = cap;
     img.src = src;
     img.loading = "lazy";
+    img.decoding = "async";
     const fc = document.createElement("figcaption");
     fc.textContent = cap;
     fig.appendChild(img);
@@ -2439,7 +2546,7 @@ document.addEventListener("visibilitychange", function(){
       const img = new Image();
       const url = URL.createObjectURL(file);
       img.onload = function(){
-        const max = 960;
+        const max = 900;
         let w = img.naturalWidth || img.width, h = img.naturalHeight || img.height;
         const scale = Math.min(1, max / Math.max(w, h));
         w = Math.max(1, Math.round(w * scale));
@@ -2450,7 +2557,7 @@ document.addEventListener("visibilitychange", function(){
         if(!g){ URL.revokeObjectURL(url); rej(new Error("canvas")); return; }
         g.drawImage(img, 0, 0, w, h);
         URL.revokeObjectURL(url);
-        res(canvas.toDataURL("image/jpeg", 0.72));
+        res(canvas.toDataURL("image/jpeg", 0.6));
       };
       img.onerror = function(){ URL.revokeObjectURL(url); rej(new Error("image")); };
       img.src = url;
@@ -2467,12 +2574,14 @@ document.addEventListener("visibilitychange", function(){
   const memInput = document.getElementById("memPhotos");
   if(memInput){
     memInput.addEventListener("change", function(){
-      const files = Array.from(memInput.files || []).filter(function(f){ return f.type.indexOf("image/") === 0; }).slice(0, 40);
+      const all = Array.from(memInput.files || []).filter(function(f){ return f.type.indexOf("image/") === 0; });
+      const files = all.slice(0, 80);
       const status = document.getElementById("baiduStatus");
       if(!files.length){ return; }
-      if(status) status.textContent = "正在加進回憶…";
+      if(status) status.textContent = all.length > files.length ? "一次先壓前 80 張，其餘再選一次" : "正在壓小…";
       memDb().then(async function(db){
         for(let i = 0; i < files.length; i++){
+          if(status) status.textContent = "正在壓小 " + (i+1) + "/" + files.length;
           const src = await squeeze(files[i]);
           const item = {id: Date.now() + "-" + i, src: src, cap: "我們的"};
           await new Promise(function(res, rej){

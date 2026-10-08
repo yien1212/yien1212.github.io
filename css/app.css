@@ -215,16 +215,18 @@ body::before{
 .wall figure{
   margin:0 0 12px; cursor:pointer; overflow:hidden; border-radius:16px;
   background:#fff; box-shadow:0 4px 15px rgba(0,0,0,.06);
-  transition:all .4s;
   break-inside:avoid;
 }
-.wall figure:hover{transform:translateY(-5px); box-shadow:0 12px 30px rgba(233,30,99,.2)}
-.wall img{width:100%; height:auto; display:block; transition:transform .6s}
+@media (hover:hover) and (pointer:fine){
+  .wall figure{transition:transform .25s}
+  .wall figure:hover{transform:translateY(-4px); box-shadow:0 12px 30px rgba(233,30,99,.2)}
+  .wall figure:hover img{transform:scale(1.04)}
+}
+.wall img{width:100%; height:auto; display:block; background:#f6e8ee}
 .wall figcaption{
   padding:8px 10px 10px; text-align:center;
   font-size:.72rem; letter-spacing:.12em; color:#c06;
 }
-.wall figure:hover img{transform:scale(1.05)}
 
 /* 燈箱 */
 #lb{

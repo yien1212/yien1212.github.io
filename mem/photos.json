@@ -1,0 +1,44 @@
+[
+  {
+    "t": "mem/t/kiss.jpg",
+    "f": "mem/kiss.jpg",
+    "c": "親了一臉",
+    "w": 480,
+    "h": 740
+  },
+  {
+    "t": "mem/t/close.jpg",
+    "f": "mem/close.jpg",
+    "c": "靠很近",
+    "w": 480,
+    "h": 831
+  },
+  {
+    "t": "mem/t/elevator.jpg",
+    "f": "mem/elevator.jpg",
+    "c": "電梯裡",
+    "w": 480,
+    "h": 639
+  },
+  {
+    "t": "mem/t/bridge.jpg",
+    "f": "mem/bridge.jpg",
+    "c": "晚上的橋",
+    "w": 480,
+    "h": 639
+  },
+  {
+    "t": "mem/t/heart.jpg",
+    "f": "mem/heart.jpg",
+    "c": "比了一個心",
+    "w": 480,
+    "h": 319
+  },
+  {
+    "t": "mem/t/shoes.jpg",
+    "f": "mem/shoes.jpg",
+    "c": "蹲下來弄鞋子",
+    "w": 480,
+    "h": 639
+  }
+]
