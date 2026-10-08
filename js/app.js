@@ -176,7 +176,18 @@ const carP = [
   ["mem/sand.jpg","沙灘"],
   ["mem/yarn.jpg","毛線花"],
   ["mem/pads.jpg","手把"],
-  ["mem/bunny.jpg","打電動"]
+  ["mem/bunny.jpg","打電動"],
+  ["mem/rain.jpg","下雨比心"],
+  ["mem/peck.jpg","鏡子裡親一下"],
+  ["mem/mask2.jpg","口罩自拍"],
+  ["mem/cheek.jpg","靠在一起"],
+  ["mem/nap.jpg","窩在一起"],
+  ["mem/note.jpg","寫給你"],
+  ["mem/flowers.jpg","白花"],
+  ["mem/pups.jpg","兩隻小狗"],
+  ["mem/okbus.jpg","車上"],
+  ["mem/toys.jpg","一堆娃娃"],
+  ["mem/nightgame.jpg","晚上打電動"]
 ];
 function initCarousel(){
   function show(i){

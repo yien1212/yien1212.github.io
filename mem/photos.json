@@ -243,5 +243,82 @@
     "c": "打電動",
     "w": 480,
     "h": 640
+  },
+  {
+    "t": "mem/t/rain.jpg",
+    "f": "mem/rain.jpg",
+    "c": "下雨比心",
+    "w": 480,
+    "h": 640
+  },
+  {
+    "t": "mem/t/peck.jpg",
+    "f": "mem/peck.jpg",
+    "c": "鏡子裡親一下",
+    "w": 480,
+    "h": 640
+  },
+  {
+    "t": "mem/t/mask2.jpg",
+    "f": "mem/mask2.jpg",
+    "c": "口罩自拍",
+    "w": 480,
+    "h": 745
+  },
+  {
+    "t": "mem/t/cheek.jpg",
+    "f": "mem/cheek.jpg",
+    "c": "靠在一起",
+    "w": 480,
+    "h": 851
+  },
+  {
+    "t": "mem/t/nap.jpg",
+    "f": "mem/nap.jpg",
+    "c": "窩在一起",
+    "w": 480,
+    "h": 640
+  },
+  {
+    "t": "mem/t/note.jpg",
+    "f": "mem/note.jpg",
+    "c": "寫給你",
+    "w": 480,
+    "h": 640
+  },
+  {
+    "t": "mem/t/flowers.jpg",
+    "f": "mem/flowers.jpg",
+    "c": "白花",
+    "w": 480,
+    "h": 640
+  },
+  {
+    "t": "mem/t/pups.jpg",
+    "f": "mem/pups.jpg",
+    "c": "兩隻小狗",
+    "w": 480,
+    "h": 640
+  },
+  {
+    "t": "mem/t/okbus.jpg",
+    "f": "mem/okbus.jpg",
+    "c": "車上",
+    "w": 480,
+    "h": 840
+  },
+  {
+    "t": "mem/t/toys.jpg",
+    "f": "mem/toys.jpg",
+    "c": "一堆娃娃",
+    "w": 480,
+    "h": 854
+  },
+  {
+    "t": "mem/t/nightgame.jpg",
+    "f": "mem/nightgame.jpg",
+    "c": "晚上打電動",
+    "w": 480,
+    "h": 640
   }
 ]
