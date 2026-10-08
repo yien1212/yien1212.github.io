@@ -1922,9 +1922,36 @@ document.querySelectorAll(".photo figure, .card").forEach(el => {
   });
 });
 
-/* 音樂 */
-document.getElementById("playBtn").onclick = () => bgm.play();
-document.getElementById("pauseBtn").onclick = () => bgm.pause();
+/* 音樂：固定在分頁上方，播放和暫停都按得到 */
+(function(){
+  const bgm = document.getElementById("bgm");
+  const playBtn = document.getElementById("playBtn");
+  const pauseBtn = document.getElementById("pauseBtn");
+  function mark(playing){
+    if(playBtn) playBtn.classList.toggle("on", !playing);
+    if(pauseBtn) pauseBtn.classList.toggle("on", playing);
+  }
+  if(playBtn) playBtn.onclick = function(e){
+    e.preventDefault();
+    e.stopPropagation();
+    if(!bgm) return;
+    const p = bgm.play();
+    if(p && p.catch) p.catch(function(){});
+    mark(true);
+  };
+  if(pauseBtn) pauseBtn.onclick = function(e){
+    e.preventDefault();
+    e.stopPropagation();
+    if(!bgm) return;
+    bgm.pause();
+    mark(false);
+  };
+  if(bgm){
+    bgm.addEventListener("play", function(){ mark(true); });
+    bgm.addEventListener("pause", function(){ mark(false); });
+  }
+  mark(false);
+})();
 
 /* 🍜 今天吃什麼 */
 const foods = ["海底撈 🍲","日式拉麵 🍜","義大利麵 🍝","韓式炸雞 🍗","夜市小吃 🍢","精緻甜點 🍰","麥當勞 🍔","小火鍋 🍲","壽司 🍣","燒烤 🍖","水餃 🥟","滷肉飯 🍚","牛肉麵 🍜","鹹酥雞 🍗","鬆餅 🥞","珍珠奶茶 🧋","雞肉飯 🍗","肉圓 🥟","蚵仔煎 🦪","臭豆腐 🍢","滷味 🍢","鍋燒意麵 🍜","陽春麵 🍜","乾麵加蛋 🍜","排骨便當 🍱","雞腿便當 🍱","壽喜燒 🍲","串燒 🍢","居酒屋 🍶","泰式打拋豬 🍛","越南河粉 🍜","海南雞飯 🍚","麻辣鍋 🌶️","石頭火鍋 🍲","薑母鴨 🍲","羊肉爐 🍲","炒飯 🍳","蛋包飯 🍳","披薩 🍕","漢堡 🍔","炸雞排 🍗","雞蛋糕 🍰","車輪餅 🥞","豆花 🍮","芋圓 🍠","刨冰 🍧","霜淇淋 🍦","可麗餅 🥞","早午餐 🥐","早餐店蛋餅 🥙","蘿蔔糕 🥟","燒餅油條 🥖","粥 🥣","廣東粥 🥣","小籠包 🥟","蒸餃 🥟","鍋貼 🥟","酸菜白肉鍋 🍲","韓式豆腐鍋 🍲","部隊鍋 🍲","石鍋拌飯 🍛","咖哩飯 🍛","豬排飯 🍱","鰻魚飯 🍱","丼飯 🍱","關東煮 🍢","鹽酥雞 🍗","地瓜球 🍠","雞湯 🥣","番茄牛肉麵 🍜","擔仔麵 🍜","炒碼麵 🍜","肉燥飯 🍚","控肉飯 🍚","鵝肉 🍗","薑汁番茄 🍅","熱炒 🥘","快炒店 🥘","自助餐 🍱","全家微波 🏪","自己煮飯 🍳"];
