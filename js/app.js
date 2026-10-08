@@ -111,20 +111,12 @@ function initTimeline(){
 
 /* 輪播 */
 const carP = [
-  ["couple_helmet.jpg","兩個安全帽"],
-  ["date_dessert.jpg","兩碗甜點"],
-  ["trip_hotel.jpg","礁溪老爺"],
-  ["couple_crown.jpg","公主與魔杖"],
-  ["cinnamoroll.jpg","玉桂狗聯名"],
-  ["giant_icecream.jpg","她變成冰淇淋"],
-  ["icecream_selfie.jpg","張大嘴吃冰"],
-  ["her_selfie1.jpg","她的自拍"],
-  ["her_selfie2.jpg","再一張"],
-  ["her_selfie3.jpg","看鏡頭"],
-  ["her_selfie4.jpg","今天的她"],
-  ["red_umbrella.jpg","星巴克前面"],
-  ["IMG_5576.jpg","笑到肚子痛"],
-  ["IMG_6957.jpg","最可愛的一張"]
+  ["mem/kiss.jpg","親了一臉"],
+  ["mem/close.jpg","靠很近"],
+  ["mem/elevator.jpg","電梯裡"],
+  ["mem/bridge.jpg","晚上的橋"],
+  ["mem/heart.jpg","比了一個心"],
+  ["mem/shoes.jpg","蹲下來弄鞋子"]
 ];
 function initCarousel(){
   function show(i){
@@ -254,7 +246,7 @@ window.addEventListener("load", () => setTimeout(initScratch, 300));
 
 /* 翻牌 */
 (function(){
-  const ps = ["couple_helmet.jpg","date_dessert.jpg","trip_hotel.jpg","couple_crown.jpg","cinnamoroll.jpg","giant_icecream.jpg"];
+  const ps = ["mem/kiss.jpg","mem/close.jpg","mem/elevator.jpg","mem/bridge.jpg","mem/heart.jpg","mem/shoes.jpg"];
   const deck = [...ps, ...ps].sort(() => Math.random()-0.5);
   const g = document.getElementById("memGrid");
   let first = null, lock = false, mat = 0;
@@ -2475,7 +2467,7 @@ document.addEventListener("visibilitychange", function(){
   const memInput = document.getElementById("memPhotos");
   if(memInput){
     memInput.addEventListener("change", function(){
-      const files = Array.from(memInput.files || []).filter(function(f){ return f.type.indexOf("image/") === 0; }).slice(0, 12);
+      const files = Array.from(memInput.files || []).filter(function(f){ return f.type.indexOf("image/") === 0; }).slice(0, 40);
       const status = document.getElementById("baiduStatus");
       if(!files.length){ return; }
       if(status) status.textContent = "正在加進回憶…";
