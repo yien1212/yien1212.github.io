@@ -874,6 +874,11 @@ document.addEventListener("click", e => {
   }
   function clamp(n){ return Math.max(0, Math.min(100, Math.round(n))); }
 
+  function asArr(v){
+    if(Array.isArray(v)) return v;
+    if(!v || typeof v !== "object") return [];
+    return Object.keys(v).sort(function(a,b){ return Number(a)-Number(b); }).map(function(k){ return v[k]; });
+  }
   function renderReport(r){
     const report = document.getElementById("talkReport");
     const wrap = document.getElementById("radarWrap");
@@ -889,14 +894,17 @@ document.addEventListener("click", e => {
       "<span>照片 "+Number(r.photos||0).toLocaleString()+" 張</span>"+
       "<span>貼圖 "+Number(r.stickers||0).toLocaleString()+" 個</span>"+
       "<span>"+days+" 天</span>";
-    drawBars(r.bars || []);
+    drawBars(asArr(r.bars || []).map(function(row){ return asArr(row); }));
     document.getElementById("talkWhen").textContent = r.when || "";
     document.getElementById("talkStory").textContent = r.story || "";
     paintWho(r.y||0, r.yun||0);
     paintType(r.text||0, r.stickers||0, r.photos||0, r.other||0);
-    paintHours(r.hours || []);
-    paintMonths(r.monthLabels || [], r.monthVals || []);
+    paintHours(asArr(r.hours || []));
+    paintMonths(asArr(r.monthLabels || []), asArr(r.monthVals || []));
     radarYears = r.radar || {};
+    Object.keys(radarYears).forEach(function(year){
+      radarYears[year] = asArr(radarYears[year]).map(Number);
+    });
     radarNotes = r.notes || {};
     const box = document.getElementById("radarYears");
     const years = Object.keys(radarYears);
@@ -1036,17 +1044,31 @@ document.addEventListener("click", e => {
         return p[0].slice(2) + "/" + p[1];
       });
       try{ localStorage.setItem(SAVE_KEY, JSON.stringify(report)); }catch(e){}
+      if(window.db){
+        window.db.ref("lineReport").set(Object.assign({at: Date.now()}, report)).catch(function(){});
+      }
       renderReport(report);
       if(fresh.length){
         pool = fresh.slice(0, 80);
         n = 0;
         show();
       }
-      status.textContent = "算完了，只留在這台手機。再選一份就換成新的。";
+      status.textContent = "算完了。這台手機會留著，另一台登入後也看得到。再選新檔就換成新的。";
     };
     reader.readAsText(file);
     this.value = "";
   });
+  if(window._authReady){
+    window._authReady.then(function(){
+      if(!window.db) return;
+      window.db.ref("lineReport").on("value", function(s){
+        const v = s.val();
+        if(!v || !(v.y || v.yun)) return;
+        try{ localStorage.setItem(SAVE_KEY, JSON.stringify(v)); }catch(e){}
+        renderReport(v);
+      });
+    });
+  }
 })();
 
 /* 即時聊天 */
