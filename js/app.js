@@ -246,6 +246,99 @@ function bindWall(){
 bindWall();
 window.bindWall = bindWall;
 
+(function(){
+  const items = Array.from(document.querySelectorAll(".mem-row .tl-item")).map(function(el){
+    const img = el.querySelector("img");
+    const date = (el.querySelector(".tl-date") || {}).textContent || "";
+    const m = /(\d{4})\s*\/\s*(\d{1,2})/.exec(date);
+    return {
+      src: img ? img.getAttribute("src") : "",
+      key: m ? (Number(m[1]) * 100 + Number(m[2])) : 0,
+      label: m ? (m[1] + " / " + Number(m[2])) : ""
+    };
+  }).filter(function(it){ return it.src && it.key; });
+  const img = document.getElementById("playImg");
+  const months = document.getElementById("playMonths");
+  const msg = document.getElementById("playMsg");
+  const monthPane = document.getElementById("playMonthPane");
+  const olderPane = document.getElementById("playOlderPane");
+  const btnA = document.getElementById("playA");
+  const btnB = document.getElementById("playB");
+  const next = document.getElementById("playNext");
+  if(!img || !items.length || !months) return;
+  const labels = [];
+  const seen = {};
+  items.forEach(function(it){ if(!seen[it.key]){ seen[it.key] = it.label; labels.push(it.key); } });
+  labels.sort(function(a,b){ return a - b; });
+  let mode = "month", lock = false, score = 0, asked = 0, current = null, pair = null;
+  function setMode(nextMode){
+    mode = nextMode;
+    document.getElementById("playMonth").classList.toggle("on", mode === "month");
+    document.getElementById("playOlder").classList.toggle("on", mode === "older");
+    monthPane.hidden = mode !== "month";
+    olderPane.hidden = mode !== "older";
+    round();
+  }
+  function round(){
+    lock = false;
+    if(mode === "month"){
+      current = items[Math.floor(Math.random() * items.length)];
+      img.src = current.src;
+      months.innerHTML = "";
+      labels.forEach(function(key){
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "chip";
+        b.textContent = seen[key];
+        b.onclick = function(){
+          if(lock) return;
+          lock = true;
+          asked++;
+          const ok = key === current.key;
+          if(ok) score++;
+          b.classList.add(ok ? "ok" : "bad");
+          if(!ok){
+            Array.from(months.children).forEach(function(x){ if(x.textContent === current.label) x.classList.add("ok"); });
+          }
+          msg.textContent = (ok ? "對" : "是 " + current.label) + "　" + score + " / " + asked;
+        };
+        months.appendChild(b);
+      });
+      msg.textContent = score ? (score + " / " + asked) : "這張是幾月";
+    } else {
+      let a = items[Math.floor(Math.random() * items.length)];
+      let b = items[Math.floor(Math.random() * items.length)];
+      let guard = 0;
+      while((b.key === a.key || b.src === a.src) && guard < 20){
+        b = items[Math.floor(Math.random() * items.length)];
+        guard++;
+      }
+      pair = [a, b];
+      btnA.className = ""; btnB.className = "";
+      btnA.querySelector("img").src = a.src;
+      btnB.querySelector("img").src = b.src;
+      msg.textContent = "點比較早的那張";
+    }
+  }
+  function pickOlder(i){
+    if(lock || !pair) return;
+    lock = true;
+    asked++;
+    const ok = pair[i].key < pair[1 - i].key;
+    if(ok) score++;
+    btnA.classList.add(pair[0].key <= pair[1].key ? "ok" : "bad");
+    btnB.classList.add(pair[1].key < pair[0].key ? "ok" : "bad");
+    const early = pair[0].key <= pair[1].key ? pair[0] : pair[1];
+    msg.textContent = (ok ? "對" : "比較早的是 " + early.label) + "　" + score + " / " + asked;
+  }
+  document.getElementById("playMonth").onclick = function(){ setMode("month"); };
+  document.getElementById("playOlder").onclick = function(){ setMode("older"); };
+  btnA.onclick = function(){ pickOlder(0); };
+  btnB.onclick = function(){ pickOlder(1); };
+  next.onclick = round;
+  round();
+})();
+
 const WALL_PAGE = 24;
 let wallAll = null;
 let wallAuto = 0;

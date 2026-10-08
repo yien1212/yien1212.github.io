@@ -16,7 +16,7 @@
 <title>我們 ❤️</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@200;300;400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/app.css?v=26">
+<link rel="stylesheet" href="css/app.css?v=27">
 </head>
 <body>
 
@@ -174,6 +174,26 @@
 
   </div>
   <div class="page" id="page-memories">
+
+  <h3 class="stitle">回憶玩法</h3>
+  <div class="card" id="memPlay">
+    <div class="chip-row" style="justify-content:center">
+      <button type="button" class="chip on" id="playMonth">猜月份</button>
+      <button type="button" class="chip" id="playOlder">哪張比較早</button>
+    </div>
+    <div id="playMonthPane">
+      <img id="playImg" class="play-shot" alt="" src="">
+      <div class="chip-row" id="playMonths"></div>
+    </div>
+    <div id="playOlderPane" hidden>
+      <div class="play-pair">
+        <button type="button" id="playA"><img alt="" src=""></button>
+        <button type="button" id="playB"><img alt="" src=""></button>
+      </div>
+    </div>
+    <p id="playMsg" class="talk-note" style="text-align:center"></p>
+    <button class="btn-pink" id="playNext" type="button" style="display:block;margin:8px auto 0">換一題</button>
+  </div>
 
   <!-- 時間軸 -->
   <h3 class="stitle">2024 / 12</h3>
@@ -686,7 +706,7 @@
 <script src="js/guard.js?v=6"></script>
 <script src="js/config.js?v=4"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-<script src="js/app.js?v=36"></script>
+<script src="js/app.js?v=37"></script>
 <script src="https://cdn.botpress.cloud/webchat/v3.5/inject.js"></script>
 <script src="https://files.bpcontent.cloud/2026/01/12/17/20260112175648-Q8N99NKQ.js" defer></script>
 
