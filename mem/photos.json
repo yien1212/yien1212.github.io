@@ -173,5 +173,75 @@
     "c": "比耶",
     "w": 480,
     "h": 640
+  },
+  {
+    "t": "mem/t/scoot.jpg",
+    "f": "mem/scoot.jpg",
+    "c": "一起騎車",
+    "w": 480,
+    "h": 854
+  },
+  {
+    "t": "mem/t/bus.jpg",
+    "f": "mem/bus.jpg",
+    "c": "坐夜車",
+    "w": 480,
+    "h": 640
+  },
+  {
+    "t": "mem/t/mirrors.jpg",
+    "f": "mem/mirrors.jpg",
+    "c": "電梯鏡子",
+    "w": 480,
+    "h": 640
+  },
+  {
+    "t": "mem/t/movie.jpg",
+    "f": "mem/movie.jpg",
+    "c": "去看電影",
+    "w": 480,
+    "h": 854
+  },
+  {
+    "t": "mem/t/dinner.jpg",
+    "f": "mem/dinner.jpg",
+    "c": "吃飯比耶",
+    "w": 480,
+    "h": 640
+  },
+  {
+    "t": "mem/t/market.jpg",
+    "f": "mem/market.jpg",
+    "c": "夜市",
+    "w": 480,
+    "h": 640
+  },
+  {
+    "t": "mem/t/sand.jpg",
+    "f": "mem/sand.jpg",
+    "c": "沙灘",
+    "w": 480,
+    "h": 640
+  },
+  {
+    "t": "mem/t/yarn.jpg",
+    "f": "mem/yarn.jpg",
+    "c": "毛線花",
+    "w": 480,
+    "h": 640
+  },
+  {
+    "t": "mem/t/pads.jpg",
+    "f": "mem/pads.jpg",
+    "c": "手把",
+    "w": 480,
+    "h": 640
+  },
+  {
+    "t": "mem/t/bunny.jpg",
+    "f": "mem/bunny.jpg",
+    "c": "打電動",
+    "w": 480,
+    "h": 640
   }
 ]
