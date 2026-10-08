@@ -316,10 +316,16 @@ document.getElementById("mystery").addEventListener("click", () => { localStorag
 /* 願望清單 - 先畫出來，登入後再跟雲端同步 */
 function renderWishes(){
   const groups = {
-    "旅行": ["一起看海","一起去日本","一起去迪士尼","一起騎車環島","一起泡溫泉","一起去海邊看日出","一起去海邊游泳","一起賞楓","一起賞櫻花","一起去冰山","一起露營","一起住小木屋"],
-    "吃": ["一起吃壽司","一起做蛋糕","一起做飯","一起逛夜市","一起吃牛肉麵","一起吃麥當勞早餐","一起吃火鍋","一起吃甜點"],
-    "玩": ["一起看煙火","一起看演唱會","一起看一輝的演唱會","一起去遊樂園","一起玩雲霄飛車","一起看流星雨","一起去逛街","一起去貓咪咖啡廳","一起拍大頭貼","一起拍情侶照","一起買情侶裝"],
-    "日常": ["一起跨年","一起養一隻貓","一起養隻狗","一起種植物","一起組電腦","一起打電動","一起看恐怖片","一起過生日","一起交換禮物","一起養老"]
+    "旅行": ["一起看海","一起去日本","一起去韓國","一起去泰國","一起去法國","一起去京都","一起去首爾","一起去沖繩","一起去北海道","一起去清邁","一起去迪士尼","一起騎車環島","一起泡溫泉","一起去海邊看日出","一起去海邊游泳","一起賞楓","一起賞櫻花","一起去冰山","一起去海邊的島","一起去下雪的地方","一起露營","一起住小木屋","住一間兩個人的旅館"],
+    "吃": ["一起吃早餐","一起吃壽司","一起吃牛肉麵","一起吃麥當勞早餐","一起去星巴克","一起吃火鍋","一起吃甜點","一起吃滷味","一起吃鬆餅","一起吃泡麵","一起吃提拉米蘇","一起吃漢堡","一起吃蘋果","一起吃布丁","一起吃冰淇淋","一起吃拉麵","一起吃水餃","一起吃炸雞","一起吃蛋餅","一起吃粥","一起吃燒烤","一起吃小籠包","一起吃排骨酥","一起吃鮭魚","一起吃便當","一起做蛋糕","一起做飯","一起逛夜市"],
+    "玩": ["一起看煙火","一起看演唱會","一起看一輝的演唱會","一起去遊樂園","一起玩雲霄飛車","一起看流星雨","一起去逛街","一起去貓咪咖啡廳","一起拍大頭貼","一起拍情侶照","一起買情侶裝","一起騎車兜風","一起看電影","一起唱歌","一起追劇","一起逛超商","一起散步","一起逛書局","一起去水族館","一起坐著發呆"],
+    "日常": ["一起跨年","一起養一隻貓","一起養隻狗","一起種植物","一起組電腦","一起打電動","一起看恐怖片","一起過生日","一起交換禮物","一起養老","到家說一聲","傳一段語音","說晚安","抱抱","問吃了沒","傳一張照片","講一句想你","叫一聲乖乖","早點睡","牽手走一段","說早安","提醒穿外套","忙完找對方","雨天一起待在家"]
+  };
+  const ideaMap = {
+    "ideaEat:麥當勞早餐":"一起吃麥當勞早餐","ideaEat:牛肉麵":"一起吃牛肉麵","ideaEat:壽司":"一起吃壽司","ideaEat:星巴克":"一起去星巴克","ideaEat:滷味":"一起吃滷味","ideaEat:鬆餅":"一起吃鬆餅","ideaEat:泡麵":"一起吃泡麵","ideaEat:提拉米蘇":"一起吃提拉米蘇","ideaEat:漢堡":"一起吃漢堡","ideaEat:蘋果":"一起吃蘋果","ideaEat:布丁":"一起吃布丁","ideaEat:冰淇淋":"一起吃冰淇淋","ideaEat:火鍋":"一起吃火鍋","ideaEat:夜市":"一起逛夜市","ideaEat:拉麵":"一起吃拉麵","ideaEat:水餃":"一起吃水餃","ideaEat:炸雞":"一起吃炸雞","ideaEat:蛋餅":"一起吃蛋餅","ideaEat:粥":"一起吃粥","ideaEat:燒烤":"一起吃燒烤","ideaEat:小籠包":"一起吃小籠包","ideaEat:排骨酥":"一起吃排骨酥","ideaEat:鮭魚":"一起吃鮭魚","ideaEat:便當":"一起吃便當","ideaEat:甜點":"一起吃甜點",
+    "ideaPlay:騎車兜風":"一起騎車兜風","ideaPlay:看電影":"一起看電影","ideaPlay:逛街":"一起去逛街","ideaPlay:打遊戲":"一起打電動","ideaPlay:逛夜市":"一起逛夜市","ideaPlay:看海":"一起看海","ideaPlay:唱歌":"一起唱歌","ideaPlay:拍一組照片":"一起拍情侶照","ideaPlay:一起追劇":"一起追劇","ideaPlay:逛超商":"一起逛超商","ideaPlay:散步":"一起散步","ideaPlay:逛書局":"一起逛書局","ideaPlay:水族館":"一起去水族館","ideaPlay:坐著發呆":"一起坐著發呆","ideaPlay:看煙火":"一起看煙火","ideaPlay:雨天不出門":"雨天一起待在家",
+    "ideaDay:一起吃早餐":"一起吃早餐","ideaDay:到家說一聲":"到家說一聲","ideaDay:傳一段語音":"傳一段語音","ideaDay:說晚安":"說晚安","ideaDay:抱抱":"抱抱","ideaDay:問吃了沒":"問吃了沒","ideaDay:傳一張照片":"傳一張照片","ideaDay:講一句想你":"講一句想你","ideaDay:叫一聲乖乖":"叫一聲乖乖","ideaDay:早點睡":"早點睡","ideaDay:牽手走一段":"牽手走一段","ideaDay:說早安":"說早安","ideaDay:提醒穿外套":"提醒穿外套","ideaDay:忙完找對方":"忙完找對方",
+    "ideaTrip:日本":"一起去日本","ideaTrip:韓國":"一起去韓國","ideaTrip:泰國":"一起去泰國","ideaTrip:法國":"一起去法國","ideaTrip:海邊的島":"一起去海邊的島","ideaTrip:下雪的地方":"一起去下雪的地方","ideaTrip:京都":"一起去京都","ideaTrip:首爾":"一起去首爾","ideaTrip:沖繩":"一起去沖繩","ideaTrip:北海道":"一起去北海道","ideaTrip:清邁":"一起去清邁","ideaTrip:兩個人的旅館":"住一間兩個人的旅館","ideaTrip:有夜市的城市":"一起逛夜市"
   };
   const legacy = ["一起看海","一起跨年","一起去日本","一起養一隻貓","一起做飯","一起露營","一起拍情侶照","一起看煙火","一起養老","一起去迪士尼","一起泡溫泉","一起騎車環島","一起看演唱會","一起種植物","一起組電腦","一起去海邊看日出","一起做蛋糕","一起養隻狗","一起去冰山","一起住小木屋","一起玩雲霄飛車","一起看流星雨","一起逛夜市","一起買情侶裝","一起去貓咪咖啡廳","一起去海邊游泳","一起賞楓","一起拍大頭貼","一起去遊樂園","一起看一輝的演唱會","一起吃壽司","一起去逛街","一起打電動","一起看恐怖片","一起過生日","一起交換禮物","一起賞櫻花"];
   const wishes = Object.values(groups).flat();
@@ -390,9 +396,21 @@ function renderWishes(){
       list.appendChild(d);
     });
   }
+  let ideaDone = {};
+  try{ ideaDone = JSON.parse(localStorage.getItem("idea-done") || "{}"); }catch(e){}
+  function withIdeas(done){
+    const next = done.slice();
+    Object.keys(ideaDone).forEach(function(k){
+      const name = ideaMap[k];
+      if(ideaDone[k] && name && wishes.indexOf(name) >= 0 && next.indexOf(name) < 0) next.push(name);
+    });
+    return next;
+  }
   let local = [];
   try{ local = JSON.parse(localStorage.getItem("wishes-done") || "[]"); }catch(e){ local = []; }
   if(!Array.isArray(local)) local = [];
+  local = withIdeas(local);
+  try{ localStorage.setItem("wishes-done", JSON.stringify(local)); }catch(e){}
   paint(local);
   if(window._wishBound || !window._authReady) return;
   window._wishBound = true;
@@ -400,10 +418,21 @@ function renderWishes(){
     if(!window.db) return;
     window.db.ref("wishes/state").on("value", function(doc){
       const raw = doc.exists() && doc.val() ? doc.val().done || [] : [];
-      const done = raw.map(function(x){ return typeof x === "number" ? legacy[x] : x; }).filter(Boolean);
+      const done = withIdeas(raw.map(function(x){ return typeof x === "number" ? legacy[x] : x; }).filter(Boolean));
       try{ localStorage.setItem("wishes-done", JSON.stringify(done)); }catch(e){}
       paint(done);
     });
+    window.db.ref("ideas/done").once("value").then(function(s){
+      const v = s.val();
+      if(!v || typeof v !== "object") return;
+      ideaDone = Object.assign({}, ideaDone, v);
+      try{ localStorage.setItem("idea-done", JSON.stringify(ideaDone)); }catch(e){}
+      window.db.ref("wishes/state").once("value").then(function(doc){
+        const raw = doc.exists() && doc.val() ? doc.val().done || [] : [];
+        const done = withIdeas(raw.map(function(x){ return typeof x === "number" ? legacy[x] : x; }).filter(Boolean));
+        window.db.ref("wishes/state").set({done: done}).catch(function(){});
+      });
+    }).catch(function(){});
   });
 }
 
@@ -2335,71 +2364,6 @@ document.getElementById("foodMap").addEventListener("click", function(e){
 });
 
 
-
-/* 做過就留著 */
-(function(){
-  const groups = {
-    ideaEat: ["麥當勞早餐","牛肉麵","壽司","星巴克","滷味","鬆餅","泡麵","提拉米蘇","漢堡","蘋果","布丁","冰淇淋","火鍋","夜市","拉麵","水餃","炸雞","蛋餅","粥","燒烤","小籠包","排骨酥","鮭魚","便當","甜點","不放椒麻的那一餐"],
-    ideaPlay: ["騎車兜風","看電影","逛街","打遊戲","逛夜市","看海","唱歌","拍一組照片","一起追劇","逛超商","散步","逛書局","水族館","坐著發呆","看煙火","雨天不出門"],
-    ideaDay: ["一起吃早餐","到家說一聲","傳一段語音","說晚安","騎車慢一點","抱抱","問吃了沒","傳一張照片","講一句想你","叫一聲乖乖","早點睡","牽手走一段","說早安","提醒穿外套","忙完找對方"],
-    ideaTrip: ["日本","韓國","泰國","法國","海邊的島","下雪的地方","有夜市的城市","兩個人的旅館","京都","首爾","沖繩","北海道","清邁","慢慢走的城市"]
-  };
-  let done = {};
-  try{ done = JSON.parse(localStorage.getItem("idea-done") || "{}"); }catch(e){}
-  function save(){
-    try{ localStorage.setItem("idea-done", JSON.stringify(done)); }catch(e){}
-    if(window.db) window.db.ref("ideas/done").set(done);
-  }
-  function paint(){
-    let n = 0;
-    Object.keys(groups).forEach(function(id){
-      const row = document.getElementById(id);
-      if(!row) return;
-      row.innerHTML = "";
-      groups[id].forEach(function(name){
-        const key = id + ":" + name;
-        if(done[key]) n++;
-        const b = document.createElement("button");
-        b.type = "button";
-        b.className = "chip" + (done[key] ? " done" : "");
-        b.textContent = name;
-        b.onclick = function(){
-          if(done[key]) delete done[key];
-          else done[key] = true;
-          save();
-          paint();
-        };
-        row.appendChild(b);
-      });
-    });
-    const note = document.getElementById("ideaNote");
-    if(note) note.textContent = n ? ("做過 " + n + " 件，下次打開還在。") : "點一下就記成做過。";
-  }
-  paint();
-  if(window._authReady){
-    window._authReady.then(function(){
-      if(!window.db) return;
-      let ready = false;
-      window.db.ref("ideas/done").on("value", function(s){
-        const v = s.val();
-        if(!ready){
-          ready = true;
-          const merged = Object.assign({}, v || {}, done);
-          done = merged;
-          try{ localStorage.setItem("idea-done", JSON.stringify(done)); }catch(e){}
-          paint();
-          if(JSON.stringify(v || {}) !== JSON.stringify(merged)) window.db.ref("ideas/done").set(merged);
-          return;
-        }
-        if(v && typeof v === "object"){
-          done = v;
-          try{ localStorage.setItem("idea-done", JSON.stringify(done)); }catch(e){}
-          paint();
-        }
-      });
-    });
-  }
-})();
 
 /* 🔒 防偷窺：切換分頁時模糊 */
 document.addEventListener("visibilitychange", function(){
