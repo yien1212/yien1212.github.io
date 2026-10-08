@@ -16,7 +16,7 @@
 <title>我們 ❤️</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@200;300;400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/app.css?v=16">
+<link rel="stylesheet" href="css/app.css?v=17">
 </head>
 <body>
 
@@ -329,13 +329,10 @@
 
   <h3 class="stitle">常常在聊什麼</h3>
   <div class="chat-box" id="talkBox">
-    <p class="talk-lead">從 2024/11/14 聊到 2026/08/24，643 天。下面的數字是這份 LINE 算的，吵架也算在裡面。密碼和電話沒有放上來。</p>
-    <div class="talk-counts" id="talkCounts">
-      <span>Y 51,911 則</span>
-      <span>小昀 62,337 則</span>
-      <span>照片 12,126 張</span>
-      <span>貼圖 4,199 個</span>
-    </div>
+    <p class="talk-lead" id="talkLead">尚未匯入聊天記錄</p>
+    <p class="talk-note" id="talkEmpty">選擇一份 LINE 記錄後，才會開始分析。</p>
+    <div id="talkReport" hidden>
+      <div class="talk-counts" id="talkCounts"></div>
     <div class="chart-grid">
       <div class="chart-card"><div class="chart-box"><canvas id="whoChart"></canvas></div></div>
       <div class="chart-card"><div class="chart-box"><canvas id="typeChart"></canvas></div></div>
@@ -343,23 +340,22 @@
     <div class="chart-card"><div class="chart-box"><canvas id="hourChart"></canvas></div></div>
     <div class="chart-card"><div class="chart-box wide"><canvas id="monthChart"></canvas></div></div>
     <div id="talkBars"></div>
-    <p class="talk-note" id="talkWhen">最常在晚上 10 點傳訊息。</p>
-    <p class="talk-note" id="talkStory" style="white-space:pre-line;text-align:left"></p>
+      <p class="talk-note" id="talkWhen"></p>
+      <p class="talk-note" id="talkStory" style="white-space:pre-line;text-align:left"></p>
+    </div>
     <label class="btn-pink talk-import">匯入另一份 LINE 記錄<input id="talkFile" type="file" accept=".txt,text/plain" hidden></label>
     <p class="talk-note">選檔只在這台手機上算，不會上傳。</p>
     <p id="talkStatus" class="talk-note"></p>
   </div>
 
+  <div id="radarWrap" hidden>
   <h3 class="stitle">感情雷達</h3>
   <div class="card radar-card">
-    <p class="talk-note">五個分數是從聊天比例算出來的感覺，不是心理測驗。點年份，形狀會跟著變。</p>
-    <div class="chip-row" id="radarYears">
-      <button type="button" class="chip" data-year="2024">2024</button>
-      <button type="button" class="chip on" data-year="2025">2025</button>
-      <button type="button" class="chip" data-year="2026">2026</button>
-    </div>
+    <p class="talk-note">五個分數是從這份聊天的比例算出來的，不是心理測驗。點年份，形狀會跟著變。</p>
+    <div class="chip-row" id="radarYears"></div>
     <div class="chart-box tall"><canvas id="radarChart"></canvas></div>
     <p id="radarNote" class="talk-note"></p>
+  </div>
   </div>
 
   <!-- 煙花 -->
@@ -625,7 +621,7 @@
 <script src="js/guard.js?v=6"></script>
 <script src="js/config.js?v=4"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-<script src="js/app.js?v=16"></script>
+<script src="js/app.js?v=17"></script>
 <script src="https://cdn.botpress.cloud/webchat/v3.5/inject.js"></script>
 <script src="https://files.bpcontent.cloud/2026/01/12/17/20260112175648-Q8N99NKQ.js" defer></script>
 

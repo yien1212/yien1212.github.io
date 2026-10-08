@@ -777,16 +777,8 @@ document.addEventListener("click", e => {
       return '<div class="talk-row"><b>'+esc(row[0])+'</b><div class="talk-bar"><i style="width:'+w+'%"></i></div><span>'+row[1]+'</span></div>';
     }).join("");
   }
-  drawBars(topics0);
-  const story = document.getElementById("talkStory");
-  if(story){
-    story.textContent = "114,248 則訊息。小昀講得比較多，62,337 則，Y 是 51,911 則。照片 12,126 張、貼圖 4,199 個、語音 687 則，最常在晚上 10 點。\n聊最多的是叫對方寶寶、說愛、好不好吃、想你、回家有沒有到。也會吵：對不起 271 次、討厭 233、生氣 212、吵架 91，然後和好 43 次。旁邊還有上課、考試、貓狗、麥當勞。";
-  }
 
 
-  const hours0 = [5834,3296,3467,1987,1378,935,1027,1702,2043,2540,3596,5151,5746,5430,6724,6328,6775,7115,6590,6490,5769,8009,9002,7314];
-  const monthLabels = ["24/11","24/12","25/01","25/02","25/03","25/04","25/05","25/06","25/07","25/08","25/09","25/10","25/11","25/12","26/01","26/02","26/03","26/04","26/05","26/06","26/07","26/08"];
-  const monthVals = [6414,11853,7661,10594,4841,13899,11449,6035,6301,3867,3135,5423,2263,896,1554,7617,2995,2814,1372,1198,1393,674];
   const pinks = ["#e91e63","#ff8fb3","#ffd0e0","#c45c26"];
   const charts = {};
   function chartOk(){ return window.Chart && document.getElementById("whoChart"); }
@@ -828,22 +820,10 @@ document.addEventListener("click", e => {
       options:Object.assign(baseOpts(false), { scales:{ x:{ ticks:{ maxTicksLimit:6 } }, y:{ ticks:{ display:false } } } })
     });
   }
-  paintWho(51911, 62337);
-  paintType(94848, 4199, 12126, 3075);
-  paintHours(hours0);
-  paintMonths(monthLabels, monthVals);
   window._talkCharts = { paintWho:paintWho, paintHours:paintHours, paintMonths:paintMonths, paintType:paintType };
 
-  const radarYears = {
-    "2024":[74,67,71,45,35],
-    "2025":[88,52,74,78,72],
-    "2026":[85,52,65,42,61]
-  };
-  const radarNotes = {
-    "2024":"剛在一起。吃醋高一點，還沒那麼黏，五分鐘內會回的比例 74%。",
-    "2025":"最黏、最大方，搞笑和默契也最高。五分鐘內會回的比例 88%。",
-    "2026":"訊息變少，黏人的話少了，但默契還在。這是比例，不是總量。"
-  };
+  let radarYears = {};
+  let radarNotes = {};
   let radar;
   function showRadar(year){
     const note = document.getElementById("radarNote");
@@ -853,6 +833,7 @@ document.addEventListener("click", e => {
     });
     if(!window.Chart || !document.getElementById("radarChart")) return;
     const data = radarYears[year];
+    if(!data || !data.length) return;
     if(radar){
       radar.data.datasets[0].data = data;
       radar.update();
@@ -879,16 +860,68 @@ document.addEventListener("click", e => {
       }
     });
   }
-  document.querySelectorAll("#radarYears .chip").forEach(function(b){
-    b.onclick = function(){ showRadar(b.dataset.year); };
-  });
-  showRadar("2025");
   window._resizeTalk = function(){
     Object.keys(charts).forEach(function(id){ if(charts[id]) charts[id].resize(); });
     if(radar) radar.resize();
   };
 
   const keys = ["寶寶","愛你","好吃","想你","我愛你","回家","想吃","睡覺","對不起","北鼻","討厭","生氣","抱抱","寶貝","吃飯","乖乖","老婆","上課","早安","吵架","晚安","和好","麥當勞","星巴克"];
+  const SAVE_KEY = "ynn-line-report-v1";
+
+  function hourName(h){
+    const part = h < 5 ? "凌晨" : h < 12 ? "早上" : h < 18 ? "下午" : "晚上";
+    return part + " " + (h % 12 || 12) + " 點";
+  }
+  function clamp(n){ return Math.max(0, Math.min(100, Math.round(n))); }
+
+  function renderReport(r){
+    const report = document.getElementById("talkReport");
+    const wrap = document.getElementById("radarWrap");
+    const empty = document.getElementById("talkEmpty");
+    if(report) report.hidden = false;
+    if(wrap) wrap.hidden = false;
+    if(empty) empty.hidden = true;
+    document.getElementById("talkLead").textContent = r.lead || "這份記錄算出來的";
+    const days = r.days || 0;
+    document.getElementById("talkCounts").innerHTML =
+      "<span>Y "+Number(r.y||0).toLocaleString()+" 則</span>"+
+      "<span>小昀 "+Number(r.yun||0).toLocaleString()+" 則</span>"+
+      "<span>照片 "+Number(r.photos||0).toLocaleString()+" 張</span>"+
+      "<span>貼圖 "+Number(r.stickers||0).toLocaleString()+" 個</span>"+
+      "<span>"+days+" 天</span>";
+    drawBars(r.bars || []);
+    document.getElementById("talkWhen").textContent = r.when || "";
+    document.getElementById("talkStory").textContent = r.story || "";
+    paintWho(r.y||0, r.yun||0);
+    paintType(r.text||0, r.stickers||0, r.photos||0, r.other||0);
+    paintHours(r.hours || []);
+    paintMonths(r.monthLabels || [], r.monthVals || []);
+    radarYears = r.radar || {};
+    radarNotes = r.notes || {};
+    const box = document.getElementById("radarYears");
+    const years = Object.keys(radarYears);
+    if(box){
+      box.innerHTML = "";
+      years.forEach(function(year){
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "chip";
+        b.dataset.year = year;
+        b.textContent = year;
+        b.onclick = function(){ showRadar(year); };
+        box.appendChild(b);
+      });
+    }
+    if(radar){ radar.destroy(); radar = null; }
+    if(years.length) showRadar(years[years.length - 1]);
+    setTimeout(function(){ if(window._resizeTalk) window._resizeTalk(); }, 80);
+  }
+
+  try{
+    const saved = JSON.parse(localStorage.getItem(SAVE_KEY) || "null");
+    if(saved && (saved.y || saved.yun)) renderReport(saved);
+  }catch(e){}
+
   document.getElementById("talkFile").addEventListener("change", function(){
     const file = this.files && this.files[0];
     const status = document.getElementById("talkStatus");
@@ -898,12 +931,20 @@ document.addEventListener("click", e => {
     reader.onload = function(){
       const raw = String(reader.result || "");
       const lines = raw.split(/\r?\n/);
-      let y = 0, yun = 0, photos = 0, date = "", days = {};
+      let y = 0, yun = 0, photos = 0, stickers = 0, textN = 0, other = 0, date = "";
+      const days = {};
       const hit = {};
       keys.forEach(function(k){ hit[k] = 0; });
       const hours = new Array(24).fill(0);
+      const months = {};
+      const yearStat = {};
       const fresh = [];
       let buf = [];
+      let prev = null;
+      function yearBag(year){
+        if(!yearStat[year]) yearStat[year] = {msg:0, sour:0, laugh:0, cling:0, give:0, quick:0, turns:0};
+        return yearStat[year];
+      }
       function flush(){
         if(buf.length < 2) { buf = []; return; }
         const who = {};
@@ -912,20 +953,39 @@ document.addEventListener("click", e => {
         buf = [];
       }
       lines.forEach(function(line){
-        const d = line.match(/^(\d{4}\/\d{2}\/\d{2})/);
-        if(d && line.indexOf("（") >= 0){ date = d[1]; days[date] = 1; flush(); return; }
+        const d = line.match(/^(\d{4})\/(\d{2})\/(\d{2})/);
+        if(d && line.indexOf("（") >= 0){ date = d[1]+"/"+d[2]+"/"+d[3]; days[date] = 1; flush(); return; }
         const m = line.match(/^(上午|下午)(\d{2}:\d{2})\t(.+?)\t(.*)$/);
-        if(!m) return;
+        if(!m || !date) return;
         const who = m[3] === "Y" ? "Y" : "yun";
         const body = (m[4] || "").trim();
+        const year = date.slice(0, 4);
+        const bag = yearBag(year);
         if(who === "Y") y++; else yun++;
-        if(body.indexOf("[照片]") === 0) photos++;
+        bag.msg++;
+        const monthKey = date.slice(0, 7);
+        months[monthKey] = (months[monthKey] || 0) + 1;
         let hh = parseInt(m[2], 10);
+        const mm = parseInt(m[2].slice(3), 10) || 0;
         if(m[1] === "下午" && hh < 12) hh += 12;
         if(m[1] === "上午" && hh === 12) hh = 0;
         hours[hh]++;
-        if(!body || body.charAt(0) === "[" || body.indexOf("http") === 0 || body.charAt(0) === "☎") return;
+        const mins = hh * 60 + mm;
+        if(prev && prev.date === date && prev.who !== who){
+          bag.turns++;
+          const diff = mins - prev.mins;
+          if(diff >= 0 && diff <= 5) bag.quick++;
+        }
+        prev = {date:date, who:who, mins:mins};
+        if(body.indexOf("[照片]") === 0){ photos++; return; }
+        if(body.indexOf("[貼圖]") === 0){ stickers++; return; }
+        if(!body || body.charAt(0) === "[" || body.indexOf("http") === 0 || body.charAt(0) === "☎"){ other++; return; }
+        textN++;
         if(/密碼|鍵位|邀請碼|去死|分手/.test(body)) return;
+        if(/吃醋|生氣|討厭|不爽|不理/.test(body)) bag.sour++;
+        if(/哈哈|笑死|好好笑|XD|笑/.test(body)) bag.laugh++;
+        if(/想你|想妳|寶寶|愛你|愛妳|抱抱|北鼻/.test(body)) bag.cling++;
+        if(/請你|我請|請客|買給/.test(body)) bag.give++;
         keys.forEach(function(k){ if(body.indexOf(k) >= 0) hit[k]++; });
         if(body.length >= 2 && body.length <= 36 && !/http|密碼|鍵位|去死|分手|操|逼/.test(body)){
           buf.push([who, body, date]);
@@ -933,25 +993,59 @@ document.addEventListener("click", e => {
         } else flush();
       });
       flush();
-      const list = keys.map(function(k){ return [k, hit[k]||0]; }).filter(function(r){ return r[1] > 0; }).sort(function(a,b){ return b[1]-a[1]; }).slice(0,16);
-      if(list.length) drawBars(list);
+      if(!y && !yun){
+        status.textContent = "這份不像 LINE 匯出的文字檔。";
+        return;
+      }
+      const dayList = Object.keys(days).sort();
       let peak = 0;
       hours.forEach(function(v,i){ if(v > hours[peak]) peak = i; });
-      document.getElementById("talkWhen").textContent = "這份最常在 " + peak + " 點傳訊息。";
-      if(window._talkCharts){
-        window._talkCharts.paintWho(y, yun);
-        window._talkCharts.paintHours(hours);
-      }
-      document.getElementById("talkCounts").innerHTML =
-        "<span>Y "+y.toLocaleString()+" 則</span><span>小昀 "+yun.toLocaleString()+" 則</span><span>照片 "+photos.toLocaleString()+" 張</span><span>"+Object.keys(days).length+" 天</span>";
+      const monthKeys = Object.keys(months).sort();
+      const bars = keys.map(function(k){ return [k, hit[k]||0]; }).filter(function(row){ return row[1] > 0; }).sort(function(a,b){ return b[1]-a[1]; }).slice(0,16);
+      const radar = {};
+      const notes = {};
+      Object.keys(yearStat).sort().forEach(function(year){
+        const s = yearStat[year];
+        const n = Math.max(1, s.msg);
+        const sync = s.turns ? Math.round(s.quick / s.turns * 100) : 0;
+        radar[year] = [
+          sync,
+          clamp(s.sour / n * 10000),
+          clamp(s.laugh / n * 2000),
+          clamp(s.cling / n * 2200),
+          clamp(s.give / n * 80000)
+        ];
+        notes[year] = "這一年 " + s.msg.toLocaleString() + " 則。五分鐘內會回的比例 " + sync + "%。分數是比例，不是總量。";
+      });
+      const top = bars.slice(0, 5).map(function(row){ return row[0]; }).join("、");
+      const report = {
+        y:y, yun:yun, photos:photos, stickers:stickers, text:textN, other:other,
+        days: dayList.length,
+        hours: hours,
+        monthLabels: monthKeys.map(function(k){ return k.slice(2).replace("-","/").replace("/","/"); }),
+        monthVals: monthKeys.map(function(k){ return months[k]; }),
+        bars: bars,
+        radar: radar,
+        notes: notes,
+        lead: (dayList[0] || "") + " 到 " + (dayList[dayList.length-1] || "") + "，" + dayList.length + " 天。這是剛剛選的那份，只留在這台手機。",
+        when: "這份最常在" + hourName(peak) + "傳訊息。",
+        story: (y+yun).toLocaleString() + " 則訊息。Y " + y.toLocaleString() + " 則，小昀 " + yun.toLocaleString() + " 則。照片 " + photos.toLocaleString() + " 張、貼圖 " + stickers.toLocaleString() + " 個。\n聊最多的是" + (top || "這些日常") + "。"
+      };
+      report.monthLabels = monthKeys.map(function(k){
+        const p = k.split("/");
+        return p[0].slice(2) + "/" + p[1];
+      });
+      try{ localStorage.setItem(SAVE_KEY, JSON.stringify(report)); }catch(e){}
+      renderReport(report);
       if(fresh.length){
         pool = fresh.slice(0, 80);
         n = 0;
         show();
       }
-      status.textContent = "算完了，只留在這台手機。";
+      status.textContent = "算完了，只留在這台手機。再選一份就換成新的。";
     };
     reader.readAsText(file);
+    this.value = "";
   });
 })();
 
