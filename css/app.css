@@ -846,7 +846,7 @@ button, .chip, .mood, .tab-btn, .cbtn{ touch-action:manipulation; }
 .alm-grid b{display:block;font-size:.72rem;color:#e91e63;letter-spacing:1px;margin-bottom:4px}
 .alm-grid span{display:block;font-size:.92rem;line-height:1.55;color:#3a2a3a}
 .alm-dot{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:middle}
-.alm-line{margin:12px 0 0;font-family:"Noto Serif TC",serif;color:#a24;line-height:1.7}
+.alm-line{margin:12px 0 0;font-family:"Noto Serif TC",serif;color:#a24;line-height:1.7;white-space:pre-line;text-align:left}
 .now-line{font-family:"Noto Serif TC",serif;font-size:1.15rem;color:var(--pink-deep);line-height:1.7;margin:0}
 .pact{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:14px 0}
 .pact button{

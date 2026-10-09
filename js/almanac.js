@@ -52,8 +52,8 @@
     "開":["安葬"],
     "閉":["開市","出行","求財"]
   };
-  var OURS_YI = ["一起吃甜點","給對方一個擁抱","拍一張合照","牽手走一段","早點說晚安","傳一句想你","一起吃頓好的","並排坐著發呆","幫對方倒杯水","出門前記得牽手","把今天的小事講給對方","一起挑一部片","買一份小點心","寫一張小字條","一起散步","早一點回家"];
-  var OURS_JI = ["太晚才睡","忘記喝水","為了小事賭氣","訊息已讀不回","餓著肚子出門","一直刷手機不說話","把累積的火留到晚上","答應的事拖過今天","各看各的不對眼","講一句再收回去的話"];
+  var OURS_YI = ["一起吃甜點","給對方一個擁抱","拍一張合照","牽手走一段","早點說晚安","傳一句想你","一起吃頓好的","並排坐著發呆","幫對方倒杯水","出門前記得牽手","把今天的小事講給對方","一起挑一部片","買一份小點心","寫一張小字條","一起散步","早一點回家","一起吃牛肉麵","麥當勞早餐留給對方","星巴克坐同一側","滷味不要太辣","提拉米蘇留一塊","騎車慢一點","到家說一聲","幫對方吹頭髮","冬天一起躲被窩","夏天一起吃冰","雨天把手伸過去","電梯門開之前先抱一下","把好吃的留一口","睡前鬧一下再睡","醒來第一句找對方","週末整天陪著","把外套分一件","一起看畢業那張照片","宜蘭的路再走一次","水族館裡只看對方","演唱會把螢光棒靠在一起","動物園並排站好","小豬先夾菜","狗狗負責點餐","把委屈當天說完","給對方捏一下肩膀","一起收杯子","把喜歡說出聲","今天也站在同一邊"];
+  var OURS_JI = ["太晚才睡","忘記喝水","為了小事賭氣","訊息已讀不回","餓著肚子出門","一直刷手機不說話","把累積的火留到晚上","答應的事拖過今天","各看各的不對眼","講一句再收回去的話","各自滑手機到睡著","餓著還說不餓","冷戰超過一小時","把隨便當真的","忘記說到家了","雨天不牽手","比誰比較忙","把委屈吞下去","答應的擁抱拖到明天","吃飯只看螢幕","生氣先關門","把小豬的份吃掉","狗狗裝沒聽到","太晚才回訊息","一人一副耳機整晚","把今天的好心情留到明天才講","餓著還硬撐","把『等一下』說成一整天","轉身就忘了對方說的話","用比較大聲蓋過對方"];
   var LINES = [
     "兩個獅子坐在一起，脾氣可以大，手不要放開。",
     "狗狗先沉住氣，小豬再靠近一點就好。",
@@ -91,15 +91,48 @@
     "狗年猪年挨著，連生肖都幫你們排好了。",
     "契合度不是考試，是今天還想見面。",
     "若黃曆忌遠行，那就近一點，近到肩膀。",
-    "今日情話不用新的，舊的那句我喜歡你仍然算數。"
+    "今日情話不用新的，舊的那句我喜歡你仍然算數。",
+    "癸水負責把話放輕，辛金負責把人護住。",
+    "早上的辰時和夜裡的子時，中間都是想彼此的空檔。",
+    "中壢的晚風先到，鳳山的人還是在。",
+    "兩個獅子今天不要爭王座，爭誰先說想你。",
+    "狗狗的水要拿來澆，不要拿來冷。",
+    "小豬的金要拿來抱，不要拿來頂。",
+    "生辰寫在這裡，人就坐在旁邊。",
+    "八月的月亮換過，你們的位置沒換。",
+    "今天的三個數字，一個用來點餐，一個用來牽手，一個用來早點睡。",
+    "幸運色塗在同一件衣服上就好，不必分開穿。",
+    "宜忌寫再多，第一條還是：看到對方就笑一下。",
+    "動物園並排過，演唱會靠過，今天在家也算並排。",
+    "宜蘭那趟之後，出遠門的定義變成有你在。",
+    "魚很多的那天，眼睛還是只停在你身上。",
+    "畢業緞帶會舊，叫你的那聲不會。",
+    "吃吃吃的那些日子，現在還能再約一頓。",
+    "電梯門會開，手可以晚一點放開。",
+    "雨天的傘只要一把，兩個人就夠。",
+    "今天若契合度不是滿分，扣的那些分用來練習讓步。",
+    "小豬先吃，狗狗看著也算一份甜。",
+    "鳳山到中壢不是距離，是你們已經走完的路。",
+    "辰時的人先醒，就把晚安補成早安。",
+    "子時的人還沒睡，就把燈留一盞。",
+    "兩個人都是獅子座，脾氣熱，心也熱。",
+    "今天適合把『我沒事』改成『我想你』。",
+    "黃曆沖到誰，都不要沖到這張桌子對面。",
+    "喜神的方向如果太遠，就轉向對方。",
+    "生肖一個狗一個豬，本來就會擠在同一張沙發。",
+    "今天的情話可以很短：在。",
+    "把八字收好，把人抱好。",
+    "甜點分一半，話也分一半，悶不要分。",
+    "若今天只記得一句，記得你們是一起的。"
   ];
   var COLORS = {
-    "木":[["薄荷綠","#7dcea0"],["森綠","#2e8b57"],["芽綠","#9ccc65"]],
-    "火":[["櫻花粉","#ff6b9d"],["朱紅","#e74c3c"],["珊瑚橘","#ff8a65"]],
-    "土":[["奶油黃","#ffe08a"],["香檳金","#e6c27a"],["杏仁米","#f3e5c2"]],
-    "金":[["香檳金","#e6c27a"],["霧銀","#cfd8dc"],["珍珠白","#f7f4ef"]],
-    "水":[["霧藍","#90caf9"],["薰衣草紫","#b39ddb"],["靛青","#5c6bc0"]]
+    "木":[["薄荷綠","#7dcea0"],["森綠","#2e8b57"],["芽綠","#9ccc65"],["青蘋果","#8bc34a"],["湖水綠","#4db6ac"],["橄欖","#827717"],["新葉","#aed581"],["松綠","#2e7d32"]],
+    "火":[["櫻花粉","#ff6b9d"],["朱紅","#e74c3c"],["珊瑚橘","#ff8a65"],["胭脂","#c2185b"],["蜜桃","#ffab91"],["夕陽橘","#ff7043"],["玫紅","#e91e63"],["燈籠紅","#d32f2f"]],
+    "土":[["奶油黃","#ffe08a"],["香檳金","#e6c27a"],["杏仁米","#f3e5c2"],["麥芽","#d7ccc8"],["蜂蜜","#ffb300"],["燕麥","#efebe9"],["杏桃","#ffcc80"],["暖沙","#d4a574"]],
+    "金":[["香檳金","#e6c27a"],["霧銀","#cfd8dc"],["珍珠白","#f7f4ef"],["月光銀","#eceff1"],["香檳米","#f8e8d8"],["淺金","#ffe082"],["雲白","#fafafa"],["米金","#f3e5ab"]],
+    "水":[["霧藍","#90caf9"],["薰衣草紫","#b39ddb"],["靛青","#5c6bc0"],["海鹽藍","#81d4fa"],["薄霧紫","#ce93d8"],["夜藍","#3949ab"],["晴空","#64b5f6"],["丁香","#9575cd"]]
   };
+  var NUM_SAY = ["","一起吃一份","牽一次手","傳一句話","早一點睡","喝一杯水","並排坐一下","拍一張照","說一句喜歡","把外套分一件"];
 
   function lYearDays(y){
     var i, sum = 348;
@@ -211,20 +244,23 @@
     var seed = now.getFullYear() * 10000 + (now.getMonth() + 1) * 100 + now.getDate() + 20060812 + 20070726 + 815 + 2300;
     var rng = rngOf(seed);
     var el = element(today.day[0]);
-    var color = take(rng, COLORS[el], 1)[0];
+    var colors = take(rng, COLORS[el], 3);
     var n1 = (GAN.indexOf(today.day[0]) + zhi + now.getDate()) % 9 + 1;
     var n2 = (ZHI.indexOf(today.day[1]) + 3) % 9 + 1;
     var n3 = (n1 + n2 + 4) % 9 + 1;
     if(n3 === n1 || n3 === n2) n3 = n3 % 9 + 1;
-    var score = 85 + Math.floor(rng() * 11);
+    var score = 85 + Math.floor(rng() * 16);
+    var talk = 85 + Math.floor(rng() * 16);
+    var food = 85 + Math.floor(rng() * 16);
+    var hug = 85 + Math.floor(rng() * 16);
     var meEl = element(me.day[0]);
     var herEl = element(her.day[0]);
     if(el === meEl || el === herEl) score = Math.min(100, score + 2);
     var yi = YI[jian].join("、");
     var ji = JI[jian].join("、");
-    var ourYi = take(rng, OURS_YI, 2).join("、");
-    var ourJi = take(rng, OURS_JI, 2).join("、");
-    var line = take(rng, LINES, 1)[0];
+    var ourYi = take(rng, OURS_YI, 4).join("、");
+    var ourJi = take(rng, OURS_JI, 3).join("、");
+    var lines = take(rng, LINES, 2);
     var week = "日一二三四五六"[now.getDay()];
     var WORD = {
       "祈福":"求個心安","出行":"出門","會友":"見人","上梁":"辦新的大事","祭祀":"紀念想念",
@@ -256,9 +292,9 @@
     function sayList(text){
       return text.split("、").map(function(w){ return WORD[w] || w; }).join("、");
     }
-    function whoLine(label, birth, p){
+    function birthLine(label, when, where, p){
       var animal = ANIMALS[ZHI.indexOf(p.year[1])];
-      return label + "是" + animal + "年，" + birth + "，時辰在" + HOUR_SAY[p.hour[1]] + "。日主是" + p.day[0] + EL_SAY[element(p.day[0])] + "。";
+      return label + "的生辰：" + when + "，" + where + "。八字是" + p.year + "年、" + p.month + "月、" + p.day + "日、" + p.hour + "時。" + animal + "年，獅子座，日主" + p.day[0] + EL_SAY[element(p.day[0])] + "。時辰在" + HOUR_SAY[p.hour[1]] + "。";
     }
     var yearAnimal = ANIMALS[ZHI.indexOf(gz(lunar.y - 4)[1])];
     var chongAnimal = ANIMALS[ZHI.indexOf(chong)];
@@ -270,8 +306,8 @@
       "想要順一點，就往" + xi + "走。",
       "黃曆把今天叫「" + jian + "」：" + JIAN_SAY[jian] + "。",
       "老黃曆寫適合" + sayList(yi) + "。先別做：" + sayList(ji) + "。",
-      whoLine("狗狗", "2006年8月12日早上8點15分", me),
-      whoLine("小豬", "2007年7月26日晚上11點", her)
+      birthLine("狗狗", "2006年8月12日上午08:15", "桃園中壢", me),
+      birthLine("小豬", "2007年7月26日晚上23:00", "高雄鳳山", her)
     ].join("\n");
     var raw = "原文 " + gz(lunar.y - 4) + "年 " + lunar.text + " 日柱" + today.day + " 沖" + chongAnimal + "煞" + shaText + " 喜神" + xi + " 建除" + jian
       + "\n狗狗 " + me.year + " " + me.month + " " + me.day + " " + me.hour
@@ -287,13 +323,15 @@
     rawEl.textContent = raw;
     gzBox.appendChild(plainEl);
     gzBox.appendChild(rawEl);
-    document.getElementById("almScore").textContent = "今日契合 " + score + "%";
+    document.getElementById("almScore").textContent = "今日契合 " + score + "%　說話 " + talk + "　吃飯 " + food + "　抱抱 " + hug;
     document.getElementById("almBar").style.width = score + "%";
-    document.getElementById("almColor").innerHTML = '<i class="alm-dot" style="background:' + color[1] + '"></i>' + color[0];
-    document.getElementById("almNum").textContent = n1 + "、" + n2 + "、" + n3;
+    document.getElementById("almColor").innerHTML = colors.map(function(c){
+      return '<i class="alm-dot" style="background:' + c[1] + '"></i>' + c[0];
+    }).join("<br>");
+    document.getElementById("almNum").textContent = [n1, n2, n3].map(function(n){ return n + " " + NUM_SAY[n]; }).join("、");
     document.getElementById("almYi").textContent = ourYi;
     document.getElementById("almJi").textContent = ourJi;
-    document.getElementById("almLine").textContent = line;
+    document.getElementById("almLine").textContent = lines.join("\n");
   }catch(err){
     if(window.Guard) Guard.push("黃曆", err.message || err, "");
     box.textContent = "今日黃曆暫時算不出來，其他頁面還能用。";
