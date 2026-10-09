@@ -200,7 +200,14 @@ const carP = [
   ["mem/onsen.jpg","晚上泡一下"],
   ["mem/peck2.jpg","電梯裡親一下"],
   ["mem/lift4.jpg","電梯鏡子"],
-  ["mem/blanket.jpg","一起睡"]
+  ["mem/blanket.jpg","一起睡"],
+  ["mem/lift5.jpg","電梯比心"],
+  ["mem/ray.jpg","魔鬼魚"],
+  ["mem/jelly.jpg","水母"],
+  ["mem/tank.jpg","一整面魚"],
+  ["mem/polar.jpg","拍立得"],
+  ["mem/grill2.jpg","烤肉"],
+  ["mem/choco.jpg","巧克力"]
 ];
 function initCarousel(){
   function show(i){
@@ -511,6 +518,9 @@ document.getElementById("mystery").onclick = function(){
       [/娃娃/, "娃娃一堆，人只要你"],
       [/電動|遊戲/, "你打，我在旁邊"],
       [/火車|車票/, "第一次出遠門，坐你旁邊"],
+      [/魚|水母|魔鬼/, "魚很多，我只看你"],
+      [/巧克力/, "甜的留你吃"],
+      [/拍立得/, "這張要留著"],
       [/泡/, "晚上就這樣靠著"],
       [/蠟筆/, "顏色慢慢塗，我等你"],
       [/麵|杯/, "吃的我請"],
