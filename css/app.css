@@ -110,7 +110,7 @@ body::before{
 }
 .btn-pink:active{transform:scale(.95); box-shadow:0 2px 8px rgba(233,30,99,.2)}
 
-/* 通用卡片：毛玻璃放在不吃點擊的底層，按鈕本身不要濾鏡，iOS 才按得到 */
+/* 毛玻璃只留在卡片自己的底色，不要再蓋一層在內容上 */
 .card,
 .stat,
 .food-board,
@@ -118,39 +118,26 @@ body::before{
 .wish-fold,
 .letter-body,
 .letter summary,
-.tab-bar,
-.page div[style*="background:rgba(255,255,255"],
-.page div[style*="background:#fff"]{
-  position:relative;
-  background:rgba(255,255,255,.55);
+.tab-bar{
+  background:rgba(255,255,255,.72);
   border:1px solid rgba(255,255,255,.6);
   box-shadow:0 10px 32px rgba(233,30,99,.1);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
 }
 .card{
+  position:relative;
   z-index:5;
   border-radius:22px;
   padding:28px 22px;
-  backdrop-filter:none;
-  -webkit-backdrop-filter:none;
 }
-.card::before,
-.stat::before,
-.food-board::before,
-.chart-card::before,
-.wish-fold::before,
-.letter-body::before,
-.letter summary::before,
-.tab-bar::before,
-.page div[style*="background:rgba(255,255,255"]::before,
-.page div[style*="background:#fff"]::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  border-radius:inherit;
-  pointer-events:none;
-  z-index:0;
-  backdrop-filter:blur(20px);
-  -webkit-backdrop-filter:blur(20px);
+.card button,
+.card input,
+.card a,
+.card label,
+.tab-btn{
+  position:relative;
+  z-index:2;
 }
 
 /* 計時器 */
@@ -624,9 +611,7 @@ body{counter-reset: section}
   background:#fff5f7; transition:opacity .45s ease;
 }
 #splash.out{ opacity:0; pointer-events:none; }
-.splash-heart{ width:72px; height:62px; }
-.splash-heart rect{ fill:#e91e63; }
-.splash-heart{ animation:beat 0.7s ease-in-out infinite; }
+.splash-heart{ width:72px; height:62px; animation:beat 0.7s ease-in-out infinite; }
 @keyframes beat{ 0%,100%{ transform:scale(1); } 40%{ transform:scale(1.16); } }
 .splash-brand{
   margin:14px 0 16px; font-family:"Noto Serif TC",serif;
@@ -634,9 +619,7 @@ body{counter-reset: section}
 }
 #splashPhoto{ width:168px; height:210px; object-fit:cover; border-radius:18px; background:#ffd6e7; }
 .lock-emoji svg{ width:54px; height:54px; }
-.lock-emoji svg rect{ fill:#e91e63; }
 .tab-btn .icon svg{ width:22px; height:22px; display:block; margin:0 auto 2px; }
-.tab-btn .icon svg rect{ fill:currentColor; }
 #toast{
   position:fixed; left:50%; bottom:calc(var(--dock) + 16px); transform:translateX(-50%);
   z-index:2500; max-width:min(320px, calc(100vw - 32px));
@@ -850,7 +833,18 @@ button, .chip, .mood, .tab-btn, .cbtn{ touch-action:manipulation; }
   from{ opacity:0; transform:translateX(var(--slide, 18px)); }
   to{ opacity:1; transform:none; }
 }
-.now-card{text-align:center}
+.almanac{max-width:520px;margin:0 auto;text-align:center;background:linear-gradient(160deg,rgba(255,245,247,.8),rgba(255,255,255,.72))}
+.alm-badge{display:inline-block;padding:4px 12px;border-radius:999px;background:#ffe4ec;color:#e91e63;font-size:.8rem;letter-spacing:1px}
+.alm-score{font-family:"Noto Serif TC",serif;font-size:1.6rem;color:#e91e63;margin:10px 0 4px}
+.alm-bar{height:8px;border-radius:99px;background:#ffe4ec;overflow:hidden;margin:0 auto 10px;max-width:220px}
+.alm-bar i{display:block;height:100%;background:linear-gradient(90deg,#ffb3c8,#e91e63)}
+.alm-gz{font-size:.82rem;color:#8a6070;line-height:1.7;margin:0 0 12px;white-space:pre-line}
+.alm-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;text-align:left}
+.alm-grid div{background:rgba(255,255,255,.72);border:1px solid rgba(255,255,255,.6);border-radius:14px;padding:10px 12px}
+.alm-grid b{display:block;font-size:.72rem;color:#e91e63;letter-spacing:1px;margin-bottom:4px}
+.alm-grid span{display:block;font-size:.92rem;line-height:1.55;color:#3a2a3a}
+.alm-dot{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:middle}
+.alm-line{margin:12px 0 0;font-family:"Noto Serif TC",serif;color:#a24;line-height:1.7}
 .now-line{font-family:"Noto Serif TC",serif;font-size:1.15rem;color:var(--pink-deep);line-height:1.7;margin:0}
 .pact{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:14px 0}
 .pact button{

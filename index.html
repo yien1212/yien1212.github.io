@@ -16,15 +16,15 @@
 <title>我們 ❤️</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@200;300;400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/app.css?v=30">
+<link rel="stylesheet" href="css/app.css?v=31">
 </head>
 <body>
 <div id="splash">
   <svg class="splash-heart" viewBox="0 0 7 6" aria-hidden="true">
-    <rect x="1" y="0" width="1" height="1"/><rect x="2" y="0" width="1" height="1"/>
-    <rect x="4" y="0" width="1" height="1"/><rect x="5" y="0" width="1" height="1"/>
-    <rect x="0" y="1" width="7" height="1"/><rect x="1" y="2" width="5" height="1"/>
-    <rect x="2" y="3" width="3" height="1"/><rect x="3" y="4" width="1" height="1"/>
+    <rect x="1" y="0" width="1" height="1" fill="#ff6b9d"/><rect x="2" y="0" width="1" height="1" fill="#f6c945"/>
+    <rect x="4" y="0" width="1" height="1" fill="#7dcea0"/><rect x="5" y="0" width="1" height="1" fill="#b39ddb"/>
+    <rect x="0" y="1" width="7" height="1" fill="#ff8a65"/><rect x="1" y="2" width="5" height="1" fill="#7eb6ff"/>
+    <rect x="2" y="3" width="3" height="1" fill="#e91e63"/><rect x="3" y="4" width="1" height="1" fill="#ffe08a"/>
   </svg>
   <p class="splash-brand">我愛妳</p>
   <img id="splashPhoto" alt="">
@@ -48,7 +48,7 @@
 <div class="petal" style="left:92%; animation-delay:8s"></div>
 
 <div id="login">
-  <div class="lock-emoji" aria-hidden="true"><svg viewBox="0 0 8 8"><rect x="2" y="1" width="4" height="1"/><rect x="1" y="2" width="1" height="2"/><rect x="6" y="2" width="1" height="2"/><rect x="1" y="4" width="6" height="3"/><rect x="3" y="5" width="2" height="1" fill="#fff5f7"/></svg></div>
+  <div class="lock-emoji" aria-hidden="true"><svg viewBox="0 0 8 8"><rect x="2" y="1" width="4" height="1" fill="#b39ddb"/><rect x="1" y="2" width="1" height="2" fill="#7eb6ff"/><rect x="6" y="2" width="1" height="2" fill="#7dcea0"/><rect x="1" y="4" width="6" height="3" fill="#ff6b9d"/><rect x="3" y="5" width="2" height="1" fill="#ffe08a"/></svg></div>
   <h1>給最重要的人</h1>
   <p>這是只屬於我們的地方</p>
   <div id="roleStep" style="margin-top:10px">
@@ -180,6 +180,21 @@
     <input type="text" id="anniName" placeholder="名稱 例如：小昀生日" style="padding:8px;border-radius:12px;border:1.5px solid var(--pink-soft);width:60%;margin-right:5px">
     <input type="date" id="anniDate" style="padding:8px;border-radius:12px;border:1.5px solid var(--pink-soft)">
     <button class="btn-pink" id="anniAdd" style="margin-top:8px">＋ 新增</button>
+  </div>
+
+  <h3 class="stitle">今日黃曆</h3>
+  <div class="card almanac" id="almanac">
+    <div class="alm-badge" id="almDate"></div>
+    <div class="alm-score" id="almScore"></div>
+    <div class="alm-bar"><i id="almBar"></i></div>
+    <p class="alm-gz" id="almGz"></p>
+    <div class="alm-grid">
+      <div><b>幸運色</b><span id="almColor"></span></div>
+      <div><b>幸運數字</b><span id="almNum"></span></div>
+      <div><b>我們宜</b><span id="almYi"></span></div>
+      <div><b>我們忌</b><span id="almJi"></span></div>
+    </div>
+    <p class="alm-line" id="almLine"></p>
   </div>
 
   </div>
@@ -710,10 +725,10 @@
 
   <!-- Tab Bar -->
   <div class="tab-bar">
-    <button class="tab-btn active" data-page="home"><span class="icon"><svg viewBox="0 0 8 8"><rect x="3" y="0" width="2" height="1"/><rect x="2" y="1" width="4" height="1"/><rect x="1" y="2" width="6" height="1"/><rect x="1" y="3" width="6" height="4"/><rect x="3" y="5" width="2" height="2" fill="#fff5f7"/></svg></span>首頁</button>
-    <button class="tab-btn" data-page="memories"><span class="icon"><svg viewBox="0 0 8 8"><rect x="1" y="1" width="6" height="6"/><rect x="2" y="2" width="4" height="4" fill="#fff5f7"/><rect x="3" y="3" width="2" height="2"/></svg></span>回憶</button>
-    <button class="tab-btn" data-page="chat"><span class="icon"><svg viewBox="0 0 8 8"><rect x="0" y="1" width="5" height="3"/><rect x="1" y="4" width="1" height="1"/><rect x="3" y="3" width="5" height="3"/><rect x="6" y="6" width="1" height="1"/></svg></span>互動</button>
-    <button class="tab-btn" data-page="games"><span class="icon"><svg viewBox="0 0 8 8"><rect x="3" y="0" width="2" height="2"/><rect x="1" y="2" width="2" height="2"/><rect x="5" y="2" width="2" height="2"/><rect x="3" y="4" width="2" height="2"/><rect x="3" y="2" width="2" height="2" fill="#fff5f7"/></svg></span>遊戲</button>
+    <button class="tab-btn active" data-page="home"><span class="icon"><svg viewBox="0 0 8 8"><rect x="3" y="0" width="2" height="1" fill="#f6c945"/><rect x="2" y="1" width="4" height="1" fill="#ff8a65"/><rect x="1" y="2" width="6" height="1" fill="#ff6b9d"/><rect x="1" y="3" width="6" height="4" fill="#7eb6ff"/><rect x="3" y="5" width="2" height="2" fill="#ffe08a"/></svg></span>首頁</button>
+    <button class="tab-btn" data-page="memories"><span class="icon"><svg viewBox="0 0 8 8"><rect x="1" y="1" width="6" height="6" fill="#b39ddb"/><rect x="2" y="2" width="4" height="4" fill="#fff5f7"/><rect x="3" y="3" width="2" height="2" fill="#7dcea0"/></svg></span>回憶</button>
+    <button class="tab-btn" data-page="chat"><span class="icon"><svg viewBox="0 0 8 8"><rect x="0" y="1" width="5" height="3" fill="#ff6b9d"/><rect x="1" y="4" width="1" height="1" fill="#ff8a65"/><rect x="3" y="3" width="5" height="3" fill="#7eb6ff"/><rect x="6" y="6" width="1" height="1" fill="#f6c945"/></svg></span>互動</button>
+    <button class="tab-btn" data-page="games"><span class="icon"><svg viewBox="0 0 8 8"><rect x="3" y="0" width="2" height="2" fill="#f6c945"/><rect x="1" y="2" width="2" height="2" fill="#ff6b9d"/><rect x="5" y="2" width="2" height="2" fill="#7dcea0"/><rect x="3" y="4" width="2" height="2" fill="#7eb6ff"/><rect x="3" y="2" width="2" height="2" fill="#fff5f7"/></svg></span>遊戲</button>
   </div>
 </div><!-- /app -->
 
@@ -766,6 +781,7 @@
 <script src="js/guard.js?v=7"></script>
 <script src="js/config.js?v=4"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="js/almanac.js?v=1"></script>
 <script src="js/app.js?v=42"></script>
 <script src="https://cdn.botpress.cloud/webchat/v3.5/inject.js"></script>
 <script src="https://files.bpcontent.cloud/2026/01/12/17/20260112175648-Q8N99NKQ.js" defer></script>
