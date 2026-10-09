@@ -44,14 +44,21 @@ function enterApp(){
 }
 document.querySelectorAll(".tab-btn").forEach(btn => {
   btn.onclick = function(){
+    const nextId = btn.dataset.page;
+    const next = document.getElementById("page-" + nextId);
+    const cur = document.querySelector(".page.active");
+    if(!next || cur === next) return;
+    const order = ["home","memories","chat","games"];
+    const curName = cur && cur.id ? cur.id.replace("page-","") : "home";
+    const dir = order.indexOf(nextId) >= order.indexOf(curName) ? 1 : -1;
     document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
     document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
     btn.classList.add("active");
-    const page = document.getElementById("page-" + btn.dataset.page);
-    if(page) page.classList.add("active");
+    next.style.setProperty("--slide", (dir * 22) + "px");
+    next.classList.add("active");
     window.scrollTo(0,0);
-    if(btn.dataset.page === "games" && typeof initScratch === "function") setTimeout(initScratch, 100);
-    if(btn.dataset.page === "games" && window._resizeTalk) setTimeout(window._resizeTalk, 60);
+    if(nextId === "games" && typeof initScratch === "function") setTimeout(initScratch, 100);
+    if(nextId === "games" && window._resizeTalk) setTimeout(window._resizeTalk, 60);
   };
 });
 

@@ -3,13 +3,16 @@
   --cream:#fff5f7; --ink:#3a2a3a; --gold:#d4a574;
 }
 *{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent;scrollbar-width:none}
 body{
   font-family:"Noto Sans TC",sans-serif;
   background:var(--cream); color:var(--ink);
   min-height:100vh; overflow-x:hidden;
   -webkit-font-smoothing:antialiased;
+  scrollbar-width:none;
 }
+html::-webkit-scrollbar,
+body::-webkit-scrollbar{width:0;height:0;display:none}
 body.privacy-blur{ filter:blur(20px); transition:filter .3s; }
 body::before{
   content:""; position:fixed; inset:0; z-index:-2;
@@ -107,16 +110,47 @@ body::before{
 }
 .btn-pink:active{transform:scale(.95); box-shadow:0 2px 8px rgba(233,30,99,.2)}
 
-/* 通用卡片 */
-.card{
-  position:relative; z-index:5;
-  background:#fff;
-  backdrop-filter:none;
-  -webkit-backdrop-filter:none;
+/* 通用卡片：毛玻璃放在不吃點擊的底層，按鈕本身不要濾鏡，iOS 才按得到 */
+.card,
+.stat,
+.food-board,
+.chart-card,
+.wish-fold,
+.letter-body,
+.letter summary,
+.tab-bar,
+.page div[style*="background:rgba(255,255,255"],
+.page div[style*="background:#fff"]{
+  position:relative;
+  background:rgba(255,255,255,.55);
   border:1px solid rgba(255,255,255,.6);
+  box-shadow:0 10px 32px rgba(233,30,99,.1);
+}
+.card{
+  z-index:5;
   border-radius:22px;
   padding:28px 22px;
-  box-shadow:0 8px 32px rgba(233,30,99,.08);
+  backdrop-filter:none;
+  -webkit-backdrop-filter:none;
+}
+.card::before,
+.stat::before,
+.food-board::before,
+.chart-card::before,
+.wish-fold::before,
+.letter-body::before,
+.letter summary::before,
+.tab-bar::before,
+.page div[style*="background:rgba(255,255,255"]::before,
+.page div[style*="background:#fff"]::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:inherit;
+  pointer-events:none;
+  z-index:0;
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
 }
 
 /* 計時器 */
@@ -134,7 +168,7 @@ body::before{
 /* 數字 */
 .stats{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:14px}
 .stat{
-  background:rgba(255,255,255,.6); border-radius:16px;
+  border-radius:16px;
   padding:18px 8px; text-align:center;
   transition:transform .3s;
 }
@@ -729,17 +763,19 @@ details.fold > .fold-body{padding-bottom:6px}
 /* Tab 導航 */
 .tab-bar{
   position:fixed; bottom:0; left:0; right:0; z-index:1000;
-  display:flex; background:rgba(255,255,255,.96);
-  border-top:1px solid rgba(233,30,99,.15);
-  padding:6px 0 calc(8px + env(safe-area-inset-bottom));
+  display:flex;
+  padding:6px env(safe-area-inset-right) calc(8px + env(safe-area-inset-bottom)) env(safe-area-inset-left);
+  border-radius:0;
 }
 .tab-btn{
+  position:relative; z-index:1;
   flex:1; text-align:center; padding:8px 4px; cursor:pointer; font-size:.72rem;
   color:#aaa; border:none; background:none; font-family:inherit;
   min-height:48px;
-  transition:color .2s;
+  transition:color .2s, transform .2s;
 }
 .tab-btn.active{ color:var(--pink); font-weight:700; }
+.tab-btn:active{ transform:scale(.96); }
 button, .chip, .mood, .tab-btn, .cbtn{ touch-action:manipulation; }
 .tab-btn .icon{ font-size:1.3rem; display:block; margin-bottom:2px; }
 .mood{ transition:transform .2s; display:inline-block; }
@@ -809,7 +845,11 @@ button, .chip, .mood, .tab-btn, .cbtn{ touch-action:manipulation; }
   z-index: 1100;
 }
 .page{ display:none; padding-bottom: calc(var(--dock) + 28px); }
-.page.active{ display:block; animation:fadeIn .35s ease; }
+.page.active{ display:block; animation:pageIn .42s cubic-bezier(.22,.8,.36,1); }
+@keyframes pageIn{
+  from{ opacity:0; transform:translateX(var(--slide, 18px)); }
+  to{ opacity:1; transform:none; }
+}
 .now-card{text-align:center}
 .now-line{font-family:"Noto Serif TC",serif;font-size:1.15rem;color:var(--pink-deep);line-height:1.7;margin:0}
 .pact{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:14px 0}
@@ -854,7 +894,7 @@ button, .chip, .mood, .tab-btn, .cbtn{ touch-action:manipulation; }
 .album-card input{width:100%;padding:12px 14px;border:1.5px solid var(--pink-soft);border-radius:14px;font-family:inherit;margin:8px 0}
 .food-board{
   text-align:center; max-width:520px; margin:0 auto;
-  background:rgba(255,255,255,.72); border-radius:20px; padding:18px 16px;
+  border-radius:20px; padding:18px 16px;
   display:flex; flex-direction:column; align-items:center; gap:12px;
 }
 #foodResult{font-family:"Noto Serif TC",serif; font-size:1.35rem; color:var(--pink-deep); min-height:2rem}
@@ -865,7 +905,7 @@ a.btn-pink{display:inline-flex; align-items:center; justify-content:center; text
 .food-board .chip-row{ justify-content:center; }
 .chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
 @media(max-width:560px){.chart-grid{grid-template-columns:1fr}}
-.chart-card{background:#fff;border-radius:16px;padding:8px;margin:8px 0}
+.chart-card{border-radius:16px;padding:8px;margin:8px 0}
 .chart-box{position:relative;height:210px}
 .chart-box.wide{height:230px}
 .chart-box.tall{height:280px;margin-top:8px}
@@ -878,7 +918,7 @@ a.btn-pink{display:inline-flex; align-items:center; justify-content:center; text
 .sync-top{display:flex;justify-content:space-between;gap:8px;font-size:.82rem;color:#a24;margin:4px 0 8px}
 #dailyCard{
   backdrop-filter:none; -webkit-backdrop-filter:none;
-  background:#fff; position:relative; z-index:6;
+  background:rgba(255,255,255,.55); position:relative; z-index:6;
 }
 .sync-choices{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:12px; position:relative; z-index:8}
 .sync-choices button{
