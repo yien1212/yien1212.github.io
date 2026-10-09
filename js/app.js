@@ -207,7 +207,14 @@ const carP = [
   ["mem/tank.jpg","一整面魚"],
   ["mem/polar.jpg","拍立得"],
   ["mem/grill2.jpg","烤肉"],
-  ["mem/choco.jpg","巧克力"]
+  ["mem/choco.jpg","巧克力"],
+  ["mem/fam.jpg","全家"],
+  ["mem/dinner2.jpg","吃飯"],
+  ["mem/sash.jpg","紅花"],
+  ["mem/bunch.jpg","一束花"],
+  ["mem/kiss2.jpg","親一下"],
+  ["mem/faces.jpg","靠很近"],
+  ["mem/peace2.jpg","比耶"]
 ];
 function initCarousel(){
   function show(i){
@@ -520,6 +527,7 @@ document.getElementById("mystery").onclick = function(){
       [/火車|車票/, "第一次出遠門，坐你旁邊"],
       [/魚|水母|魔鬼/, "魚很多，我只看你"],
       [/巧克力/, "甜的留你吃"],
+      [/花|紅花/, "花是給你的"],
       [/拍立得/, "這張要留著"],
       [/泡/, "晚上就這樣靠著"],
       [/蠟筆/, "顏色慢慢塗，我等你"],
@@ -694,9 +702,9 @@ document.getElementById("mystery").addEventListener("click", () => { localStorag
 /* 願望清單 - 先畫出來，登入後再跟雲端同步 */
 function renderWishes(){
   const groups = {
-    "旅行": ["一起看海","一起去日本","一起去韓國","一起去泰國","一起去法國","一起去京都","一起去首爾","一起去沖繩","一起去北海道","一起去清邁","一起去迪士尼","一起騎車環島","一起泡溫泉","一起去海邊看日出","一起去海邊游泳","一起賞楓","一起賞櫻花","一起去冰山","一起去海邊的島","一起去下雪的地方","一起露營","一起住小木屋","住一間兩個人的旅館"],
-    "吃": ["一起吃早餐","一起吃壽司","一起吃牛肉麵","一起吃麥當勞早餐","一起去星巴克","一起吃火鍋","一起吃甜點","一起吃滷味","一起吃鬆餅","一起吃泡麵","一起吃提拉米蘇","一起吃漢堡","一起吃蘋果","一起吃布丁","一起吃冰淇淋","一起吃拉麵","一起吃水餃","一起吃炸雞","一起吃蛋餅","一起吃粥","一起吃燒烤","一起吃小籠包","一起吃排骨酥","一起吃鮭魚","一起吃便當","一起做蛋糕","一起做飯","一起逛夜市"],
-    "玩": ["一起看煙火","一起看演唱會","一起看一輝的演唱會","一起去遊樂園","一起玩雲霄飛車","一起看流星雨","一起去逛街","一起去貓咪咖啡廳","一起拍大頭貼","一起拍情侶照","一起買情侶裝","一起騎車兜風","一起看電影","一起唱歌","一起追劇","一起逛超商","一起散步","一起逛書局","一起去水族館","一起坐著發呆"],
+    "旅行": ["一起看海","一起去日本","一起去韓國","一起去泰國","一起去法國","一起去京都","一起去首爾","一起去沖繩","一起去北海道","一起去清邁","一起去迪士尼","一起騎車環島","一起泡溫泉","一起去海邊看日出","一起去海邊游泳","一起賞楓","一起賞櫻花","一起去冰山","一起去海邊的島","一起去下雪的地方","一起露營","一起住小木屋","住一間兩個人的旅館","一起再去宜蘭","一起去台南","一起去墾丁","一起去九份","一起去花蓮","一起去澎湖","一起去看夜景","一起去動物園","一起去看展覽","一起坐夜車"],
+    "吃": ["一起吃早餐","一起吃壽司","一起吃牛肉麵","一起吃麥當勞早餐","一起去星巴克","一起吃火鍋","一起吃甜點","一起吃滷味","一起吃鬆餅","一起吃泡麵","一起吃提拉米蘇","一起吃漢堡","一起吃蘋果","一起吃布丁","一起吃冰淇淋","一起吃拉麵","一起吃水餃","一起吃炸雞","一起吃蛋餅","一起吃粥","一起吃燒烤","一起吃小籠包","一起吃排骨酥","一起吃鮭魚","一起吃便當","一起做蛋糕","一起做飯","一起逛夜市","一起吃海鮮","一起吃牛排","一起吃巧克力","一起吃烤肉","一起吃迴轉壽司","一起吃蛋糕","一起喝珍奶","一起吃下午茶","一起吃炸物","一起吃關東煮","一起吃壽喜燒","一起吃蟹"],
+    "玩": ["一起看煙火","一起看演唱會","一起看一輝的演唱會","一起去遊樂園","一起玩雲霄飛車","一起看流星雨","一起去逛街","一起去貓咪咖啡廳","一起拍大頭貼","一起拍情侶照","一起買情侶裝","一起騎車兜風","一起看電影","一起唱歌","一起追劇","一起逛超商","一起散步","一起逛書局","一起去水族館","一起坐著發呆","一起去釣蝦","一起去鬼屋","一起看日出","一起去拍貼機","一起玩桌遊","一起去圖書館","一起去看展","一起去海邊踩水","一起夜市玩遊戲"],
     "日常": ["一起跨年","一起養一隻貓","一起養隻狗","一起種植物","一起組電腦","一起打電動","一起看恐怖片","一起過生日","一起交換禮物","一起養老","到家說一聲","傳一段語音","說晚安","抱抱","問吃了沒","傳一張照片","講一句想你","叫一聲乖乖","早點睡","牽手走一段","說早安","提醒穿外套","忙完找對方","雨天一起待在家"]
   };
   const ideaMap = {
@@ -751,11 +759,8 @@ function renderWishes(){
       list.appendChild(empty);
       return;
     }
-    let lastGroup = "";
-    shown.forEach(function(item){
-      if(current !== "還沒做" && current !== "做完了" && item.group !== lastGroup){
-        lastGroup = item.group;
-      }
+    if(!window._wishOpen) window._wishOpen = {};
+    function addItem(parent, item){
       const d = document.createElement("div");
       d.className = "wish-item" + (item.isDone ? " done" : "");
       d.innerHTML = '<input type="checkbox"' + (item.isDone ? " checked" : "") + '> <span></span>';
@@ -771,7 +776,27 @@ function renderWishes(){
         if(window.db) window.db.ref("wishes/state").set({done: next}).catch(function(){});
         paint(next);
       };
-      list.appendChild(d);
+      parent.appendChild(d);
+    }
+    const grouped = current === "還沒做" || current === "做完了";
+    if(!grouped){
+      shown.forEach(function(item){ addItem(list, item); });
+      return;
+    }
+    Object.keys(groups).forEach(function(group){
+      const items = shown.filter(function(item){ return item.group === group; });
+      if(!items.length) return;
+      const det = document.createElement("details");
+      det.className = "wish-fold";
+      const key = current + ":" + group;
+      det.open = !!window._wishOpen[key];
+      det.addEventListener("toggle", function(){ window._wishOpen[key] = det.open; });
+      const sum = document.createElement("summary");
+      const left = items.filter(function(item){ return !item.isDone; }).length;
+      sum.textContent = group + "　" + (current === "做完了" ? items.length : left);
+      det.appendChild(sum);
+      items.forEach(function(item){ addItem(det, item); });
+      list.appendChild(det);
     });
   }
   let ideaDone = {};
@@ -3018,3 +3043,35 @@ document.addEventListener("visibilitychange", function(){
     bubble(false, "在。想說什麼");
   }
 })();
+
+function foldSections(pageId, stayOpen){
+  const page = document.getElementById(pageId);
+  if(!page) return;
+  Array.from(page.querySelectorAll(":scope > h3.stitle")).forEach(function(h){
+    const text = h.textContent || "";
+    const det = document.createElement("details");
+    det.className = "fold";
+    if(stayOpen.some(function(s){ return text.indexOf(s) >= 0; })) det.open = true;
+    const sum = document.createElement("summary");
+    sum.className = "stitle";
+    while(h.firstChild) sum.appendChild(h.firstChild);
+    const ico = document.createElement("span");
+    ico.className = "fold-ico";
+    sum.appendChild(ico);
+    det.appendChild(sum);
+    const body = document.createElement("div");
+    body.className = "fold-body";
+    let n = h.nextSibling;
+    h.replaceWith(det);
+    while(n){
+      if(n.nodeType === 1 && n.tagName === "H3" && n.classList.contains("stitle")) break;
+      const next = n.nextSibling;
+      body.appendChild(n);
+      n = next;
+    }
+    det.appendChild(body);
+  });
+}
+foldSections("page-home", ["我們在一起", "今天心情"]);
+foldSections("page-games", []);
+foldSections("page-chat", []);

@@ -650,7 +650,26 @@ body{counter-reset: section}
 .play-pair button.bad{border-color:#c62828}
 #playMonths{justify-content:center;margin-top:10px}
 #playMonths .chip.ok{background:#2e7d32;color:#fff;border-color:#2e7d32}
-#playMonths .chip.bad{background:#c62828;color:#fff;border-color:#c62828}
+details.fold > summary.stitle{
+  display:block; list-style:none; cursor:pointer;
+}
+details.fold > summary.stitle::-webkit-details-marker{display:none}
+details.fold > summary.stitle .fold-ico{margin-left:6px;font-size:.75rem;letter-spacing:1px;color:var(--pink)}
+details.fold > summary.stitle .fold-ico::before{content:"展開"}
+details.fold[open] > summary.stitle .fold-ico::before{content:"收起"}
+details.fold > .fold-body{padding-bottom:6px}
+.wish-fold{
+  border:1px solid var(--pink-soft); border-radius:16px;
+  margin:8px 0; background:#fff; overflow:hidden;
+}
+.wish-fold > summary{
+  display:block; list-style:none; cursor:pointer;
+  padding:12px 14px; font-family:"Noto Serif TC",serif; color:var(--pink-deep);
+}
+.wish-fold > summary::-webkit-details-marker{display:none}
+.wish-fold > summary::after{content:"展開"; float:right; font-size:.75rem; color:var(--pink)}
+.wish-fold[open] > summary::after{content:"收起"}
+.wish-fold .wish-item{padding:0 14px 10px}
 #wall:empty{display:none}
 #wallMine[hidden]{display:none!important}
 #wallMine{
