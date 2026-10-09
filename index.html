@@ -16,9 +16,19 @@
 <title>我們 ❤️</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@200;300;400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/app.css?v=28">
+<link rel="stylesheet" href="css/app.css?v=29">
 </head>
 <body>
+<div id="splash">
+  <svg class="splash-heart" viewBox="0 0 7 6" aria-hidden="true">
+    <rect x="1" y="0" width="1" height="1"/><rect x="2" y="0" width="1" height="1"/>
+    <rect x="4" y="0" width="1" height="1"/><rect x="5" y="0" width="1" height="1"/>
+    <rect x="0" y="1" width="7" height="1"/><rect x="1" y="2" width="5" height="1"/>
+    <rect x="2" y="3" width="3" height="1"/><rect x="3" y="4" width="1" height="1"/>
+  </svg>
+  <p class="splash-brand">我愛妳</p>
+  <img id="splashPhoto" alt="">
+</div>
 
 
 
@@ -31,14 +41,14 @@
 </div>
 <button type="button" id="errBadge" hidden>!</button>
 
-<div class="petal" style="left:8%">🌸</div>
-<div class="petal" style="left:28%; animation-delay:2s">🌸</div>
-<div class="petal" style="left:50%; animation-delay:4s">🌸</div>
-<div class="petal" style="left:72%; animation-delay:6s">🌸</div>
-<div class="petal" style="left:92%; animation-delay:8s">🌸</div>
+<div class="petal" style="left:8%"></div>
+<div class="petal" style="left:28%; animation-delay:2s"></div>
+<div class="petal" style="left:50%; animation-delay:4s"></div>
+<div class="petal" style="left:72%; animation-delay:6s"></div>
+<div class="petal" style="left:92%; animation-delay:8s"></div>
 
 <div id="login">
-  <div class="lock-emoji">🔐</div>
+  <div class="lock-emoji" aria-hidden="true"><svg viewBox="0 0 8 8"><rect x="2" y="1" width="4" height="1"/><rect x="1" y="2" width="1" height="2"/><rect x="6" y="2" width="1" height="2"/><rect x="1" y="4" width="6" height="3"/><rect x="3" y="5" width="2" height="1" fill="#fff5f7"/></svg></div>
   <h1>給最重要的人</h1>
   <p>這是只屬於我們的地方</p>
   <div id="roleStep" style="margin-top:10px">
@@ -700,10 +710,10 @@
 
   <!-- Tab Bar -->
   <div class="tab-bar">
-    <button class="tab-btn active" data-page="home"><span class="icon">🏠</span>首頁</button>
-    <button class="tab-btn" data-page="memories"><span class="icon">📷</span>回憶</button>
-    <button class="tab-btn" data-page="chat"><span class="icon">💬</span>互動</button>
-    <button class="tab-btn" data-page="games"><span class="icon">🎮</span>遊戲</button>
+    <button class="tab-btn active" data-page="home"><span class="icon"><svg viewBox="0 0 8 8"><rect x="3" y="0" width="2" height="1"/><rect x="2" y="1" width="4" height="1"/><rect x="1" y="2" width="6" height="1"/><rect x="1" y="3" width="6" height="4"/><rect x="3" y="5" width="2" height="2" fill="#fff5f7"/></svg></span>首頁</button>
+    <button class="tab-btn" data-page="memories"><span class="icon"><svg viewBox="0 0 8 8"><rect x="1" y="1" width="6" height="6"/><rect x="2" y="2" width="4" height="4" fill="#fff5f7"/><rect x="3" y="3" width="2" height="2"/></svg></span>回憶</button>
+    <button class="tab-btn" data-page="chat"><span class="icon"><svg viewBox="0 0 8 8"><rect x="0" y="1" width="5" height="3"/><rect x="1" y="4" width="1" height="1"/><rect x="3" y="3" width="5" height="3"/><rect x="6" y="6" width="1" height="1"/></svg></span>互動</button>
+    <button class="tab-btn" data-page="games"><span class="icon"><svg viewBox="0 0 8 8"><rect x="3" y="0" width="2" height="2"/><rect x="1" y="2" width="2" height="2"/><rect x="5" y="2" width="2" height="2"/><rect x="3" y="4" width="2" height="2"/><rect x="3" y="2" width="2" height="2" fill="#fff5f7"/></svg></span>遊戲</button>
   </div>
 </div><!-- /app -->
 
@@ -726,6 +736,16 @@
   <div id="lbCap"></div>
 </div>
 
+<div id="toast" hidden></div>
+<div id="sheet" hidden>
+  <div class="sheet-card">
+    <p id="sheetText"></p>
+    <div class="sheet-actions">
+      <button type="button" id="sheetNo">取消</button>
+      <button type="button" id="sheetYes">確定</button>
+    </div>
+  </div>
+</div>
 <div id="music">
   <audio id="bgm" loop>
     <source src="你聽得到.mp3" type="audio/mpeg">
@@ -743,10 +763,10 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
-<script src="js/guard.js?v=6"></script>
+<script src="js/guard.js?v=7"></script>
 <script src="js/config.js?v=4"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-<script src="js/app.js?v=40"></script>
+<script src="js/app.js?v=41"></script>
 <script src="https://cdn.botpress.cloud/webchat/v3.5/inject.js"></script>
 <script src="https://files.bpcontent.cloud/2026/01/12/17/20260112175648-Q8N99NKQ.js" defer></script>
 

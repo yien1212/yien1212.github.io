@@ -589,7 +589,7 @@ function initScratch(){
     x.globalCompositeOperation = "destination-out";
     x.beginPath(); x.arc(px,py,25,0,Math.PI*2); x.fill();
   }
-  c.addEventListener("mousedown", e => { s = true; const r = c.getBoundingClientRect(); sc((e.clientX-r.left)*c.width/r.width, (e.clientY-r.top)*c.height/r.height); });
+  c.addEventListener("mousedown", e => { s = true; if(window.buzz) window.buzz(15); const r = c.getBoundingClientRect(); sc((e.clientX-r.left)*c.width/r.width, (e.clientY-r.top)*c.height/r.height); });
   c.addEventListener("mouseup", () => s = false);
   c.addEventListener("mouseleave", () => s = false);
   c.addEventListener("mousemove", e => {
@@ -597,7 +597,7 @@ function initScratch(){
     const r = c.getBoundingClientRect();
     sc((e.clientX-r.left)*c.width/r.width, (e.clientY-r.top)*c.height/r.height);
   });
-  c.addEventListener("touchstart", e => { s = true; const r = c.getBoundingClientRect(); const t = e.touches[0]; sc((t.clientX-r.left)*c.width/r.width, (t.clientY-r.top)*c.height/r.height); }, {passive:true});
+  c.addEventListener("touchstart", e => { s = true; if(window.buzz) window.buzz(15); const r = c.getBoundingClientRect(); const t = e.touches[0]; sc((t.clientX-r.left)*c.width/r.width, (t.clientY-r.top)*c.height/r.height); }, {passive:true});
   c.addEventListener("touchend", () => s = false);
   c.addEventListener("touchmove", e => {
     if(!s) return;
@@ -799,7 +799,7 @@ function renderWishes(){
       const det = document.createElement("details");
       det.className = "wish-fold";
       const key = current + ":" + group;
-      det.open = !!window._wishOpen[key];
+      det.open = window._wishOpen[key] !== false;
       det.addEventListener("toggle", function(){ window._wishOpen[key] = det.open; });
       const sum = document.createElement("summary");
       const left = items.filter(function(item){ return !item.isDone; }).length;
@@ -1344,7 +1344,7 @@ function startGame(){
       burst(e.clientX, e.clientY);
       this.remove();
       if(c === 10){ localStorage.setItem("heart10","1"); renderBadges(); }
-      if(c % 10 === 0) alert("收集到 " + c + " 個愛心！");
+      if(c % 10 === 0 && window.toast) window.toast("收集到 " + c + " 個愛心");
     };
     sp.appendChild(h);
     setTimeout(() => { if(h.parentElement) h.remove(); }, 5000);
@@ -1795,6 +1795,7 @@ window._authReady.then(function(uid){
     localStorage.setItem("chatSent","1");
     if(typeof renderBadges === "function") renderBadges();
     document.getElementById("chatInput").value = "";
+    if(window.toast) window.toast("已送出");
   };
   document.getElementById("chatInput").addEventListener("keydown", e => {
     if(e.key === "Enter") document.getElementById("chatSend").click();
@@ -2325,12 +2326,16 @@ window.redeem = function(type){
     const p = snap.val() || 0;
     if(p < costs[type]){
       document.getElementById("rewardShow").textContent = "點數不夠啦，再玩一下～";
+      if(window.toast) window.toast("點數不夠");
       return;
     }
-    if(!confirm("確定兌換「"+names[type]+"」？")) return;
-    db.ref("points/"+uid).set(p - costs[type]);
-    db.ref("rewards").push({who: uid, type: type, name: names[type], time: Date.now()});
-    document.getElementById("rewardShow").textContent = "🎉 已兌換 " + names[type] + "！";
+    window.askBox("確定兌換「" + names[type] + "」？").then(function(ok){
+      if(!ok) return;
+      db.ref("points/"+uid).set(p - costs[type]);
+      db.ref("rewards").push({who: uid, type: type, name: names[type], time: Date.now()});
+      document.getElementById("rewardShow").textContent = "已兌換 " + names[type];
+      if(window.toast) window.toast("已兌換 " + names[type]);
+    });
   });
 };
 window._authReady.then(function(uid){
@@ -2422,6 +2427,7 @@ if(window._authReady){
 window.sendGift = function(emoji){
   localStorage.setItem("giftDone","1");
   if(typeof renderBadges === "function") renderBadges();
+  if(window.toast) window.toast("已送給對方");
   for(let i = 0; i < 5; i++){
     setTimeout(() => {
       const el = document.createElement("div");
@@ -3061,7 +3067,7 @@ function foldSections(pageId, stayOpen){
     const text = h.textContent || "";
     const det = document.createElement("details");
     det.className = "fold";
-    if(stayOpen.some(function(s){ return text.indexOf(s) >= 0; })) det.open = true;
+    det.open = true;
     const sum = document.createElement("summary");
     sum.className = "stitle";
     while(h.firstChild) sum.appendChild(h.firstChild);
@@ -3082,6 +3088,4 @@ function foldSections(pageId, stayOpen){
     det.appendChild(body);
   });
 }
-foldSections("page-home", ["我們在一起", "今天心情"]);
-foldSections("page-games", []);
-foldSections("page-chat", []);
+foldSections("page-home", []);

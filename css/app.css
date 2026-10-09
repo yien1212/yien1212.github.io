@@ -579,7 +579,55 @@ body{counter-reset: section}
 .card3d{transition:transform 0.2s ease-out; transform-style:preserve-3d}
 
 /* 花瓣 */
-.petal{position:fixed; top:-5%; font-size:14px; color:var(--pink-soft); animation:fall 12s linear infinite; z-index:-1; pointer-events:none}
+.petal{
+  position:fixed; top:-5%; z-index:-1; pointer-events:none;
+  width:10px; height:10px; background:var(--pink-soft);
+  animation:fall 12s linear infinite;
+}
+#splash{
+  position:fixed; inset:0; z-index:4000;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  background:#fff5f7; transition:opacity .45s ease;
+}
+#splash.out{ opacity:0; pointer-events:none; }
+.splash-heart{ width:72px; height:62px; }
+.splash-heart rect{ fill:#e91e63; }
+.splash-heart{ animation:beat 0.7s ease-in-out infinite; }
+@keyframes beat{ 0%,100%{ transform:scale(1); } 40%{ transform:scale(1.16); } }
+.splash-brand{
+  margin:14px 0 16px; font-family:"Noto Serif TC",serif;
+  letter-spacing:8px; color:#e91e63; font-size:1.4rem;
+}
+#splashPhoto{ width:168px; height:210px; object-fit:cover; border-radius:18px; background:#ffd6e7; }
+.lock-emoji svg{ width:54px; height:54px; }
+.lock-emoji svg rect{ fill:#e91e63; }
+.tab-btn .icon svg{ width:22px; height:22px; display:block; margin:0 auto 2px; }
+.tab-btn .icon svg rect{ fill:currentColor; }
+#toast{
+  position:fixed; left:50%; bottom:calc(var(--dock) + 16px); transform:translateX(-50%);
+  z-index:2500; max-width:min(320px, calc(100vw - 32px));
+  background:rgba(40,20,30,.92); color:#fff; border-radius:16px;
+  padding:12px 16px; font-size:.9rem; text-align:center;
+  box-shadow:0 8px 24px rgba(0,0,0,.18);
+}
+#toast[hidden]{ display:none; }
+#sheet{
+  position:fixed; inset:0; z-index:2600;
+  display:flex; align-items:flex-end; justify-content:center;
+  background:rgba(0,0,0,.28); padding:16px;
+}
+#sheet[hidden]{ display:none; }
+.sheet-card{
+  width:min(360px, 100%); background:#fff; border-radius:18px;
+  padding:18px 16px 14px; margin-bottom:calc(var(--dock) + 8px);
+}
+.sheet-card p{ margin:0 0 14px; text-align:center; color:#333; line-height:1.6; }
+.sheet-actions{ display:flex; gap:8px; }
+.sheet-actions button{
+  flex:1; min-height:44px; border-radius:12px; font-family:inherit; cursor:pointer;
+}
+#sheetNo{ border:1px solid #eee; background:#f6f6f6; color:#555; }
+#sheetYes{ border:none; background:#e91e63; color:#fff; }
 @keyframes fall{0%{transform:translateY(-5vh) rotate(0); opacity:0}10%{opacity:.8}100%{transform:translateY(110vh) rotate(360deg); opacity:0}}
 .burst-heart{position:fixed; pointer-events:none; font-size:18px; z-index:9999; animation:burst 1s ease-out forwards}
 @keyframes burst{0%{transform:translate(0,0) scale(.5); opacity:1}100%{transform:translate(var(--dx),var(--dy)) scale(1.4); opacity:0}}
