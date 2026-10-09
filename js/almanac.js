@@ -226,8 +226,67 @@
     var ourJi = take(rng, OURS_JI, 2).join("、");
     var line = take(rng, LINES, 1)[0];
     var week = "日一二三四五六"[now.getDay()];
+    var WORD = {
+      "祈福":"求個心安","出行":"出門","會友":"見人","上梁":"辦新的大事","祭祀":"紀念想念",
+      "治病":"把身體顧好","掃舍":"打掃","求醫":"去看醫生","結親":"談感情","開市":"開始做一件新的",
+      "納財":"進帳","修造":"修一修","塗泥":"補一補","平治道路":"把事情理順","納采":"送禮約定",
+      "嫁娶":"辦婚事","訂盟":"把約定定下來","牧養":"照顧小動物","捕捉":"去追、去抓","拆卸":"清掉舊的",
+      "安床":"整理床鋪","入學":"學習","交易":"買賣","收賬":"把錢收回來","求財":"求財運",
+      "築堤":"把缺口補上","補垣":"把界線補好","塞穴":"把漏洞補上","動土":"大興土木","開倉":"一次把存的拿出來",
+      "遠行":"出遠門","服藥":"吃藥","詞訟":"爭執","大事":"辦大事","出行爭辯":"出門跟人吵",
+      "搬家":"搬家","簽約":"簽約","開業":"新開張","登高":"爬高","乘船":"坐船","訴訟":"打官司",
+      "開張":"新開張","破土":"動土開工","安葬":"辦喪事"
+    };
+    var JIAN_SAY = {
+      "建":"適合出門見人，大工程先不要動",
+      "除":"適合打掃、看病，遠行和辦喜事先緩一緩",
+      "滿":"適合求心安、進帳，把感情放在一起",
+      "平":"平常的一天，修修補補就好",
+      "定":"適合把約定定下來",
+      "執":"適合守著現在的，先別搬家、先別開張",
+      "破":"適合看病、清掉舊的，先別簽約、先別辦大事",
+      "危":"宜安穩待著，少去冒險",
+      "成":"適合把事情做成，出門、見面都可以",
+      "收":"適合把東西收回來，先別新開張",
+      "開":"適合出門、求財",
+      "閉":"適合收心，先別出門求財"
+    };
+    var EL_SAY = { "木":"木，會長也會讓", "火":"火，熱、來得快", "土":"土，穩、想把人顧好", "金":"金，直、有自己的標準", "水":"水，細、會想" };
+    var HOUR_SAY = { "子":"晚上11點到1點", "丑":"凌晨1點到3點", "寅":"凌晨3點到5點", "卯":"清晨5點到7點", "辰":"早上7點到9點", "巳":"上午9點到11點", "午":"中午11點到1點", "未":"下午1點到3點", "申":"下午3點到5點", "酉":"傍晚5點到7點", "戌":"晚上7點到9點", "亥":"晚上9點到11點" };
+    function sayList(text){
+      return text.split("、").map(function(w){ return WORD[w] || w; }).join("、");
+    }
+    function whoLine(label, birth, p){
+      var animal = ANIMALS[ZHI.indexOf(p.year[1])];
+      return label + "是" + animal + "年，" + birth + "，時辰在" + HOUR_SAY[p.hour[1]] + "。日主是" + p.day[0] + EL_SAY[element(p.day[0])] + "。";
+    }
+    var yearAnimal = ANIMALS[ZHI.indexOf(gz(lunar.y - 4)[1])];
+    var chongAnimal = ANIMALS[ZHI.indexOf(chong)];
+    var chongWho = chongAnimal === "狗" ? "狗狗" : chongAnimal === "豬" ? "小豬" : "屬" + chongAnimal + "的人";
+    var plain = [
+      "今天是" + yearAnimal + "年，農曆" + lunar.text + "。",
+      "這個日子叫「" + today.day + "」，五行是" + el + "。",
+      "今天跟" + chongWho + "比較容易頂到，少硬碰硬。" + shaText + "邊少起爭執。",
+      "想要順一點，就往" + xi + "走。",
+      "黃曆把今天叫「" + jian + "」：" + JIAN_SAY[jian] + "。",
+      "老黃曆寫適合" + sayList(yi) + "。先別做：" + sayList(ji) + "。",
+      whoLine("狗狗", "2006年8月12日早上8點15分", me),
+      whoLine("小豬", "2007年7月26日晚上11點", her)
+    ].join("\n");
+    var raw = "原文 " + gz(lunar.y - 4) + "年 " + lunar.text + " 日柱" + today.day + " 沖" + chongAnimal + "煞" + shaText + " 喜神" + xi + " 建除" + jian
+      + "\n狗狗 " + me.year + " " + me.month + " " + me.day + " " + me.hour
+      + "　小豬 " + her.year + " " + her.month + " " + her.day + " " + her.hour;
     document.getElementById("almDate").textContent = now.getFullYear() + "." + (now.getMonth() + 1) + "." + now.getDate() + " 週" + week;
-    document.getElementById("almGz").textContent = gz(lunar.y - 4) + "年　農曆" + lunar.text + "　日柱" + today.day + "　沖" + ANIMALS[ZHI.indexOf(chong)] + "煞" + shaText + "　喜神" + xi + "　建除「" + jian + "」\n黃曆宜 " + yi + "　忌 " + ji + "\n狗狗 " + me.year + " " + me.month + " " + me.day + " " + me.hour + "　小豬 " + her.year + " " + her.month + " " + her.day + " " + her.hour;
+    var gzBox = document.getElementById("almGz");
+    gzBox.textContent = "";
+    var plainEl = document.createElement("span");
+    plainEl.className = "alm-plain";
+    plainEl.textContent = plain;
+    var rawEl = document.createElement("span");
+    rawEl.className = "alm-raw";
+    rawEl.textContent = raw;
+    gzBox.appendChild(plainEl);
+    gzBox.appendChild(rawEl);
     document.getElementById("almScore").textContent = "今日契合 " + score + "%";
     document.getElementById("almBar").style.width = score + "%";
     document.getElementById("almColor").innerHTML = '<i class="alm-dot" style="background:' + color[1] + '"></i>' + color[0];

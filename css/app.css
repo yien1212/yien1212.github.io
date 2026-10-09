@@ -838,7 +838,9 @@ button, .chip, .mood, .tab-btn, .cbtn{ touch-action:manipulation; }
 .alm-score{font-family:"Noto Serif TC",serif;font-size:1.6rem;color:#e91e63;margin:10px 0 4px}
 .alm-bar{height:8px;border-radius:99px;background:#ffe4ec;overflow:hidden;margin:0 auto 10px;max-width:220px}
 .alm-bar i{display:block;height:100%;background:linear-gradient(90deg,#ffb3c8,#e91e63)}
-.alm-gz{font-size:.82rem;color:#8a6070;line-height:1.7;margin:0 0 12px;white-space:pre-line}
+.alm-gz{font-size:.92rem;color:#5c4450;line-height:1.75;margin:0 0 12px;white-space:pre-line;text-align:left}
+.alm-plain{display:block}
+.alm-raw{display:block;margin-top:8px;font-size:.72rem;color:#b0909c;line-height:1.6}
 .alm-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;text-align:left}
 .alm-grid div{background:rgba(255,255,255,.72);border:1px solid rgba(255,255,255,.6);border-radius:14px;padding:10px 12px}
 .alm-grid b{display:block;font-size:.72rem;color:#e91e63;letter-spacing:1px;margin-bottom:4px}
