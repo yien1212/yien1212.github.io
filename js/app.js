@@ -3096,3 +3096,5 @@ function foldSections(pageId, stayOpen){
   });
 }
 foldSections("page-home", []);
+foldSections("page-games", []);
+foldSections("page-chat", []);
