@@ -509,5 +509,61 @@
     "c": "比耶",
     "w": 480,
     "h": 854
+  },
+  {
+    "t": "mem/t/jj.jpg",
+    "f": "mem/jj.jpg",
+    "c": "演唱會票",
+    "w": 480,
+    "h": 640
+  },
+  {
+    "t": "mem/t/stage.jpg",
+    "f": "mem/stage.jpg",
+    "c": "舞台",
+    "w": 480,
+    "h": 640
+  },
+  {
+    "t": "mem/t/stick.jpg",
+    "f": "mem/stick.jpg",
+    "c": "螢光棒",
+    "w": 480,
+    "h": 640
+  },
+  {
+    "t": "mem/t/film.jpg",
+    "f": "mem/film.jpg",
+    "c": "錄下來",
+    "w": 480,
+    "h": 640
+  },
+  {
+    "t": "mem/t/hands2.jpg",
+    "f": "mem/hands2.jpg",
+    "c": "牽手",
+    "w": 480,
+    "h": 640
+  },
+  {
+    "t": "mem/t/skewer.jpg",
+    "f": "mem/skewer.jpg",
+    "c": "串燒",
+    "w": 480,
+    "h": 640
+  },
+  {
+    "t": "mem/t/grill3.jpg",
+    "f": "mem/grill3.jpg",
+    "c": "烤肉",
+    "w": 480,
+    "h": 640
+  },
+  {
+    "t": "mem/t/dogs.jpg",
+    "f": "mem/dogs.jpg",
+    "c": "兩隻狗",
+    "w": 480,
+    "h": 640
   }
 ]

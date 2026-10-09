@@ -214,7 +214,15 @@ const carP = [
   ["mem/bunch.jpg","一束花"],
   ["mem/kiss2.jpg","親一下"],
   ["mem/faces.jpg","靠很近"],
-  ["mem/peace2.jpg","比耶"]
+  ["mem/peace2.jpg","比耶"],
+  ["mem/jj.jpg","演唱會票"],
+  ["mem/stage.jpg","舞台"],
+  ["mem/stick.jpg","螢光棒"],
+  ["mem/film.jpg","錄下來"],
+  ["mem/hands2.jpg","牽手"],
+  ["mem/skewer.jpg","串燒"],
+  ["mem/grill3.jpg","烤肉"],
+  ["mem/dogs.jpg","兩隻狗"]
 ];
 function initCarousel(){
   function show(i){
@@ -528,6 +536,8 @@ document.getElementById("mystery").onclick = function(){
       [/魚|水母|魔鬼/, "魚很多，我只看你"],
       [/巧克力/, "甜的留你吃"],
       [/花|紅花/, "花是給你的"],
+      [/演唱會|螢光棒|舞台/, "第一場，坐你旁邊"],
+      [/狗/, "牠們也想擠進來"],
       [/拍立得/, "這張要留著"],
       [/泡/, "晚上就這樣靠著"],
       [/蠟筆/, "顏色慢慢塗，我等你"],
